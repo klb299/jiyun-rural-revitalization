@@ -788,3 +788,39 @@ Awwwards 2026 与 GSAP 案例的共同手法：单一被坚持的编辑方向、
 * `audit-mobile` 9 页 × 320/390/430 返回 `[]`（切换按钮由 36px 提到 40px）；`audit-links` `17 / [] / [] / []`；`audit-interactions` 10/10 分档、附录折叠、1 框 4 角标。
 * `audit-round19.js`：11 个点位在**滚到后仅 600ms** 截图，`visibleRevealsNotReady = 0`；认养切换 4 项断言全通过；admin `topElementIsNav = true`；控制台 `errors: []`。截图在 `.workbuddy/shots/fix*.png`。
 * 文档同步：`README.md`、`VISUAL_HANDOFF.md`（新增第 12 节与 13–16 条已知坑）、`PROJECT_HANDOVER.md`（本节）、工作日志。
+
+## 🔧 二十、2026-11-07 自查后的工程精进
+
+用户要求「自查一下觉得哪里可以精进」，并勾选了「修可访问性与懒加载 / 优化 SVG 体积 / 补回滚能力与一键探针」三项。
+
+### 1. 自查结论
+
+新增 `audit-a11y.js` 补现有探针盲区，结果健康：768/1024/1280/1920 × 6 页零横向溢出；6 个代表页未命名按钮 / 未标注输入 / 未命名滑块 / 缺 `alt` 全为 0 且 `skip-link` 全有；reduced-motion 下 47 个入场元素无隐藏态；5 条路由（含 404）的 title / description 全部正确；数量口径 13 单元 / 18 路由一致；全站无 TODO、FIXME、调试日志（仅 1 处合理的 WebGL 降级 warn）。短板集中在工程与键盘细节。
+
+### 2. 导航下拉可访问性
+
+4 个分组按钮原只有 `@mouseenter` / `@mouseleave`。补 `:aria-expanded`、`aria-haspopup`、`:aria-controls`，header 加 `@keydown.esc`，分组容器加 `@focusout`，移动端菜单按钮补 `aria-expanded`。下拉面板由 `v-if` 改 `v-show`，保证 `aria-controls` 的 id 常驻、不产生断头 ARIA 引用，同时不影响 Tab 序列与 Transition。键盘实测：`false → Enter → true`（面板可见、3 个链接）`→ Esc → false`，焦点移出亦收起。
+
+附带发现：`@mouseenter` 先置位、click 再 toggle，导致 Playwright `click()`（移动鼠标）表现为「点了反而关掉」；测此组件须用 `focus() + keyboard`。已写进交接文档。
+
+### 3. 图片懒加载边界
+
+10 个 `<img>` 中 5 个已有 `loading="lazy"`；缺的 5 个里 3 个是**首屏可见**（首页 hero 图版、沙盘首屏测绘图版、WebGL 兜底图），懒加载会拖慢首屏，故只对首屏外的 `HomeView` 的 `hero-field.svg` 与 `DashboardView` 的 `soil-strata.svg` 补 `loading="lazy"`。
+
+### 4. SVG 降采样
+
+`scripts/generate_art.py`：`contour()` 默认 `step 8→14`，`hero-field` 散点 `260→160`、`panorama` 散点 `420→240`。10 张图版 **449 KB → 321 KB（省 128 KB / 28.6%）**；panorama −39.7%、hero-field −37.1%、atlas −36.7%、harvest −34.5%、rice −19.4%，其余 5 张字节不变。截图确认曲线平滑无锯齿，10 张 XML 合法。改生成脚本，可复跑。
+
+### 5. 工程基建
+
+- `git init` + 完善 `.gitignore` + 首次提交 `ab25358`。忽略 `dist/`、`node_modules/`、`.playwright-cli/`、备份 / 截图 / 审计日志；**`.workbuddy/tools/` 与 `.workbuddy/memory/` 作为工程资产提交**。此前项目不是 git 仓库，仅有一份 `round18` 手动备份，第十九轮改动无快照可回滚。
+- `package.json` 新增 `art` / `audit` / `snapshot`。`npm run audit` 一条命令跑完 7 个探针并汇总到 `.workbuddy/audit/latest.log`（把 `open` 与全部 `run-code` 拼进同一 shell 调用，规避浏览器会话回收）；`npm run snapshot` 用 `shutil` 复制 10 项源码与文档到带时间戳的快照目录，实测 69 文件 / 1.4 MB。
+- **环境坑**：本环境 Node 被注入 `node-brokered-fs-shim`，使用 `fs` 的 `.mjs` 静默退出 127（纯 `console.log` 的 mjs 正常），故 `audit` / `snapshot` 改用 Python 实现，与 `generate_art.py` 保持一致。
+
+### 6. 验证
+
+`npm run build` 零警告；`npm run audit` **7/7 探针取到结果**（contrast 仍仅品牌金大字、mobile `[]`、links `17/[]/[]/[]`、interactions 全绿、round19 全绿、a11y 全绿）；键盘下拉四项断言通过；降采样图版截图确认视觉无损；`npm run art` / `npm run snapshot` 均实测可用。
+
+### 7. 明确不动
+
+`RuralSandbox3D.vue`（2387 行）、`textures.js`（1306 行）暂不拆分；`ExhibitCard` / `StatBlock` / `StageFallback` 单引用组件暂不清理；品牌金大字 2.68–2.84 为用户确认保留的设计取舍。文档同步 `README.md`（脚本与 404 脚注）、`VISUAL_HANDOFF.md`（第 13 节）、本节与工作日志。

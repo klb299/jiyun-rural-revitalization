@@ -45,6 +45,8 @@
 | `/about` | 长春智库与答辩白皮书、技术架构、数据口径（附录 A）、公开资料索引（附录 B） | 说明页 |
 | `/admin` | 数字展馆管理后台 | 演示门禁 + localStorage 持久化 |
 
+另有 `/:pathMatch(.*)*` 兜底 404 导览页，未列入上表；全站共 18 条路由。
+
 `/admin` 演示密码 `admin123456`。这是前端演示门禁，不是服务端鉴权，请勿用于真实数据。
 
 ## 三、快速开始
@@ -54,7 +56,12 @@ npm install
 npm run dev       # 本地开发
 npm run build     # 生产构建，输出到 dist/
 npm run preview   # 预览构建产物
+npm run art       # 重新生成 public/art/ 下 10 张程序化 SVG 图版
+npm run audit     # 一键跑 7 个探针（需先启动 preview 服务）
+npm run snapshot  # 把源码与文档快照到 .workbuddy/backup/
 ```
+
+`npm run audit` 的前置：另开终端执行 `npm run preview -- --host 127.0.0.1 --port 4173`。它会依次跑对比度、移动端触控、死链、低对比定位、交互、第十九轮回归与可访问性共 7 个探针，汇总结果写入 `.workbuddy/audit/latest.log`。探针脚本在 `.workbuddy/tools/`，新增页面时记得把路径补进前四个脚本的 `paths`。
 
 构建产物约 2.5 MB（含 10 张 SVG 图版）。首屏只加载主包约 233 KB（gzip 约 88 KB）、Vue runtime 62 KB、Pinia 与图标两个小 chunk，FCP 约 80 ms，不加载任何 Three.js 或 ECharts。Three.js（693 KB / gzip 175 KB）与按需注册后的 ECharts（576 KB / gzip 195 KB）都是异步 chunk，只在进入 3D 展厅与图表页时下载；`/exhibit-map` 是独立的 23 KB（gzip 7.7 KB）异步 chunk，首页沙盘还要等滚入视口才挂载。
 

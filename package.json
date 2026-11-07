@@ -8,8 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "art": "python scripts/generate_art.py",
-    "audit": "node scripts/audit.mjs",
-    "snapshot": "node scripts/snapshot.mjs"
+    "audit": "python scripts/audit.py",
+    "snapshot": "python scripts/snapshot.py"
   },
   "dependencies": {
     "@types/three": "^0.187.0",

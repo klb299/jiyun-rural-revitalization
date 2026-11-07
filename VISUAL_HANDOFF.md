@@ -346,6 +346,12 @@ npm run build 2>&1 | tail -5
 
 ```bash
 npm run preview -- --host 127.0.0.1 --port 4173
+npm run audit    # 一键跑全部 7 个探针并汇总结果（推荐）
+```
+
+等价的手工方式（调试单个探针时用）：
+
+```bash
 export PATH="$PATH:/c/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-6"
 
 # 浏览器会话跨 shell 调用会被回收：open 与所有 run-code 必须写在同一条命令里
@@ -561,3 +567,39 @@ playwright-cli console 2>&1 | grep -E "Total messages|\[ERROR\]|\[WARNING\]"
 14. **全屏 `z-[60]` 页面会吞掉悬浮导航**。后台页若要显示全局导航，层级必须低于 `z-50`，并给内容留出 `pt-[88px]`。
 15. **改图版要改生成脚本**。`python scripts/generate_art.py` 会重写 10 张 SVG；改完先 diff 确认只有预期文件变化。
 16. **提亮底色要同步复查文字对比**。土层第三层提亮后，原先合格的亮金/白字立刻掉到 2.31 / 3.48。
+
+---
+
+## 13. 第二十轮：自查后的工程精进（2026-11-07）
+
+用户要求「自查一下觉得哪里可以精进」。先跑新增的 `audit-a11y.js` 补探针盲区，结果健康：768/1024/1280/1920 × 6 页零溢出、6 页无未命名控件 / 未标注输入 / 缺 `alt`、reduced-motion 下 47 个入场元素全部可见、5 条路由 meta 全对、数量口径一致、无调试残留。真正的短板在工程与细节，按用户勾选全部落地。
+
+### 13.1 导航下拉的键盘 / 读屏路径
+
+4 个分组按钮原来只有 `@mouseenter` / `@mouseleave`，能点开但没有 `aria-*` 状态、没有 Esc 关闭、焦点移出不收起。现在：
+
+- 补 `:aria-expanded`、`aria-haspopup="true"`、`:aria-controls`；
+- 下拉面板从 `v-if` 改 `v-show`，让 `aria-controls` 指向的 id 始终存在（避免断头 ARIA 引用），`display:none` 时不进 Tab 序列，Transition 动画照常；
+- header 加 `@keydown.esc`，分组容器加 `@focusout`（仅当焦点真正离开容器才收起）；移动端菜单按钮补 `aria-expanded`。
+
+实测键盘路径：`false → Enter → true`（面板可见、含 3 个链接）`→ Esc → false`，焦点移出后也为 `false`。
+
+> **注意原有逻辑**：`@mouseenter` 会先把 `activeGroup` 设为该分组，紧接着的 click 又按 toggle 清空。所以 Playwright 的 `click()`（会移动鼠标）看到的是「点了反而关掉」，纯键盘 Enter 才正常。**测这个组件要用 `focus() + keyboard`，不要用 `click()`。**
+
+### 13.2 图片懒加载的边界
+
+10 个 `<img>` 里 5 个已有 `loading="lazy"`；缺的 5 个中有 3 个其实是**首屏可见**（首页 hero 图版、沙盘首屏测绘图版、WebGL 兜底图），这些不能懒加载，否则拖慢首屏。只给真正首屏外的 2 处（`HomeView` 的 `hero-field.svg`、`DashboardView` 的 `soil-strata.svg`）加了 `loading="lazy"`。
+
+### 13.3 SVG 降采样
+
+`contour()` 默认 `step=8 → 14`，`hero-field` 散点 `260 → 160`、`panorama` 散点 `420 → 240`。10 张图版总计 **449 KB → 321 KB（省 128 KB / 28.6%）**，变化集中在 5 张等高线图版（panorama −39.7%、hero-field −37.1%、atlas −36.7%、harvest −34.5%、rice −19.4%），其余 5 张字节不变。截图确认曲线仍平滑无锯齿，10 张 XML 全部合法。**改的是 `scripts/generate_art.py`，可复跑。**
+
+### 13.4 工程基建
+
+- **版本控制**：项目历史上不是 git 仓库，只有一份 `round18` 手动备份。现 `git init` + `.gitignore` + 首次提交 `ab25358`。忽略 `dist/`、`node_modules/`、`.playwright-cli/` 与备份/截图/审计日志；**`.workbuddy/tools/` 与 `.workbuddy/memory/` 必须提交**，它们是探针与工程日志。
+- **脚本**：`package.json` 新增 `art` / `audit` / `snapshot` 三个入口；`npm run audit` 实测 7/7 探针取到结果。
+- **环境坑**：本环境的 Node 被注入 `node-brokered-fs-shim`，凡使用 `fs` 的 `.mjs` 都会静默退出 127（纯 `console.log` 的 mjs 正常）。因此 `audit` / `snapshot` 改用 Python 实现，与既有 `generate_art.py` 一致。
+
+### 13.5 明确不动的
+
+`RuralSandbox3D.vue`（2387 行）与 `textures.js`（1306 行）暂不拆分；`ExhibitCard` / `StatBlock` / `StageFallback` 单引用组件暂不清理；品牌金大字 2.68–2.84 仍是用户确认保留的设计取舍。`audit-a11y.js` 的 `perf.transferKB` 在有缓存会话里恒为 0，只可看资源条数。
