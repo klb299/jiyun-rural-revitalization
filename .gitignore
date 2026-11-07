@@ -1,0 +1,35 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 本地验证产物与回滚备份
+.playwright-cli/
+.check_3d_shots/
+.backup_3d_upgrade_20261105/
+
+# 探针截图、汇总日志与手动快照（体积大，git 已接管版本历史）
+# 注意：.workbuddy/tools/ 与 .workbuddy/memory/ 是有价值的工程资产，必须提交
+.workbuddy/backup/
+.workbuddy/shots/
+.workbuddy/audit/

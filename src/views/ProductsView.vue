@@ -1,0 +1,315 @@
+<script setup>
+import { ref, computed, onUnmounted } from 'vue'
+import SectionHead from '../components/editorial/SectionHead.vue'
+import FigurePlate from '../components/editorial/FigurePlate.vue'
+import Reveal from '../components/editorial/Reveal.vue'
+import { ArrowUpRight, Check } from 'lucide-vue-next'
+
+const activeFilter = ref('all')
+const toast = ref('')
+let toastTimer = null
+
+const categories = [
+  { id: 'all', name: '全部吉林风物' },
+  { id: 'grain', name: '优质粳稻谷物' },
+  { id: 'mountain', name: '长白山珍稀林特' },
+  { id: 'lake', name: '查干湖生态渔业' }
+]
+
+const products = [
+  {
+    id: 1, category: 'grain', name: '吉林秋田小町 / 稻花香粳米', origin: '长春九台 / 饮马河流域',
+    tag: '国家地理标志', desc: '有机黑土栽培，松花江水源灌溉。米粒饱满半透明，煮饭油亮微甜，冷饭不回生。',
+    price: '¥ 68.00 / 5kg', sales: '月销 12,000+ 件', image: '/art/rice.svg', plate: 'PLATE 04', no: '01'
+  },
+  {
+    id: 2, category: 'grain', name: '东北黄金甜糯玉米真空棒', origin: '四平 / 公主岭黄金玉米带',
+    tag: '非转基因 · 鲜摘锁鲜', desc: '从采摘到真空高压灭菌不超过五小时，保留天然高膳食纤维与甜脆多汁。',
+    price: '¥ 39.90 / 8 支装', sales: '月销 35,000+ 件', image: '/art/harvest.svg', plate: 'PLATE 07', no: '02'
+  },
+  {
+    id: 3, category: 'mountain', name: '长白山野生椴树雪蜜', origin: '长白山脉深山原始森林',
+    tag: '天然成熟原蜜', desc: '每年夏至前后椴树花开，蜜蜂采自深山天然粉源，洁白如雪，带清雅薄荷淡香。',
+    price: '¥ 88.00 / 500g', sales: '月销 8,600+ 件', image: '/art/seasons.svg', plate: 'PLATE 06', no: '03'
+  },
+  {
+    id: 4, category: 'mountain', name: '长白山红松子仁 / 破壁人参片', origin: '抚松 / 长白山腹地',
+    tag: '药食同源', desc: '手工精选野生红松大籽，仁香醇厚；林下野山参低温超微打粉破壁。',
+    price: '¥ 128.00 / 盒', sales: '月销 5,400+ 件', image: '/art/atlas.svg', plate: 'PLATE 08', no: '04'
+  },
+  {
+    id: 5, category: 'lake', name: '查干湖生态胖头鱼', origin: '松原 / 查干湖冬捕非遗区',
+    tag: '国家非遗传统冬捕', desc: '天然大水面自然生长五年以上，纯野生无投喂，肉质紧密肥嫩，冬捕冷链直达。',
+    price: '¥ 198.00 / 条约 6 斤', sales: '冬捕预订 28,000+ 件', image: '/art/lake.svg', plate: 'PLATE 05', no: '05'
+  },
+  {
+    id: 6, category: 'grain', name: '延边有机黑豆与杂粮礼盒', origin: '延边朝鲜族自治州',
+    tag: '绿色富硒认证', desc: '长白山矿泉水与火山灰土孕育，包含黑米、薏仁、红小豆、燕麦。',
+    price: '¥ 79.00 / 礼盒装', sales: '月销 9,200+ 件', image: '/art/soil-strata.svg', plate: 'PLATE 01', no: '06'
+  }
+]
+
+const pickCategory = (id) => {
+  activeFilter.value = id
+  document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+const filtered = computed(() => activeFilter.value === 'all'
+  ? products
+  : products.filter((p) => p.category === activeFilter.value))
+
+const addToList = (name) => {
+  toast.value = `已把「${name}」加入助农直采清单`
+  clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => { toast.value = '' }, 2800)
+}
+
+onUnmounted(() => clearTimeout(toastTimer))
+
+</script>
+
+<template>
+  <div>
+    <!-- 01 市集标签墙：Z 轴层叠的四张品类卡，点击即筛选 -->
+    <section class="relative min-h-[100dvh] flex items-center overflow-hidden"
+      style="background: linear-gradient(148deg, #F0DFC0 0%, #E4BE79 48%, #C88A32 100%)">
+      <div class="absolute inset-0 coord-rule opacity-30 pointer-events-none"></div>
+      <div data-parallax="-8" class="absolute -left-[12%] -bottom-[26%] w-[42vw] h-[42vw] min-w-[360px] min-h-[360px] rounded-full bg-[#FFFDF9]/15 blur-2xl pointer-events-none"></div>
+
+      <div class="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
+        <Reveal>
+          <div class="flex flex-wrap items-center gap-3 mb-8">
+            <span class="px-3 py-1.5 rounded-full bg-[#1C1B18] text-[#F7F4EE] font-mono text-[10px] tracking-[0.2em] font-bold">CHAPTER 08</span>
+            <span class="font-mono text-[10px] tracking-[0.2em] text-[#1C1B18]/70">SPECIALTY AGRI-FAIR / 吉林风物特产集市</span>
+          </div>
+        </Reveal>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          <div class="lg:col-span-6">
+            <h1 class="display-1 text-[#1C1B18]" aria-label="把白山松水 装进一只礼盒">
+              <span v-for="(ch, i) in Array.from('把白山松水')" :key="'a' + i" class="kin-char"
+                :style="{ animationDelay: (0.12 + i * 0.07) + 's' }">{{ ch }}</span>
+              <span class="block whitespace-nowrap text-[#1C1B18]" :style="{ fontSize: '0.72em' }">
+                <span v-for="(ch, i) in Array.from('装进一只礼盒')" :key="'b' + i" class="kin-char"
+                  :style="{ animationDelay: (0.46 + i * 0.055) + 's' }">{{ ch }}</span>
+              </span>
+            </h1>
+            <Reveal :delay="580"><p class="font-editorial text-lg sm:text-2xl text-[#1C1B18]/80 mt-7">从田间地头，到千家万户的最后一百米</p></Reveal>
+            <Reveal :delay="660">
+              <p class="lede text-[#1C1B18]/78 mt-5 max-w-xl">
+                精选黑土粳稻、黄金玉米、长白山林特与查干湖生态渔业四类物产。每件风物都标注产地、认证与流通方式，让「助农」不只是一句口号，而是一条可以追溯的链。
+              </p>
+            </Reveal>
+            <Reveal :delay="740">
+              <div class="flex flex-wrap gap-3 mt-9">
+                <a href="#catalog" class="mag-btn"><span>浏览全部风物</span><span class="mag-btn__island"><ArrowUpRight :size="16" /></span></a>
+                <a href="#origins" class="mag-btn mag-btn--light"><span>阅读产地地图</span><span class="mag-btn__island"><ArrowUpRight :size="16" /></span></a>
+              </div>
+            </Reveal>
+            <Reveal :delay="820">
+              <div class="flex flex-wrap gap-2 mt-12 max-w-lg">
+                <span v-for="t in ['产地到县域', '国家地理标志', '一袋一码', '冷链直达', '助农直采']" :key="t"
+                  class="rounded-full border border-[#1C1B18]/30 px-3 py-1.5 font-mono text-[9px] tracking-[0.14em] text-[#1C1B18]/75">{{ t }}</span>
+              </div>
+            </Reveal>
+          </div>
+
+          <!-- 层叠品类标签卡 -->
+          <div class="lg:col-span-6">
+            <div class="grid grid-cols-2 gap-4 sm:gap-5" data-stagger>
+              <Reveal v-for="(c, i) in categories" :key="c.id" :delay="180 + i * 90">
+                <button @click="pickCategory(c.id)"
+                  class="z-card group relative w-full text-left bg-[#FFFDF9] border border-[#1C1B18]/14 p-5 sm:p-6 cursor-pointer"
+                  :class="activeFilter === c.id ? 'ring-2 ring-[#1C1B18]' : ''"
+                  :style="{ transform: `rotate(${[-3, 2.5, -2, 3][i]}deg)` }">
+                  <div class="flex items-start justify-between gap-2 mb-5">
+                    <span class="font-mono text-[10px] tracking-[0.18em] text-[#8A6324]">TAG 0{{ i + 1 }}</span>
+                    <span class="w-6 h-6 rounded-full bg-[#1C1B18] text-[#F7F4EE] grid place-items-center">
+                      <ArrowUpRight :size="13" class="arrow-shift" />
+                    </span>
+                  </div>
+                  <div class="font-editorial text-lg sm:text-xl font-bold leading-snug mb-3">{{ c.name }}</div>
+                  <div class="text-[11px] leading-relaxed text-[#5A564E] min-h-[32px]">
+                    {{ products.find(p => p.category === c.id)?.name || '四类风物 · 产地直采' }}
+                  </div>
+                  <div class="mt-5 pt-4 border-t border-dashed border-[#1C1B18]/20 flex items-center justify-between gap-2">
+                    <span class="font-mono text-[9px] tracking-[0.14em] text-[#6E6960]">JILIN / ORIGIN</span>
+                    <span class="text-[11px] font-bold text-[#8A6324]">
+                      {{ products.find(p => p.category === c.id)?.price || '查看全部' }}
+                    </span>
+                  </div>
+                </button>
+              </Reveal>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#1C1B18]/15 bg-[#1C1B18] py-2.5" aria-hidden="true">
+        <div class="marquee-track">
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
+            <span>黑土粳稻 / 黄金玉米</span><span class="text-[#C88A32]">✳</span>
+            <span>长白山椴树雪蜜 / 红松子</span><span class="text-[#C88A32]">✳</span>
+            <span>查干湖生态胖头鱼</span><span class="text-[#C88A32]">✳</span>
+            <span>产地可查 · 认证可验 · 流通可追</span><span class="text-[#C88A32]">✳</span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 目录 -->
+    <section id="catalog" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
+      <Reveal>
+        <SectionHead
+          index="01 / 04"
+          eyebrow="CURATED CATALOG / 风物目录"
+          title="六件风物，三种地貌"
+          description="按品类筛选。卡片中的价格与销量为教学演示数据，用于说明产地到消费者的信息结构。"
+        />
+      </Reveal>
+
+      <Reveal :delay="90" class="mt-10">
+        <div class="flex flex-wrap items-center gap-2 border-b border-[#1C1B18]/12 pb-6">
+          <button
+            v-for="c in categories"
+            :key="c.id"
+            @click="activeFilter = c.id"
+            class="px-4 py-2.5 min-h-[40px] rounded-lg text-xs font-semibold cursor-pointer transition-all duration-300"
+            :class="activeFilter === c.id
+              ? 'bg-[#1C1B18] text-[#F7F4EE]'
+              : 'border border-[#1C1B18]/14 text-[#5A564E] hover:border-[#C88A32] hover:text-[#C88A32]'"
+          >{{ c.name }}</button>
+          <span class="ml-auto font-mono text-[10px] tracking-[0.16em] text-[#6E6960]">{{ filtered.length }} ITEMS</span>
+        </div>
+      </Reveal>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-8">
+        <Reveal v-for="(p, i) in filtered" :key="p.id" :delay="(i % 3) * 90" class="h-full">
+          <article class="h-full border border-[#1C1B18]/10 bg-[#FFFDF9]/70 lift flex flex-col overflow-hidden">
+            <div class="art-frame aspect-[16/9]">
+              <img :src="p.image" :alt="p.name" loading="lazy" />
+              <span class="absolute top-3 left-3 px-2 py-1 font-mono text-[10px] tracking-[0.16em] bg-[#FFFDF9]/88 text-[#1C1B18]">{{ p.plate }}</span>
+              <span class="absolute bottom-3 right-3 font-editorial text-xl font-bold text-[#F7F4EE]/92">{{ p.no }}</span>
+            </div>
+            <div class="p-6 flex flex-col flex-1">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <span class="px-2.5 py-1 bg-[#C88A32]/12 text-[#8A6324] text-[10px] font-mono">{{ p.tag }}</span>
+                <span class="caption">{{ p.plate }}</span>
+              </div>
+              <h3 class="display-3 mb-2">{{ p.name }}</h3>
+              <div class="font-mono text-[10px] tracking-[0.1em] text-[#6E6960] mb-4">产地 / {{ p.origin }}</div>
+              <p class="body-copy text-[13px]! flex-1">{{ p.desc }}</p>
+              <div class="mt-6 pt-5 border-t border-[#1C1B18]/10 flex items-baseline justify-between gap-3">
+                <span class="font-editorial text-lg font-bold text-[#B83828]">{{ p.price }}</span>
+                <span class="caption">{{ p.sales }}</span>
+              </div>
+              <button
+                @click="addToList(p.name)"
+                class="mt-5 w-full py-3 rounded-lg bg-[#1C1B18] text-[#F7F4EE] text-xs font-bold hover:bg-[#C88A32] hover:text-[#1C1B18] transition-colors duration-300 cursor-pointer flex items-center justify-center gap-2"
+              >
+                加入助农直采清单 <ArrowUpRight :size="14" />
+              </button>
+            </div>
+          </article>
+        </Reveal>
+      </div>
+    </section>
+
+    <!-- 产地地图 -->
+    <section id="origins" class="surface-linen border-y border-[#1C1B18]/10">
+      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+          <Reveal class="lg:col-span-6">
+            <FigurePlate
+              src="/art/atlas.svg"
+              alt="吉林物产产地经纬图版"
+              index="PLATE 08"
+              caption="中部平原粳稻与玉米、东南山林特产、西北湖泊渔业，构成三条清晰的物产带。"
+              credit="RESEARCH ATLAS"
+            />
+          </Reveal>
+          <div class="lg:col-span-6">
+            <Reveal>
+              <SectionHead
+                index="02 / 04"
+                eyebrow="ORIGIN MAP / 产地与流通"
+                title="一件风物，背后是一整片地貌"
+              />
+            </Reveal>
+            <Reveal :delay="100"><p class="lede mt-7">
+              中部松辽平原的黑土与灌区给出粳稻和玉米，东南长白山林下给出椴树蜜、松子与人参，西北查干湖的大水面给出冬捕胖头鱼。三条物产带对应三种完全不同的生态本底，也决定了各自的采收节律与冷链方式。
+            </p></Reveal>
+            <Reveal :delay="170">
+              <div class="mt-8 divide-y divide-[#1C1B18]/10 border-y border-[#1C1B18]/10">
+                <div v-for="n in [
+                  { k: 'PLAIN', v: '松辽平原', d: '粳稻 / 甜糯玉米 / 杂粮' },
+                  { k: 'FOREST', v: '长白山林区', d: '椴树雪蜜 / 红松子 / 人参' },
+                  { k: 'LAKE', v: '查干湖湿地', d: '冬捕胖头鱼 / 生态渔业' }
+                ]" :key="n.k" class="grid grid-cols-[92px_1fr_auto] items-center gap-4 py-4">
+                  <span class="font-mono text-[10px] tracking-[0.16em] text-[#8A6324]">{{ n.k }}</span>
+                  <span class="text-sm font-semibold">{{ n.v }}</span>
+                  <span class="caption text-right hidden sm:block">{{ n.d }}</span>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 助农说明 -->
+    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <Reveal>
+        <SectionHead
+          index="03 / 04"
+          eyebrow="RURAL E-COMMERCE / 数字助农"
+          title="把链路讲清楚，比卖出去更重要"
+        />
+      </Reveal>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
+        <Reveal v-for="(n, i) in [
+          { no: '01', k: 'ORIGIN', t: '产地可查', d: '每件风物标注到县域与流域，不做模糊的「东北特产」' },
+          { no: '02', k: 'QUALITY', t: '认证可核', d: '地理标志、绿色食品与有机认证分别列示' },
+          { no: '03', k: 'LOGISTICS', t: '链路可见', d: '从烘干、入库到冷链直发的节点全部标注' }
+        ]" :key="n.no" :delay="i * 100">
+          <div class="border-t border-[#1C1B18]/16 pt-6">
+            <div class="flex items-baseline justify-between mb-4">
+              <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324]">{{ n.k }}</span>
+              <span class="font-mono text-[10px] text-[#6E6960]">{{ n.no }}</span>
+            </div>
+            <h3 class="font-editorial text-xl font-bold mb-3">{{ n.t }}</h3>
+            <p class="body-copy text-[13px]!">{{ n.d }}</p>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+
+    <section class="surface-ink">
+      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-10">
+        <Reveal>
+          <div class="eyebrow mb-4">04 / 04 · COLOPHON</div>
+          <p class="text-[13px] leading-[2] text-[#F7F4EE]/90 max-w-2xl">本集市为教学演示模块，商品、价格、销量与下单交互均为模拟数据，不产生真实交易。</p>
+        </Reveal>
+        <Reveal :delay="120">
+          <RouterLink to="/about" class="inline-flex items-baseline gap-3 min-h-[40px] group">
+            <span class="font-editorial text-2xl sm:text-3xl font-bold text-[#F7F4EE] group-hover:text-[#C88A32] transition-colors">长春智库与答辩说明</span>
+            <ArrowUpRight :size="22" class="text-[#C88A32] arrow-shift" />
+          </RouterLink>
+        </Reveal>
+      </div>
+    </section>
+
+    <!-- 轻量提示 -->
+    <Transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="opacity-0 translate-y-4"
+      leave-active-class="transition duration-200 ease-in"
+      leave-to-class="opacity-0 translate-y-4"
+    >
+      <div v-if="toast" class="fixed bottom-7 left-1/2 -translate-x-1/2 z-[80] museum-card px-5 py-3 rounded-xl border border-[#C88A32]/40 flex items-center gap-2.5 shadow-xl">
+        <Check :size="15" class="text-[#2E5A44]" />
+        <span class="text-xs font-semibold text-[#1C1B18]">{{ toast }}</span>
+      </div>
+    </Transition>
+  </div>
+</template>

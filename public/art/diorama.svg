@@ -1,0 +1,400 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" width="1200" height="820" role="img">
+<title>松辽平原土地利用抽象测绘图版</title>
+<defs>
+<clipPath id="frame"><rect x="0" y="0" width="1200" height="820"/></clipPath>
+<clipPath id="gridclip"><rect x="0" y="0" width="890" height="820"/></clipPath>
+<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0 H0 V40" fill="none" stroke="#F7F4EE" stroke-opacity="0.045" stroke-width="1"/></pattern>
+<linearGradient id="gp" x1="0" y1="0" x2="0.65" y2="1"><stop offset="0" stop-color="#2E5A44"/><stop offset="1" stop-color="#1C1B18"/></linearGradient>
+<linearGradient id="gr" x1="0" y1="0" x2="0.65" y2="1"><stop offset="0" stop-color="#C88A32"/><stop offset="1" stop-color="#8C583A"/></linearGradient>
+<linearGradient id="gd" x1="0" y1="0" x2="0.65" y2="1"><stop offset="0" stop-color="#8C583A"/><stop offset="1" stop-color="#1C1B18"/></linearGradient>
+<linearGradient id="gf" x1="0" y1="0" x2="0.65" y2="1"><stop offset="0" stop-color="#2E5A44" stop-opacity="0.75"/><stop offset="1" stop-color="#1C1B18"/></linearGradient>
+<pattern id="ridge-h" width="80" height="14" patternUnits="userSpaceOnUse"><path d="M0 13 H80" stroke="#F7F4EE" stroke-opacity="0.17" stroke-width="1"/><path d="M0 6 H80" stroke="#1C1B18" stroke-opacity="0.16" stroke-width="1"/></pattern>
+<pattern id="ridge-v" width="14" height="80" patternUnits="userSpaceOnUse"><path d="M13 0 V80" stroke="#F7F4EE" stroke-opacity="0.16" stroke-width="1"/><path d="M6 0 V80" stroke="#1C1B18" stroke-opacity="0.15" stroke-width="1"/></pattern>
+<pattern id="ridge-d" width="18" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(32)"><path d="M2 0 V18" stroke="#F7F4EE" stroke-opacity="0.15" stroke-width="1"/><path d="M11 0 V18" stroke="#1C1B18" stroke-opacity="0.16" stroke-width="1"/></pattern>
+<pattern id="crop" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="1.7" fill="#F7F4EE" fill-opacity="0.24"/><circle cx="17" cy="16" r="1.3" fill="#F7F4EE" fill-opacity="0.16"/><path d="M6 11 v4 M17 2 v4" stroke="#F7F4EE" stroke-opacity="0.14" stroke-width="1"/></pattern>
+</defs>
+<rect width="1200" height="820" fill="#1C1B18"/>
+<rect width="1200" height="820" fill="url(#grid)"/>
+<g clip-path="url(#frame)">
+<text x="46" y="62" fill="#C88A32" fill-opacity="1" font-size="13" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="4" text-anchor="start">PLATE 03</text>
+<text x="1154" y="62" fill="#FFFDF9" fill-opacity="0.72" font-size="11" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="2.4" text-anchor="end">SHEET 03 / AERIAL SURVEY / GRID 03-06</text>
+<path d="M46.0 78.0 L1154.0 78.0" stroke="#FFFDF9" stroke-width="1" stroke-opacity="0.16" fill="none"/>
+<rect x="70" y="110" width="250" height="185" rx="8" fill="url(#gp)" fill-opacity="0.9"/>
+<rect x="70" y="110" width="250" height="185" rx="8" fill="url(#ridge-h)"/>
+<path d="M80 111 H310" stroke="#FFFDF9" stroke-opacity="0.28" stroke-width="1.5"/>
+<rect x="70" y="110" width="250" height="185" rx="8" fill="none" stroke="#FFFDF9" stroke-opacity="0.3"/>
+<text x="84" y="134" fill="#FFFDF9" fill-opacity="0.92" font-size="11" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="2.2" text-anchor="start">A-01</text>
+<text x="84" y="281" fill="#FFFDF9" fill-opacity="0.8" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.6" text-anchor="start">PADDY / 水田</text>
+<path d="M294 128 h12 M300 122 v12" stroke="#C88A32" stroke-opacity="0.85" stroke-width="1.2" fill="none"/>
+<rect x="350" y="110" width="250" height="185" rx="8" fill="url(#gr)" fill-opacity="0.9"/>
+<rect x="350" y="110" width="250" height="185" rx="8" fill="url(#ridge-v)"/>
+<path d="M360 111 H590" stroke="#FFFDF9" stroke-opacity="0.28" stroke-width="1.5"/>
+<rect x="350" y="110" width="250" height="185" rx="8" fill="none" stroke="#FFFDF9" stroke-opacity="0.3"/>
+<path d="M505.0 118.0 L505.0 287.0" stroke="#FFFDF9" stroke-width="1" stroke-opacity="0.22" fill="none"/>
+<text x="364" y="134" fill="#FFFDF9" fill-opacity="0.92" font-size="11" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="2.2" text-anchor="start">A-02</text>
+<text x="364" y="281" fill="#FFFDF9" fill-opacity="0.8" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.6" text-anchor="start">RIPE / 成熟稻</text>
+<path d="M574 128 h12 M580 122 v12" stroke="#C88A32" stroke-opacity="0.85" stroke-width="1.2" fill="none"/>
+<rect x="630" y="110" width="250" height="185" rx="8" fill="url(#gd)" fill-opacity="0.9"/>
+<rect x="630" y="110" width="250" height="185" rx="8" fill="url(#crop)"/>
+<path d="M640 111 H870" stroke="#FFFDF9" stroke-opacity="0.28" stroke-width="1.5"/>
+<rect x="630" y="110" width="250" height="185" rx="8" fill="none" stroke="#FFFDF9" stroke-opacity="0.3"/>
+<text x="644" y="134" fill="#FFFDF9" fill-opacity="0.92" font-size="11" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="2.2" text-anchor="start">A-03</text>
+<text x="644" y="281" fill="#FFFDF9" fill-opacity="0.8" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.6" text-anchor="start">DRYLAND / 旱田</text>
+<path d="M854 128 h12 M860 122 v12" stroke="#C88A32" stroke-opacity="0.85" stroke-width="1.2" fill="none"/>
+<rect x="70" y="320" width="250" height="185" rx="8" fill="url(#gr)" fill-opacity="0.9"/>
+<rect x="70" y="320" width="250" height="185" rx="8" fill="url(#crop)"/>
+<path d="M80 321 H310" stroke="#FFFDF9" stroke-opacity="0.28" stroke-width="1.5"/>
+<rect x="70" y="320" width="250" height="185" rx="8" fill="none" stroke="#FFFDF9" stroke-opacity="0.3"/>
+<text x="84" y="344" fill="#FFFDF9" fill-opacity="0.92" font-size="11" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="2.2" text-anchor="start">B-01</text>
+<text x="84" y="491" fill="#FFFDF9" fill-opacity="0.8" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.6" text-anchor="start">HARVEST / 收割</text>
+<path d="M294 338 h12 M300 332 v12" stroke="#C88A32" stroke-opacity="0.85" stroke-width="1.2" fill="none"/>
+<rect x="350" y="320" width="250" height="185" rx="8" fill="url(#gp)" fill-opacity="0.9"/>
+<rect x="350" y="320" width="250" height="185" rx="8" fill="url(#ridge-d)"/>
+<path d="M360 321 H590" stroke="#FFFDF9" stroke-opacity="0.28" stroke-width="1.5"/>
+<rect x="350" y="320" width="250" height="185" rx="8" fill="none" stroke="#FFFDF9" stroke-opacity="0.3"/>
+<path d="M505.0 328.0 L505.0 497.0" stroke="#FFFDF9" stroke-width="1" stroke-opacity="0.22" fill="none"/>
+<text x="364" y="344" fill="#FFFDF9" fill-opacity="0.92" font-size="11" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="2.2" text-anchor="start">B-02</text>
+<text x="364" y="491" fill="#FFFDF9" fill-opacity="0.8" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.6" text-anchor="start">MEADOW / 草甸</text>
+<path d="M574 338 h12 M580 332 v12" stroke="#C88A32" stroke-opacity="0.85" stroke-width="1.2" fill="none"/>
+<rect x="630" y="320" width="250" height="185" rx="8" fill="url(#gd)" fill-opacity="0.9"/>
+<rect x="630" y="320" width="250" height="185" rx="8" fill="url(#ridge-h)"/>
+<path d="M640 321 H870" stroke="#FFFDF9" stroke-opacity="0.28" stroke-width="1.5"/>
+<rect x="630" y="320" width="250" height="185" rx="8" fill="none" stroke="#FFFDF9" stroke-opacity="0.3"/>
+<text x="644" y="344" fill="#FFFDF9" fill-opacity="0.92" font-size="11" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="2.2" text-anchor="start">B-03</text>
+<text x="644" y="491" fill="#FFFDF9" fill-opacity="0.8" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.6" text-anchor="start">FALLOW / 休耕</text>
+<path d="M854 338 h12 M860 332 v12" stroke="#C88A32" stroke-opacity="0.85" stroke-width="1.2" fill="none"/>
+<rect x="70" y="530" width="250" height="185" rx="8" fill="url(#gd)" fill-opacity="0.9"/>
+<rect x="70" y="530" width="250" height="185" rx="8" fill="url(#ridge-v)"/>
+<path d="M80 531 H310" stroke="#FFFDF9" stroke-opacity="0.28" stroke-width="1.5"/>
+<rect x="70" y="530" width="250" height="185" rx="8" fill="none" stroke="#FFFDF9" stroke-opacity="0.3"/>
+<text x="84" y="554" fill="#FFFDF9" fill-opacity="0.92" font-size="11" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="2.2" text-anchor="start">C-01</text>
+<text x="84" y="701" fill="#FFFDF9" fill-opacity="0.8" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.6" text-anchor="start">ORCHARD / 果园</text>
+<path d="M294 548 h12 M300 542 v12" stroke="#C88A32" stroke-opacity="0.85" stroke-width="1.2" fill="none"/>
+<rect x="350" y="530" width="250" height="185" rx="8" fill="url(#gf)" fill-opacity="0.9"/>
+<rect x="350" y="530" width="250" height="185" rx="8" fill="url(#crop)"/>
+<path d="M360 531 H590" stroke="#FFFDF9" stroke-opacity="0.28" stroke-width="1.5"/>
+<rect x="350" y="530" width="250" height="185" rx="8" fill="none" stroke="#FFFDF9" stroke-opacity="0.3"/>
+<path d="M505.0 538.0 L505.0 707.0" stroke="#FFFDF9" stroke-width="1" stroke-opacity="0.22" fill="none"/>
+<text x="364" y="554" fill="#FFFDF9" fill-opacity="0.92" font-size="11" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="2.2" text-anchor="start">C-02</text>
+<text x="364" y="701" fill="#FFFDF9" fill-opacity="0.8" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.6" text-anchor="start">SHELTERBELT / 防护林</text>
+<path d="M574 548 h12 M580 542 v12" stroke="#C88A32" stroke-opacity="0.85" stroke-width="1.2" fill="none"/>
+<rect x="630" y="530" width="250" height="185" rx="8" fill="url(#gp)" fill-opacity="0.9"/>
+<rect x="630" y="530" width="250" height="185" rx="8" fill="url(#ridge-h)"/>
+<path d="M640 531 H870" stroke="#FFFDF9" stroke-opacity="0.28" stroke-width="1.5"/>
+<rect x="630" y="530" width="250" height="185" rx="8" fill="none" stroke="#FFFDF9" stroke-opacity="0.3"/>
+<text x="644" y="554" fill="#FFFDF9" fill-opacity="0.92" font-size="11" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="2.2" text-anchor="start">C-03</text>
+<text x="644" y="701" fill="#FFFDF9" fill-opacity="0.8" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.6" text-anchor="start">PADDY / 水田</text>
+<path d="M854 548 h12 M860 542 v12" stroke="#C88A32" stroke-opacity="0.85" stroke-width="1.2" fill="none"/>
+<g clip-path="url(#gridclip)">
+<path d="M-50.0 546.0 L-35.4 550.4 L-20.8 554.5 L-6.2 558.4 L8.4 562.0 L23.0 565.5 L37.6 568.6 L52.2 571.4 L66.9 573.9 L81.5 576.2 L96.1 578.0 L110.7 579.6 L125.3 580.7 L139.9 581.6 L154.5 582.0 L169.1 582.1 L183.7 581.8 L198.3 581.1 L212.9 580.0 L227.5 578.6 L242.1 576.8 L256.7 574.6 L271.3 572.0 L286.0 569.1 L300.6 565.9 L315.2 562.2 L329.8 558.3 L344.4 554.0 L359.0 549.4 L373.6 544.6 L388.2 539.4 L402.8 534.0 L417.4 528.4 L432.0 522.5 L446.6 516.4 L461.2 510.2 L475.8 503.7 L490.4 497.2 L505.1 490.5 L519.7 483.7 L534.3 476.9 L548.9 470.0 L563.5 463.1 L578.1 456.2 L592.7 449.3 L607.3 442.4 L621.9 435.7 L636.5 429.0 L651.1 422.4 L665.7 416.0 L680.3 409.8 L694.9 403.7 L709.6 397.8 L724.2 392.2 L738.8 386.8 L753.4 381.7 L768.0 376.8 L782.6 372.2 L797.2 368.0 L811.8 364.0 L826.4 360.4 L841.0 357.2 L855.6 354.3 L870.2 351.7 L884.8 349.6 L899.4 347.8 L914.0 346.3 L928.7 345.3 L943.3 344.6 L957.9 344.3 L972.5 344.4 L987.1 344.9 L1001.7 345.7 L1016.3 346.9 L1030.9 348.4 L1045.5 350.3 L1060.1 352.6 L1074.7 355.1 L1089.3 357.9 L1103.9 361.1 L1118.5 364.5 L1133.1 368.2 L1147.8 372.1 L1162.4 376.2 L1177.0 380.5 L1191.6 385.1 L1206.2 389.7 L1220.8 394.6 L1235.4 399.5 L1250.0 404.5" stroke="#FFFDF9" stroke-width="58" stroke-opacity="0.1" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M-50.0 546.0 L-35.4 550.4 L-20.8 554.5 L-6.2 558.4 L8.4 562.0 L23.0 565.5 L37.6 568.6 L52.2 571.4 L66.9 573.9 L81.5 576.2 L96.1 578.0 L110.7 579.6 L125.3 580.7 L139.9 581.6 L154.5 582.0 L169.1 582.1 L183.7 581.8 L198.3 581.1 L212.9 580.0 L227.5 578.6 L242.1 576.8 L256.7 574.6 L271.3 572.0 L286.0 569.1 L300.6 565.9 L315.2 562.2 L329.8 558.3 L344.4 554.0 L359.0 549.4 L373.6 544.6 L388.2 539.4 L402.8 534.0 L417.4 528.4 L432.0 522.5 L446.6 516.4 L461.2 510.2 L475.8 503.7 L490.4 497.2 L505.1 490.5 L519.7 483.7 L534.3 476.9 L548.9 470.0 L563.5 463.1 L578.1 456.2 L592.7 449.3 L607.3 442.4 L621.9 435.7 L636.5 429.0 L651.1 422.4 L665.7 416.0 L680.3 409.8 L694.9 403.7 L709.6 397.8 L724.2 392.2 L738.8 386.8 L753.4 381.7 L768.0 376.8 L782.6 372.2 L797.2 368.0 L811.8 364.0 L826.4 360.4 L841.0 357.2 L855.6 354.3 L870.2 351.7 L884.8 349.6 L899.4 347.8 L914.0 346.3 L928.7 345.3 L943.3 344.6 L957.9 344.3 L972.5 344.4 L987.1 344.9 L1001.7 345.7 L1016.3 346.9 L1030.9 348.4 L1045.5 350.3 L1060.1 352.6 L1074.7 355.1 L1089.3 357.9 L1103.9 361.1 L1118.5 364.5 L1133.1 368.2 L1147.8 372.1 L1162.4 376.2 L1177.0 380.5 L1191.6 385.1 L1206.2 389.7 L1220.8 394.6 L1235.4 399.5 L1250.0 404.5" stroke="#8EBACB" stroke-width="46" stroke-opacity="0.24" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M-50.0 546.0 L-35.4 550.4 L-20.8 554.5 L-6.2 558.4 L8.4 562.0 L23.0 565.5 L37.6 568.6 L52.2 571.4 L66.9 573.9 L81.5 576.2 L96.1 578.0 L110.7 579.6 L125.3 580.7 L139.9 581.6 L154.5 582.0 L169.1 582.1 L183.7 581.8 L198.3 581.1 L212.9 580.0 L227.5 578.6 L242.1 576.8 L256.7 574.6 L271.3 572.0 L286.0 569.1 L300.6 565.9 L315.2 562.2 L329.8 558.3 L344.4 554.0 L359.0 549.4 L373.6 544.6 L388.2 539.4 L402.8 534.0 L417.4 528.4 L432.0 522.5 L446.6 516.4 L461.2 510.2 L475.8 503.7 L490.4 497.2 L505.1 490.5 L519.7 483.7 L534.3 476.9 L548.9 470.0 L563.5 463.1 L578.1 456.2 L592.7 449.3 L607.3 442.4 L621.9 435.7 L636.5 429.0 L651.1 422.4 L665.7 416.0 L680.3 409.8 L694.9 403.7 L709.6 397.8 L724.2 392.2 L738.8 386.8 L753.4 381.7 L768.0 376.8 L782.6 372.2 L797.2 368.0 L811.8 364.0 L826.4 360.4 L841.0 357.2 L855.6 354.3 L870.2 351.7 L884.8 349.6 L899.4 347.8 L914.0 346.3 L928.7 345.3 L943.3 344.6 L957.9 344.3 L972.5 344.4 L987.1 344.9 L1001.7 345.7 L1016.3 346.9 L1030.9 348.4 L1045.5 350.3 L1060.1 352.6 L1074.7 355.1 L1089.3 357.9 L1103.9 361.1 L1118.5 364.5 L1133.1 368.2 L1147.8 372.1 L1162.4 376.2 L1177.0 380.5 L1191.6 385.1 L1206.2 389.7 L1220.8 394.6 L1235.4 399.5 L1250.0 404.5" stroke="#8EBACB" stroke-width="30" stroke-opacity="0.62" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M-50.0 546.0 L-35.4 550.4 L-20.8 554.5 L-6.2 558.4 L8.4 562.0 L23.0 565.5 L37.6 568.6 L52.2 571.4 L66.9 573.9 L81.5 576.2 L96.1 578.0 L110.7 579.6 L125.3 580.7 L139.9 581.6 L154.5 582.0 L169.1 582.1 L183.7 581.8 L198.3 581.1 L212.9 580.0 L227.5 578.6 L242.1 576.8 L256.7 574.6 L271.3 572.0 L286.0 569.1 L300.6 565.9 L315.2 562.2 L329.8 558.3 L344.4 554.0 L359.0 549.4 L373.6 544.6 L388.2 539.4 L402.8 534.0 L417.4 528.4 L432.0 522.5 L446.6 516.4 L461.2 510.2 L475.8 503.7 L490.4 497.2 L505.1 490.5 L519.7 483.7 L534.3 476.9 L548.9 470.0 L563.5 463.1 L578.1 456.2 L592.7 449.3 L607.3 442.4 L621.9 435.7 L636.5 429.0 L651.1 422.4 L665.7 416.0 L680.3 409.8 L694.9 403.7 L709.6 397.8 L724.2 392.2 L738.8 386.8 L753.4 381.7 L768.0 376.8 L782.6 372.2 L797.2 368.0 L811.8 364.0 L826.4 360.4 L841.0 357.2 L855.6 354.3 L870.2 351.7 L884.8 349.6 L899.4 347.8 L914.0 346.3 L928.7 345.3 L943.3 344.6 L957.9 344.3 L972.5 344.4 L987.1 344.9 L1001.7 345.7 L1016.3 346.9 L1030.9 348.4 L1045.5 350.3 L1060.1 352.6 L1074.7 355.1 L1089.3 357.9 L1103.9 361.1 L1118.5 364.5 L1133.1 368.2 L1147.8 372.1 L1162.4 376.2 L1177.0 380.5 L1191.6 385.1 L1206.2 389.7 L1220.8 394.6 L1235.4 399.5 L1250.0 404.5" stroke="#FFFDF9" stroke-width="2.4" stroke-opacity="0.75" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M300 300 C 420 380, 500 520, 610 700" stroke="#FFFDF9" stroke-width="2" stroke-opacity="0.32" stroke-dasharray="9 9" fill="none"/>
+<rect x="726" y="404" width="42" height="72" rx="3" fill="#FFFDF9" fill-opacity="0.16" stroke="#FFFDF9" stroke-opacity="0.5"/>
+<path d="M726.0 428.0 L768.0 428.0" stroke="#FFFDF9" stroke-width="1.5" stroke-opacity="0.55" fill="none"/>
+<path d="M726.0 452.0 L768.0 452.0" stroke="#FFFDF9" stroke-width="1.5" stroke-opacity="0.55" fill="none"/>
+</g>
+<circle cx="78.0" cy="305" r="2.4" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="78.0" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="101.0" cy="305" r="2.9" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="101.0" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="126.9" cy="305" r="2.3" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="126.9" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="147.7" cy="305" r="3.0" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="147.7" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="171.1" cy="305" r="3.3" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="171.1" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="194.5" cy="305" r="3.2" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="194.5" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="219.7" cy="305" r="3.3" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="219.7" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="243.4" cy="305" r="2.5" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="243.4" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="267.3" cy="305" r="2.4" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="267.3" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="292.8" cy="305" r="2.8" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="292.8" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="318.3" cy="305" r="3.2" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="318.3" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="342.8" cy="305" r="2.5" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="342.8" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="363.8" cy="305" r="3.6" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="363.8" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="390.2" cy="305" r="3.3" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="390.2" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="417.2" cy="305" r="2.9" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="417.2" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="436.8" cy="305" r="2.7" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="436.8" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="460.3" cy="305" r="2.6" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="460.3" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="482.9" cy="305" r="3.4" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="482.9" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="507.6" cy="305" r="3.0" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="507.6" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="526.8" cy="305" r="3.2" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="526.8" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="548.7" cy="305" r="2.8" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="548.7" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="570.9" cy="305" r="3.0" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="570.9" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="593.8" cy="305" r="2.4" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="593.8" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="616.9" cy="305" r="3.3" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="616.9" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="640.7" cy="305" r="2.9" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="640.7" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="667.0" cy="305" r="2.6" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="667.0" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="689.4" cy="305" r="3.5" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="689.4" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="712.2" cy="305" r="2.9" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="712.2" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="731.4" cy="305" r="2.5" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="731.4" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="751.5" cy="305" r="2.3" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="751.5" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="776.1" cy="305" r="3.4" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="776.1" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="795.9" cy="305" r="3.1" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="795.9" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="818.7" cy="305" r="2.9" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="818.7" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="839.5" cy="305" r="3.4" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="839.5" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="863.5" cy="305" r="2.8" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="863.5" cy="304" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="78.0" cy="515" r="3.5" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="78.0" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="104.9" cy="515" r="3.0" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="104.9" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="128.4" cy="515" r="3.1" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="128.4" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="149.8" cy="515" r="3.3" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="149.8" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="172.9" cy="515" r="2.9" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="172.9" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="198.9" cy="515" r="2.8" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="198.9" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="220.3" cy="515" r="2.6" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="220.3" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="239.5" cy="515" r="3.1" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="239.5" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="263.3" cy="515" r="2.8" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="263.3" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="286.5" cy="515" r="2.9" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="286.5" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="312.9" cy="515" r="2.6" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="312.9" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="335.8" cy="515" r="2.9" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="335.8" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="361.4" cy="515" r="3.3" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="361.4" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="384.8" cy="515" r="3.5" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="384.8" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="410.5" cy="515" r="2.6" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="410.5" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="436.8" cy="515" r="2.3" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="436.8" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="461.3" cy="515" r="3.3" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="461.3" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="484.5" cy="515" r="2.8" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="484.5" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="511.2" cy="515" r="3.6" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="511.2" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="536.9" cy="515" r="2.9" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="536.9" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="556.4" cy="515" r="2.6" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="556.4" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="579.4" cy="515" r="2.3" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="579.4" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="604.4" cy="515" r="2.8" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="604.4" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="627.0" cy="515" r="2.2" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="627.0" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="646.0" cy="515" r="3.0" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="646.0" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="672.5" cy="515" r="2.3" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="672.5" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="697.8" cy="515" r="2.5" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="697.8" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="721.8" cy="515" r="3.3" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="721.8" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="748.4" cy="515" r="3.1" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="748.4" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="772.5" cy="515" r="2.4" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="772.5" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="794.0" cy="515" r="3.0" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="794.0" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="819.2" cy="515" r="3.5" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="819.2" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="842.1" cy="515" r="3.2" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="842.1" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<circle cx="862.2" cy="515" r="2.5" fill="#2E5A44" fill-opacity="0.9"/>
+<circle cx="862.2" cy="514" r="1" fill="#FFFDF9" fill-opacity="0.4"/>
+<text x="910" y="120" fill="#C88A32" fill-opacity="1" font-size="12" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="2.6" text-anchor="start">LAND USE KEY</text>
+<text x="910" y="140" fill="#FFFDF9" fill-opacity="0.72" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.4" text-anchor="start">地类索引 / 抽象图例</text>
+<path d="M910.0 152.0 L1154.0 152.0" stroke="#FFFDF9" stroke-width="1" stroke-opacity="0.22" fill="none"/>
+<rect x="910" y="164" width="18" height="18" rx="3" fill="url(#gp)"/>
+<rect x="910" y="164" width="18" height="18" rx="3" fill="none" stroke="#FFFDF9" stroke-opacity="0.35"/>
+<text x="938" y="177" fill="#FFFDF9" fill-opacity="0.86" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.4" text-anchor="start">PADDY / 水田</text>
+<rect x="910" y="198" width="18" height="18" rx="3" fill="url(#gr)"/>
+<rect x="910" y="198" width="18" height="18" rx="3" fill="none" stroke="#FFFDF9" stroke-opacity="0.35"/>
+<text x="938" y="211" fill="#FFFDF9" fill-opacity="0.86" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.4" text-anchor="start">RIPE / 成熟稻</text>
+<rect x="910" y="232" width="18" height="18" rx="3" fill="url(#gd)"/>
+<rect x="910" y="232" width="18" height="18" rx="3" fill="none" stroke="#FFFDF9" stroke-opacity="0.35"/>
+<text x="938" y="245" fill="#FFFDF9" fill-opacity="0.86" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.4" text-anchor="start">DRYLAND / 旱田</text>
+<rect x="910" y="266" width="18" height="18" rx="3" fill="url(#gf)"/>
+<rect x="910" y="266" width="18" height="18" rx="3" fill="none" stroke="#FFFDF9" stroke-opacity="0.35"/>
+<text x="938" y="279" fill="#FFFDF9" fill-opacity="0.86" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.4" text-anchor="start">BELT / 防护林</text>
+<text x="910" y="336" fill="#FFFDF9" fill-opacity="0.72" font-size="10" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.8" text-anchor="start">VIEWPOINTS / 漫游视点</text>
+<circle cx="946" cy="386" r="30" fill="#FFFDF9" fill-opacity="0.9"/>
+<circle cx="946" cy="386" r="30" fill="none" stroke="#C88A32" stroke-opacity="0.85" stroke-width="1.5"/>
+<circle cx="946" cy="386" r="8" fill="#C88A32"/>
+<text x="946" y="346" fill="#C88A32" fill-opacity="1" font-size="9" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.4" text-anchor="middle">V-01</text>
+<circle cx="1028" cy="386" r="30" fill="#FFFDF9" fill-opacity="0.9"/>
+<circle cx="1028" cy="386" r="30" fill="none" stroke="#C88A32" stroke-opacity="0.85" stroke-width="1.5"/>
+<circle cx="1028" cy="386" r="8" fill="#C88A32"/>
+<text x="1028" y="346" fill="#C88A32" fill-opacity="1" font-size="9" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.4" text-anchor="middle">V-02</text>
+<circle cx="946" cy="468" r="30" fill="#FFFDF9" fill-opacity="0.9"/>
+<circle cx="946" cy="468" r="30" fill="none" stroke="#C88A32" stroke-opacity="0.85" stroke-width="1.5"/>
+<circle cx="946" cy="468" r="8" fill="#C88A32"/>
+<text x="946" y="428" fill="#C88A32" fill-opacity="1" font-size="9" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.4" text-anchor="middle">V-03</text>
+<rect x="1074" y="410" width="46" height="52" rx="2" fill="#FFFDF9" fill-opacity="0.2"/>
+<path d="M1068 410 L1097 390 L1126 410 Z" fill="#C88A32" fill-opacity="0.72"/>
+<path d="M1074.0 424.0 L1120.0 424.0" stroke="#FFFDF9" stroke-width="1" stroke-opacity="0.3" fill="none"/>
+<path d="M1074.0 437.0 L1120.0 437.0" stroke="#FFFDF9" stroke-width="1" stroke-opacity="0.3" fill="none"/>
+<path d="M1074.0 450.0 L1120.0 450.0" stroke="#FFFDF9" stroke-width="1" stroke-opacity="0.3" fill="none"/>
+<path d="M1097.0 500.0 L1097.0 570.0" stroke="#FFFDF9" stroke-width="2.5" stroke-opacity="0.6" fill="none"/>
+<path d="M1097 500 L1131.0 500.0" stroke="#FFFDF9" stroke-opacity="0.7" stroke-width="3" stroke-linecap="round"/>
+<path d="M1097 500 L1080.0 529.4" stroke="#FFFDF9" stroke-opacity="0.7" stroke-width="3" stroke-linecap="round"/>
+<path d="M1097 500 L1080.0 470.6" stroke="#FFFDF9" stroke-opacity="0.7" stroke-width="3" stroke-linecap="round"/>
+<circle cx="1097" cy="500" r="5" fill="#C88A32"/>
+<text x="910" y="636" fill="#FFFDF9" fill-opacity="0.6" font-size="9" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="2" text-anchor="start">SCALE</text>
+<path d="M910.0 656.0 L1030.0 656.0" stroke="#FFFDF9" stroke-width="3" stroke-opacity="0.7" fill="none"/>
+<path d="M910.0 650.0 L910.0 662.0" stroke="#FFFDF9" stroke-width="1.5" stroke-opacity="0.7" fill="none"/>
+<path d="M970.0 650.0 L970.0 662.0" stroke="#FFFDF9" stroke-width="1.5" stroke-opacity="0.7" fill="none"/>
+<path d="M1030.0 650.0 L1030.0 662.0" stroke="#FFFDF9" stroke-width="1.5" stroke-opacity="0.7" fill="none"/>
+<text x="910" y="678" fill="#FFFDF9" fill-opacity="0.7" font-size="9" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1" text-anchor="start">0</text>
+<text x="1030" y="678" fill="#FFFDF9" fill-opacity="0.7" font-size="9" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1" text-anchor="middle">500 m</text>
+<path d="M1120 612 v56 M1092 640 h56" stroke="#C88A32" stroke-opacity="0.8" stroke-width="1.4" fill="none"/>
+<circle cx="1120" cy="640" r="16" fill="none" stroke="#C88A32" stroke-opacity="0.55"/>
+<text x="1120" y="700" fill="#FFFDF9" fill-opacity="0.6" font-size="8" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.4" text-anchor="middle">SURVEY MARK</text>
+<circle cx="1149.2" cy="743.8" r="1.41" fill="#FFFDF9" fill-opacity="0.06"/>
+<circle cx="1073.8" cy="746.8" r="1.85" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="979.6" cy="720.6" r="1.89" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="951.1" cy="700.7" r="0.77" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="913.4" cy="717.4" r="1.17" fill="#FFFDF9" fill-opacity="0.11"/>
+<circle cx="906.7" cy="725.5" r="1.12" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="984.8" cy="706.1" r="2.12" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="1109.3" cy="707.7" r="1.43" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="987.5" cy="729.9" r="1.69" fill="#FFFDF9" fill-opacity="0.06"/>
+<circle cx="1003.8" cy="709.8" r="2.07" fill="#FFFDF9" fill-opacity="0.06"/>
+<circle cx="1041.6" cy="741.9" r="1.32" fill="#FFFDF9" fill-opacity="0.11"/>
+<circle cx="949.0" cy="735.5" r="2.00" fill="#FFFDF9" fill-opacity="0.06"/>
+<circle cx="1037.8" cy="739.3" r="1.43" fill="#FFFDF9" fill-opacity="0.13"/>
+<circle cx="941.7" cy="742.2" r="1.22" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="1007.7" cy="703.9" r="1.09" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="968.5" cy="724.9" r="1.85" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="1021.6" cy="716.3" r="1.37" fill="#FFFDF9" fill-opacity="0.06"/>
+<circle cx="1107.1" cy="739.8" r="1.91" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="960.1" cy="747.7" r="2.01" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="1006.1" cy="739.2" r="1.96" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="1149.9" cy="717.6" r="0.85" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="1048.8" cy="726.9" r="0.78" fill="#FFFDF9" fill-opacity="0.11"/>
+<circle cx="1044.5" cy="728.4" r="0.94" fill="#FFFDF9" fill-opacity="0.07"/>
+<circle cx="969.7" cy="727.8" r="0.76" fill="#FFFDF9" fill-opacity="0.07"/>
+<circle cx="1148.3" cy="708.6" r="1.70" fill="#FFFDF9" fill-opacity="0.11"/>
+<circle cx="1087.8" cy="709.3" r="1.61" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="972.0" cy="741.9" r="1.07" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="967.8" cy="703.1" r="1.26" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="1102.0" cy="720.7" r="0.62" fill="#FFFDF9" fill-opacity="0.06"/>
+<circle cx="906.0" cy="706.2" r="1.70" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="1143.4" cy="717.5" r="1.85" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="1070.2" cy="730.8" r="2.08" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="956.1" cy="723.1" r="2.17" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="1078.5" cy="743.1" r="1.69" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="1001.2" cy="747.4" r="1.17" fill="#FFFDF9" fill-opacity="0.11"/>
+<circle cx="1013.6" cy="701.2" r="1.71" fill="#FFFDF9" fill-opacity="0.07"/>
+<circle cx="1149.2" cy="740.0" r="0.80" fill="#FFFDF9" fill-opacity="0.11"/>
+<circle cx="982.9" cy="745.1" r="1.47" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="1045.8" cy="736.1" r="0.78" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="930.8" cy="706.3" r="1.17" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="1070.5" cy="701.4" r="1.53" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="999.9" cy="712.0" r="1.27" fill="#FFFDF9" fill-opacity="0.07"/>
+<circle cx="932.6" cy="727.1" r="1.66" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="1077.8" cy="719.8" r="1.01" fill="#FFFDF9" fill-opacity="0.06"/>
+<circle cx="906.1" cy="713.8" r="1.37" fill="#FFFDF9" fill-opacity="0.07"/>
+<circle cx="981.8" cy="747.2" r="1.55" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="1043.8" cy="732.5" r="2.14" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="969.0" cy="731.7" r="1.81" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="1071.0" cy="700.6" r="2.17" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="1152.3" cy="734.0" r="1.98" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="1135.6" cy="720.0" r="2.16" fill="#FFFDF9" fill-opacity="0.13"/>
+<circle cx="960.5" cy="741.5" r="1.15" fill="#FFFDF9" fill-opacity="0.07"/>
+<circle cx="993.4" cy="731.9" r="1.48" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="1105.0" cy="729.0" r="0.90" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="940.0" cy="744.7" r="2.12" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="1117.1" cy="735.1" r="1.87" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="921.9" cy="718.6" r="1.77" fill="#FFFDF9" fill-opacity="0.06"/>
+<circle cx="1092.3" cy="749.9" r="0.63" fill="#FFFDF9" fill-opacity="0.07"/>
+<circle cx="1120.7" cy="729.1" r="1.52" fill="#FFFDF9" fill-opacity="0.13"/>
+<circle cx="999.0" cy="748.2" r="1.43" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="941.1" cy="725.4" r="0.74" fill="#FFFDF9" fill-opacity="0.11"/>
+<circle cx="986.7" cy="713.1" r="0.67" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="1104.7" cy="708.1" r="1.07" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="992.9" cy="748.6" r="0.90" fill="#FFFDF9" fill-opacity="0.11"/>
+<circle cx="902.5" cy="730.3" r="1.37" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="1111.2" cy="745.1" r="2.17" fill="#FFFDF9" fill-opacity="0.13"/>
+<circle cx="944.4" cy="725.8" r="0.89" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="942.6" cy="744.4" r="1.42" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="1067.3" cy="700.1" r="1.20" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="956.2" cy="707.7" r="1.58" fill="#FFFDF9" fill-opacity="0.06"/>
+<circle cx="1156.1" cy="724.2" r="2.00" fill="#FFFDF9" fill-opacity="0.11"/>
+<circle cx="999.1" cy="730.8" r="1.64" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="1136.5" cy="706.0" r="1.43" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="1077.7" cy="722.8" r="1.54" fill="#FFFDF9" fill-opacity="0.06"/>
+<circle cx="1102.6" cy="704.4" r="1.39" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="1095.9" cy="711.3" r="1.12" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="986.2" cy="745.4" r="1.76" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="1004.8" cy="708.8" r="1.89" fill="#FFFDF9" fill-opacity="0.07"/>
+<circle cx="1079.2" cy="717.4" r="1.86" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="1108.8" cy="719.1" r="0.85" fill="#FFFDF9" fill-opacity="0.11"/>
+<circle cx="1070.8" cy="706.4" r="1.03" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="983.2" cy="742.1" r="1.31" fill="#FFFDF9" fill-opacity="0.06"/>
+<circle cx="1063.0" cy="711.7" r="2.16" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="932.0" cy="714.7" r="1.33" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="905.6" cy="735.8" r="1.68" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="1076.6" cy="746.1" r="2.05" fill="#FFFDF9" fill-opacity="0.12"/>
+<circle cx="1147.7" cy="733.4" r="1.47" fill="#FFFDF9" fill-opacity="0.07"/>
+<circle cx="991.6" cy="716.5" r="2.08" fill="#FFFDF9" fill-opacity="0.11"/>
+<circle cx="902.7" cy="727.9" r="1.00" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="1067.5" cy="720.7" r="1.85" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="1131.2" cy="716.9" r="0.66" fill="#FFFDF9" fill-opacity="0.07"/>
+<circle cx="931.4" cy="742.6" r="1.03" fill="#FFFDF9" fill-opacity="0.05"/>
+<circle cx="954.4" cy="722.9" r="1.04" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="920.5" cy="734.6" r="1.46" fill="#FFFDF9" fill-opacity="0.05"/>
+<circle cx="924.9" cy="716.5" r="0.95" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="1057.6" cy="708.5" r="1.10" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="1085.1" cy="734.1" r="1.49" fill="#FFFDF9" fill-opacity="0.06"/>
+<circle cx="970.4" cy="721.0" r="0.90" fill="#FFFDF9" fill-opacity="0.11"/>
+<circle cx="1157.0" cy="749.4" r="2.06" fill="#FFFDF9" fill-opacity="0.10"/>
+<circle cx="988.7" cy="717.4" r="1.57" fill="#FFFDF9" fill-opacity="0.07"/>
+<circle cx="1129.6" cy="741.9" r="0.66" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="905.7" cy="740.4" r="1.01" fill="#FFFDF9" fill-opacity="0.11"/>
+<circle cx="951.7" cy="713.7" r="1.95" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="956.8" cy="702.7" r="1.26" fill="#FFFDF9" fill-opacity="0.06"/>
+<circle cx="1087.7" cy="733.1" r="1.69" fill="#FFFDF9" fill-opacity="0.11"/>
+<circle cx="977.6" cy="724.1" r="0.75" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="1035.8" cy="716.3" r="1.11" fill="#FFFDF9" fill-opacity="0.08"/>
+<circle cx="947.1" cy="749.4" r="1.98" fill="#FFFDF9" fill-opacity="0.07"/>
+<circle cx="966.9" cy="747.4" r="1.99" fill="#FFFDF9" fill-opacity="0.09"/>
+<circle cx="999.5" cy="705.3" r="1.57" fill="#FFFDF9" fill-opacity="0.07"/>
+<path d="M46.0 752.0 L1154.0 752.0" stroke="#FFFDF9" stroke-width="1" stroke-opacity="0.18" fill="none"/>
+<text x="46" y="776" fill="#FFFDF9" fill-opacity="0.8" font-size="13" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="3" text-anchor="start">SONGLIAO PLAIN / DIGITAL TWIN</text>
+<text x="1154" y="776" fill="#C88A32" fill-opacity="0.9" font-size="9" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.8" text-anchor="end">ABSTRACT LAND-USE GRID · NOT A CADASTRAL MAP</text>
+<text x="600" y="776" fill="#FFFDF9" fill-opacity="0.55" font-size="9" font-family="ui-monospace, Menlo, monospace" font-weight="400" letter-spacing="1.8" text-anchor="middle">PROCEDURAL PLATE / 程序化图版</text>
+</g>
+<rect x="14" y="14" width="1172" height="792" fill="none" stroke="#FFFDF9" stroke-opacity="0.12"/>
+</svg>

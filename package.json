@@ -1,0 +1,32 @@
+{
+  "name": "wangyedazuoye",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "art": "python scripts/generate_art.py",
+    "audit": "node scripts/audit.mjs",
+    "snapshot": "node scripts/snapshot.mjs"
+  },
+  "dependencies": {
+    "@types/three": "^0.187.0",
+    "echarts": "^6.1.0",
+    "gsap": "^3.15.0",
+    "lucide-vue-next": "^1.0.0",
+    "pinia": "^4.1.0",
+    "three": "^0.187.0",
+    "vue": "^3.5.44",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.4",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "autoprefixer": "^10.6.2",
+    "postcss": "^8.5.32",
+    "tailwindcss": "^4.3.4",
+    "vite": "^8.3.5"
+  }
+}
