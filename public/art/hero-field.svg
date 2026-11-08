@@ -7,6 +7,9 @@
 </defs>
 <rect width="1200" height="820" fill="#1C1B18"/>
 <g clip-path="url(#frame)">
+<path d="M0 452 C 250 352, 520 512, 790 424 S 1100 352, 1200 392 L1200 820 L0 820 Z" fill="#2E5A44" fill-opacity="0.5"/>
+<path d="M0 576 C 300 496, 620 636, 900 556 S 1120 516, 1200 540 L1200 820 L0 820 Z" fill="#1C1B18" fill-opacity="0.55"/>
+<path d="M0 688 C 340 616, 700 738, 1200 654 L1200 820 L0 820 Z" fill="#8C583A" fill-opacity="0.46"/>
 <circle cx="870" cy="250" r="176" fill="#C88A32" fill-opacity="0.14"/>
 <circle cx="870" cy="250" r="126" fill="url(#warm)" fill-opacity="0.55"/>
 <circle cx="870" cy="250" r="176" fill="none" stroke="#C88A32" stroke-opacity="0.4"/>

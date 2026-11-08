@@ -100,6 +100,14 @@ def corner(index, title, dark=False):
 
 def art_hero():
     s = head(dark=True)
+    # 4 号示范：先铺三条大块明暗，让缩略图里「先有形」，再叠等高线细部。
+    # 只改这一张图版，其余 9 张生成逻辑不变。
+    s.append('<path d="M0 452 C 250 352, 520 512, 790 424 S 1100 352, 1200 392 L1200 820 L0 820 Z" '
+             'fill="#2E5A44" fill-opacity="0.5"/>')
+    s.append('<path d="M0 576 C 300 496, 620 636, 900 556 S 1120 516, 1200 540 L1200 820 L0 820 Z" '
+             'fill="#1C1B18" fill-opacity="0.55"/>')
+    s.append('<path d="M0 688 C 340 616, 700 738, 1200 654 L1200 820 L0 820 Z" '
+             'fill="#8C583A" fill-opacity="0.46"/>')
     s.append(f'<circle cx="870" cy="250" r="176" fill="{GOLD}" fill-opacity="0.14"/>')
     s.append(f'<circle cx="870" cy="250" r="126" fill="url(#warm)" fill-opacity="0.55"/>')
     s.append(f'<circle cx="870" cy="250" r="176" fill="none" stroke="{GOLD}" stroke-opacity="0.4"/>')

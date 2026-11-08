@@ -109,7 +109,7 @@ svg[class*="lucide"] { stroke-width: 1.5; }
     align-items: center;
     gap: 0.45rem;
     font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-    font-size: 0.62rem;
+    font-size: 0.7rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #7A5518; /* 眉题胶囊落在亚麻 / 浅金底上时也要 ≥4.5，比小字金色再深一档 */
@@ -124,7 +124,7 @@ svg[class*="lucide"] { stroke-width: 1.5; }
   .body-copy { font-size: 0.9rem; line-height: 1.9; color: var(--ink-secondary); }
   .caption {
     font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-    font-size: 0.66rem; letter-spacing: 0.1em; color: var(--ink-muted); line-height: 1.7;
+    font-size: 0.72rem; letter-spacing: 0.1em; color: var(--ink-muted); line-height: 1.7;
   }
 }
 
@@ -504,6 +504,19 @@ svg[class*="lucide"] { stroke-width: 1.5; }
   .kin-char { opacity: 1 !important; transform: none !important; filter: none !important; animation: none !important; }
 }
 
+/* 5 号：首屏入场记忆点。只用 transform / opacity，不用 blur（曾导致「字看不清」）。
+   动画挂在子元素上，避开 [data-parallax] 由 GSAP 控制的 transform。 */
+@keyframes hero-core {
+  from { opacity: 0; transform: scale(0.35); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes hero-plate {
+  from { opacity: 0; transform: translate3d(0, 46px, 0) rotate(-10deg) scale(0.93); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) rotate(-4deg) scale(1); }
+}
+.hero-core  { animation: hero-core 0.75s var(--ease-luxe) 0.1s both; }
+.hero-plate { animation: hero-plate 0.95s var(--ease-luxe) 0.18s both; }
+
 @keyframes line-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 .line-grow { transform-origin: left; animation: line-grow 1.2s var(--ease-luxe) both; }
 
@@ -527,6 +540,8 @@ svg[class*="lucide"] { stroke-width: 1.5; }
   .art-frame img, .art-frame svg, .lift, .btn-solid, .btn-outline, .btn-on-ink,
   .mag-btn, .arrow-shift, .link-line::after, .z-card { transition: none !important; }
   .float-slow, .drift-slow, .line-grow, .route-progress, .marquee-track { animation: none !important; }
+  .hero-core, .hero-plate { animation: none !important; opacity: 1 !important; }
+  .hero-plate { transform: rotate(-4deg) !important; }
 }
 
 ::-webkit-scrollbar { width: 7px; height: 7px; }

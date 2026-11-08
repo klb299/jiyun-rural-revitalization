@@ -110,7 +110,7 @@ const loadSandbox = () => {
           </text>
         </svg>
         <div class="absolute inset-[22%] rounded-full border border-[#1C1B18]/20"></div>
-        <div class="absolute inset-[38%] rounded-full bg-[#1C1B18]/90 grid place-items-center">
+        <div class="hero-core absolute inset-[38%] rounded-full bg-[#1C1B18]/90 grid place-items-center">
           <span class="font-editorial text-[#F7F4EE] text-3xl sm:text-5xl font-bold">吉</span>
         </div>
       </div>
@@ -132,7 +132,8 @@ const loadSandbox = () => {
             <h1 class="display-1 text-[#1C1B18]" aria-label="黑土粮仓 吉韵新程">
               <span v-for="(ch, i) in Array.from('黑土粮仓')" :key="'a' + i" class="kin-char"
                 :style="{ animationDelay: (0.1 + i * 0.07) + 's' }">{{ ch }}</span>
-              <span class="block text-[#C88A32]">
+              <!-- 3 号示范：只改这一处金色（#A9701F），等确认后再决定是否全站铺开 -->
+              <span class="block text-[#A9701F]">
                 <span v-for="(ch, i) in Array.from('吉韵新程')" :key="'b' + i" class="kin-char"
                   :style="{ animationDelay: (0.42 + i * 0.07) + 's' }">{{ ch }}</span>
               </span>
@@ -159,7 +160,7 @@ const loadSandbox = () => {
 
           <!-- Z 轴层叠图版 -->
           <div class="lg:col-span-5 relative hidden lg:block" data-parallax="-8">
-            <div class="bezel z-card" style="transform: rotate(-4deg)">
+            <div class="bezel z-card hero-plate">
               <div class="bezel-core">
                 <img src="/art/diorama.svg" alt="松辽平原田块俯视图版" class="w-full aspect-[4/5] object-cover" />
               </div>
