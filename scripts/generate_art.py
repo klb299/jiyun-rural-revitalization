@@ -100,8 +100,25 @@ def corner(index, title, dark=False):
 
 def art_hero():
     s = head(dark=True)
-    # 4 号第一版（三条独立波浪硬色带）已被用户否决：走向与等高线不一致、
-    # 硬边界且铺满下半幅。当前保持干净版，等两种新加法选出后再落地。
+    # 4 号定稿「纯光影」（用户 2026-11-08 选定候选 B）：完全不加色块，
+    # 只用金圆柔光晕 + 底部暗角 + 每 5 条里的主线提亮，保住墨底通透感。
+    # 第一版「三条独立波浪硬色带」已被否决：走向与等高线不一致、硬边界、
+    # 铺满下半幅且显脏，不要再改回去。
+    s.append('<defs>')
+    s.append('<radialGradient id="halo" cx="50%" cy="50%" r="50%">'
+             f'<stop offset="0" stop-color="{GOLD}" stop-opacity="0.20"/>'
+             f'<stop offset="1" stop-color="{GOLD}" stop-opacity="0"/>'
+             '</radialGradient>')
+    s.append('<linearGradient id="vign" x1="0" y1="0" x2="0" y2="1">'
+             f'<stop offset="0" stop-color="{INK}" stop-opacity="0"/>'
+             f'<stop offset="1" stop-color="{INK}" stop-opacity="0.55"/>'
+             '</linearGradient>')
+    s.append('</defs>')
+    s.append(f'<circle cx="870" cy="250" r="330" fill="url(#halo)"/>')
+    s.append(f'<rect x="0" y="560" width="{W}" height="{H - 560}" fill="url(#vign)"/>')
+    for i in range(0, 30, 5):
+        s.append(contour(300 + i * 17, 22 + i * 1.5, i * 0.32, GOLD,
+                         0.5, 2.2, freq=0.008 + i * 0.0002))
     s.append(f'<circle cx="870" cy="250" r="176" fill="{GOLD}" fill-opacity="0.14"/>')
     s.append(f'<circle cx="870" cy="250" r="126" fill="url(#warm)" fill-opacity="0.55"/>')
     s.append(f'<circle cx="870" cy="250" r="176" fill="none" stroke="{GOLD}" stroke-opacity="0.4"/>')
