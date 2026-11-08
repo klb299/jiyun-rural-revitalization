@@ -41,7 +41,7 @@ def head(dark=False):
         '<linearGradient id="soil" x1="0" y1="0" x2="0" y2="1">'
         f'<stop offset="0" stop-color="{SOIL[0]}"/>'
         f'<stop offset="1" stop-color="{SOIL[3]}"/></linearGradient>',
-        '<clipPath id="frame"><rect x="0" y="0" width="1200" height="820"/></clipPath>',
+        f'<clipPath id="frame"><rect x="0" y="0" width="{W}" height="{H}"/></clipPath>',
         '</defs>',
         f'<rect width="{W}" height="{H}" fill="{bg}"/>',
         '<g clip-path="url(#frame)">',
@@ -68,7 +68,11 @@ def poly(points, color=INK, width=1.2, opacity=0.5, fill="none"):
     return f'<path d="{d}" stroke="{color}" stroke-width="{width}" stroke-opacity="{opacity}" fill="{fill}" stroke-linecap="round" stroke-linejoin="round"/>'
 
 
-def contour(y0, amp, phase, color, opacity=0.35, width=1.2, freq=0.011, step=14, x0=0, x1=W):
+def contour(y0, amp, phase, color, opacity=0.35, width=1.2, freq=0.011, step=14, x0=0, x1=None):
+    # x1 默认取「调用时」的画布宽度；原先 x1=W 在定义期就绑死 1200，
+    # 导致 1920 宽的 panorama 右半没有等高线。
+    if x1 is None:
+        x1 = W
     pts = []
     x = x0
     while x <= x1:
@@ -209,7 +213,7 @@ def art_diorama():
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img">',
         '<title>松辽平原土地利用抽象测绘图版</title>',
         '<defs>',
-        '<clipPath id="frame"><rect x="0" y="0" width="1200" height="820"/></clipPath>',
+        f'<clipPath id="frame"><rect x="0" y="0" width="{W}" height="{H}"/></clipPath>',
         # 水系只画在 3×3 网格区，不越界压到右侧图例
         '<clipPath id="gridclip"><rect x="0" y="0" width="890" height="820"/></clipPath>',
         # 测绘底纹
@@ -485,6 +489,11 @@ def art_atlas():
     for i in range(26):
         s.append(contour(120 + i * 25, 30 + (i % 4) * 9, i * 0.42, MOSS if i % 5 == 0 else INK3,
                          0.13 if i % 5 else 0.34, 1 if i % 5 else 1.6, freq=0.009 + i * 0.0003))
+    # 4 号推广：atlas 是浅底网格图版，只取「主线加深加实」这一半，
+    # 不铺光晕 / 暗角——浅底上叠暗色会显脏。
+    for i in range(0, 26, 5):
+        s.append(contour(120 + i * 25, 30 + (i % 4) * 9, i * 0.42, MOSS,
+                         0.48, 2.1, freq=0.009 + i * 0.0003))
     marks = [(300, 250, "CHANGCHUN"), (760, 400, "SONGLIAO"), (520, 590, "CHAGAN"), (980, 220, "CHANGBAI")]
     for x, y, label in marks:
         s.append(f'<circle cx="{x}" cy="{y}" r="9" fill="{RED}"/>')
@@ -500,6 +509,23 @@ def art_panorama():
     global W, H
     W, H = 1920, 760
     s = head(dark=True)
+    # 4 号「纯光影」推广（与 art_hero 同一套语言）：不加色块，
+    # 只用金圆柔光晕 + 底部暗角 + 主线提亮，保住墨底通透感。
+    s.append('<defs>')
+    s.append('<radialGradient id="halo" cx="50%" cy="50%" r="50%">'
+             f'<stop offset="0" stop-color="{GOLD}" stop-opacity="0.18"/>'
+             f'<stop offset="1" stop-color="{GOLD}" stop-opacity="0"/>'
+             '</radialGradient>')
+    s.append('<linearGradient id="vign" x1="0" y1="0" x2="0" y2="1">'
+             f'<stop offset="0" stop-color="{INK}" stop-opacity="0"/>'
+             f'<stop offset="1" stop-color="{INK}" stop-opacity="0.5"/>'
+             '</linearGradient>')
+    s.append('</defs>')
+    s.append(f'<circle cx="1480" cy="210" r="360" fill="url(#halo)"/>')
+    s.append(f'<rect x="0" y="470" width="{W}" height="{H - 470}" fill="url(#vign)"/>')
+    for i in range(0, 46, 6):
+        s.append(contour(300 + i * 12, 12 + i * 1.8, i * 0.22, GOLD,
+                         0.46, 2.1, freq=0.005 + i * 0.0001))
     s.append(f'<circle cx="1480" cy="210" r="190" fill="{GOLD}" fill-opacity="0.18"/>')
     s.append(f'<circle cx="1480" cy="210" r="128" fill="url(#warm)" fill-opacity="0.5"/>')
     for i in range(46):

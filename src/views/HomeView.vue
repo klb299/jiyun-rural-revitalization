@@ -132,8 +132,7 @@ const loadSandbox = () => {
             <h1 class="display-1 text-[#1C1B18]" aria-label="黑土粮仓 吉韵新程">
               <span v-for="(ch, i) in Array.from('黑土粮仓')" :key="'a' + i" class="kin-char"
                 :style="{ animationDelay: (0.1 + i * 0.07) + 's' }">{{ ch }}</span>
-              <!-- 3 号示范：只改这一处金色（#A9701F），等确认后再决定是否全站铺开 -->
-              <span class="block text-[#A9701F]">
+              <span class="block text-[#C88A32]">
                 <span v-for="(ch, i) in Array.from('吉韵新程')" :key="'b' + i" class="kin-char"
                   :style="{ animationDelay: (0.42 + i * 0.07) + 's' }">{{ ch }}</span>
               </span>
