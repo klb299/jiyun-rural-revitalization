@@ -70,7 +70,7 @@ const soils = [
   },
   {
     key: 'pore', no: '02', name: '孔隙与蚯蚓通道', en: 'POROSITY',
-    desc: '团粒之间与大孔隙构成水分和空气的通道。免耕覆盖让蚯蚓种群增加，通道得以长期保留，春雨能迅速下渗而不是冲刷地表带走表土。',
+    desc: '团粒之间与大孔隙构成水分和空气的通道。模型里能看到从地表孔口贯通到母质层的孔道与侧枝；免耕覆盖让这些通道长期保留，春雨能迅速下渗而不是冲刷地表带走表土。',
     metric: '45 – 55%', note: '健康黑土总孔隙度'
   },
   {
@@ -565,7 +565,7 @@ const resetLab = () => {
           <div class="card-ink h-full p-7 sm:p-8">
             <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-6">EXPERIMENT 01</div>
             <h3 class="display-3 mb-4">黑土为什么疏松</h3>
-            <p class="text-[13px] leading-[1.9] text-[#F7F4EE]/86">把一厘米土层放大到可交互的尺度，用四类结构解释保水保肥的物理基础：团粒负责胶结，孔隙负责通气透水，菌丝负责稳定与供肥，结核记录淋溶历史。点击任一结构即可聚焦并读取档案。</p>
+            <p class="text-[13px] leading-[1.9] text-[#F7F4EE]/86">把一厘米土层放大到可交互的尺度，剖面按 0–100 cm 分层并标出深度：团粒负责胶结，孔隙负责通气透水，菌丝负责稳定与供肥，结核记录淋溶历史。点击任一结构即可聚焦并读取档案。</p>
             <div class="mt-7 flex flex-wrap gap-2">
               <span v-for="t in ['团粒', '孔隙', '菌丝', '结核']" :key="t" class="px-2.5 py-1 rounded-full bg-[#F7F4EE]/10 text-[11px]">{{ t }}</span>
             </div>

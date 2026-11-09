@@ -72,15 +72,66 @@ export function buildSoilScene(scene, stage) {
   soil.receiveShadow = true
   root.add(soil)
 
-  // 剖面前缘的层理线
-  for (let i = 0; i < 5; i++) {
-    const seam = new THREE.Mesh(
-      roundedBox(3.36, 0.025, 0.02, 0.008, 2),
-      new THREE.MeshStandardMaterial({ color: i % 2 ? 0x6B5942 : 0x3A2E22, roughness: 0.96 })
+  // 剖面前缘：按 0–20 / 20–50 / 50–100 cm 层厚分色
+  const soilBands = [
+    { y: 0.85, h: 0.78, c: 0x241D16 },
+    { y: 0.05, h: 0.78, c: 0x33291F },
+    { y: -0.75, h: 0.78, c: 0x453829 }
+  ]
+  soilBands.forEach((b) => {
+    const band = new THREE.Mesh(
+      roundedBox(3.34, b.h - 0.012, 0.014, 0.006, 2),
+      new THREE.MeshStandardMaterial({ color: b.c, roughness: 0.99 })
     )
-    seam.position.set(0, 0.9 - i * 0.42, 1.055)
+    band.position.set(0, b.y, 1.052)
+    root.add(band)
+  })
+  ;[0.46, -0.34, -1.14].forEach((y) => {
+    const seam = new THREE.Mesh(
+      roundedBox(3.34, 0.014, 0.016, 0.004, 2),
+      new THREE.MeshStandardMaterial({ color: 0x6B5942, roughness: 0.96 })
+    )
+    seam.position.set(0, y, 1.066)
     root.add(seam)
-  }
+  })
+
+  // 左侧深度标尺：把「放大一厘米」的尺度讲清楚
+  const tickMat = new THREE.MeshBasicMaterial({ color: PALETTE.gold, transparent: true, opacity: 0.72 })
+  const soilRuler = new THREE.Mesh(new THREE.BoxGeometry(0.012, 2.5, 0.012), tickMat)
+  soilRuler.position.set(-1.82, 0, 1.08)
+  soilRuler.userData.excludeFromAO = true
+  root.add(soilRuler)
+  ;[
+    { y: 1.25, t: '0 cm' }, { y: 0.55, t: '20 cm' },
+    { y: -0.25, t: '50 cm' }, { y: -1.25, t: '100 cm' }
+  ].forEach((d) => {
+    const tick = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.012, 0.012), tickMat)
+    tick.position.set(-1.77, d.y, 1.08)
+    tick.userData.excludeFromAO = true
+    root.add(tick)
+    const tex = labelTexture(d.t, {
+      width: 256, height: 64, color: '#C88A32',
+      font: '600 40px ui-monospace, monospace', align: 'left'
+    })
+    const lab = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.52, 0.13),
+      new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, side: THREE.DoubleSide })
+    )
+    lab.position.set(-2.08, d.y, 1.09)
+    lab.userData.excludeFromAO = true
+    root.add(lab)
+  })
+  const scaleTex = labelTexture('× 100  /  1 cm SOIL', {
+    width: 640, height: 72, color: '#C88A32',
+    font: '600 34px ui-monospace, monospace', align: 'right'
+  })
+  const scaleLabel = new THREE.Mesh(
+    new THREE.PlaneGeometry(1.5, 0.17),
+    new THREE.MeshBasicMaterial({ map: scaleTex, transparent: true, depthWrite: false, side: THREE.DoubleSide })
+  )
+  scaleLabel.position.set(0.85, 1.42, 0.9)
+  scaleLabel.userData.excludeFromAO = true
+  root.add(scaleLabel)
 
   const rnd = mulberry32(7031)
   const dummy = new THREE.Object3D()
@@ -94,11 +145,14 @@ export function buildSoilScene(scene, stage) {
   const crumbMat = new THREE.MeshStandardMaterial({ color: 0x4A3B2C, roughness: 0.96 })
   const crumbGroup = new THREE.Group()
   crumbGroup.userData.key = 'crumb'
-  const crumbCount = 58
+  const crumbCount = 40
   const crumbs = new THREE.InstancedMesh(crumbGeo, crumbMat, crumbCount)
   for (let i = 0; i < crumbCount; i++) {
-    dummy.position.set((rnd() - 0.5) * 3.15, (rnd() - 0.5) * 2.25, 1.06 + rnd() * 0.05)
-    const s = 0.55 + rnd() * 1.1
+    const yy = (rnd() - 0.5) * 2.25
+    const layer = (yy + 1.125) / 2.25
+    dummy.position.set((rnd() - 0.5) * 3.15, yy, 1.07 + rnd() * 0.05)
+    // 腐殖质层团粒最发达，往下逐渐变小；整体留白，别铺满剖面
+    const s = (0.35 + rnd() * 0.62) * (0.62 + layer * 0.6)
     dummy.scale.set(s, s * (0.7 + rnd() * 0.5), s * 0.55)
     dummy.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3)
     dummy.updateMatrix()
@@ -107,13 +161,28 @@ export function buildSoilScene(scene, stage) {
   crumbs.instanceMatrix.needsUpdate = true
   crumbs.castShadow = true
   crumbGroup.add(crumbs)
+  // 团粒内部与粒间的微孔隙
+  const microPores = new THREE.InstancedMesh(
+    new THREE.SphereGeometry(0.028, 8, 6),
+    new THREE.MeshStandardMaterial({ color: 0x17120E, roughness: 1 }), 22
+  )
+  for (let i = 0; i < 22; i++) {
+    dummy.position.set((rnd() - 0.5) * 3.1, (rnd() - 0.5) * 2.2, 1.115)
+    const s = 0.5 + rnd() * 1.1
+    dummy.scale.set(s, s * 0.8, s * 0.3)
+    dummy.rotation.set(0, 0, 0)
+    dummy.updateMatrix()
+    microPores.setMatrixAt(i, dummy.matrix)
+  }
+  microPores.instanceMatrix.needsUpdate = true
+  crumbGroup.add(microPores)
   groups.crumb = crumbGroup
 
   const poreGeo = new THREE.SphereGeometry(0.11, 14, 10)
   const poreMat = new THREE.MeshStandardMaterial({ color: 0x120E0B, roughness: 1 })
   const poreGroup = new THREE.Group()
   poreGroup.userData.key = 'pore'
-  const poreCount = 30
+  const poreCount = 22
   const pores = new THREE.InstancedMesh(poreGeo, poreMat, poreCount)
   for (let i = 0; i < poreCount; i++) {
     dummy.position.set((rnd() - 0.5) * 3.05, (rnd() - 0.5) * 2.15, 1.07)
@@ -125,28 +194,73 @@ export function buildSoilScene(scene, stage) {
   }
   pores.instanceMatrix.needsUpdate = true
   poreGroup.add(pores)
+
+  // 贯通的蚯蚓通道：从地表蜿蜒到母质层，带地表孔口与侧枝
+  const burrowMat = new THREE.MeshStandardMaterial({ color: 0x2A211A, roughness: 0.98 })
+  const burrowRimMat = new THREE.MeshStandardMaterial({ color: 0x8C583A, roughness: 0.9 })
+  for (let b = 0; b < 4; b++) {
+    const x0 = (rnd() - 0.5) * 2.7
+    const pts = []
+    for (let k = 0; k < 7; k++) {
+      pts.push(new THREE.Vector3(
+        x0 + Math.sin(k * 1.05 + b * 1.7) * 0.22,
+        1.16 - k * 0.38,
+        1.09 + Math.sin(k * 0.8) * 0.012
+      ))
+    }
+    poreGroup.add(new THREE.Mesh(
+      new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 48, 0.038 + rnd() * 0.012, 9, false), burrowMat
+    ))
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(0.055, 0.012, 8, 20), burrowRimMat)
+    rim.position.set(x0, 1.17, 1.1)
+    poreGroup.add(rim)
+    const branchPts = [
+      pts[3].clone(),
+      pts[3].clone().add(new THREE.Vector3(0.3, -0.18, 0)),
+      pts[3].clone().add(new THREE.Vector3(0.55, -0.5, 0))
+    ]
+    poreGroup.add(new THREE.Mesh(
+      new THREE.TubeGeometry(new THREE.CatmullRomCurve3(branchPts), 20, 0.02, 7, false), burrowMat
+    ))
+  }
   groups.pore = poreGroup
 
   const hyphaMat = new THREE.MeshStandardMaterial({
-    color: 0xC88A32, roughness: 0.8, metalness: 0.12, transparent: true, opacity: 0.86
+    color: 0x9A7738, roughness: 0.85, metalness: 0.08, transparent: true, opacity: 0.86
   })
   const hyphaGroup = new THREE.Group()
   hyphaGroup.userData.key = 'hypha'
-  for (let r = 0; r < 9; r++) {
+  const hyphaNodeMat = new THREE.MeshStandardMaterial({ color: 0xE8BC6E, roughness: 0.75 })
+  const nodeGeo = new THREE.SphereGeometry(0.026, 10, 8)
+  for (let r = 0; r < 3; r++) {
     const x0 = (rnd() - 0.5) * 2.7
     const pts = []
-    for (let k = 0; k < 6; k++) {
+    for (let k = 0; k < 7; k++) {
       pts.push(new THREE.Vector3(
-        x0 + Math.sin(k * 1.4 + r) * 0.24,
-        1.1 - k * 0.38,
-        1.09 + rnd() * 0.02
+        x0 + Math.sin(k * 1.2 + r) * 0.3,
+        1.12 - k * 0.34,
+        1.12 + rnd() * 0.015
       ))
     }
-    const curve = new THREE.CatmullRomCurve3(pts)
-    const tube = new THREE.Mesh(
-      new THREE.TubeGeometry(curve, 36, 0.016 + rnd() * 0.012, 8, false), hyphaMat
-    )
-    hyphaGroup.add(tube)
+    hyphaGroup.add(new THREE.Mesh(
+      new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 48, 0.019, 8, false), hyphaMat
+    ))
+    // 两条侧枝从主干分出，绕向相邻团粒
+    ;[2, 4].forEach((k, j) => {
+      const start = pts[k]
+      const side = j % 2 ? 1 : -1
+      const bpts = [
+        start.clone(),
+        start.clone().add(new THREE.Vector3(side * 0.16, -0.1, 0.01)),
+        start.clone().add(new THREE.Vector3(side * 0.34, -0.28, 0.02))
+      ]
+      hyphaGroup.add(new THREE.Mesh(
+        new THREE.TubeGeometry(new THREE.CatmullRomCurve3(bpts), 20, 0.009, 6, false), hyphaMat
+      ))
+      const node = new THREE.Mesh(nodeGeo, hyphaNodeMat)
+      node.position.copy(start)
+      hyphaGroup.add(node)
+    })
   }
   groups.hypha = hyphaGroup
 
@@ -154,20 +268,54 @@ export function buildSoilScene(scene, stage) {
   const noduleMat = new THREE.MeshStandardMaterial({ color: 0xD9CBA9, roughness: 0.92 })
   const noduleGroup = new THREE.Group()
   noduleGroup.userData.key = 'nodule'
-  const noduleCount = 16
+  const noduleCount = 10
   const nodules = new THREE.InstancedMesh(noduleGeo, noduleMat, noduleCount)
+  // 同心层理：外层壳体 + 更亮的碳酸钙内芯
+  const cores = new THREE.InstancedMesh(
+    new THREE.SphereGeometry(0.06, 10, 8),
+    new THREE.MeshStandardMaterial({ color: 0xF2E7CD, roughness: 0.9 }), noduleCount
+  )
   for (let i = 0; i < noduleCount; i++) {
-    dummy.position.set((rnd() - 0.5) * 3.0, (rnd() - 0.5) * 2.1, 1.075)
+    const x = (rnd() - 0.5) * 3.0
+    const y = (rnd() - 0.5) * 2.1
     const s = 0.5 + rnd() * 1.15
+    dummy.position.set(x, y, 1.075)
     dummy.scale.set(s, s * 0.8, s * 0.45)
     dummy.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3)
     dummy.updateMatrix()
     nodules.setMatrixAt(i, dummy.matrix)
+    dummy.position.set(x, y, 1.1)
+    dummy.scale.setScalar(s * 0.55)
+    dummy.updateMatrix()
+    cores.setMatrixAt(i, dummy.matrix)
   }
   nodules.instanceMatrix.needsUpdate = true
+  cores.instanceMatrix.needsUpdate = true
   nodules.castShadow = true
-  noduleGroup.add(nodules)
+  noduleGroup.add(nodules, cores)
+  // 母质层里散落的钙质斑片
+  const fleckMat = new THREE.MeshStandardMaterial({ color: 0xCDBB98, roughness: 0.95, side: THREE.DoubleSide })
+  const fleckGeo = new THREE.PlaneGeometry(0.09, 0.035)
+  for (let i = 0; i < 8; i++) {
+    const fleck = new THREE.Mesh(fleckGeo, fleckMat)
+    fleck.rotation.set(0, 0, rnd() * Math.PI)
+    fleck.position.set((rnd() - 0.5) * 3.1, -0.5 - rnd() * 0.7, 1.115)
+    noduleGroup.add(fleck)
+  }
   groups.nodule = noduleGroup
+
+  // 根系细须：不参与拾取，只补剖面的纵向层次
+  const fineRootMat = new THREE.MeshStandardMaterial({ color: 0x6B5942, roughness: 0.96 })
+  for (let r = 0; r < 3; r++) {
+    const x0 = (rnd() - 0.5) * 2.6
+    const pts = []
+    for (let k = 0; k < 6; k++) {
+      pts.push(new THREE.Vector3(x0 + Math.sin(k * 1.3 + r) * 0.16, 1.16 - k * 0.4, 1.115))
+    }
+    root.add(new THREE.Mesh(
+      new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 26, 0.008, 5, false), fineRootMat
+    ))
+  }
 
   keys.forEach((k) => root.add(groups[k]))
 
@@ -200,12 +348,15 @@ export function buildSoilScene(scene, stage) {
     if (groups[focus]) clearHighlight(groups[focus])
     focus = next
     highlight(groups[focus], { intensity: 0.1 })
+    // 同一材质被几十个 mesh 共用，按材质去重，避免一次聚焦生成上百个重复 tween
+    const tweened = new Set()
     keys.forEach((k) => {
       const target = k === focus ? 1 : 0.42
       groups[k].traverse((o) => {
-        if (o.isMesh && o.material?.transparent !== undefined) {
-          gsap.to(o.material, { opacity: k === 'hypha' ? (target === 1 ? 0.95 : 0.3) : 1, duration: 0.5 })
-        }
+        const m = o.material
+        if (!o.isMesh || !m || tweened.has(m)) return
+        tweened.add(m)
+        gsap.to(m, { opacity: k === 'hypha' ? (target === 1 ? 0.95 : 0.3) : 1, duration: 0.5 })
       })
     })
   }
