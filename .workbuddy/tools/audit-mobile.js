@@ -1,6 +1,11 @@
 async page => {
   const base = 'http://127.0.0.1:4173'
-  const paths = ['/', '/last-mile', '/aid-projects', '/adopt-a-field', '/exhibit-map', '/about', '/products', '/strata-3d', '/admin']
+  const paths = [
+  '/', '/strata-3d', '/machinery-3d', '/sandbox-3d', '/dashboard',
+  '/journey', '/chagan-lake', '/solar-terms', '/products', '/aid-projects',
+  '/adopt-a-field', '/farm-income', '/last-mile', '/science',
+  '/exhibit-map', '/about', '/admin'
+]
   const sizes = [[320, 720], [390, 844], [430, 932]]
   const out = []
   for (const [w, h] of sizes) {

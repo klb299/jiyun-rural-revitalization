@@ -36,7 +36,7 @@ const customs = [
 ]
 
 const stats = [
-  { value: '500+', label: '平方公里水域', note: '吉林松原 / 查干湖湿地', index: 'L-01', accent: '#C88A32' },
+  { value: '500+', label: '平方公里水域', note: '吉林松原 / 查干湖湿地', index: 'L-01', accent: '#A9701F' },
   { value: '0.8–1.2', label: '米 / 冬季冰层厚度', note: '足以承载马拉绞盘作业', index: 'L-02', accent: 'var(--accent-water-ink)' },
   { value: '100万+', label: '年游客接待人次', note: '冰雪文旅与生态研学', index: 'L-03', accent: '#2E5A44' },
   { value: '六寸', label: '网孔下限', note: '抓大放小 / 只捕成鱼', index: 'L-04', accent: '#B83828' }

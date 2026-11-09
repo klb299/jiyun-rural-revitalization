@@ -311,3 +311,23 @@ npm run preview    # 预览构建产物
 
 - 页面：`soils` 的孔隙描述补「从地表孔口贯通到母质层的孔道与侧枝」，实验档案卡补「剖面按 0–100 cm 分层并标出深度」。
 - 新增 `audit-soil.js`（验证四类结构按钮、canvas 非静态兜底、控制台零错误），`npm run audit` 扩到 **9/9 全绿**。截图 `.workbuddy/shots/soil-fine.png`。
+
+### 9.4 第五轮：稻作场景重建 + 探针盲区补齐（2026-11-09 13:44）
+
+**自查发现两处缺口**：`buildRiceScene` 只有 119 行 / 5 个 Mesh / `pickTargets: []`，远低于其它三景（323/438/460 行、38/50/54 个 Mesh）；`audit-contrast` / `audit-mobile` / `audit-a11y` 只覆盖 8 / 9 / 6 页，18 条路由里 7–11 页从未测过。
+
+**稻作场景重建为 247 行**（`LAB_BUILDERS.rice` 接口不变，参数新增 `focus`）：
+
+- **田间环境**：四边田埂、侧向灌渠 + 闸门、0 / 5 / 15 cm 水位标尺；水层加 `waterNormalMap` 法线细波与 3 圈随时间扩散的涟漪。
+- **阶段差异化**：育秧期出现 5 格秧盘、抽穗期出现 36 朵白色稻花；5 张阶段展签纹理预生成，切换 `material.map` 不重复分配，`disposeExtra()` 手动释放。
+- **四类可拾取结构**：`plant / water / bund / canal`，`applyFocus()` 走 emissive 高亮（`highlight()` 改的是 emissive 而非 color，与阶段 `plantMat.color.setHex()` 不冲突）。页面加 `riceStructures` 结构卡、`riceFocus` 与 `onSelect` 分支；hover 提示抽成 `hoverName` computed 统一三个实验。
+- 成熟期水面用 opacity 归零而非 `visible = false`，保证「水层」热点仍可拾取。
+
+**探针盲区补齐**：`audit-contrast` / `audit-mobile` / `audit-a11y` 的 `paths` 统一扩到 17 条可访问路由（与 `audit-links` 一致）。扩完立刻查出并修掉盲区里的真问题：
+
+- `/chagan-lake` 统计卡 `500+` 用内联 `accent: '#C88A32'`，绕过了按底色分档的 CSS 规则 → 改 `'#A9701F'`。
+- **全站导航按钮** `AppNavbar.vue` 分组项 32px、语音导览 35px；`/sandbox-3d` 六个视点热点只有 12px、`/science` 重置按钮 16px、`/journey` 翻页 36px、`/solar-terms` 季节条目 32px → 统一补 `min-h-[40px]`，视点热点补 `w-10 h-10 flex items-center justify-center`。
+
+新增 `audit-rice.js`，`npm run audit` 扩到 **10/10 全绿**：对比度仅剩 `/machinery-3d` 4 项已知假阳性，移动端 `[]`。截图 `.workbuddy/shots/rice-seedling.png` / `rice-harvest.png`。
+
+> **经验**：探针覆盖面比探针数量更重要——把 paths 从 8 页扩到 17 页，一次就查出 6 类从未被发现的触控目标问题。以后新增页面必须同步所有探针的 `paths`，不能只补 `audit-links`。

@@ -346,7 +346,7 @@ npm run build 2>&1 | tail -5
 
 ```bash
 npm run preview -- --host 127.0.0.1 --port 4173
-npm run audit    # 一键跑全部 9 个探针并汇总结果（推荐）
+npm run audit    # 一键跑全部 10 个探针并汇总结果（推荐）
 ```
 
 等价的手工方式（调试单个探针时用）：
@@ -365,7 +365,7 @@ playwright-cli run-code --filename .workbuddy/tools/audit-interactions.js
 
 `run-code "$(cat ...)"` 在 Windows Git Bash 下会丢引号，统一用 `--filename`。输出里 CLI 会回显整段代码，用 `> /tmp/x.log` 存下来再 `sed -n '/^### Result/,/^### Ran/p'` 取纯结果。
 
-覆盖范围：`audit-contrast` 8 页 / `audit-mobile` 9 页 × 3 档 / `audit-links` 17 页 / `audit-detail` 17 页；`audit-interactions.js` 验 10 条路由的 `data-motion` 分档、白皮书附录折叠、3D 装裱角标；`audit-round19.js` 在滚到后仅等 600ms 就检查「文字是否已可读」，并验认养页数据切换与后台导航；`audit-a11y.js` 自查 768/1024/1280/1920 四档溢出、未命名控件、reduced-motion 隐藏态、路由 meta 与首屏资源。**新增页面时前四个脚本的 `paths` 都要补**。截图统一写到 `.workbuddy/shots/`。
+覆盖范围（2026-11-09 第五轮统一扩充）：`audit-contrast` / `audit-mobile` / `audit-a11y` / `audit-links` / `audit-detail` 均覆盖 **17 条可访问路由**，`audit-mobile` 每页跑 320/390/430 三档；`audit-interactions.js` 验 10 条路由的 `data-motion` 分档、白皮书附录折叠、3D 装裱角标；`audit-round19.js` 在滚到后仅等 600ms 就检查「文字是否已可读」，并验认养页数据切换与后台导航；`audit-notill.js` / `audit-soil.js` / `audit-rice.js` 分别回归第 4 / 第 1 / 稻作三个科普实验的场景与交互。**新增页面时所有带 `paths` 的脚本都要补**，不能只补 `audit-links`。截图统一写到 `.workbuddy/shots/`。
 
 > `audit-a11y.js` 的 `perf.transferKB` 在有缓存的会话里会是 0，只能看资源条数；要测真实首屏体积须用全新 context 并禁用缓存。
 

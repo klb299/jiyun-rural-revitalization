@@ -27,6 +27,7 @@ PROBES = [
     "audit-a11y.js",
     "audit-notill.js",
     "audit-soil.js",
+    "audit-rice.js",
 ]
 CLI = os.environ.get("PLAYWRIGHT_CLI", "playwright-cli")
 

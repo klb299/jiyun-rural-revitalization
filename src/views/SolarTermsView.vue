@@ -248,7 +248,7 @@ const solarTermsData = {
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 mt-12">
         <Reveal v-for="(s, i) in seasons" :key="s.id" :delay="i * 80">
           <div class="border-t border-[#1C1B18]/14 pt-6 pb-8">
-            <button @click="activeSeason = s.id" class="group flex items-baseline gap-3 mb-4 cursor-pointer">
+            <button @click="activeSeason = s.id" class="group flex items-center gap-3 mb-4 min-h-[40px] cursor-pointer">
               <span class="font-editorial text-2xl font-bold" :style="{ color: s.color }">{{ s.name }}</span>
               <span class="caption group-hover:text-[#8A6324] transition-colors">{{ s.sub }} / 06 节气</span>
             </button>

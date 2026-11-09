@@ -114,7 +114,7 @@ const playNarration = () => {
       <nav class="hidden lg:flex items-center gap-1 h-full">
         <RouterLink
           to="/"
-          class="px-4 py-2 text-xs font-semibold transition-colors duration-300"
+          class="px-4 py-2 min-h-[40px] text-xs font-semibold transition-colors duration-300"
           :class="route.path === '/' ? 'text-[#8A6324]' : 'text-[#5A564E] hover:text-[#1C1B18]'"
         >序厅</RouterLink>
         <div
@@ -125,7 +125,7 @@ const playNarration = () => {
           @focusout="onGroupFocusOut($event, g.id)"
         >
           <button
-            class="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold transition-colors duration-300 cursor-pointer"
+            class="flex items-center gap-1.5 px-4 py-2 min-h-[40px] text-xs font-semibold transition-colors duration-300 cursor-pointer"
             :class="activeGroup === g.id || g.items.some(i => i.path === route.path)
               ? 'text-[#8A6324]' : 'text-[#5A564E] hover:text-[#1C1B18]'"
             :aria-expanded="activeGroup === g.id"
@@ -174,7 +174,7 @@ const playNarration = () => {
       <div class="flex items-center gap-2 sm:gap-3">
         <button
           @click="playNarration"
-          class="hidden sm:flex items-center gap-2 px-3 py-2 rounded-full border text-[11px] font-semibold transition-all duration-300 cursor-pointer"
+          class="hidden sm:flex items-center gap-2 px-3 py-2 min-h-[40px] rounded-full border text-[11px] font-semibold transition-all duration-300 cursor-pointer"
           :class="isAudioPlaying
             ? 'border-[#C88A32] bg-[#C88A32]/12 text-[#8A6324]'
             : 'border-[#1C1B18]/14 text-[#5A564E] hover:border-[#1C1B18]/35 hover:text-[#1C1B18]'"

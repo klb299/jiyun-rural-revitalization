@@ -2,7 +2,12 @@ async page => {
   // 可访问性与中等宽度自查：补现有探针（320/390/430、对比度、死链）的盲区
   const base = 'http://127.0.0.1:4173'
   const out = {}
-  const paths = ['/', '/exhibit-map', '/about', '/admin', '/sandbox-3d', '/last-mile']
+  const paths = [
+  '/', '/strata-3d', '/machinery-3d', '/sandbox-3d', '/dashboard',
+  '/journey', '/chagan-lake', '/solar-terms', '/products', '/aid-projects',
+  '/adopt-a-field', '/farm-income', '/last-mile', '/science',
+  '/exhibit-map', '/about', '/admin'
+]
 
   // 1. 平板 / 桌面宽度横向溢出
   out.overflow = []

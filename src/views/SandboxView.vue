@@ -110,7 +110,7 @@ const legend = [
                     v-for="v in viewpoints"
                     :key="v.id"
                     @click="appStore.setFocusPoint(v.id)"
-                    class="absolute -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
+                    class="absolute -translate-x-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center group cursor-pointer"
                     :style="{ left: v.x + '%', top: v.y + '%' }"
                     :aria-label="'飞行至' + v.name"
                   >

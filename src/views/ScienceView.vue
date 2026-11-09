@@ -85,6 +85,13 @@ const soils = [
   }
 ]
 
+const riceStructures = [
+  { key: 'plant', no: '01', name: '稻株', en: 'RICE PLANT', desc: '分节茎、弧面剑叶、弯曲穗轴与下垂谷粒；五个阶段里株高、颜色、倾角与水位同步变化。' },
+  { key: 'water', no: '02', name: '水层', en: 'FLOOD WATER', desc: '浅水层随生育期由深到浅，法线细波与扩散涟漪显示灌溉节律，成熟期落干。' },
+  { key: 'bund', no: '03', name: '田埂', en: 'BUND', desc: '四边土埂把田块围成独立格，用来蓄水、行走与分隔不同品种。' },
+  { key: 'canal', no: '04', name: '灌渠与水位标尺', en: 'IRRIGATION', desc: '侧向灌渠与闸门控制进排水，0 / 5 / 15 cm 刻度对应不同生育期的适宜水层。' }
+]
+
 const ricePhases = [
   { no: 0, name: '育秧', time: '4 月下旬 – 5 月中', en: 'SEEDLING', desc: '温室浸种催芽，秧床保持浅水层。株高只有十几厘米，根系先在黑土表层铺开。', metric: '株高 12–18 cm' },
   { no: 1, name: '分蘖', time: '5 月下 – 6 月', en: 'TILLERING', desc: '稻株从基部分出侧茎，田间进入旺盛营养生长。浅水勤灌促使根系向深层黑土下扎。', metric: '单株 8–15 个分蘖' },
@@ -95,6 +102,7 @@ const ricePhases = [
 
 const soilFocus = ref('crumb')
 const riceStage = ref(0)
+const riceFocus = ref('plant')
 const satCount = ref(4)
 const blocked = ref(false)
 const coverage = ref(60)
@@ -105,7 +113,7 @@ const partFocus = ref('')
 
 const param = computed(() => {
   if (activeMode.value === 'soil') return { focus: soilFocus.value }
-  if (activeMode.value === 'rice') return { stage: riceStage.value }
+  if (activeMode.value === 'rice') return { stage: riceStage.value, focus: riceFocus.value }
   if (activeMode.value === 'notill') {
     return {
       coverage: coverage.value, focus: notillFocus.value,
@@ -132,6 +140,15 @@ const coverReadout = computed(() => {
   }
 })
 const activePhase = computed(() => ricePhases[riceStage.value])
+const activeRice = computed(() => riceStructures.find((s) => s.key === riceFocus.value) || riceStructures[0])
+const hoverName = computed(() => {
+  const k = hoverKey.value
+  if (!k) return ''
+  if (activeMode.value === 'soil') return soils.find((s) => s.key === k)?.name || ''
+  if (activeMode.value === 'rice') return riceStructures.find((s) => s.key === k)?.name || ''
+  if (activeMode.value === 'notill') return notillStructures.find((s) => s.key === k)?.name || ''
+  return ''
+})
 const accuracy = computed(() => {
   if (blocked.value) return '± 1.2 m'
   if (satCount.value >= 5) return '± 2.0 cm'
@@ -170,11 +187,13 @@ const rtResult = computed(() => blocked.value
 const onSelect = (key) => {
   if (activeMode.value === 'soil') soilFocus.value = key
   else if (activeMode.value === 'notill') notillFocus.value = key
+  else if (activeMode.value === 'rice') riceFocus.value = key
 }
 
 const resetLab = () => {
   soilFocus.value = 'crumb'
   riceStage.value = 0
+  riceFocus.value = 'plant'
   satCount.value = 4
   blocked.value = false
   coverage.value = 60
@@ -271,18 +290,16 @@ const resetLab = () => {
                   <WebGLStage scene="science">
                     <ScienceStage :mode="activeMode" :param="param" @select="onSelect" @hover="hoverKey = $event" />
                   </WebGLStage>
-                  <div v-if="hoverKey && (activeMode === 'soil' || activeMode === 'notill')"
+                  <div v-if="hoverName"
                     class="absolute top-4 right-4 z-10 rounded-full bg-[#C88A32] text-[#1C1B18] px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] font-bold pointer-events-none">
-                    点击聚焦 · {{ activeMode === 'soil'
-                      ? (soils.find(s => s.key === hoverKey) || {}).name
-                      : (notillStructures.find(s => s.key === hoverKey) || {}).name }}
+                    点击聚焦 · {{ hoverName }}
                   </div>
                 </div>
               </div>
             </div>
             <div class="flex flex-wrap items-center justify-between gap-3 mt-4">
               <p class="caption">实时 WebGL / 程序化几何与材质 / 可自由旋转与缩放</p>
-              <button @click="resetLab" class="inline-flex items-center gap-2 text-xs font-bold text-[#8A6324] cursor-pointer group">
+              <button @click="resetLab" class="inline-flex items-center gap-2 min-h-[40px] text-xs font-bold text-[#8A6324] cursor-pointer group">
                 <RotateCcw :size="14" class="group-hover:-rotate-45 transition-transform duration-500" /> 重置实验参数
               </button>
             </div>
@@ -350,6 +367,23 @@ const resetLab = () => {
                   <div class="relative mt-7 pt-5 border-t border-[#F7F4EE]/16">
                     <div class="caption text-[#F7F4EE]/90 mb-1">关键指标</div>
                     <div class="font-editorial text-xl font-bold text-[#F7F4EE]">{{ activePhase.metric }}</div>
+                  </div>
+                </div>
+              </Reveal>
+
+              <Reveal :delay="160">
+                <div class="card-linen p-6 sm:p-7">
+                  <div class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960] mb-4">SELECT A STRUCTURE / 点击模型或下方结构</div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button v-for="s in riceStructures" :key="s.key" @click="riceFocus = s.key"
+                      class="px-3 py-3 min-h-[40px] rounded-xl text-xs font-bold text-left transition-all duration-400 cursor-pointer"
+                      :class="riceFocus === s.key ? 'bg-[#1C1B18] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E] hover:bg-[#C88A32]/20'">
+                      <span class="font-mono text-[9px] tracking-[0.16em] opacity-60 block mb-1">{{ s.no }}</span>{{ s.name }}
+                    </button>
+                  </div>
+                  <div class="mt-5 pt-4 border-t border-[#1C1B18]/10">
+                    <div class="font-mono text-[9px] tracking-[0.2em] text-[#8A6324] mb-2">{{ activeRice.en }}</div>
+                    <p class="text-[12px] leading-[1.9] text-[#5A564E]">{{ activeRice.desc }}</p>
                   </div>
                 </div>
               </Reveal>

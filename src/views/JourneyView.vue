@@ -216,12 +216,12 @@ const goToAct = (i) => {
                 <button
                   @click="currentStep = Math.max(0, currentStep - 1)"
                   :disabled="currentStep === 0"
-                  class="px-4 py-2.5 rounded-lg border border-[#1C1B18]/16 text-xs font-semibold disabled:opacity-35 cursor-pointer hover:border-[#C88A32] transition-colors flex items-center gap-1.5"
+                  class="px-4 py-2.5 min-h-[40px] rounded-lg border border-[#1C1B18]/16 text-xs font-semibold disabled:opacity-35 cursor-pointer hover:border-[#C88A32] transition-colors flex items-center gap-1.5"
                 ><ArrowLeft :size="14" /> 上一幕</button>
                 <button
                   @click="currentStep = Math.min(steps.length - 1, currentStep + 1)"
                   :disabled="currentStep === steps.length - 1"
-                  class="px-4 py-2.5 rounded-lg bg-[#1C1B18] text-[#F7F4EE] text-xs font-semibold disabled:opacity-35 cursor-pointer hover:bg-[#C88A32] transition-colors flex items-center gap-1.5"
+                  class="px-4 py-2.5 min-h-[40px] rounded-lg bg-[#1C1B18] text-[#F7F4EE] text-xs font-semibold disabled:opacity-35 cursor-pointer hover:bg-[#C88A32] transition-colors flex items-center gap-1.5"
                 >下一幕 <ArrowRight :size="14" /></button>
               </div>
             </div>

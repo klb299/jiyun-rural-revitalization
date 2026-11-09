@@ -10,7 +10,7 @@ import {
   PALETTE, mulberry32, roundedBox, bevelCylinder, lathe, coilSpringGeometry,
   chernozemMaterial, grassMaterial, gravelMaterial,
   porcelainMaterial, metalMaterial, lacquerMaterial,
-  glowSprite, applyWind, labelTexture,
+  glowSprite, applyWind, labelTexture, waterNormalMap,
   sculptedAggregateGeometry, makeDetailedRiceStalkGeometry
 } from './textures.js'
 
@@ -387,6 +387,12 @@ export function buildRiceScene(scene, stage) {
   scene.add(root)
   pedestal(root, 3.2, -1.6)
 
+  const rnd = mulberry32(9182)
+  const dummy = new THREE.Object3D()
+  const groups = {}
+  const keys = ['plant', 'water', 'bund', 'canal']
+
+  // 田床
   const bed = new THREE.Mesh(
     roundedBox(4.6, 0.32, 2.9, 0.1, 6),
     chernozemMaterial({ repeat: [5, 3], bumpScale: 0.03 })
@@ -396,11 +402,15 @@ export function buildRiceScene(scene, stage) {
   bed.castShadow = true
   root.add(bed)
 
-  // 水面：早期阶段可见
+  // 1) 水层：法线细波 + 三圈扩散涟漪
+  const waterGroup = new THREE.Group()
+  waterGroup.userData.key = 'water'
   const water = new THREE.Mesh(
     new THREE.PlaneGeometry(4.5, 2.8, 40, 20),
     new THREE.MeshPhysicalMaterial({
       color: 0x9FC4CC, roughness: 0.12, metalness: 0.05,
+      normalMap: waterNormalMap([6, 2]),
+      normalScale: new THREE.Vector2(0.12, 0.12),
       transparent: true, opacity: 0.55, depthWrite: false,
       clearcoat: 1, side: THREE.DoubleSide
     })
@@ -408,44 +418,145 @@ export function buildRiceScene(scene, stage) {
   water.rotation.x = -Math.PI / 2
   water.position.y = -0.71
   water.userData.excludeFromAO = true
-  root.add(water)
+  waterGroup.add(water)
+  const ripples = []
+  for (let i = 0; i < 3; i++) {
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(0.2, 0.215, 48),
+      new THREE.MeshBasicMaterial({ color: 0xE8F4F6, transparent: true, opacity: 0.3, side: THREE.DoubleSide, depthWrite: false })
+    )
+    ring.rotation.x = -Math.PI / 2
+    ring.position.set(-1.3 + i * 1.3, -0.695, 0.4 - i * 0.5)
+    ring.userData.excludeFromAO = true
+    waterGroup.add(ring)
+    ripples.push(ring)
+  }
+  groups.water = waterGroup
 
-  // 单株稻：分节稻茎 + 茎节环 + 弧面剑叶 + 弯曲下垂穗轴 + 饱满谷粒与颖芒。
-  // 株高基准 1.26，与五阶段生长补间的缩放完全对齐；非索引几何兼容 applyWind。
-  const stalkGeo = makeDetailedRiceStalkGeometry({
-    height: 0.95, grainCount: 12, leafCount: 4, widthScale: 1.6
+  // 2) 四边田埂
+  const bundGroup = new THREE.Group()
+  bundGroup.userData.key = 'bund'
+  const bundMat = chernozemMaterial({ repeat: [4, 1], bumpScale: 0.04, color: 0x7C6A52 })
+  ;[
+    { x: 0, z: -1.52, w: 4.9, d: 0.22 },
+    { x: 0, z: 1.52, w: 4.9, d: 0.22 },
+    { x: -2.36, z: 0, w: 0.22, d: 3.05 },
+    { x: 2.36, z: 0, w: 0.22, d: 3.05 }
+  ].forEach((b) => {
+    const m = new THREE.Mesh(roundedBox(b.w, 0.26, b.d, 0.06, 4), bundMat)
+    m.position.set(b.x, -0.74, b.z)
+    m.castShadow = true
+    m.receiveShadow = true
+    bundGroup.add(m)
   })
+  groups.bund = bundGroup
 
-  const plantMat = new THREE.MeshStandardMaterial({
-    color: 0x4E7A52, roughness: 0.84, metalness: 0.02, side: THREE.DoubleSide
+  // 3) 灌渠、闸门与水位标尺
+  const canalGroup = new THREE.Group()
+  canalGroup.userData.key = 'canal'
+  const canal = new THREE.Mesh(
+    roundedBox(0.34, 0.1, 3.05, 0.03, 4),
+    new THREE.MeshStandardMaterial({ color: 0x3E5F68, roughness: 0.32, metalness: 0.12 })
+  )
+  canal.position.set(2.62, -0.76, 0)
+  canalGroup.add(canal)
+  const gate = new THREE.Mesh(
+    roundedBox(0.42, 0.2, 0.5, 0.03, 4),
+    metalMaterial(0x8C583A, { roughness: 0.6 }).clone()
+  )
+  gate.position.set(2.62, -0.68, 1.15)
+  canalGroup.add(gate)
+  const rulerMat = new THREE.MeshBasicMaterial({ color: PALETTE.gold, transparent: true, opacity: 0.75 })
+  const wr = new THREE.Mesh(new THREE.BoxGeometry(0.012, 0.5, 0.012), rulerMat)
+  wr.position.set(-2.52, -0.5, 1.0)
+  wr.userData.excludeFromAO = true
+  canalGroup.add(wr)
+  ;[
+    { y: -0.3, t: '15 cm' }, { y: -0.46, t: '5 cm' }, { y: -0.62, t: '0 cm' }
+  ].forEach((d) => {
+    const tick = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.012, 0.012), rulerMat)
+    tick.position.set(-2.47, d.y, 1.0)
+    tick.userData.excludeFromAO = true
+    canalGroup.add(tick)
+    const tex = labelTexture(d.t, {
+      width: 256, height: 64, color: '#C88A32',
+      font: '600 40px ui-monospace, monospace', align: 'left'
+    })
+    const lab = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.46, 0.115),
+      new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, side: THREE.DoubleSide })
+    )
+    lab.position.set(-2.78, d.y, 1.01)
+    lab.userData.excludeFromAO = true
+    canalGroup.add(lab)
   })
+  groups.canal = canalGroup
+
+  // 4) 稻株：分节茎 / 弧面叶 / 下垂穗轴 / 谷粒，另加阶段专属的秧盘与稻花
+  const stalkGeo = makeDetailedRiceStalkGeometry({ height: 0.95, grainCount: 12, leafCount: 4, widthScale: 1.6 })
+  const plantMat = new THREE.MeshStandardMaterial({ color: 0x4E7A52, roughness: 0.84, metalness: 0.02, side: THREE.DoubleSide })
   const wind = applyWind(plantMat, { amount: 0.09, speed: 1.35, phaseScale: 1.2 })
-
-  const rows = 6
-  const cols = 14
-  const count = rows * cols
+  const rows = 6, cols = 14, count = rows * cols
+  const plantGroup = new THREE.Group()
+  plantGroup.userData.key = 'plant'
   const rice = new THREE.InstancedMesh(stalkGeo, plantMat, count)
   rice.castShadow = true
-  const rnd = mulberry32(9182)
+  plantGroup.add(rice)
+
+  const trayMat = new THREE.MeshStandardMaterial({ color: 0x8C7A5A, roughness: 0.92 })
+  const tray = new THREE.Group()
+  for (let i = 0; i < 5; i++) {
+    const cell = new THREE.Mesh(roundedBox(0.72, 0.06, 2.3, 0.02, 3), trayMat)
+    cell.position.set(-1.84 + i * 0.92, -0.7, 0)
+    tray.add(cell)
+  }
+  plantGroup.add(tray)
+  const flowers = new THREE.InstancedMesh(
+    new THREE.SphereGeometry(0.018, 6, 5),
+    new THREE.MeshStandardMaterial({ color: 0xF2EDE0, roughness: 0.9 }), 36
+  )
+  const flowerDummy = new THREE.Object3D()
+  for (let i = 0; i < 36; i++) {
+    flowerDummy.position.set((rnd() - 0.5) * 4.0, -0.2 + rnd() * 0.25, (rnd() - 0.5) * 2.3)
+    flowerDummy.scale.setScalar(0.7 + rnd() * 0.8)
+    flowerDummy.updateMatrix()
+    flowers.setMatrixAt(i, flowerDummy.matrix)
+  }
+  flowers.instanceMatrix.needsUpdate = true
+  plantGroup.add(flowers)
+  groups.plant = plantGroup
+
   const spots = []
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      // 固定每株的随机因子，阶段切换补间时不会逐帧抖动
       spots.push({
         x: (c / (cols - 1) - 0.5) * 4.1 + (rnd() - 0.5) * 0.1,
         z: (r / (rows - 1) - 0.5) * 2.4 + (rnd() - 0.5) * 0.1,
-        rx: (rnd() - 0.5) * 0.1,
-        ry: rnd() * Math.PI * 2,
-        tilt: rnd() - 0.5,
-        hf: 0.82 + rnd() * 0.32,
-        sx: 0.85 + rnd() * 0.3,
-        sz: 0.85 + rnd() * 0.3
+        rx: (rnd() - 0.5) * 0.1, ry: rnd() * Math.PI * 2,
+        tilt: rnd() - 0.5, hf: 0.82 + rnd() * 0.32,
+        sx: 0.85 + rnd() * 0.3, sz: 0.85 + rnd() * 0.3
       })
     }
   }
-  root.add(rice)
+  keys.forEach((k) => root.add(groups[k]))
 
-  // 阶段表：高度、颜色、倾斜、水位
+  // 阶段展签：5 张纹理预生成，切换 map 不重复分配
+  const phaseNames = [
+    '01  SEEDLING / 育秧', '02  TILLERING / 分蘖', '03  HEADING / 抽穗',
+    '04  GRAIN FILLING / 灌浆', '05  HARVEST / 成熟'
+  ]
+  const phaseTextures = phaseNames.map((t) => labelTexture(t, {
+    width: 900, height: 80, color: '#C88A32',
+    font: '600 34px ui-monospace, monospace', align: 'right'
+  }))
+  const phaseLabel = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.1, 0.19),
+    new THREE.MeshBasicMaterial({ map: phaseTextures[0], transparent: true, depthWrite: false, side: THREE.DoubleSide })
+  )
+  phaseLabel.position.set(1.0, 0.62, 0.6)
+  phaseLabel.userData.excludeFromAO = true
+  root.add(phaseLabel)
+
   const phases = [
     { h: 0.22, color: 0x6E9B5E, lean: 0.02, water: 0.55 },
     { h: 0.52, color: 0x4E7A52, lean: 0.05, water: 0.42 },
@@ -453,15 +564,20 @@ export function buildRiceScene(scene, stage) {
     { h: 0.95, color: 0x98955A, lean: 0.16, water: 0.08 },
     { h: 1.05, color: 0xA98843, lean: 0.26, water: 0 }
   ]
-  const dummy = new THREE.Object3D()
   let current = 0
   const proxy = { v: 0 }
+  let focus = 'plant'
 
   function apply(p) {
-    const a = phases[Math.round(p)]
+    const idx = Math.max(0, Math.min(4, Math.round(p)))
+    const a = phases[idx]
     plantMat.color.setHex(a.color)
-    water.visible = a.water > 0.01
     gsap.to(water.material, { opacity: a.water, duration: 0.6 })
+    tray.visible = idx === 0
+    flowers.visible = idx === 2
+    ripples.forEach((r) => { r.visible = a.water > 0.05 })
+    phaseLabel.material.map = phaseTextures[idx]
+    phaseLabel.material.needsUpdate = true
     for (let i = 0; i < count; i++) {
       const spt = spots[i]
       dummy.position.set(spt.x, -0.72, spt.z)
@@ -473,14 +589,22 @@ export function buildRiceScene(scene, stage) {
     }
     rice.instanceMatrix.needsUpdate = true
   }
+  function applyFocus(next) {
+    if (!next || !groups[next]) return
+    if (groups[focus]) clearHighlight(groups[focus])
+    focus = next
+    highlight(groups[focus], { intensity: 0.1 })
+  }
   apply(0)
+  applyFocus('plant')
 
   stage.addContactShadow({ size: 7, opacity: 0.4, position: [0, -1.42, 0], parent: root })
 
   return {
     root,
-    pickTargets: [],
+    pickTargets: keys.map((k) => groups[k]),
     setParam(p) {
+      if (p?.focus) applyFocus(p.focus)
       if (p?.stage === undefined) return
       const next = Math.max(0, Math.min(4, Number(p.stage)))
       if (next === current) return
@@ -493,8 +617,16 @@ export function buildRiceScene(scene, stage) {
     update(dt, t) {
       wind(t)
       root.rotation.y = Math.sin(t * 0.12) * 0.1
+      ripples.forEach((r, i) => {
+        const k = (t * 0.35 + i * 0.33) % 1
+        r.scale.setScalar(0.5 + k * 2.2)
+        r.material.opacity = 0.3 * (1 - k)
+      })
     },
-    disposeExtra() { disposeRoot(root) }
+    disposeExtra() {
+      phaseTextures.forEach((t) => t.dispose())
+      disposeRoot(root)
+    }
   }
 }
 
