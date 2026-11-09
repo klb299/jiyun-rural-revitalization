@@ -975,17 +975,26 @@ export function buildNoTillScene(scene, stage) {
   }
   groups.pore = poreGroup
 
-  // 4) 免耕播种总成：17 个零件，可沿径向展开查看内部装配
+  // 4) 免耕播种总成：18 个零件，可沿径向展开查看内部装配
   const openerGroup = new THREE.Group()
   openerGroup.userData.key = 'opener'
   const openerParts = []
-  const addPart = (mesh, base, dir) => {
+  const partByKey = {}
+  const addPart = (mesh, base, dir, key) => {
     mesh.position.set(base[0], base[1], base[2])
     openerGroup.add(mesh)
     const v = new THREE.Vector3(base[0] - 1.38, base[1] - 0.45, base[2] - 0.55)
     if (v.lengthSq() < 0.001) v.set(dir[0], dir[1], dir[2])
     else v.normalize().add(new THREE.Vector3(dir[0], dir[1], dir[2]).multiplyScalar(0.35)).normalize()
-    openerParts.push({ mesh, base: new THREE.Vector3(base[0], base[1], base[2]), dir: v })
+    const entry = { mesh, base: new THREE.Vector3(base[0], base[1], base[2]), dir: v }
+    openerParts.push(entry)
+    if (key) {
+      mesh.userData.key = key
+      // 可聚焦零件必须独占材质，否则 highlight() 会串到共用 steel/darkSteel 的其它零件
+      if (mesh.material && !Array.isArray(mesh.material)) mesh.material = mesh.material.clone()
+      if (!partByKey[key]) partByKey[key] = []
+      partByKey[key].push(entry)
+    }
   }
 
   const steel = metalMaterial(PALETTE.gold, { roughness: 0.32, metalness: 0.82 }).clone()
@@ -1006,59 +1015,59 @@ export function buildNoTillScene(scene, stage) {
   })
   const disc = new THREE.Mesh(notchedDiscGeo, steel)
   disc.rotation.y = Math.PI / 2
-  addPart(disc, [0.98, 0.20, 0.64], [-1, 0, 0])
+  addPart(disc, [0.98, 0.20, 0.64], [-1, 0, 0], 'disc')
   const disc2 = new THREE.Mesh(notchedDiscGeo.clone().scale(0.82, 0.82, 1), darkSteel)
   disc2.rotation.y = Math.PI / 2
-  addPart(disc2, [0.98, 0.20, 0.42], [-1, 0, -1])
+  addPart(disc2, [0.98, 0.20, 0.42], [-1, 0, -1], 'disc2')
 
   const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 0.09, 24), lacquerMaterial(0x1C1B18).clone())
   hub.rotation.z = Math.PI / 2
-  addPart(hub, [0.98, 0.20, 0.64], [-1, 1, 0])
+  addPart(hub, [0.98, 0.20, 0.64], [-1, 1, 0], 'hub')
   const boltGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.1, 8)
   for (let i = 0; i < 6; i++) {
     const a = (i / 6) * Math.PI * 2
     const bolt = new THREE.Mesh(boltGeo, steel)
     bolt.rotation.z = Math.PI / 2
-    addPart(bolt, [0.98, 0.20 + Math.cos(a) * 0.055, 0.64 + Math.sin(a) * 0.055], [-1, Math.cos(a), Math.sin(a)])
+    addPart(bolt, [0.98, 0.20 + Math.cos(a) * 0.055, 0.64 + Math.sin(a) * 0.055], [-1, Math.cos(a), Math.sin(a)], 'bolts')
   }
 
   const arm = new THREE.Mesh(roundedBox(0.82, 0.09, 0.1, 0.03, 4), darkSteel)
   arm.rotation.z = -0.32
-  addPart(arm, [1.34, 0.50, 0.55], [0.4, 1, 0])
+  addPart(arm, [1.34, 0.50, 0.55], [0.4, 1, 0], 'arm')
   const spring = new THREE.Mesh(
     coilSpringGeometry({ radius: 0.055, tubeRadius: 0.011, height: 0.3, turns: 6 }), steel
   )
-  addPart(spring, [1.28, 0.74, 0.55], [0, 1, 0.3])
+  addPart(spring, [1.28, 0.74, 0.55], [0, 1, 0.3], 'spring')
   const springCap = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.02, 24), darkSteel)
-  addPart(springCap, [1.28, 0.90, 0.55], [0, 1, 0])
+  addPart(springCap, [1.28, 0.90, 0.55], [0, 1, 0], 'springCap')
 
   const gaugeWheel = new THREE.Mesh(
     new THREE.CylinderGeometry(0.155, 0.155, 0.055, 32),
     new THREE.MeshStandardMaterial({ color: 0x2E5A44, roughness: 0.86 })
   )
   gaugeWheel.rotation.z = Math.PI / 2
-  addPart(gaugeWheel, [1.62, 0.13, 0.64], [1, -0.4, 0])
+  addPart(gaugeWheel, [1.62, 0.13, 0.64], [1, -0.4, 0], 'gauge')
   const pressWheel = new THREE.Mesh(
     new THREE.CylinderGeometry(0.13, 0.13, 0.05, 32), lacquerMaterial(0x1C1B18).clone()
   )
   pressWheel.rotation.z = Math.PI / 2
-  addPart(pressWheel, [1.88, 0.12, 0.64], [1, -0.4, 0])
+  addPart(pressWheel, [1.88, 0.12, 0.64], [1, -0.4, 0], 'press')
 
   const seedBox = new THREE.Mesh(
     roundedBox(0.36, 0.26, 0.28, 0.05, 5), porcelainMaterial({ repeat: [2, 2] }).clone()
   )
-  addPart(seedBox, [1.52, 0.98, 0.55], [0.5, 1, 0])
+  addPart(seedBox, [1.52, 0.98, 0.55], [0.5, 1, 0], 'seedBox')
   const seedCurve = new THREE.CatmullRomCurve3([
     new THREE.Vector3(0.22, 0.36, 0), new THREE.Vector3(0.10, 0.18, 0),
     new THREE.Vector3(-0.02, -0.06, 0), new THREE.Vector3(-0.14, -0.30, 0)
   ])
   addPart(new THREE.Mesh(new THREE.TubeGeometry(seedCurve, 32, 0.022, 8, false), darkSteel),
-    [1.20, 0.50, 0.55], [0.6, 0, 0])
+    [1.20, 0.50, 0.55], [0.6, 0, 0], 'seedTube')
   const boot = new THREE.Mesh(roundedBox(0.1, 0.2, 0.06, 0.02, 3), steel)
   boot.rotation.z = 0.25
-  addPart(boot, [1.06, 0.13, 0.55], [-0.5, -1, 0])
+  addPart(boot, [1.06, 0.13, 0.55], [-0.5, -1, 0], 'boot')
   const hitch = new THREE.Mesh(roundedBox(0.5, 0.06, 0.07, 0.02, 3), darkSteel)
-  addPart(hitch, [1.72, 0.72, 0.55], [1, 0.5, 0])
+  addPart(hitch, [1.72, 0.72, 0.55], [1, 0.5, 0], 'hitch')
   groups.opener = openerGroup
 
   keys.forEach((k) => root.add(groups[k]))
@@ -1130,6 +1139,8 @@ export function buildNoTillScene(scene, stage) {
   let coverage = 60
   let focus = 'straw'
   let explode = 0
+  let rain = 2
+  let partFocus = null
   function applyCoverage(v) {
     coverage = Math.max(0, Math.min(100, Number(v) || 0))
     const shown = Math.round(maxStraw * coverage / 100)
@@ -1137,13 +1148,30 @@ export function buildNoTillScene(scene, stage) {
     strawB.count = Math.floor(shown / 2)
     surfaceMat.color.set(coverage >= 60 ? 0x241E18 : coverage >= 30 ? 0x32281E : 0x4A3E30)
   }
+  function applyRain(v) {
+    rain = Math.max(1, Math.min(3, Math.round(Number(v) || 2)))
+  }
   function applyExplode(v) {
     explode = Math.max(0, Math.min(1, Number(v) || 0))
     openerParts.forEach(({ mesh, base, dir }) => {
       mesh.position.copy(base).addScaledVector(dir, explode * 0.42)
     })
   }
+  function clearPartFocus() {
+    if (partFocus && partByKey[partFocus]) {
+      partByKey[partFocus].forEach((e) => clearHighlight(e.mesh))
+    }
+    partFocus = null
+  }
+  function applyPartFocus(key) {
+    clearPartFocus()
+    if (!key || !partByKey[key]) return
+    clearHighlight(openerGroup)
+    partFocus = key
+    partByKey[key].forEach((e) => highlight(e.mesh, { intensity: 0.18 }))
+  }
   function applyFocus(next) {
+    clearPartFocus()
     if (!next || !groups[next]) return
     if (groups[focus]) clearHighlight(groups[focus])
     focus = next
@@ -1157,16 +1185,25 @@ export function buildNoTillScene(scene, stage) {
     pickTargets: keys.map((k) => groups[k]),
     setParam(p) {
       if (p && typeof p.coverage === 'number') applyCoverage(p.coverage)
+      if (p && typeof p.rain === 'number') applyRain(p.rain)
       if (p && typeof p.explode === 'number') applyExplode(p.explode)
+      // 先切结构焦点再点零件，否则 applyFocus 会把零件高亮清掉
       if (p?.focus) applyFocus(p.focus)
+      if (p && 'part' in p) {
+        if (p.part) applyPartFocus(p.part)
+        else clearPartFocus()
+      }
     },
     update(dt, t) {
       root.rotation.y = Math.sin(t * 0.14) * 0.12
-      const infilCount = Math.round(dropCount * coverage / 100)
+      const activeDrops = Math.round(dropCount * rain / 3)
+      const infilCount = Math.round(activeDrops * coverage / 100)
+      const rainSpeed = 0.7 + rain * 0.25
       infil.count = infilCount
-      runoff.count = dropCount - infilCount
+      runoff.count = activeDrops - infilCount
       dropSeeds.forEach((s, i) => {
-        const tt = (t * 0.42 * s.speed + s.off) % 1
+        if (i >= activeDrops) return
+        const tt = (t * 0.42 * s.speed * rainSpeed + s.off) % 1
         let x = s.x
         let y = 1.55 - tt * 2.05
         let scale = 1
@@ -1190,7 +1227,7 @@ export function buildNoTillScene(scene, stage) {
       runoff.instanceMatrix.needsUpdate = true
 
       // 溅蚀土粒：覆盖率越低，裸露表土被砸得越明显
-      const splashShown = Math.round(splashCount * (1 - coverage / 100))
+      const splashShown = Math.round(splashCount * (1 - coverage / 100) * rain / 3)
       splash.count = splashShown
       for (let i = 0; i < splashShown; i++) {
         const s = dropSeeds[i]

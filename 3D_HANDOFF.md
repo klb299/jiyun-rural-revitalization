@@ -266,7 +266,8 @@ npm run preview    # 预览构建产物
 
 ## 9. 第四个科普实验实现记录（2026-11-09）
 
-- `buildNoTillScene(scene, stage)` 注册为 `LAB_BUILDERS.notill`，接口与另三个一致；参数 `{ coverage: 0–100, focus: 'straw' | 'crumb' | 'pore' | 'opener', explode: 0–1 }`。`explode` 让开沟总成的 17 个零件沿径向散开，页面按钮 `exploded` 控制。
+- `buildNoTillScene(scene, stage)` 注册为 `LAB_BUILDERS.notill`，接口与另三个一致；参数 `{ coverage: 0–100, focus, explode: 0–1, rain: 1–3, part: string }`。`explode` 让开沟总成的 **18 个零件**（13 次装配调用，其中螺栓循环 6 件）沿径向散开；`rain` 控制有效雨滴数、下落速度与溅蚀量；`part` 按 `partByKey` 高亮单组零件。
+- **参数顺序坑**：`setParam()` 必须先 `applyFocus()` 再 `applyPartFocus()`，因为 `applyFocus()` 会 `clearPartFocus()`；反过来写零件高亮会被立刻清掉。`part` 为空字符串时走 `clearPartFocus()`，重置按钮依赖这条。
 - 覆盖率驱动三件事：秸秆 `InstancedMesh.count`、地表薄层 `surfaceMat.color`、下渗 / 径流两组雨滴实例的数量与路径。雨滴用 `DynamicDrawUsage`，每帧按 `(t * speed + off) % 1` 更新矩阵，不新建对象。
 - 可拾取四组各用独立材质，其中蚯蚓通道逐条 `new MeshStandardMaterial()`，避免 `highlight()` 串色（硬约束 6）。
 - 页面侧 `ScienceView.vue` 的北斗分支已由 `<template v-else>` 改成显式 `v-else-if`，新增实验才能渲染；改第 5 个实验时同样注意别再留裸 `v-else`。
@@ -277,7 +278,7 @@ npm run preview    # 预览构建产物
 
 用户要求「继续迭代精细，不用担心 token」，在首版基础上做了四组建模精修：
 
-1. **开沟总成**：从 4 零件扩到 **17 零件**——14 齿缺刻圆盘（`THREE.Shape` + `ExtrudeGeometry`）、副盘、轮毂、6 颗螺栓、支臂、`coilSpringGeometry` 弹簧加压与上托盘、限深轮、镇压轮、种子箱、输种管（`TubeGeometry`）、导种靴、悬挂架。`openerParts` 记录每个零件的 `base` 与 `dir`，`applyExplode()` 按 `explode` 值沿径向平移 0.42。
+1. **开沟总成**：从 4 零件扩到 **18 零件**——14 齿缺刻圆盘（`THREE.Shape` + `ExtrudeGeometry`）、副盘、轮毂、6 颗螺栓、支臂、`coilSpringGeometry` 弹簧加压与上托盘、限深轮、镇压轮、种子箱、输种管（`TubeGeometry`）、导种靴、悬挂架。`openerParts` 记录每个零件的 `base` 与 `dir`，`applyExplode()` 按 `explode` 值沿径向平移 0.42。
 2. **剖面**：按 0–20 / 20–50 / 50–100 cm 层厚做三色分带 + 层间细线；42 个雕塑团粒、34 个孔隙点、根系细管；左侧深度标尺（刻度线 + `labelTexture` 数字展签）。
 3. **地表**：秸秆由纯圆柱改成 `lathe` 带两道节的秆；残茬加亮色斜切口；新增 22 片碎屑。
 4. **粒子**：下渗雨滴加正弦摆动模拟沿孔隙蜿蜒；新增 20 个溅蚀土粒，`splash.count` 随覆盖率反比变化。
@@ -285,3 +286,12 @@ npm run preview    # 预览构建产物
 **第二版自查收敛**：首版精修后正面有 9 条亮金线（5 通道 + 4 根系）铺满剖面，把分层与标尺盖住、显得乱而非精。已把通道改 `0x403326` 且半径再减半、根系 `0x4A3F30` 且数量 4→2、剖面团粒压暗到 `0x4E3E2E`、标尺标签放大到 `0.52×0.13` / 40px。**精细化不等于堆元素，次要结构必须让位给分层与标尺**，不要再把这些线调亮加粗。
 
 验证：`npm run build` 零 Error；`npm run audit` 8/8 全绿；实机 `errors: []`、canvas 872×600 非静态兜底、拆解开关展开与合拢均生效。截图 `.workbuddy/shots/fine-*.png`。
+
+### 9.2 第三轮：零件级聚焦与降雨参数（2026-11-09 13:10）
+
+- **零件数订正**：精确计数为 **18 件 / 13 组**（此前误写 17，已全项目修正）。`addPart(mesh, base, dir, key)` 第四参数注册 `partByKey`，同 key 可对应多个 mesh（6 颗螺栓共用 `bolts`）。
+- **独占材质**：有 key 的零件在 `addPart` 里 `mesh.material.clone()`，否则共用的 `steel` / `darkSteel` 会让 `highlight()` 串色（硬约束 6）。
+- `applyPartFocus(key)` 先清旧高亮、再 `clearHighlight(openerGroup)`、最后逐 mesh 高亮；`clearPartFocus()` 供切组与重置调用。
+- **降雨强度** `rain = 1/2/3`：`activeDrops = round(42 * rain/3)`、`rainSpeed = 0.7 + rain*0.25`、溅蚀量按 `rain/3` 缩放。小雨粒子少且慢，大雨密集且溅蚀明显。
+- 页面：`rainLevels` 三档、`notillParts` 13 组清单（18 件 · 13 组），点零件时自动 `exploded = true` 并设 `notillFocus = 'opener'`，清单底部显示该组说明。
+- `audit-notill.js` 扩增到验证降雨三档、零件说明、自动展开、拆解开合、三档覆盖率与场景切换。实机 `errors: []`，截图 `.workbuddy/shots/round3-*.png`。

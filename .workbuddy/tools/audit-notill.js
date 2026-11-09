@@ -39,6 +39,18 @@ async page => {
     await page.waitForTimeout(500)
   }
 
+  // 降雨强度三档 + 零件清单聚焦
+  out.rainButtons = await page.getByRole('button', { name: /^(小雨|中雨|大雨)$/ }).count()
+  await page.getByRole('button', { name: '大雨' }).click()
+  await page.waitForTimeout(600)
+  out.partButton = await page.getByRole('button', { name: /主缺刻圆盘/ }).count()
+  if (out.partButton) {
+    await page.getByRole('button', { name: /主缺刻圆盘/ }).click()
+    await page.waitForTimeout(900)
+    out.partDesc = await page.evaluate(() => document.body.textContent.includes('14 齿轮廓切开秸秆'))
+    out.autoExpanded = await page.getByRole('button', { name: /合拢播种机零件/ }).count()
+  }
+
   // 覆盖率拉到 0，检查读数与场景响应
   await page.evaluate(() => {
     const el = document.querySelector('input[aria-label="秸秆覆盖率"]')

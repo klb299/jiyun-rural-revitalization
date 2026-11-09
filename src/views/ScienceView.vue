@@ -35,11 +35,32 @@ const notillStructures = [
   },
   {
     key: 'opener', no: '04', name: '免耕开沟器', en: 'NO-TILL OPENER',
-    desc: '整组由 17 个零件装配：14 齿缺刻圆盘与副盘、轮毂螺栓、弹簧加压、限深轮与镇压轮、种子箱、输种管、导种靴和悬挂架。点「展开零件」可逐个看清，圆盘只切窄缝、不翻转土层。',
-    metric: '17 个零件', note: '可展开拆解'
+    desc: '整组由 18 个零件装配：14 齿缺刻圆盘与副盘、轮毂螺栓、弹簧加压、限深轮与镇压轮、种子箱、输种管、导种靴和悬挂架。点「展开零件」可逐个看清，圆盘只切窄缝、不翻转土层。',
+    metric: '18 个零件', note: '可展开拆解'
   }
 ]
 const coverLevels = [0, 30, 60, 90]
+const rainLevels = [
+  { no: 1, name: '小雨', en: 'LIGHT' },
+  { no: 2, name: '中雨', en: 'MODERATE' },
+  { no: 3, name: '大雨', en: 'HEAVY' }
+]
+// 18 个零件按装配关系归为 13 组，每组可在模型里单独高亮
+const notillParts = [
+  { key: 'disc', no: '01', name: '主缺刻圆盘', en: 'NOTCHED COULTER', desc: '14 齿轮廓切开秸秆与表土，只留一条窄缝，不翻转土层。' },
+  { key: 'disc2', no: '02', name: '副圆盘', en: 'SECOND COULTER', desc: '与主盘错开布置，形成播种沟并挡住秸秆回弹。' },
+  { key: 'hub', no: '03', name: '轮毂与轴承', en: 'HUB & BEARING', desc: '承载圆盘转动，把机架下压力传给切土部件。' },
+  { key: 'bolts', no: '04', name: '轮毂螺栓 ×6', en: 'HUB BOLTS ×6', desc: '六点均布固定，保证高速作业时圆盘不偏摆。' },
+  { key: 'arm', no: '05', name: '平行支臂', en: 'PARALLEL ARM', desc: '四连杆仿形，让开沟深度随地表起伏保持稳定。' },
+  { key: 'spring', no: '06', name: '加压弹簧', en: 'DOWNFORCE SPRING', desc: '提供下压力，保证缺刻盘在坚硬黑土上也能入土。' },
+  { key: 'springCap', no: '07', name: '弹簧上托盘', en: 'SPRING CAP', desc: '固定弹簧上端并传递预紧力。' },
+  { key: 'gauge', no: '08', name: '限深轮', en: 'DEPTH GAUGE WHEEL', desc: '贴着地表滚动，把播种深度控制在设定值。' },
+  { key: 'press', no: '09', name: '镇压轮', en: 'PRESS WHEEL', desc: '合上种沟并压实覆土，让种子与湿土贴合。' },
+  { key: 'seedBox', no: '10', name: '种子箱', en: 'SEED HOPPER', desc: '存放定量种子，经排种器按株距下落。' },
+  { key: 'seedTube', no: '11', name: '输种管', en: 'SEED TUBE', desc: '把种子从种箱导到沟底，避免中途散落。' },
+  { key: 'boot', no: '12', name: '导种靴', en: 'SEED BOOT', desc: '护住沟底落种点，防止湿土提前塌落堵住出口。' },
+  { key: 'hitch', no: '13', name: '悬挂架', en: 'HITCH FRAME', desc: '与拖拉机三点悬挂连接，传递牵引力。' }
+]
 
 const soils = [
   {
@@ -79,18 +100,26 @@ const blocked = ref(false)
 const coverage = ref(60)
 const notillFocus = ref('straw')
 const exploded = ref(false)
+const rainLevel = ref(2)
+const partFocus = ref('')
 
 const param = computed(() => {
   if (activeMode.value === 'soil') return { focus: soilFocus.value }
   if (activeMode.value === 'rice') return { stage: riceStage.value }
   if (activeMode.value === 'notill') {
-    return { coverage: coverage.value, focus: notillFocus.value, explode: exploded.value ? 1 : 0 }
+    return {
+      coverage: coverage.value, focus: notillFocus.value,
+      explode: exploded.value ? 1 : 0,
+      rain: rainLevel.value, part: partFocus.value
+    }
   }
   return { sats: satCount.value, blocked: blocked.value }
 })
 
 const activeSoil = computed(() => soils.find((s) => s.key === soilFocus.value) || soils[0])
 const activeNotill = computed(() => notillStructures.find((s) => s.key === notillFocus.value) || notillStructures[0])
+const activePart = computed(() => notillParts.find((p) => p.key === partFocus.value) || null)
+const rainLabel = computed(() => rainLevels.find((r) => r.no === rainLevel.value)?.name || '中雨')
 const coverReadout = computed(() => {
   const c = coverage.value
   const level = c >= 75 ? 3 : c >= 50 ? 2 : c >= 25 ? 1 : 0
@@ -151,6 +180,8 @@ const resetLab = () => {
   coverage.value = 60
   notillFocus.value = 'straw'
   exploded.value = false
+  rainLevel.value = 2
+  partFocus.value = ''
 }
 </script>
 
@@ -434,10 +465,24 @@ const resetLab = () => {
                     <span>下渗 {{ coverReadout.infilPct }}%</span><span>径流 {{ coverReadout.runoffPct }}%</span>
                   </div>
                   <p class="text-[10px] leading-[1.8] text-[#5A564E] mt-3">模型内部的示意比例，用于观察趋势，不是实测统计值。</p>
+
+                  <div class="mt-5 pt-4 border-t border-[#1C1B18]/8">
+                    <div class="flex items-center justify-between gap-3 mb-3">
+                      <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">RAINFALL / 降雨强度</span>
+                      <span class="font-mono text-[10px] text-[#8A6324]">{{ rainLabel }}</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-1.5">
+                      <button v-for="r in rainLevels" :key="r.no" @click="rainLevel = r.no"
+                        class="py-2.5 min-h-[40px] rounded-lg text-[11px] font-bold transition-all duration-300 cursor-pointer"
+                        :class="rainLevel === r.no ? 'bg-[#2E5A44] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E]'">{{ r.name }}</button>
+                    </div>
+                    <p class="text-[10px] leading-[1.8] text-[#5A564E] mt-2">雨越大，同一覆盖率下被打松的表土越多；和覆盖率一起调，差别最明显。</p>
+                  </div>
+
                   <button @click="exploded = !exploded"
                     class="w-full mt-5 py-3 rounded-xl text-xs font-bold transition-all duration-400 cursor-pointer"
                     :class="exploded ? 'bg-[#2E5A44] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E] hover:bg-[#C88A32]/20'">
-                    {{ exploded ? '合拢播种机零件' : '展开播种机零件（17 件）' }}
+                    {{ exploded ? '合拢播种机零件' : '展开播种机零件（18 件）' }}
                   </button>
                   <p class="text-[10px] leading-[1.8] text-[#5A564E] mt-2">展开后可逐个查看缺刻圆盘、弹簧加压、输种管与镇压轮等装配细节。</p>
                 </div>
@@ -482,6 +527,28 @@ const resetLab = () => {
                       <span class="font-editorial text-lg font-bold text-[#8A6324]">{{ activeNotill.metric }}</span>
                     </div>
                   </div>
+                </div>
+              </Reveal>
+
+              <Reveal :delay="190">
+                <div class="card-linen p-6 sm:p-7">
+                  <div class="flex items-center justify-between gap-3 mb-4">
+                    <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">ASSEMBLY / 零件清单</span>
+                    <span class="font-mono text-[10px] text-[#8A6324]">18 件 · 13 组</span>
+                  </div>
+                  <div class="grid grid-cols-2 gap-1.5 max-h-[220px] overflow-y-auto pr-1">
+                    <button v-for="p in notillParts" :key="p.no"
+                      @click="partFocus = p.key; notillFocus = 'opener'; exploded = true"
+                      class="px-2.5 py-2 min-h-[36px] rounded-lg text-[11px] font-bold text-left transition-all duration-300 cursor-pointer"
+                      :class="partFocus === p.key ? 'bg-[#2E5A44] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E] hover:bg-[#C88A32]/20'">
+                      <span class="font-mono text-[9px] opacity-60 mr-1.5">{{ p.no }}</span>{{ p.name }}
+                    </button>
+                  </div>
+                  <div v-if="activePart" class="mt-4 pt-4 border-t border-[#1C1B18]/10">
+                    <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324] mb-1.5">{{ activePart.en }}</div>
+                    <p class="text-[11px] leading-[1.85] text-[#5A564E]">{{ activePart.desc }}</p>
+                  </div>
+                  <p v-else class="text-[10px] leading-[1.8] text-[#5A564E] mt-3">点任一零件，总成会自动展开并在模型里高亮这一组。</p>
                 </div>
               </Reveal>
             </template>
