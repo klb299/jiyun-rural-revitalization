@@ -32,7 +32,7 @@
 | `/strata-3d` | 黑土地质标本馆：三层剖面、分层展开、层位探针 | Three.js 实时场景 |
 | `/machinery-3d` | 北斗农机解构馆：整车爆炸分解、部件对焦 | Three.js 实时场景 |
 | `/sandbox-3d` | 松辽平原生态沙盘：黑土格网、防护林、蜿蜒水系、六视点飞行 | Three.js 实时场景 |
-| `/science` | 互动科普实验室：团粒与孔隙、稻作五阶段、北斗 RTK 定位原理 | 三个可操作的 3D 实验 |
+| `/science` | 互动科普实验室：团粒与孔隙、稻作五阶段、北斗 RTK 定位原理、秸秆覆盖免耕 | 四个可操作的 3D 实验 |
 | `/dashboard` | 黑土振兴数智驾驶舱 | ECharts 数据可视化 |
 | `/journey` | 一粒米的数字旅程：五幕物候剧情 | 交互式时间轴 |
 | `/chagan-lake` | 查干湖冬捕生态非遗馆：四段仪轨 | 图文与刻度叙事 |
@@ -57,11 +57,11 @@ npm run dev       # 本地开发
 npm run build     # 生产构建，输出到 dist/
 npm run preview   # 预览构建产物
 npm run art       # 重新生成 public/art/ 下 10 张程序化 SVG 图版
-npm run audit     # 一键跑 7 个探针（需先启动 preview 服务）
+npm run audit     # 一键跑 8 个探针（需先启动 preview 服务）
 npm run snapshot  # 把源码与文档快照到 .workbuddy/backup/
 ```
 
-`npm run audit` 的前置：另开终端执行 `npm run preview -- --host 127.0.0.1 --port 4173`。它会依次跑对比度、移动端触控、死链、低对比定位、交互、第十九轮回归与可访问性共 7 个探针，汇总结果写入 `.workbuddy/audit/latest.log`。探针脚本在 `.workbuddy/tools/`，新增页面时记得把路径补进前四个脚本的 `paths`。
+`npm run audit` 的前置：另开终端执行 `npm run preview -- --host 127.0.0.1 --port 4173`。它会依次跑对比度、移动端触控、死链、低对比定位、交互、第十九轮回归、可访问性与第四个科普实验共 8 个探针，汇总结果写入 `.workbuddy/audit/latest.log`。探针脚本在 `.workbuddy/tools/`，新增页面时记得把路径补进前四个脚本的 `paths`。
 
 构建产物约 2.5 MB（含 10 张 SVG 图版）。首屏只加载主包约 233 KB（gzip 约 88 KB）、Vue runtime 62 KB、Pinia 与图标两个小 chunk，FCP 约 80 ms，不加载任何 Three.js 或 ECharts。Three.js（693 KB / gzip 175 KB）与按需注册后的 ECharts（576 KB / gzip 195 KB）都是异步 chunk，只在进入 3D 展厅与图表页时下载；`/exhibit-map` 是独立的 23 KB（gzip 7.7 KB）异步 chunk，首页沙盘还要等滚入视口才挂载。
 

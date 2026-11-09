@@ -847,3 +847,33 @@ Awwwards 2026 与 GSAP 案例的共同手法：单一被坚持的编辑方向、
 新建 **`NEXT_PHASE.md`** 作为接手 AI 的当前指针，含：用户历次选择表、可复验基线、评价结论、三路线取舍、阶段 0–4 执行清单（含落点与验收）、阻塞项、硬约束 10 条、本环境 5 个坑、开工验证命令、读文档顺序。同步 `README.md` 第七节（工程文档表加 `NEXT_PHASE.md` / `VISUAL_HANDOFF.md`，并标注「接手先读」）、本节与 `.workbuddy/memory/2026-11-08.md`。
 
 **后续接手请从 `NEXT_PHASE.md` 第 7 节的阶段 0 三项决策开始**；结论记入该文档与下一节（第二十二节）。若用户暂不回话，阶段 1 的 ① CSS 层叠收编 ② 修导航 hover/click 双触发是零业务风险的安全起点。
+
+---
+
+## 🌾 二十二、2026-11-09 新增第 4 个科普 3D 建模：秸秆覆盖免耕
+
+> 本节编号原预留给 B+C 阶段 0 结论，但该路线已按 `NEXT_PHASE.md` 修正块暂停；阶段 0 若重启另起新节。
+
+用户要求「接着精细化建模部分，顺便试试能不能新增建模」。评估三个落点后选 **B：科普实验室加第 4 个实验**——真正算新增建模，又不动 18/13/10/1 数量口径、不加路由。
+
+### 1. 3D 场景（`scienceScenes.js` 的 `buildNoTillScene`）
+
+黑土剖面（顶面 y = 0）+ 地表薄层 + 64 根横卧秸秆（`InstancedMesh.count` 随覆盖率）+ 26 个雕塑团粒 + 5 条蚯蚓通道 + 免耕播种开沟器（竖直圆盘 / 轮毂 / 支臂 / 限深轮）+ 9 株直立残茬 + 4 条垄线 + 42 个雨滴实例。覆盖率 0–100 同时驱动：秸秆数量、地表基色、**下渗 / 径流两组雨滴的数量分配与运动路径**（高覆盖向下渗入土体，低覆盖沿地表横向流走）。四类结构各成可拾取组，`userData.key` = `straw / crumb / pore / opener`。
+
+### 2. 页面接线（`ScienceView.vue`）
+
+`labs` 加第 4 项、`notillStructures` 四张结构档案、`coverLevels` 四档、`coverage` / `notillFocus` 两个 ref，`param`、`onSelect`、`resetLab` 各加分支，新增 `coverReadout` 三档定性读数。控制面板加覆盖率滑块 + 四档按钮 + 下渗 / 径流条 + 「田里会怎样」+ 结构档案卡。
+
+**关键坑**：原 `<template v-else>`（北斗）必须改成显式 `v-else-if="activeMode === 'beidou'"`，否则第 4 分支永不渲染。
+
+封面、tab 区（3 列→4 列）、`SectionHead` 编号、实验档案四卡、收束与数据说明全部同步为「四个实验」；导航备注 / 白皮书 / 首页 / README 的「三个实验」也一并改。注意「最后一公里实验室」的三个实验是另一模块，**保持未动**。所有新增读数均标注「模型内部示意 / 不作生产决策依据」。
+
+### 3. 自查修掉的建模瑕疵
+
+首版出图后发现：开沟圆盘平躺（应为竖直切土）、土体偏浅像木板箱、蚯蚓通道太粗太亮像涂鸦。分别改为 `rotation.set(0, 0.2, Math.PI / 2)` 且下移切入地表、`chernozemMaterial` 传 `color: 0x6E655C` 压暗、通道半径减半并改深棕 `0x7A5D3A`（数量 6→5）。完整约定见 `3D_HANDOFF.md` 第 9 节。
+
+### 4. 验证
+
+`npm run build` 零 Error；新增 `audit-notill.js` 并接入 `npm run audit`（**8/8 全绿**）；实机控制台零错误、canvas 872×600 且 `fallbackVisible: false`（WebGL 真渲染，非静态兜底）、覆盖率 0 / 60 / 90 三档读数与粒子分配正确、切回实验一无残留。截图在 `.workbuddy/shots/notill-stage-*.png`。
+
+文档同步：`3D_HANDOFF.md`（第 1 / 5 / 7 节 + 第 9 节）、`README.md`、`VISUAL_HANDOFF.md`、本节与 `.workbuddy/memory/2026-11-09.md`。

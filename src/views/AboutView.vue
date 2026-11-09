@@ -59,7 +59,7 @@ const structure = [
   { no: '06', name: '查干湖冬捕', path: '/chagan-lake', note: '四段非遗仪轨' },
   { no: '07', name: '二十四节气', path: '/solar-terms', note: '全年农事索引' },
   { no: '08', name: '吉林风物集市', path: '/products', note: '产地与流通' },
-  { no: '09', name: '互动科普实验室', path: '/science', note: '三个可操作的 3D 实验' },
+  { no: '09', name: '互动科普实验室', path: '/science', note: '四个可操作的 3D 实验' },
   { no: '10', name: '长春智库', path: '/about', note: '设计说明与科教支撑' },
   { no: 'A1', name: '助农项目库', path: '/aid-projects', note: '六类带农路径' },
   { no: 'A2', name: '认养一亩田', path: '/adopt-a-field', note: '四步农事流程' },

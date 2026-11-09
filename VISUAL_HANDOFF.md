@@ -346,7 +346,7 @@ npm run build 2>&1 | tail -5
 
 ```bash
 npm run preview -- --host 127.0.0.1 --port 4173
-npm run audit    # 一键跑全部 7 个探针并汇总结果（推荐）
+npm run audit    # 一键跑全部 8 个探针并汇总结果（推荐）
 ```
 
 等价的手工方式（调试单个探针时用）：

@@ -455,7 +455,7 @@ const loadSandbox = () => {
           <div class="eyebrow mb-6">INTERACTIVE SCIENCE LAB / 互动科普实验室</div>
           <h2 class="display-2 text-[#F7F4EE]">看得见，<br /><span class="text-[#E8BC6E]">才谈得上理解</span></h2>
           <p class="lede text-[#F7F4EE]/86 mt-7">
-            三个可操作的 3D 原理演示。放大黑土团粒、拖动稻作时间轴、改变卫星数量看定位精度退化，把展签讲不清的事变成可以上手的操作。
+            四个可操作的 3D 原理演示。放大黑土团粒、拖动稻作时间轴、改变卫星数量看定位精度退化、调节秸秆覆盖率看雨水去向，把展签讲不清的事变成可以上手的操作。
           </p>
           <RouterLink to="/science" class="mag-btn mag-btn--light mt-9">
             <span>进入科普实验室</span><span class="mag-btn__island"><ArrowUpRight :size="16" /></span>

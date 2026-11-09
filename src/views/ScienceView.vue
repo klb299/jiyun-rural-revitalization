@@ -13,8 +13,33 @@ const hoverKey = ref(null)
 const labs = [
   { id: 'soil', no: '01', name: '黑土团粒与孔隙', en: 'SOIL MICROSTRUCTURE', short: '放大一厘米黑土，看清团粒、孔隙、菌丝与钙质结核', tone: 'ink' },
   { id: 'rice', no: '02', name: '稻作生长五阶段', en: 'RICE GROWTH CYCLE', short: '拖动时间轴，观察一株稻从育秧到成熟', tone: 'moss' },
-  { id: 'beidou', no: '03', name: '北斗 RTK 定位原理', en: 'BEIDOU RTK GEOMETRY', short: '看田边基准站怎样帮农机，把十几米误差减到两三厘米', tone: 'gold' }
+  { id: 'beidou', no: '03', name: '北斗 RTK 定位原理', en: 'BEIDOU RTK GEOMETRY', short: '看田边基准站怎样帮农机，把十几米误差减到两三厘米', tone: 'gold' },
+  { id: 'notill', no: '04', name: '秸秆覆盖免耕', en: 'NO-TILL & RESIDUE COVER', short: '调节秸秆覆盖率，看雨水是渗进黑土还是冲走表土', tone: 'clay' }
 ]
+
+const notillStructures = [
+  {
+    key: 'straw', no: '01', name: '秸秆覆盖层', en: 'RESIDUE COVER',
+    desc: '收获后把秸秆留在地表，不翻进土里。覆盖层挡住雨滴直接击打表土，减缓地表结皮，也给蚯蚓与微生物留下持续的食物和栖息环境。',
+    metric: '0 – 100%', note: '可调覆盖率 · 模型示意'
+  },
+  {
+    key: 'crumb', no: '02', name: '地表团粒', en: 'SURFACE AGGREGATE',
+    desc: '不被翻动的团粒能长期保持，孔隙结构不被打散。雨滴先被秸秆减速，再从团粒之间渗下去，而不是把细颗粒冲走。',
+    metric: '0.25 – 10 mm', note: '典型团粒粒径'
+  },
+  {
+    key: 'pore', no: '03', name: '蚯蚓通道', en: 'MACROPORE',
+    desc: '免耕让蚯蚓通道跨季节保留，成为雨水的快速下渗路径。翻耕会切断这些连续孔洞，春季融雪与暴雨更容易在地表形成径流。',
+    metric: '连续大孔隙', note: '定性示意'
+  },
+  {
+    key: 'opener', no: '04', name: '免耕开沟器', en: 'NO-TILL OPENER',
+    desc: '只在地表切出一条窄缝，把种子与肥料送进土里，其余土层保持原状。圆盘切开秸秆，限深轮控制深度，随后把缝合上。',
+    metric: '窄缝播种', note: '不翻转土层'
+  }
+]
+const coverLevels = [0, 30, 60, 90]
 
 const soils = [
   {
@@ -51,14 +76,29 @@ const soilFocus = ref('crumb')
 const riceStage = ref(0)
 const satCount = ref(4)
 const blocked = ref(false)
+const coverage = ref(60)
+const notillFocus = ref('straw')
 
 const param = computed(() => {
   if (activeMode.value === 'soil') return { focus: soilFocus.value }
   if (activeMode.value === 'rice') return { stage: riceStage.value }
+  if (activeMode.value === 'notill') return { coverage: coverage.value, focus: notillFocus.value }
   return { sats: satCount.value, blocked: blocked.value }
 })
 
 const activeSoil = computed(() => soils.find((s) => s.key === soilFocus.value) || soils[0])
+const activeNotill = computed(() => notillStructures.find((s) => s.key === notillFocus.value) || notillStructures[0])
+const coverReadout = computed(() => {
+  const c = coverage.value
+  const level = c >= 75 ? 3 : c >= 50 ? 2 : c >= 25 ? 1 : 0
+  return {
+    runoff: ['明显', '有', '较少', '很少'][level],
+    loss: ['易发生', '可见', '少量', '很少'][level],
+    water: ['弱', '一般', '较好', '好'][level],
+    infilPct: c,
+    runoffPct: 100 - c
+  }
+})
 const activePhase = computed(() => ricePhases[riceStage.value])
 const accuracy = computed(() => {
   if (blocked.value) return '± 1.2 m'
@@ -95,13 +135,18 @@ const rtResult = computed(() => blocked.value
     }
 )
 
-const onSelect = (key) => { if (activeMode.value === 'soil') soilFocus.value = key }
+const onSelect = (key) => {
+  if (activeMode.value === 'soil') soilFocus.value = key
+  else if (activeMode.value === 'notill') notillFocus.value = key
+}
 
 const resetLab = () => {
   soilFocus.value = 'crumb'
   riceStage.value = 0
   satCount.value = 4
   blocked.value = false
+  coverage.value = 60
+  notillFocus.value = 'straw'
 }
 </script>
 
@@ -115,7 +160,7 @@ const resetLab = () => {
         <svg viewBox="0 0 200 200" class="absolute inset-0 w-full h-full animate-[spin_32s_linear_infinite] opacity-70">
           <defs><path id="lab-ring" d="M100,100 m-84,0 a84,84 0 1,1 168,0 a84,84 0 1,1 -168,0"></path></defs>
           <text font-family="ui-monospace, monospace" font-size="8.5" letter-spacing="2.6" fill="#1C1B18">
-            <textPath href="#lab-ring">INTERACTIVE SCIENCE LAB · SOIL · RICE · BEIDOU · 2026 · </textPath>
+            <textPath href="#lab-ring">INTERACTIVE SCIENCE LAB · SOIL · RICE · BEIDOU · NO-TILL · 2026 · </textPath>
           </text>
         </svg>
         <div class="absolute inset-[36%] rounded-full bg-[#1C1B18] grid place-items-center">
@@ -127,7 +172,7 @@ const resetLab = () => {
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-9">
             <span class="eyebrow">INTERACTIVE SCIENCE LAB / 互动科普实验室</span>
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#F7F4EE]/80">CHAPTER 10 · THREE EXPERIMENTS</span>
+            <span class="font-mono text-[10px] tracking-[0.2em] text-[#F7F4EE]/80">CHAPTER 10 · FOUR EXPERIMENTS</span>
           </div>
         </Reveal>
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
@@ -138,9 +183,9 @@ const resetLab = () => {
                 <span v-for="(ch, i) in Array.from('变成可以上手的')" :key="'b' + i" class="kin-char" :style="{ animationDelay: (0.36 + i * 0.05) + 's' }">{{ ch }}</span>
               </span>
             </h1>
-            <Reveal :delay="700"><p class="font-editorial text-xl sm:text-2xl text-[#F7F4EE]/86 mt-7">三个可操作的 3D 原理演示</p></Reveal>
+            <Reveal :delay="700"><p class="font-editorial text-xl sm:text-2xl text-[#F7F4EE]/86 mt-7">四个可操作的 3D 原理演示</p></Reveal>
             <Reveal :delay="780"><p class="lede text-[#F7F4EE]/90 mt-5 max-w-2xl">
-              黑土为什么疏松、稻株怎样长成、北斗凭什么定位到厘米。文字讲不清的地方，就把它做成可以拖拽、可以切换、可以看见变化的模型。
+              黑土为什么疏松、稻株怎样长成、北斗凭什么定位到厘米、秸秆留在地表会发生什么。文字讲不清的地方，就把它做成可以拖拽、可以切换、可以看见变化的模型。
             </p></Reveal>
           </div>
           <Reveal :delay="300" class="lg:col-span-4">
@@ -156,7 +201,7 @@ const resetLab = () => {
 
     <!-- 实验选择 -->
     <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-14 sm:py-20">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4" data-stagger>
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4" data-stagger>
         <button v-for="lab in labs" :key="lab.id" @click="activeMode = lab.id"
           class="group text-left rounded-[26px] p-6 sm:p-7 border transition-all duration-500 cursor-pointer"
           :class="activeMode === lab.id
@@ -178,7 +223,7 @@ const resetLab = () => {
     <!-- 主实验台 -->
     <section class="surface-linen border-y border-[#1C1B18]/10">
       <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
-        <Reveal><SectionHead :index="activeMode === 'soil' ? '01 / 03' : activeMode === 'rice' ? '02 / 03' : '03 / 03'"
+        <Reveal><SectionHead :index="activeMode === 'soil' ? '01 / 04' : activeMode === 'rice' ? '02 / 04' : activeMode === 'beidou' ? '03 / 04' : '04 / 04'"
           :eyebrow="labs.find(l => l.id === activeMode).en" :title="labs.find(l => l.id === activeMode).name"
           :description="labs.find(l => l.id === activeMode).short" /></Reveal>
 
@@ -191,9 +236,11 @@ const resetLab = () => {
                   <WebGLStage scene="science">
                     <ScienceStage :mode="activeMode" :param="param" @select="onSelect" @hover="hoverKey = $event" />
                   </WebGLStage>
-                  <div v-if="hoverKey && activeMode === 'soil'"
+                  <div v-if="hoverKey && (activeMode === 'soil' || activeMode === 'notill')"
                     class="absolute top-4 right-4 z-10 rounded-full bg-[#C88A32] text-[#1C1B18] px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] font-bold pointer-events-none">
-                    点击聚焦 · {{ (soils.find(s => s.key === hoverKey) || {}).name }}
+                    点击聚焦 · {{ activeMode === 'soil'
+                      ? (soils.find(s => s.key === hoverKey) || {}).name
+                      : (notillStructures.find(s => s.key === hoverKey) || {}).name }}
                   </div>
                 </div>
               </div>
@@ -274,7 +321,7 @@ const resetLab = () => {
             </template>
 
             <!-- 实验三：先讲人话，再给术语 -->
-            <template v-else>
+            <template v-else-if="activeMode === 'beidou'">
               <!-- 读数 -->
               <Reveal>
                 <div class="card-ink p-6 sm:p-7">
@@ -359,16 +406,85 @@ const resetLab = () => {
                 </div>
               </Reveal>
             </template>
+
+            <!-- 实验四：秸秆覆盖率决定雨水去向 -->
+            <template v-else-if="activeMode === 'notill'">
+              <Reveal>
+                <div class="card-linen p-6 sm:p-7">
+                  <div class="flex items-center justify-between gap-3 mb-5">
+                    <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">RESIDUE COVER / 秸秆覆盖率</span>
+                    <span class="font-mono text-[10px] text-[#8A6324]">{{ coverage }}%</span>
+                  </div>
+                  <input v-model.number="coverage" type="range" min="0" max="100" step="10"
+                    aria-label="秸秆覆盖率" class="w-full accent-[#C88A32] cursor-pointer" />
+                  <div class="grid grid-cols-4 gap-1.5 mt-4">
+                    <button v-for="c in coverLevels" :key="c" @click="coverage = c"
+                      class="py-2.5 min-h-[40px] rounded-lg text-[11px] font-bold transition-all duration-300 cursor-pointer"
+                      :class="coverage === c ? 'bg-[#2E5A44] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E]'">{{ c }}%</button>
+                  </div>
+                  <div class="mt-5 flex gap-1.5 h-2">
+                    <div class="rounded-full bg-[#8EBACB] transition-all duration-700" :style="{ width: coverReadout.infilPct + '%' }"></div>
+                    <div class="rounded-full bg-[#8C583A] transition-all duration-700" :style="{ width: coverReadout.runoffPct + '%' }"></div>
+                  </div>
+                  <div class="flex justify-between font-mono text-[9px] tracking-[0.12em] text-[#6E6960] mt-2">
+                    <span>下渗 {{ coverReadout.infilPct }}%</span><span>径流 {{ coverReadout.runoffPct }}%</span>
+                  </div>
+                  <p class="text-[10px] leading-[1.8] text-[#5A564E] mt-3">模型内部的示意比例，用于观察趋势，不是实测统计值。</p>
+                </div>
+              </Reveal>
+
+              <Reveal :delay="80">
+                <div class="card-ink p-6 sm:p-7">
+                  <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-4">WHAT CHANGES / 田里会怎样</div>
+                  <div class="space-y-3">
+                    <div v-for="r in [
+                      { k: '地表径流', v: coverReadout.runoff },
+                      { k: '表土流失', v: coverReadout.loss },
+                      { k: '蓄水保墒', v: coverReadout.water }
+                    ]" :key="r.k" class="flex items-center justify-between gap-3 pb-2 border-b border-[#F7F4EE]/12">
+                      <span class="text-[12px] text-[#F7F4EE]/90">{{ r.k }}</span>
+                      <span class="font-editorial text-base font-bold text-[#C88A32]">{{ r.v }}</span>
+                    </div>
+                  </div>
+                  <p class="text-[11px] leading-[1.9] text-[#F7F4EE]/90 mt-4">
+                    秸秆盖得越密，雨滴越难直接砸实表土；连续孔隙保留下来，水往里渗而不是带着土往外流。
+                  </p>
+                </div>
+              </Reveal>
+
+              <Reveal :delay="140">
+                <div class="card-linen p-6 sm:p-7 flex-1 relative overflow-hidden">
+                  <span class="absolute -right-4 -bottom-10 font-editorial font-bold text-[#1C1B18]/6 select-none" style="font-size: 9rem; line-height: 1">{{ activeNotill.no }}</span>
+                  <div class="relative font-mono text-[10px] tracking-[0.2em] text-[#6E6960] mb-4">SELECT A STRUCTURE / 点击模型或下方结构</div>
+                  <div class="relative grid grid-cols-2 gap-2">
+                    <button v-for="s in notillStructures" :key="s.key" @click="notillFocus = s.key"
+                      class="px-3 py-3 rounded-xl text-xs font-bold text-left transition-all duration-400 cursor-pointer"
+                      :class="notillFocus === s.key ? 'bg-[#1C1B18] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E] hover:bg-[#C88A32]/20'">
+                      <span class="font-mono text-[9px] tracking-[0.16em] opacity-60 block mb-1">{{ s.no }}</span>{{ s.name }}
+                    </button>
+                  </div>
+                  <div class="relative mt-6 pt-5 border-t border-[#1C1B18]/10">
+                    <div class="font-mono text-[9px] tracking-[0.2em] text-[#8A6324] mb-2">{{ activeNotill.en }}</div>
+                    <h3 class="font-editorial text-xl font-bold mb-2">{{ activeNotill.name }}</h3>
+                    <p class="text-[12px] leading-[1.9] text-[#5A564E]">{{ activeNotill.desc }}</p>
+                    <div class="flex items-end justify-between gap-3 mt-4">
+                      <span class="caption">{{ activeNotill.note }}</span>
+                      <span class="font-editorial text-lg font-bold text-[#8A6324]">{{ activeNotill.metric }}</span>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            </template>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 三个实验说明 -->
+    <!-- 四个实验说明 -->
     <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
-      <Reveal><SectionHead index="LAB NOTES" eyebrow="THREE EXPERIMENTS / 实验档案" title="每个模型，回答一个具体问题" description="不是为了炫技，而是把文字讲不清的结构与过程，变成可以亲手改变的东西。" /></Reveal>
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-5 mt-14" data-stagger>
-        <Reveal class="md:col-span-5">
+      <Reveal><SectionHead index="LAB NOTES" eyebrow="FOUR EXPERIMENTS / 实验档案" title="每个模型，回答一个具体问题" description="不是为了炫技，而是把文字讲不清的结构与过程，变成可以亲手改变的东西。" /></Reveal>
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 mt-14" data-stagger>
+        <Reveal>
           <div class="card-ink h-full p-7 sm:p-8">
             <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-6">EXPERIMENT 01</div>
             <h3 class="display-3 mb-4">黑土为什么疏松</h3>
@@ -378,7 +494,7 @@ const resetLab = () => {
             </div>
           </div>
         </Reveal>
-        <Reveal :delay="90" class="md:col-span-4">
+        <Reveal :delay="90">
           <div class="card-moss h-full p-7">
             <div class="font-mono text-[10px] tracking-[0.2em] text-[#F7F4EE]/80 mb-6">EXPERIMENT 02</div>
             <h3 class="display-3 mb-4">一百八十天怎么长</h3>
@@ -386,12 +502,20 @@ const resetLab = () => {
             <div class="mt-7 font-mono text-[11px] text-[#8A6324]">SEEDLING → HARVEST</div>
           </div>
         </Reveal>
-        <Reveal :delay="180" class="md:col-span-3">
+        <Reveal :delay="180">
           <div class="card-gold h-full p-7">
             <div class="font-mono text-[10px] tracking-[0.2em] text-[#1C1B18]/65 mb-6">EXPERIMENT 03</div>
             <h3 class="display-3 mb-4">厘米级从哪来</h3>
             <p class="text-[13px] leading-[1.9] text-[#1C1B18]/78">天上卫星、田边基准站、地里农机，三者怎么配合才能让播种不重不漏。挡住改正信号，看轨迹立刻跑偏。</p>
             <div class="mt-7 font-mono text-[11px] font-bold">2.5 cm ↔ 1.2 m</div>
+          </div>
+        </Reveal>
+        <Reveal :delay="240">
+          <div class="card-linen h-full p-7">
+            <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-6">EXPERIMENT 04</div>
+            <h3 class="display-3 mb-4">秸秆留在地表</h3>
+            <p class="text-[13px] leading-[1.9] text-[#5A564E]">把覆盖率从 0 拉到 90%，看雨滴从「沿地表冲走表土」变成「顺着孔隙往下渗」。翻不翻那一下的差别，被直接画进同一个模型里。</p>
+            <div class="mt-7 font-mono text-[11px] text-[#8A6324]">0% → 100% COVER</div>
           </div>
         </Reveal>
       </div>
@@ -407,7 +531,7 @@ const resetLab = () => {
           <Reveal><div class="eyebrow mb-5">WHY A LAB / 为什么做实验室</div></Reveal>
           <Reveal :delay="80"><h2 class="display-2">看得见，<br />才谈得上理解</h2></Reveal>
           <Reveal :delay="150"><p class="lede mt-7">
-            展馆里的三座 3D 展厅偏重现览与沉浸，而这里偏重「改一个参数，看一个结果」。三个实验分别对应土壤学、作物生理与卫星导航，把黑土保护背后的科学原理从展签里拿出来，变成可以上手的操作。
+            展馆里的三座 3D 展厅偏重现览与沉浸，而这里偏重「改一个参数，看一个结果」。四个实验分别对应土壤学、作物生理、卫星导航与保护性耕作，把黑土保护背后的科学原理从展签里拿出来，变成可以上手的操作。
           </p></Reveal>
           <Reveal :delay="220">
             <div class="flex flex-wrap gap-3 mt-9">
@@ -425,7 +549,7 @@ const resetLab = () => {
         <Reveal>
           <div class="eyebrow mb-4">DATA NOTE / 数据说明</div>
           <p class="text-[13px] leading-[2] text-[#F7F4EE]/90 max-w-2xl">
-            三个实验为教学演示用的参数化模型，结构与量级参考中国科学院东北地理与农业生态研究所「黑土粮仓」科技会战公开成果、吉林省农技推广资料与北斗 RTK 通用原理，非实物扫描与工程测量数据。
+            四个实验为教学演示用的参数化模型，结构与量级参考中国科学院东北地理与农业生态研究所「黑土粮仓」科技会战公开成果、吉林省农技推广资料、保护性耕作公开科普材料与北斗 RTK 通用原理，非实物扫描与工程测量数据。覆盖率、下渗与径流比例均为模型内部示意，用于观察趋势，不作生产决策依据。
           </p>
         </Reveal>
         <Reveal :delay="100">

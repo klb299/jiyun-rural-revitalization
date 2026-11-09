@@ -24,7 +24,7 @@ const groups = [
       { name: '查干湖冬捕', path: '/chagan-lake', note: '冰湖渔猎非遗', tag: '06' },
       { name: '二十四节气', path: '/solar-terms', note: '吉林农耕物候谱', tag: '07' },
       { name: '吉林风物集市', path: '/products', note: '地理标志助农', tag: '08' },
-      { name: '互动科普实验室', path: '/science', note: '三个可操作的 3D 原理演示', tag: '09' }
+      { name: '互动科普实验室', path: '/science', note: '四个可操作的 3D 原理演示', tag: '09' }
     ]
   },
   {

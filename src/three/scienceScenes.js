@@ -784,8 +784,232 @@ export function buildBeidouScene(scene, stage) {
   }
 }
 
+/* ================================================================== *
+ * 实验四：秸秆覆盖免耕 / 保护性耕作
+ * 覆盖率决定秸秆密度，也决定雨滴是向下渗入还是沿地表流走。
+ * ================================================================== */
+export function buildNoTillScene(scene, stage) {
+  const root = new THREE.Group()
+  scene.add(root)
+  pedestal(root, 3.05, -1.55)
+
+  const rnd = mulberry32(1109)
+  const dummy = new THREE.Object3D()
+
+  // 土体：顶面 y = 0，向下 1.5
+  const soil = new THREE.Mesh(
+    roundedBox(3.6, 1.5, 2.2, 0.12, 9),
+    chernozemMaterial({ repeat: [5, 3], bumpScale: 0.03, color: 0x6E655C })
+  )
+  soil.position.y = -0.75
+  soil.castShadow = true
+  soil.receiveShadow = true
+  root.add(soil)
+
+  // 剖面前缘的层理线
+  for (let i = 0; i < 4; i++) {
+    const seam = new THREE.Mesh(
+      roundedBox(3.56, 0.018, 0.02, 0.006, 2),
+      new THREE.MeshStandardMaterial({ color: i % 2 ? 0x6B5942 : 0x35291E, roughness: 0.96 })
+    )
+    seam.position.set(0, -0.12 - i * 0.36, 1.105)
+    root.add(seam)
+  }
+
+  // 地表薄层：覆盖率越高越深越疏松
+  const surfaceMat = new THREE.MeshStandardMaterial({ color: 0x241E18, roughness: 0.98 })
+  const surface = new THREE.Mesh(roundedBox(3.56, 0.06, 2.16, 0.03, 4), surfaceMat)
+  surface.position.y = 0.03
+  surface.receiveShadow = true
+  root.add(surface)
+
+  const groups = {}
+  const keys = ['straw', 'crumb', 'pore', 'opener']
+
+  // 1) 秸秆覆盖：横卧细秆，数量随覆盖率变化
+  const strawGeo = new THREE.CylinderGeometry(0.014, 0.018, 0.52, 6, 1)
+  strawGeo.rotateZ(Math.PI / 2)
+  const strawMat = new THREE.MeshStandardMaterial({ color: 0xC9A45B, roughness: 0.92 })
+  const strawAltMat = new THREE.MeshStandardMaterial({ color: 0x8C583A, roughness: 0.95 })
+  const strawGroup = new THREE.Group()
+  strawGroup.userData.key = 'straw'
+  const maxStraw = 64
+  const strawA = new THREE.InstancedMesh(strawGeo, strawMat, Math.ceil(maxStraw / 2))
+  const strawB = new THREE.InstancedMesh(strawGeo, strawAltMat, Math.floor(maxStraw / 2))
+  for (let i = 0; i < maxStraw; i++) {
+    dummy.position.set((rnd() - 0.5) * 3.2, 0.09 + rnd() * 0.035, (rnd() - 0.5) * 1.9)
+    dummy.rotation.set(0, rnd() * Math.PI, (rnd() - 0.5) * 0.25)
+    dummy.scale.set(0.65 + rnd() * 0.8, 1, 1)
+    dummy.updateMatrix()
+    if (i % 2 === 0) strawA.setMatrixAt(Math.floor(i / 2), dummy.matrix)
+    else strawB.setMatrixAt(Math.floor(i / 2), dummy.matrix)
+  }
+  strawA.instanceMatrix.needsUpdate = true
+  strawB.instanceMatrix.needsUpdate = true
+  strawA.castShadow = true
+  strawB.castShadow = true
+  strawGroup.add(strawA, strawB)
+  groups.straw = strawGroup
+
+  // 2) 地表团粒
+  const crumbMat = new THREE.MeshStandardMaterial({ color: 0x4A3B2C, roughness: 0.96 })
+  const crumbGroup = new THREE.Group()
+  crumbGroup.userData.key = 'crumb'
+  const crumbCount = 26
+  const crumbs = new THREE.InstancedMesh(sculptedAggregateGeometry(0.11, 2, 4409, 0.3), crumbMat, crumbCount)
+  for (let i = 0; i < crumbCount; i++) {
+    dummy.position.set((rnd() - 0.5) * 3.1, 0.11, (rnd() - 0.5) * 1.8)
+    const s = 0.55 + rnd() * 0.9
+    dummy.scale.set(s, s * 0.7, s)
+    dummy.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3)
+    dummy.updateMatrix()
+    crumbs.setMatrixAt(i, dummy.matrix)
+  }
+  crumbs.instanceMatrix.needsUpdate = true
+  crumbs.castShadow = true
+  crumbGroup.add(crumbs)
+  groups.crumb = crumbGroup
+
+  // 3) 蚯蚓通道：剖面前缘的弯曲管道，逐条克隆材质避免高亮串色
+  const poreGroup = new THREE.Group()
+  poreGroup.userData.key = 'pore'
+  for (let r = 0; r < 5; r++) {
+    const x0 = (rnd() - 0.5) * 2.9
+    const pts = []
+    for (let k = 0; k < 6; k++) {
+      pts.push(new THREE.Vector3(x0 + Math.sin(k * 1.2 + r) * 0.18, -0.03 - k * 0.23, 1.12))
+    }
+    const tube = new THREE.Mesh(
+      new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 28, 0.014 + rnd() * 0.007, 7, false),
+      new THREE.MeshStandardMaterial({ color: 0x7A5D3A, roughness: 0.92 })
+    )
+    poreGroup.add(tube)
+  }
+  groups.pore = poreGroup
+
+  // 4) 免耕播种开沟器：只切窄缝、不翻转土层
+  const openerGroup = new THREE.Group()
+  openerGroup.userData.key = 'opener'
+  const discMat = metalMaterial(PALETTE.gold, { roughness: 0.34, metalness: 0.8 }).clone()
+  const disc = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.035, 48), discMat)
+  disc.rotation.set(0, 0.2, Math.PI / 2)
+  disc.position.set(1.05, 0.22, 0.65)
+  openerGroup.add(disc)
+  const hub = new THREE.Mesh(new THREE.SphereGeometry(0.07, 16, 12), lacquerMaterial(0x1C1B18).clone())
+  hub.position.copy(disc.position)
+  openerGroup.add(hub)
+  const arm = new THREE.Mesh(roundedBox(0.9, 0.09, 0.1, 0.03, 4), metalMaterial(0x6E6960, { roughness: 0.4 }).clone())
+  arm.position.set(1.35, 0.55, 0.65)
+  arm.rotation.z = -0.3
+  openerGroup.add(arm)
+  const gauge = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.16, 0.16, 0.06, 32),
+    new THREE.MeshStandardMaterial({ color: 0x2E5A44, roughness: 0.86 })
+  )
+  gauge.rotation.set(0, 0, Math.PI / 2)
+  gauge.position.set(1.72, 0.14, 0.65)
+  openerGroup.add(gauge)
+  groups.opener = openerGroup
+
+  keys.forEach((k) => root.add(groups[k]))
+
+  // 直立残茬与垄线：免耕田的固定特征，不随覆盖率变化
+  const stubbleMat = new THREE.MeshStandardMaterial({ color: 0xA98246, roughness: 0.94 })
+  for (let i = 0; i < 9; i++) {
+    const h = 0.16 + rnd() * 0.12
+    const st = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.03, h, 7), stubbleMat)
+    st.position.set((rnd() - 0.5) * 2.9, 0.06 + h / 2, (rnd() - 0.5) * 1.7)
+    st.rotation.z = (rnd() - 0.5) * 0.25
+    st.castShadow = true
+    root.add(st)
+  }
+  const ridgeMat = new THREE.MeshStandardMaterial({ color: 0x241E18, roughness: 1 })
+  for (let i = 0; i < 4; i++) {
+    const ridge = new THREE.Mesh(roundedBox(3.3, 0.012, 0.035, 0.005, 2), ridgeMat)
+    ridge.position.set(0, 0.065, -0.72 + i * 0.48)
+    root.add(ridge)
+  }
+
+  // 雨滴：高覆盖向下渗，低覆盖沿地表流走
+  const dropCount = 42
+  const dropGeo = new THREE.SphereGeometry(0.025, 8, 6)
+  const infilMat = new THREE.MeshStandardMaterial({ color: 0x8EBACB, roughness: 0.35, transparent: true, opacity: 0.85 })
+  const runoffMat = new THREE.MeshStandardMaterial({ color: 0x8C583A, roughness: 0.9, transparent: true, opacity: 0.9 })
+  const infil = new THREE.InstancedMesh(dropGeo, infilMat, dropCount)
+  const runoff = new THREE.InstancedMesh(dropGeo, runoffMat, dropCount)
+  infil.userData.excludeFromAO = true
+  runoff.userData.excludeFromAO = true
+  infil.instanceMatrix.setUsage(THREE.DynamicDrawUsage)
+  runoff.instanceMatrix.setUsage(THREE.DynamicDrawUsage)
+  root.add(infil, runoff)
+  const dropSeeds = Array.from({ length: dropCount }, () => ({
+    x: (rnd() - 0.5) * 3.0, z: (rnd() - 0.5) * 1.7,
+    off: rnd(), speed: 0.7 + rnd() * 0.5
+  }))
+
+  stage.addContactShadow({ size: 6.4, opacity: 0.42, position: [0, -1.38, 0], parent: root })
+
+  let coverage = 60
+  let focus = 'straw'
+  function applyCoverage(v) {
+    coverage = Math.max(0, Math.min(100, Number(v) || 0))
+    const shown = Math.round(maxStraw * coverage / 100)
+    strawA.count = Math.ceil(shown / 2)
+    strawB.count = Math.floor(shown / 2)
+    surfaceMat.color.set(coverage >= 60 ? 0x241E18 : coverage >= 30 ? 0x32281E : 0x4A3E30)
+  }
+  function applyFocus(next) {
+    if (!next || !groups[next]) return
+    if (groups[focus]) clearHighlight(groups[focus])
+    focus = next
+    highlight(groups[focus], { intensity: 0.1 })
+  }
+  applyCoverage(60)
+  applyFocus('straw')
+
+  return {
+    root,
+    pickTargets: keys.map((k) => groups[k]),
+    setParam(p) {
+      if (p && typeof p.coverage === 'number') applyCoverage(p.coverage)
+      if (p?.focus) applyFocus(p.focus)
+    },
+    update(dt, t) {
+      root.rotation.y = Math.sin(t * 0.14) * 0.12
+      const infilCount = Math.round(dropCount * coverage / 100)
+      infil.count = infilCount
+      runoff.count = dropCount - infilCount
+      dropSeeds.forEach((s, i) => {
+        const tt = (t * 0.42 * s.speed + s.off) % 1
+        let x = s.x
+        let y = 1.55 - tt * 2.05
+        let scale = 1
+        if (i < infilCount) {
+          // 落到地表后继续下渗并缩小消失
+          if (tt > 0.75) scale = Math.max(0.01, 1 - (tt - 0.75) * 4)
+        } else {
+          // 落地后沿地表横向流走
+          const flow = Math.max(0, tt - 0.7) / 0.3
+          x = s.x + flow * 2.4
+          y = tt < 0.7 ? 1.55 - tt * 2.1 : 0.09
+        }
+        dummy.position.set(x, y, s.z)
+        dummy.rotation.set(0, 0, 0)
+        dummy.scale.setScalar(scale)
+        dummy.updateMatrix()
+        if (i < infilCount) infil.setMatrixAt(i, dummy.matrix)
+        else runoff.setMatrixAt(i - infilCount, dummy.matrix)
+      })
+      infil.instanceMatrix.needsUpdate = true
+      runoff.instanceMatrix.needsUpdate = true
+    },
+    disposeExtra() { disposeRoot(root) }
+  }
+}
+
 export const LAB_BUILDERS = {
   soil: buildSoilScene,
   rice: buildRiceScene,
-  beidou: buildBeidouScene
+  beidou: buildBeidouScene,
+  notill: buildNoTillScene
 }

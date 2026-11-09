@@ -22,7 +22,7 @@
 | --- | --- | --- | --- |
 | `src/three/textures.js` | 1311 | **材质与纹理工厂**：所有程序化贴图（黑土团粒、垄沟、秸秆、砂石、草甸、河岸、纸质、木纹、瓷釉、拉丝金属）+ 几何工具（圆角盒、车削、倒角柱、顶点扰动、描边、弧面叶、翼型叶片、螺旋弹簧、雕塑团粒、精细稻株/玉米株）+ 风摆与水波动效 | 想改任何物件的表面质感、颜色、颗粒感或植株/叶片造型时 |
 | `src/three/stage.js` | 540 | **统一舞台**：IBL 环境光、GTAO 后处理、软阴影、相机飞行、射线拾取、高亮描边、性能自适应 | 想改光照、后期、相机手感、拾取行为时 |
-| `src/three/scienceScenes.js` | 544 | **科普实验室三个场景**：黑土团粒、稻作生长、北斗 RTK | 想改这三个科普实验时 |
+| `src/three/scienceScenes.js` | 790 | **科普实验室四个场景**：黑土团粒、稻作生长、北斗 RTK、秸秆覆盖免耕 | 想改这四个科普实验时 |
 
 ### 1.2 三个主展厅场景组件（`src/components/`）
 
@@ -37,7 +37,7 @@
 | 文件 | 行数 | 职责 |
 | --- | --- | --- |
 | `src/components/science/ScienceStage.vue` | 100 | 单个共享 3D 舞台容器，按 `mode` 重建场景，复用 `createStage` |
-| `src/views/ScienceView.vue` | — | 页面：三个实验 tab、控制面板、实验档案卡片 |
+| `src/views/ScienceView.vue` | — | 页面：四个实验 tab、控制面板、实验档案卡片 |
 
 ### 1.4 与 3D 无关（别让外部 AI 动错文件）
 
@@ -187,21 +187,23 @@ PALETTE / CSS
 
 ## 5. 科普场景构建器接口（`scienceScenes.js`）
 
-三个函数签名一致：
+四个函数签名一致：
 
 ```js
-buildSoilScene(scene, stage)   // buildRiceScene / buildBeidouScene 同理
+buildSoilScene(scene, stage)   // buildRiceScene / buildBeidouScene / buildNoTillScene 同理
 // 返回：
 {
   root,                    // THREE.Group，挂在 scene 上
   pickTargets,             // 可拾取的 group 数组，每个设 userData.key
   update(dt, t),           // 每帧
-  setParam({ ... }),       // 外部参数驱动（focus / stage / sats+blocked）
+  setParam({ ... }),       // 外部参数：soil=focus / rice=stage / beidou=sats+blocked / notill=coverage+focus
   disposeExtra()           // 释放本场景所有几何与材质
 }
 ```
 
-`LAB_BUILDERS = { soil, rice, beidou }` 是注册表，`ScienceStage.vue` 按 `mode` 取用。
+`LAB_BUILDERS = { soil, rice, beidou, notill }` 是注册表，`ScienceStage.vue` 按 `mode` 取用。
+
+**第四个场景（秸秆覆盖免耕）** 的交互约定：`coverage` 取 0–100，驱动秸秆 `InstancedMesh.count`、地表薄层基色，以及两组雨滴实例（下渗 / 径流）的数量分配；`focus` 取 `straw / crumb / pore / opener`。可拾取的四组各用独立材质（含逐条 `.clone()` 的管道材质），避免 `highlight()` 串色。
 
 **约定**：场景里所有对象必须挂在 `root` 下（展台用 `pedestal(root, ...)`、接地阴影用 `addContactShadow({ parent: root })`），
 切换场景时 `scene.remove(api.root); api.disposeExtra()`，否则会残留并误删共享纹理。
@@ -240,8 +242,12 @@ buildSoilScene(scene, stage)   // buildRiceScene / buildBeidouScene 同理
 | 某个物件的表面质感 | `textures.js` 里对应材质工厂的 `bumpScale` / `repeat` / 基色 |
 | 光照与氛围 | `stage.js` 的 `defaultConfig`（曝光、环境光强度、主光强度、AO 参数） |
 | 相机手感 | `stage.js` 的 `createStage` 参数：`fov / minDistance / maxDistance / min-maxPolarAngle` |
+| 免耕实验的覆盖率 / 雨滴 | `scienceScenes.js` 的 `buildNoTillScene` → `applyCoverage()` 与 `update()`；页面侧 `ScienceView.vue` 的 `coverage` / `coverReadout` |
+| 免耕实验的开沟器 / 残茬 / 垄线 | `scienceScenes.js` 的 `openerGroup`、直立残茬循环与 `ridgeMat` 循环 |
 | 新增一个可拾取热点 | 给 group 设 `userData.key`，加入场景返回的 `pickTargets`，页面侧监听 `stage.enablePicking` 的 `onClick` |
-| 新增一个科普实验 | 在 `scienceScenes.js` 写 `buildXxxScene(scene, stage)`，注册进 `LAB_BUILDERS`，在 `ScienceStage.vue` 加相机参数，`ScienceView.vue` 加 tab 与控制面板 |
+| 新增一个科普实验 | 在 `scienceScenes.js` 写 `buildXxxScene(scene, stage)` 并注册进 `LAB_BUILDERS`；`ScienceView.vue` 加 tab、控制面板分支、数据档案与 `param` 分支。`ScienceStage.vue` 的相机是所有 mode 共用的，通常不用改 |
+
+> **接页面的坑**：`ScienceView.vue` 控制面板最后一个分支曾写成 `<template v-else>`，新增实验时必须先把它改成显式 `v-else-if`，否则新分支永远不会渲染。第 4 个实验已按此处理。
 
 ---
 
@@ -254,4 +260,15 @@ npm run build      # 构建（必须零 Error）
 npm run preview    # 预览构建产物
 ```
 
-三个 3D 展厅路由：`/strata-3d`、`/machinery-3d`、`/sandbox-3d`，科普实验室 `/science`。
+三个 3D 展厅路由：`/strata-3d`、`/machinery-3d`、`/sandbox-3d`，科普实验室 `/science`（四个实验）。
+
+---
+
+## 9. 第四个科普实验实现记录（2026-11-09）
+
+- `buildNoTillScene(scene, stage)` 注册为 `LAB_BUILDERS.notill`，接口与另三个一致；参数 `{ coverage: 0–100, focus: 'straw' | 'crumb' | 'pore' | 'opener' }`。
+- 覆盖率驱动三件事：秸秆 `InstancedMesh.count`、地表薄层 `surfaceMat.color`、下渗 / 径流两组雨滴实例的数量与路径。雨滴用 `DynamicDrawUsage`，每帧按 `(t * speed + off) % 1` 更新矩阵，不新建对象。
+- 可拾取四组各用独立材质，其中蚯蚓通道逐条 `new MeshStandardMaterial()`，避免 `highlight()` 串色（硬约束 6）。
+- 页面侧 `ScienceView.vue` 的北斗分支已由 `<template v-else>` 改成显式 `v-else-if`，新增实验才能渲染；改第 5 个实验时同样注意别再留裸 `v-else`。
+- **首版三处建模瑕疵已修，不要回退**：开沟圆盘由平躺改 `rotation.set(0, 0.2, Math.PI / 2)` 竖直切土并下移入地表；土体用 `chernozemMaterial({ color: 0x6E655C })` 压暗；蚯蚓通道半径减半、颜色改 `0x7A5D3A`、数量 6→5。
+- 回归探针：`npm run audit` 中的 `audit-notill.js`，验证 tab 存在、canvas 非静态兜底、三档覆盖率读数、场景切换与控制台零错误。
