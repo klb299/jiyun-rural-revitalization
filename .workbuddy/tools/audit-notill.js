@@ -28,6 +28,17 @@ async page => {
   }))
   await page.screenshot({ path: shot + 'notill-60.png' })
 
+  // 拆解开关：展开 / 合拢都要能找到
+  const expand = page.getByRole('button', { name: /展开播种机零件/ })
+  out.expandFound = await expand.count()
+  if (out.expandFound) {
+    await expand.click()
+    await page.waitForTimeout(900)
+    out.collapseFound = await page.getByRole('button', { name: /合拢播种机零件/ }).count()
+    await page.getByRole('button', { name: /合拢播种机零件/ }).click()
+    await page.waitForTimeout(500)
+  }
+
   // 覆盖率拉到 0，检查读数与场景响应
   await page.evaluate(() => {
     const el = document.querySelector('input[aria-label="秸秆覆盖率"]')

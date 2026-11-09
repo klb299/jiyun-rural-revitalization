@@ -266,9 +266,22 @@ npm run preview    # 预览构建产物
 
 ## 9. 第四个科普实验实现记录（2026-11-09）
 
-- `buildNoTillScene(scene, stage)` 注册为 `LAB_BUILDERS.notill`，接口与另三个一致；参数 `{ coverage: 0–100, focus: 'straw' | 'crumb' | 'pore' | 'opener' }`。
+- `buildNoTillScene(scene, stage)` 注册为 `LAB_BUILDERS.notill`，接口与另三个一致；参数 `{ coverage: 0–100, focus: 'straw' | 'crumb' | 'pore' | 'opener', explode: 0–1 }`。`explode` 让开沟总成的 17 个零件沿径向散开，页面按钮 `exploded` 控制。
 - 覆盖率驱动三件事：秸秆 `InstancedMesh.count`、地表薄层 `surfaceMat.color`、下渗 / 径流两组雨滴实例的数量与路径。雨滴用 `DynamicDrawUsage`，每帧按 `(t * speed + off) % 1` 更新矩阵，不新建对象。
 - 可拾取四组各用独立材质，其中蚯蚓通道逐条 `new MeshStandardMaterial()`，避免 `highlight()` 串色（硬约束 6）。
 - 页面侧 `ScienceView.vue` 的北斗分支已由 `<template v-else>` 改成显式 `v-else-if`，新增实验才能渲染；改第 5 个实验时同样注意别再留裸 `v-else`。
 - **首版三处建模瑕疵已修，不要回退**：开沟圆盘由平躺改 `rotation.set(0, 0.2, Math.PI / 2)` 竖直切土并下移入地表；土体用 `chernozemMaterial({ color: 0x6E655C })` 压暗；蚯蚓通道半径减半、颜色改 `0x7A5D3A`、数量 6→5。
-- 回归探针：`npm run audit` 中的 `audit-notill.js`，验证 tab 存在、canvas 非静态兜底、三档覆盖率读数、场景切换与控制台零错误。
+- 回归探针：`npm run audit` 中的 `audit-notill.js`，验证 tab 存在、canvas 非静态兜底、拆解开关展开/合拢、三档覆盖率读数、场景切换与控制台零错误。
+
+### 9.1 第二轮精修（2026-11-09 12:54）
+
+用户要求「继续迭代精细，不用担心 token」，在首版基础上做了四组建模精修：
+
+1. **开沟总成**：从 4 零件扩到 **17 零件**——14 齿缺刻圆盘（`THREE.Shape` + `ExtrudeGeometry`）、副盘、轮毂、6 颗螺栓、支臂、`coilSpringGeometry` 弹簧加压与上托盘、限深轮、镇压轮、种子箱、输种管（`TubeGeometry`）、导种靴、悬挂架。`openerParts` 记录每个零件的 `base` 与 `dir`，`applyExplode()` 按 `explode` 值沿径向平移 0.42。
+2. **剖面**：按 0–20 / 20–50 / 50–100 cm 层厚做三色分带 + 层间细线；42 个雕塑团粒、34 个孔隙点、根系细管；左侧深度标尺（刻度线 + `labelTexture` 数字展签）。
+3. **地表**：秸秆由纯圆柱改成 `lathe` 带两道节的秆；残茬加亮色斜切口；新增 22 片碎屑。
+4. **粒子**：下渗雨滴加正弦摆动模拟沿孔隙蜿蜒；新增 20 个溅蚀土粒，`splash.count` 随覆盖率反比变化。
+
+**第二版自查收敛**：首版精修后正面有 9 条亮金线（5 通道 + 4 根系）铺满剖面，把分层与标尺盖住、显得乱而非精。已把通道改 `0x403326` 且半径再减半、根系 `0x4A3F30` 且数量 4→2、剖面团粒压暗到 `0x4E3E2E`、标尺标签放大到 `0.52×0.13` / 40px。**精细化不等于堆元素，次要结构必须让位给分层与标尺**，不要再把这些线调亮加粗。
+
+验证：`npm run build` 零 Error；`npm run audit` 8/8 全绿；实机 `errors: []`、canvas 872×600 非静态兜底、拆解开关展开与合拢均生效。截图 `.workbuddy/shots/fine-*.png`。

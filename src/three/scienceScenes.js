@@ -7,10 +7,10 @@ import * as THREE from 'three'
 import gsap from 'gsap'
 import { highlight, clearHighlight } from './stage.js'
 import {
-  PALETTE, mulberry32, roundedBox, bevelCylinder,
+  PALETTE, mulberry32, roundedBox, bevelCylinder, lathe, coilSpringGeometry,
   chernozemMaterial, grassMaterial, gravelMaterial,
   porcelainMaterial, metalMaterial, lacquerMaterial,
-  glowSprite, applyWind,
+  glowSprite, applyWind, labelTexture,
   sculptedAggregateGeometry, makeDetailedRiceStalkGeometry
 } from './textures.js'
 
@@ -806,15 +806,98 @@ export function buildNoTillScene(scene, stage) {
   soil.receiveShadow = true
   root.add(soil)
 
-  // 剖面前缘的层理线
-  for (let i = 0; i < 4; i++) {
-    const seam = new THREE.Mesh(
-      roundedBox(3.56, 0.018, 0.02, 0.006, 2),
-      new THREE.MeshStandardMaterial({ color: i % 2 ? 0x6B5942 : 0x35291E, roughness: 0.96 })
+  // 剖面前缘：按 0–20 / 20–50 / 50–100 cm 的层厚分色
+  const layerBands = [
+    { y: -0.15, h: 0.30, c: 0x241D16 },
+    { y: -0.51, h: 0.42, c: 0x33291F },
+    { y: -0.99, h: 0.54, c: 0x453829 }
+  ]
+  layerBands.forEach((b) => {
+    const band = new THREE.Mesh(
+      roundedBox(3.54, b.h - 0.012, 0.014, 0.006, 2),
+      new THREE.MeshStandardMaterial({ color: b.c, roughness: 0.99 })
     )
-    seam.position.set(0, -0.12 - i * 0.36, 1.105)
+    band.position.set(0, b.y, 1.103)
+    root.add(band)
+  })
+  ;[-0.30, -0.72, -1.26].forEach((y) => {
+    const seam = new THREE.Mesh(
+      roundedBox(3.54, 0.014, 0.016, 0.004, 2),
+      new THREE.MeshStandardMaterial({ color: 0x6B5942, roughness: 0.96 })
+    )
+    seam.position.set(0, y, 1.116)
     root.add(seam)
+  })
+
+  // 剖面里的团粒、孔隙与结核，贴在分色带之前
+  const sectionRnd = mulberry32(8813)
+  const secCrumbMat = new THREE.MeshStandardMaterial({ color: 0x4E3E2E, roughness: 0.97 })
+  const secCrumbs = new THREE.InstancedMesh(sculptedAggregateGeometry(0.055, 1, 8813, 0.3), secCrumbMat, 42)
+  for (let i = 0; i < 42; i++) {
+    dummy.position.set((sectionRnd() - 0.5) * 3.3, -0.08 - sectionRnd() * 1.34, 1.12 + sectionRnd() * 0.01)
+    const s = 0.5 + sectionRnd() * 1.0
+    dummy.scale.set(s, s * 0.8, s * 0.4)
+    dummy.rotation.set(sectionRnd() * 3, sectionRnd() * 3, sectionRnd() * 3)
+    dummy.updateMatrix()
+    secCrumbs.setMatrixAt(i, dummy.matrix)
   }
+  secCrumbs.instanceMatrix.needsUpdate = true
+  root.add(secCrumbs)
+
+  const poreDots = new THREE.InstancedMesh(
+    new THREE.SphereGeometry(0.035, 10, 8),
+    new THREE.MeshStandardMaterial({ color: 0x120E0B, roughness: 1 }), 34
+  )
+  for (let i = 0; i < 34; i++) {
+    dummy.position.set((sectionRnd() - 0.5) * 3.25, -0.06 - sectionRnd() * 1.36, 1.128)
+    const s = 0.5 + sectionRnd() * 1.1
+    dummy.scale.set(s, s * 0.85, s * 0.3)
+    dummy.rotation.set(0, 0, 0)
+    dummy.updateMatrix()
+    poreDots.setMatrixAt(i, dummy.matrix)
+  }
+  poreDots.instanceMatrix.needsUpdate = true
+  root.add(poreDots)
+
+  // 根系：从地表向下分叉
+  const rootHairMat = new THREE.MeshStandardMaterial({ color: 0x4A3F30, roughness: 0.95 })
+  for (let r = 0; r < 2; r++) {
+    const x0 = (sectionRnd() - 0.5) * 2.7
+    const pts = []
+    for (let k = 0; k < 5; k++) {
+      pts.push(new THREE.Vector3(x0 + Math.sin(k * 1.1 + r) * 0.14, -0.02 - k * 0.2, 1.13))
+    }
+    root.add(new THREE.Mesh(
+      new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 22, 0.009, 5, false), rootHairMat
+    ))
+  }
+
+  // 左侧深度标尺：刻度线与数字展签
+  const rulerMat = new THREE.MeshBasicMaterial({ color: PALETTE.gold, transparent: true, opacity: 0.72 })
+  const ruler = new THREE.Mesh(new THREE.BoxGeometry(0.012, 1.5, 0.012), rulerMat)
+  ruler.position.set(-1.94, -0.75, 1.14)
+  ruler.userData.excludeFromAO = true
+  root.add(ruler)
+  ;[
+    { y: 0, t: '0 cm' }, { y: -0.3, t: '20 cm' },
+    { y: -0.75, t: '50 cm' }, { y: -1.5, t: '100 cm' }
+  ].forEach((d) => {
+    const tick = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.012, 0.012), rulerMat)
+    tick.position.set(-1.89, d.y, 1.14)
+    tick.userData.excludeFromAO = true
+    root.add(tick)
+    const tex = labelTexture(d.t, {
+      width: 256, height: 64, color: '#C88A32',
+      font: '600 40px ui-monospace, monospace', align: 'left'
+    })
+    const lab = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.52, 0.13),
+      new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, side: THREE.DoubleSide })
+    )
+    lab.position.set(-2.2, d.y, 1.15)
+    lab.userData.excludeFromAO = true
+    root.add(lab)
+  })
 
   // 地表薄层：覆盖率越高越深越疏松
   const surfaceMat = new THREE.MeshStandardMaterial({ color: 0x241E18, roughness: 0.98 })
@@ -827,7 +910,12 @@ export function buildNoTillScene(scene, stage) {
   const keys = ['straw', 'crumb', 'pore', 'opener']
 
   // 1) 秸秆覆盖：横卧细秆，数量随覆盖率变化
-  const strawGeo = new THREE.CylinderGeometry(0.014, 0.018, 0.52, 6, 1)
+  // 带两道节的秸秆：沿长度方向做鼓包，再转到水平横卧
+  const strawGeo = lathe([
+    [0.010, -0.26], [0.016, -0.22], [0.013, -0.16],
+    [0.012, 0.00], [0.017, 0.045], [0.013, 0.075],
+    [0.012, 0.20], [0.016, 0.235], [0.011, 0.26]
+  ], 10)
   strawGeo.rotateZ(Math.PI / 2)
   const strawMat = new THREE.MeshStandardMaterial({ color: 0xC9A45B, roughness: 0.92 })
   const strawAltMat = new THREE.MeshStandardMaterial({ color: 0x8C583A, roughness: 0.95 })
@@ -880,48 +968,127 @@ export function buildNoTillScene(scene, stage) {
       pts.push(new THREE.Vector3(x0 + Math.sin(k * 1.2 + r) * 0.18, -0.03 - k * 0.23, 1.12))
     }
     const tube = new THREE.Mesh(
-      new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 28, 0.014 + rnd() * 0.007, 7, false),
-      new THREE.MeshStandardMaterial({ color: 0x7A5D3A, roughness: 0.92 })
+      new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 28, 0.011 + rnd() * 0.005, 7, false),
+      new THREE.MeshStandardMaterial({ color: 0x403326, roughness: 0.92 })
     )
     poreGroup.add(tube)
   }
   groups.pore = poreGroup
 
-  // 4) 免耕播种开沟器：只切窄缝、不翻转土层
+  // 4) 免耕播种总成：17 个零件，可沿径向展开查看内部装配
   const openerGroup = new THREE.Group()
   openerGroup.userData.key = 'opener'
-  const discMat = metalMaterial(PALETTE.gold, { roughness: 0.34, metalness: 0.8 }).clone()
-  const disc = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.035, 48), discMat)
-  disc.rotation.set(0, 0.2, Math.PI / 2)
-  disc.position.set(1.05, 0.22, 0.65)
-  openerGroup.add(disc)
-  const hub = new THREE.Mesh(new THREE.SphereGeometry(0.07, 16, 12), lacquerMaterial(0x1C1B18).clone())
-  hub.position.copy(disc.position)
-  openerGroup.add(hub)
-  const arm = new THREE.Mesh(roundedBox(0.9, 0.09, 0.1, 0.03, 4), metalMaterial(0x6E6960, { roughness: 0.4 }).clone())
-  arm.position.set(1.35, 0.55, 0.65)
-  arm.rotation.z = -0.3
-  openerGroup.add(arm)
-  const gauge = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.16, 0.16, 0.06, 32),
+  const openerParts = []
+  const addPart = (mesh, base, dir) => {
+    mesh.position.set(base[0], base[1], base[2])
+    openerGroup.add(mesh)
+    const v = new THREE.Vector3(base[0] - 1.38, base[1] - 0.45, base[2] - 0.55)
+    if (v.lengthSq() < 0.001) v.set(dir[0], dir[1], dir[2])
+    else v.normalize().add(new THREE.Vector3(dir[0], dir[1], dir[2]).multiplyScalar(0.35)).normalize()
+    openerParts.push({ mesh, base: new THREE.Vector3(base[0], base[1], base[2]), dir: v })
+  }
+
+  const steel = metalMaterial(PALETTE.gold, { roughness: 0.32, metalness: 0.82 }).clone()
+  const darkSteel = metalMaterial(0x6E6960, { roughness: 0.42 }).clone()
+
+  // 缺刻圆盘：14 齿轮廓挤出，竖直切土不翻垄
+  const toothShape = new THREE.Shape()
+  const teeth = 14
+  for (let i = 0; i <= teeth * 2; i++) {
+    const a = (i / (teeth * 2)) * Math.PI * 2
+    const rr = i % 2 ? 0.285 : 0.335
+    if (i === 0) toothShape.moveTo(Math.cos(a) * rr, Math.sin(a) * rr)
+    else toothShape.lineTo(Math.cos(a) * rr, Math.sin(a) * rr)
+  }
+  const notchedDiscGeo = new THREE.ExtrudeGeometry(toothShape, {
+    depth: 0.024, bevelEnabled: true, bevelSize: 0.006,
+    bevelThickness: 0.005, bevelSegments: 2, curveSegments: 1
+  })
+  const disc = new THREE.Mesh(notchedDiscGeo, steel)
+  disc.rotation.y = Math.PI / 2
+  addPart(disc, [0.98, 0.20, 0.64], [-1, 0, 0])
+  const disc2 = new THREE.Mesh(notchedDiscGeo.clone().scale(0.82, 0.82, 1), darkSteel)
+  disc2.rotation.y = Math.PI / 2
+  addPart(disc2, [0.98, 0.20, 0.42], [-1, 0, -1])
+
+  const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 0.09, 24), lacquerMaterial(0x1C1B18).clone())
+  hub.rotation.z = Math.PI / 2
+  addPart(hub, [0.98, 0.20, 0.64], [-1, 1, 0])
+  const boltGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.1, 8)
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2
+    const bolt = new THREE.Mesh(boltGeo, steel)
+    bolt.rotation.z = Math.PI / 2
+    addPart(bolt, [0.98, 0.20 + Math.cos(a) * 0.055, 0.64 + Math.sin(a) * 0.055], [-1, Math.cos(a), Math.sin(a)])
+  }
+
+  const arm = new THREE.Mesh(roundedBox(0.82, 0.09, 0.1, 0.03, 4), darkSteel)
+  arm.rotation.z = -0.32
+  addPart(arm, [1.34, 0.50, 0.55], [0.4, 1, 0])
+  const spring = new THREE.Mesh(
+    coilSpringGeometry({ radius: 0.055, tubeRadius: 0.011, height: 0.3, turns: 6 }), steel
+  )
+  addPart(spring, [1.28, 0.74, 0.55], [0, 1, 0.3])
+  const springCap = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.02, 24), darkSteel)
+  addPart(springCap, [1.28, 0.90, 0.55], [0, 1, 0])
+
+  const gaugeWheel = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.155, 0.155, 0.055, 32),
     new THREE.MeshStandardMaterial({ color: 0x2E5A44, roughness: 0.86 })
   )
-  gauge.rotation.set(0, 0, Math.PI / 2)
-  gauge.position.set(1.72, 0.14, 0.65)
-  openerGroup.add(gauge)
+  gaugeWheel.rotation.z = Math.PI / 2
+  addPart(gaugeWheel, [1.62, 0.13, 0.64], [1, -0.4, 0])
+  const pressWheel = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.13, 0.13, 0.05, 32), lacquerMaterial(0x1C1B18).clone()
+  )
+  pressWheel.rotation.z = Math.PI / 2
+  addPart(pressWheel, [1.88, 0.12, 0.64], [1, -0.4, 0])
+
+  const seedBox = new THREE.Mesh(
+    roundedBox(0.36, 0.26, 0.28, 0.05, 5), porcelainMaterial({ repeat: [2, 2] }).clone()
+  )
+  addPart(seedBox, [1.52, 0.98, 0.55], [0.5, 1, 0])
+  const seedCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0.22, 0.36, 0), new THREE.Vector3(0.10, 0.18, 0),
+    new THREE.Vector3(-0.02, -0.06, 0), new THREE.Vector3(-0.14, -0.30, 0)
+  ])
+  addPart(new THREE.Mesh(new THREE.TubeGeometry(seedCurve, 32, 0.022, 8, false), darkSteel),
+    [1.20, 0.50, 0.55], [0.6, 0, 0])
+  const boot = new THREE.Mesh(roundedBox(0.1, 0.2, 0.06, 0.02, 3), steel)
+  boot.rotation.z = 0.25
+  addPart(boot, [1.06, 0.13, 0.55], [-0.5, -1, 0])
+  const hitch = new THREE.Mesh(roundedBox(0.5, 0.06, 0.07, 0.02, 3), darkSteel)
+  addPart(hitch, [1.72, 0.72, 0.55], [1, 0.5, 0])
   groups.opener = openerGroup
 
   keys.forEach((k) => root.add(groups[k]))
 
   // 直立残茬与垄线：免耕田的固定特征，不随覆盖率变化
   const stubbleMat = new THREE.MeshStandardMaterial({ color: 0xA98246, roughness: 0.94 })
+  const cutMat = new THREE.MeshStandardMaterial({ color: 0xD8BC86, roughness: 0.86, side: THREE.DoubleSide })
   for (let i = 0; i < 9; i++) {
     const h = 0.16 + rnd() * 0.12
-    const st = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.03, h, 7), stubbleMat)
-    st.position.set((rnd() - 0.5) * 2.9, 0.06 + h / 2, (rnd() - 0.5) * 1.7)
+    const st = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.03, h, 9), stubbleMat)
+    const x = (rnd() - 0.5) * 2.9
+    const z = (rnd() - 0.5) * 1.7
+    st.position.set(x, 0.06 + h / 2, z)
     st.rotation.z = (rnd() - 0.5) * 0.25
     st.castShadow = true
     root.add(st)
+    // 斜切口：亮色薄椭圆，暗示收割留下的断面
+    const cut = new THREE.Mesh(new THREE.CircleGeometry(0.023, 10), cutMat)
+    cut.rotation.set(-Math.PI / 2 + 0.35, 0, 0)
+    cut.position.set(x + 0.004, 0.06 + h, z)
+    root.add(cut)
+  }
+  // 散落的碎秸秆屑
+  const chipMat = new THREE.MeshStandardMaterial({ color: 0xB89457, roughness: 0.95, side: THREE.DoubleSide })
+  const chipGeo = new THREE.PlaneGeometry(0.075, 0.022)
+  for (let i = 0; i < 22; i++) {
+    const chip = new THREE.Mesh(chipGeo, chipMat)
+    chip.rotation.set(-Math.PI / 2, 0, rnd() * Math.PI)
+    chip.position.set((rnd() - 0.5) * 3.2, 0.072, (rnd() - 0.5) * 1.9)
+    root.add(chip)
   }
   const ridgeMat = new THREE.MeshStandardMaterial({ color: 0x241E18, roughness: 1 })
   for (let i = 0; i < 4; i++) {
@@ -942,6 +1109,17 @@ export function buildNoTillScene(scene, stage) {
   infil.instanceMatrix.setUsage(THREE.DynamicDrawUsage)
   runoff.instanceMatrix.setUsage(THREE.DynamicDrawUsage)
   root.add(infil, runoff)
+  // 溅蚀：雨滴直接砸在裸露表土上溅起的细土粒，覆盖率越低越明显
+  const splashCount = 20
+  const splash = new THREE.InstancedMesh(
+    new THREE.SphereGeometry(0.016, 6, 5),
+    new THREE.MeshStandardMaterial({ color: 0x6B4A2E, roughness: 0.95, transparent: true, opacity: 0.9 }),
+    splashCount
+  )
+  splash.userData.excludeFromAO = true
+  splash.instanceMatrix.setUsage(THREE.DynamicDrawUsage)
+  root.add(splash)
+
   const dropSeeds = Array.from({ length: dropCount }, () => ({
     x: (rnd() - 0.5) * 3.0, z: (rnd() - 0.5) * 1.7,
     off: rnd(), speed: 0.7 + rnd() * 0.5
@@ -951,12 +1129,19 @@ export function buildNoTillScene(scene, stage) {
 
   let coverage = 60
   let focus = 'straw'
+  let explode = 0
   function applyCoverage(v) {
     coverage = Math.max(0, Math.min(100, Number(v) || 0))
     const shown = Math.round(maxStraw * coverage / 100)
     strawA.count = Math.ceil(shown / 2)
     strawB.count = Math.floor(shown / 2)
     surfaceMat.color.set(coverage >= 60 ? 0x241E18 : coverage >= 30 ? 0x32281E : 0x4A3E30)
+  }
+  function applyExplode(v) {
+    explode = Math.max(0, Math.min(1, Number(v) || 0))
+    openerParts.forEach(({ mesh, base, dir }) => {
+      mesh.position.copy(base).addScaledVector(dir, explode * 0.42)
+    })
   }
   function applyFocus(next) {
     if (!next || !groups[next]) return
@@ -972,6 +1157,7 @@ export function buildNoTillScene(scene, stage) {
     pickTargets: keys.map((k) => groups[k]),
     setParam(p) {
       if (p && typeof p.coverage === 'number') applyCoverage(p.coverage)
+      if (p && typeof p.explode === 'number') applyExplode(p.explode)
       if (p?.focus) applyFocus(p.focus)
     },
     update(dt, t) {
@@ -985,10 +1171,10 @@ export function buildNoTillScene(scene, stage) {
         let y = 1.55 - tt * 2.05
         let scale = 1
         if (i < infilCount) {
-          // 落到地表后继续下渗并缩小消失
+          // 沿孔隙蜿蜒下渗，不是笔直坠落
+          x = s.x + Math.sin(tt * 7 + s.off * 9) * 0.05
           if (tt > 0.75) scale = Math.max(0.01, 1 - (tt - 0.75) * 4)
         } else {
-          // 落地后沿地表横向流走
           const flow = Math.max(0, tt - 0.7) / 0.3
           x = s.x + flow * 2.4
           y = tt < 0.7 ? 1.55 - tt * 2.1 : 0.09
@@ -1002,6 +1188,24 @@ export function buildNoTillScene(scene, stage) {
       })
       infil.instanceMatrix.needsUpdate = true
       runoff.instanceMatrix.needsUpdate = true
+
+      // 溅蚀土粒：覆盖率越低，裸露表土被砸得越明显
+      const splashShown = Math.round(splashCount * (1 - coverage / 100))
+      splash.count = splashShown
+      for (let i = 0; i < splashShown; i++) {
+        const s = dropSeeds[i]
+        const tt = (t * 0.8 + s.off) % 1
+        dummy.position.set(
+          s.x + (tt - 0.5) * 0.28,
+          0.08 + Math.sin(tt * Math.PI) * 0.22,
+          s.z + Math.cos(tt * 6 + i) * 0.04
+        )
+        dummy.rotation.set(0, 0, 0)
+        dummy.scale.setScalar(Math.sin(tt * Math.PI) * 0.9 + 0.1)
+        dummy.updateMatrix()
+        splash.setMatrixAt(i, dummy.matrix)
+      }
+      splash.instanceMatrix.needsUpdate = true
     },
     disposeExtra() { disposeRoot(root) }
   }

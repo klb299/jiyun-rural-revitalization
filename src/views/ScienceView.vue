@@ -35,8 +35,8 @@ const notillStructures = [
   },
   {
     key: 'opener', no: '04', name: '免耕开沟器', en: 'NO-TILL OPENER',
-    desc: '只在地表切出一条窄缝，把种子与肥料送进土里，其余土层保持原状。圆盘切开秸秆，限深轮控制深度，随后把缝合上。',
-    metric: '窄缝播种', note: '不翻转土层'
+    desc: '整组由 17 个零件装配：14 齿缺刻圆盘与副盘、轮毂螺栓、弹簧加压、限深轮与镇压轮、种子箱、输种管、导种靴和悬挂架。点「展开零件」可逐个看清，圆盘只切窄缝、不翻转土层。',
+    metric: '17 个零件', note: '可展开拆解'
   }
 ]
 const coverLevels = [0, 30, 60, 90]
@@ -78,11 +78,14 @@ const satCount = ref(4)
 const blocked = ref(false)
 const coverage = ref(60)
 const notillFocus = ref('straw')
+const exploded = ref(false)
 
 const param = computed(() => {
   if (activeMode.value === 'soil') return { focus: soilFocus.value }
   if (activeMode.value === 'rice') return { stage: riceStage.value }
-  if (activeMode.value === 'notill') return { coverage: coverage.value, focus: notillFocus.value }
+  if (activeMode.value === 'notill') {
+    return { coverage: coverage.value, focus: notillFocus.value, explode: exploded.value ? 1 : 0 }
+  }
   return { sats: satCount.value, blocked: blocked.value }
 })
 
@@ -147,6 +150,7 @@ const resetLab = () => {
   blocked.value = false
   coverage.value = 60
   notillFocus.value = 'straw'
+  exploded.value = false
 }
 </script>
 
@@ -430,6 +434,12 @@ const resetLab = () => {
                     <span>下渗 {{ coverReadout.infilPct }}%</span><span>径流 {{ coverReadout.runoffPct }}%</span>
                   </div>
                   <p class="text-[10px] leading-[1.8] text-[#5A564E] mt-3">模型内部的示意比例，用于观察趋势，不是实测统计值。</p>
+                  <button @click="exploded = !exploded"
+                    class="w-full mt-5 py-3 rounded-xl text-xs font-bold transition-all duration-400 cursor-pointer"
+                    :class="exploded ? 'bg-[#2E5A44] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E] hover:bg-[#C88A32]/20'">
+                    {{ exploded ? '合拢播种机零件' : '展开播种机零件（17 件）' }}
+                  </button>
+                  <p class="text-[10px] leading-[1.8] text-[#5A564E] mt-2">展开后可逐个查看缺刻圆盘、弹簧加压、输种管与镇压轮等装配细节。</p>
                 </div>
               </Reveal>
 
