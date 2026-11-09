@@ -538,6 +538,28 @@ body [data-soil-band] .text-\[\#C88A32\] { color: #F0C275; }
 
 .route-enter-active { transition: opacity 0.55s var(--ease-luxe), transform 0.55s var(--ease-luxe), filter 0.55s var(--ease-luxe); }
 .route-leave-active { transition: opacity 0.22s ease, transform 0.22s ease; }
+
+/* ------------------------------------------------------------------ *
+ * 原生 View Transitions：仅首页 → 3D 展厅，渐进增强。
+ * root 用浏览器默认 cross-fade（自己写 old/new 动画容易在中间态露白）。
+ * 唯一自定义的是共享元素 morph：首页金色大圆 → 地层页有机质印章。
+ * ------------------------------------------------------------------ */
+::view-transition-group(hero-seed) {
+  animation-duration: 0.62s;
+  animation-timing-function: var(--ease-luxe);
+}
+.hero-seed { view-transition-name: hero-seed; }
+
+/* VT 接管期间让 Vue 的路由过渡与入场动画让位，避免两套动画叠加、新快照截到半透明状态 */
+html.vt-active .route-enter-active,
+html.vt-active .route-leave-active { transition-duration: 0s !important; }
+html.vt-active .reveal {
+  opacity: 1 !important;
+  filter: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation-duration: 0s !important; }
+}
 .route-enter-from { opacity: 0; transform: translateY(22px); filter: blur(6px); }
 .route-leave-to { opacity: 0; transform: translateY(-8px); }
 

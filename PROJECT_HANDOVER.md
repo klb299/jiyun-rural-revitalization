@@ -917,3 +917,24 @@ Awwwards 2026 与 GSAP 案例的共同手法：单一被坚持的编辑方向、
 **探针覆盖从 8/9/6 页统一扩到 17 条可访问路由**，扩完立刻查出并修复盲区里的真问题：`/chagan-lake` 统计卡 `500+` 用内联金色绕过了分档规则（改 `#A9701F`）；全站 `AppNavbar` 分组按钮 32px / 语音导览 35px，以及 `/sandbox-3d` 视点热点 12px、`/science` 重置 16px、`/journey` 翻页 36px、`/solar-terms` 季节条目 32px，统一补 `min-h-[40px]`（视点热点另补 40×40 容器）。
 
 验证：`npm run build` 零 Error；新增 `audit-rice.js`，`npm run audit` 扩到 **10/10 全绿**——对比度仅剩 `/machinery-3d` 4 项已知假阳性、移动端 `[]`、稻作五阶段与四类结构全命中、控制台零错误、canvas 非静态兜底。截图 `.workbuddy/shots/rice-*.png`。数量口径、路由、视觉风格均未变化。文档同步 `3D_HANDOFF.md` 9.4、本节、当日日志；README / VISUAL_HANDOFF 探针计数改 10。
+
+---
+
+## 🎬 二十三、2026-11-09 14:22 备份 + 原生 View Transitions 最小样张
+
+用户先要求「备份一下（打成压缩包），然后再改」。**注意这是加页面过渡，不是换风格**——`MEMORY.md` 里「风格探索终止、保持原样」的结论仍然有效，配色、字体、布局一律未动。
+
+**备份**：`.workbuddy/backup/backup-20261109-142448.zip`（137 个文件 / 1.30 MB，CRC 校验 OK）。含全部源码、配置、文档、脚本、`public/art`、`dist`、探针与工作日志；排除 `node_modules`、`.git`、截图与审计日志。
+
+**改动**（4 个文件，最小、可一键还原）：
+
+- 新建 `src/lib/viewTransition.js`：`navigateWithViewTransition(router, to)`，仅在不支持 `document.startViewTransition` 或用户开启「减少动态效果」时回退到普通 `router.push`。
+- `src/style.css`：**root 过渡用浏览器默认 cross-fade**（自己写 old/new 动画在中间态会露白），唯一自定义是 `hero-seed` 共享元素 morph 的时长 0.62s；`html.vt-active` 期间让 Vue 的路由过渡与 Reveal 入场让位；reduced-motion 下把所有 VT 动画时长归零。
+- `HomeView.vue`：两个首屏 CTA 从 `RouterLink` 改为带 `router.resolve()` 生成 href 的 `<a>` + `@click.prevent` 包装；金色大圆加 `.hero-seed`。用 `router.resolve()` 而非硬编码路径，将来配 GitHub Pages 的 `base` 不会坏。
+- `SoilStrataView.vue`：有机质印章加同名 `.hero-seed`，实现「首页金色大圆 → 地层展厅印章」的变形。
+
+**实机自查修掉两个真问题**：① `startViewTransition` 的 updateCallback 里用 `requestAnimationFrame` 等待会与浏览器互相等待，Chrome 报 `DOM update timed out` → 换成 Vue `nextTick()` + `setTimeout(0)`；② 自定义 `::view-transition-old/new(root)` 双淡入淡出导致过渡中间整块露白 → 改用浏览器默认 cross-fade。
+
+**还原方式**：删 `src/lib/viewTransition.js`、`src/style.css` 的 View Transitions 段、两个视图里的 `hero-seed` class 与 click 包装；或直接解压上述备份覆盖。
+
+验证：构建零 Error；新增 `audit-vt.js`（验证 VT 被调用、`vt-active` 期间类存在且结束清理、减少动效回退不调用 VT、控制台零错误），`npm run audit` **11/11 全绿**。⚠️ headless 浏览器不渲染 `::view-transition` 伪元素，过渡中间态截图会呈白屏（真实 DOM 在 VT 期间被隐藏）；`audit-vt.js` 已验证 DOM 与导航完整，但**动画观感需在真实浏览器点一次 CTA 确认**。数量口径、路由、色板、字体、布局均未变化。

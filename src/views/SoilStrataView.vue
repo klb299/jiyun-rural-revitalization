@@ -137,7 +137,7 @@ const depthTicks = [
 
         <!-- 有机质印章 -->
         <Reveal :delay="300" variant="scale" class="hidden xl:block absolute right-12 top-1/2 -translate-y-1/2">
-          <div class="relative w-[210px] h-[210px] rounded-full border border-[#C88A32]/55 grid place-items-center text-center">
+          <div class="hero-seed relative w-[210px] h-[210px] rounded-full border border-[#C88A32]/55 grid place-items-center text-center">
             <div class="absolute inset-3 rounded-full border border-[#C88A32]/25"></div>
             <div>
               <div class="font-mono text-[9px] tracking-[0.22em] text-[#8A6324] mb-3">ORGANIC MATTER</div>

@@ -1,5 +1,7 @@
 <script setup>
 import { shallowRef } from 'vue'
+import { useRouter } from 'vue-router'
+import { navigateWithViewTransition } from '../lib/viewTransition.js'
 import WebGLStage from '../components/editorial/WebGLStage.vue'
 import StageLoading from '../components/editorial/StageLoading.vue'
 import Reveal from '../components/editorial/Reveal.vue'
@@ -7,6 +9,9 @@ import SectionHead from '../components/editorial/SectionHead.vue'
 import ExhibitCard from '../components/editorial/ExhibitCard.vue'
 import FigurePlate from '../components/editorial/FigurePlate.vue'
 import { ArrowUpRight, ArrowDown } from 'lucide-vue-next'
+
+const router = useRouter()
+const enterGallery = (to) => navigateWithViewTransition(router, to)
 
 const heroMeta = [
   { k: 'EXHIBITION', v: '2026 / 常设展' },
@@ -101,7 +106,7 @@ const loadSandbox = () => {
       <div class="absolute inset-0 coord-rule opacity-70 pointer-events-none"></div>
 
       <!-- 大面积琥珀金圆 + 旋转文字环 -->
-      <div data-parallax="-16" class="absolute -right-[10%] -top-[16%] w-[42vw] h-[42vw] min-w-[400px] min-h-[400px] rounded-full pointer-events-none"
+      <div data-parallax="-16" class="hero-seed absolute -right-[10%] -top-[16%] w-[42vw] h-[42vw] min-w-[400px] min-h-[400px] rounded-full pointer-events-none"
         style="background: radial-gradient(circle at 35% 30%, #E8BC6E 0%, #C88A32 52%, #A46C20 100%); box-shadow: 0 60px 140px -60px rgba(168,111,34,.65)">
         <svg viewBox="0 0 200 200" class="absolute inset-0 w-full h-full animate-[spin_34s_linear_infinite] opacity-70">
           <defs><path id="home-ring" d="M100,100 m-84,0 a84,84 0 1,1 168,0 a84,84 0 1,1 -168,0"></path></defs>
@@ -147,12 +152,13 @@ const loadSandbox = () => {
             </Reveal>
             <Reveal :delay="680">
               <div class="flex flex-wrap items-center gap-3 mt-9">
-                <RouterLink to="/strata-3d" class="mag-btn">
+                <!-- 原生 View Transitions 渐进增强：保留 href 语义，点击时交由 startViewTransition 接管 -->
+                <a :href="router.resolve('/strata-3d').href" class="mag-btn" @click.prevent="enterGallery('/strata-3d')">
                   <span>从一米黑土开始</span><span class="mag-btn__island"><ArrowUpRight :size="16" /></span>
-                </RouterLink>
-                <RouterLink to="/sandbox-3d" class="mag-btn mag-btn--light">
+                </a>
+                <a :href="router.resolve('/sandbox-3d').href" class="mag-btn mag-btn--light" @click.prevent="enterGallery('/sandbox-3d')">
                   <span>俯瞰松辽平原</span><span class="mag-btn__island"><ArrowUpRight :size="16" /></span>
-                </RouterLink>
+                </a>
               </div>
             </Reveal>
           </div>
