@@ -32,6 +32,10 @@
 | 实验一补齐 | 三层分带、贯通蚯蚓通道、菌丝分叉网络、结核同心层理 | `16bec44` |
 | 自查 + 稻作重建 | 稻作场景 119→247 行、四类可点结构；三探针 `paths` 扩到 17 路由，修 6 类触控目标与 1 处金色对比 | `b5062a2` |
 | 备份 + VT 样张 | 见下方挂起 A | `c632e0d` |
+| 收编交接指针 | 单一执行依据、作废 B+C 阶段路线 | `a419a7c` |
+| 三处视觉精进 | 首页入场镜头 + 中文衬线 + 3D 突破展框 + 竖屏重做 | 见 `PROJECT_HANDOVER.md` 第二十四节 |
+
+**16:40 视觉精进已落地，工作树干净。** 按用户「技术栈不限、token 无限」的前提，只做视觉手段：首页 6.4 秒一次性入场（可跳过 / 动效降级 / 不阻塞 VT）、自托管 Noto Serif SC 精简子集（OFL，6 片 336 KB）、`/strata-3d` 展签与投影溢出 bezel、移动端图版提到标题之前。没有换风格、没有加色块、没有做后端 / TypeScript / CI。`npm run audit` 11/11 全绿，截图在 `.workbuddy/shots/final-*.png`。
 
 ### 挂起 A：View Transitions 观感**未定稿**，等用户确认
 
@@ -82,13 +86,13 @@
 
 | 项 | 值 |
 | --- | --- |
-| git | `c632e0d`（VT 样张）/ `ab25358`（首次版本基线），**工作树干净** |
+| git | 最新提交见 `git log -1`，**工作树干净**；首次版本基线 `ab25358`（不写死当前 hash，避免每轮过时） |
 | 源码 | 36 个 `.vue` + 10 个 `.js`，共 16533 行；其中 `src/three/scienceScenes.js` 1539 行（四个科普场景） |
 | 文档 | README / VISUAL_HANDOFF / PROJECT_HANDOVER / 3D_HANDOFF + 本文；行数随每轮追加变化，别把它当校验基准 |
-| 构建 | `dist` 2.5 MB；主包 233 KB（gzip 88 KB）、`stage` 693 KB、`echarts` 576 KB、图版合计 320.6 KB |
+| 构建 | `dist` 约 2.9 MB；主包 237 KB（gzip 89 KB）、`stage` 693 KB、`echarts` 576 KB、图版合计 320.6 KB、中文衬线 6 片合计 336 KB |
 | 数量口径 | **18 条路由 / 13 个展陈单元（3 个 3D + 10 图文）/ 10 个专题章节 / 1 张展览地图**（地图是总览索引，不计入展陈单元）；科普实验室 4 个 3D 实验 |
 | 探针 | `.workbuddy/tools/` **11 个**，`npm run audit` 实测 **11/11** 取到结果；`audit-contrast` / `audit-mobile` / `audit-a11y` / `audit-links` / `audit-detail` 均覆盖 **17 条可访问路由** |
-| 脚本 | `npm run art` / `audit` / `snapshot`（Python 实现，见第 11 节） |
+| 脚本 | `npm run art` / `font` / `audit` / `snapshot`（Python 实现，见第 11 节；`font` 需联网重新拉 OFL 字体分片） |
 | 备份 | `.workbuddy/backup/backup-20261109-142448.zip`（改动前完整快照，见第 0 节） |
 
 **已知欠账（不是待办，是现状）**

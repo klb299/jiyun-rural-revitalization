@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "art": "python scripts/generate_art.py",
+    "font": "python scripts/fetch_font.py",
     "audit": "python scripts/audit.py",
     "snapshot": "python scripts/snapshot.py"
   },

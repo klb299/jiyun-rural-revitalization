@@ -1,5 +1,6 @@
 <script setup>
-import { shallowRef } from 'vue'
+import { shallowRef, ref, onMounted, onUnmounted, nextTick } from 'vue'
+import gsap from 'gsap'
 import { useRouter } from 'vue-router'
 import { navigateWithViewTransition } from '../lib/viewTransition.js'
 import WebGLStage from '../components/editorial/WebGLStage.vue'
@@ -97,6 +98,52 @@ const loadSandbox = () => {
     SandboxComponent.value = m.default
   })
 }
+
+/* ---------------- 首屏一次性入场镜头 ----------------
+ * 从黑土剖面推近，拉远成平原，落到沙盘俯视，然后淡出到稳定首屏。
+ * 不是循环背景视频；点击或按键立即跳过，reduced-motion 下整个不渲染。
+ * 遮罩 pointer-events:none，点击会穿透到下面的 CTA，不阻塞 View Transitions。
+ */
+const preludeOn = ref(false)
+let preludeTl = null
+let skipHandler = null
+
+const endPrelude = () => {
+  if (!preludeOn.value) return
+  preludeTl?.kill()
+  preludeOn.value = false
+  if (skipHandler) {
+    window.removeEventListener('pointerdown', skipHandler, true)
+    window.removeEventListener('keydown', skipHandler)
+    skipHandler = null
+  }
+}
+
+onMounted(() => {
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+  preludeOn.value = true
+  skipHandler = () => endPrelude()
+  window.addEventListener('pointerdown', skipHandler, { capture: true, once: true })
+  window.addEventListener('keydown', skipHandler, { once: true })
+
+  nextTick(() => {
+    const layer = document.querySelector('.hero-prelude')
+    if (!layer) { endPrelude(); return }
+    const plates = layer.querySelectorAll('.prelude-plate')
+    gsap.set(plates, { autoAlpha: 0, scale: 1.55, filter: 'blur(10px)' })
+    preludeTl = gsap.timeline({ onComplete: endPrelude })
+    preludeTl
+      .to(plates[0], { autoAlpha: 1, scale: 1.02, filter: 'blur(0px)', duration: 1.15, ease: 'power2.out' })
+      .to(plates[0], { scale: 1.35, autoAlpha: 0, duration: 1.35, ease: 'power1.inOut' }, '+=0.45')
+      .to(plates[1], { autoAlpha: 1, scale: 0.94, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, '-=0.9')
+      .to(plates[1], { scale: 0.72, autoAlpha: 0, duration: 1.25, ease: 'power1.inOut' }, '+=0.3')
+      .to(plates[2], { autoAlpha: 1, scale: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' }, '-=0.75')
+      .to(layer, { autoAlpha: 0, duration: 0.85, ease: 'power2.inOut' }, '+=0.35')
+      .to('.prelude-progress', { width: '100%', duration: 6.4, ease: 'none' }, 0)
+  })
+})
+
+onUnmounted(() => endPrelude())
 </script>
 
 <template>
@@ -163,19 +210,20 @@ const loadSandbox = () => {
             </Reveal>
           </div>
 
-          <!-- Z 轴层叠图版 -->
-          <div class="lg:col-span-5 relative hidden lg:block" data-parallax="-8">
+          <!-- Z 轴层叠图版：竖屏时提到标题之前，先给场景再落字 -->
+          <div class="hero-plate-mobile lg:col-span-5 relative order-first lg:order-none" data-parallax="-8">
             <div class="bezel z-card hero-plate">
               <div class="bezel-core">
-                <img src="/art/diorama.svg" alt="松辽平原田块俯视图版" class="w-full aspect-[4/5] object-cover" />
+                <img src="/art/diorama.svg" alt="松辽平原田块俯视图版" class="w-full aspect-[16/10] lg:aspect-[4/5] object-cover" />
               </div>
             </div>
-            <div class="card-ink z-card absolute -bottom-10 -left-14 w-64 p-6" style="transform: rotate(5deg)">
+            <div class="card-ink z-card absolute -bottom-10 -left-14 w-64 p-6 hidden lg:block" style="transform: rotate(5deg)">
               <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-3">FIELD NOTE / 001</div>
               <div class="font-editorial text-4xl font-bold leading-none">200<span class="text-lg ml-1">年</span></div>
               <p class="text-[12px] leading-relaxed text-[#F7F4EE]/90 mt-3">形成一厘米黑土所需的时间。整座展馆，从这一个数字开始。</p>
             </div>
-            <div class="absolute -top-5 -right-3 z-20 px-3 py-2 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[10px] font-bold tracking-[0.16em] shadow-lg">PLATE 00</div>
+            <div class="absolute -top-4 -right-2 lg:-top-5 lg:-right-3 z-20 px-3 py-2 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[10px] font-bold tracking-[0.16em] shadow-lg">PLATE 00</div>
+            <div class="lg:hidden absolute -bottom-5 left-3 font-mono text-[9px] tracking-[0.18em] text-[#8A6324]">下滑进入展馆 · FIELD PLATE / 松辽平原</div>
           </div>
         </div>
 
@@ -204,6 +252,27 @@ const loadSandbox = () => {
       </div>
       <div class="absolute bottom-14 right-8 z-10 hidden sm:flex items-center gap-2 text-[#1C1B18]/45">
         <span class="font-mono text-[10px] tracking-[0.2em]">SCROLL</span><ArrowDown :size="15" class="float-slow" />
+      </div>
+
+      <!-- 一次性入场镜头：剖面推近 → 拉远成平原 → 落到沙盘，随后淡出 -->
+      <div v-if="preludeOn" class="hero-prelude absolute inset-0 z-[25] bg-[#1C1B18] overflow-hidden pointer-events-none">
+        <div class="prelude-plate absolute inset-0 grid place-items-center" style="mix-blend-mode: luminosity">
+          <img src="/art/soil-strata.svg" alt="黑土剖面图版" class="w-[125%] h-[125%] object-cover" />
+        </div>
+        <div class="prelude-plate absolute inset-0 grid place-items-center" style="mix-blend-mode: luminosity">
+          <img src="/art/hero-field.svg" alt="黑土田野等高线图版" class="w-[125%] h-[125%] object-cover" />
+        </div>
+        <div class="prelude-plate absolute inset-0 grid place-items-center" style="mix-blend-mode: luminosity">
+          <img src="/art/diorama.svg" alt="松辽平原沙盘图版" class="w-[125%] h-[125%] object-cover" />
+        </div>
+        <!-- 纯光影：金圆柔光晕 + 底部暗角 + 统一压暗，不加色块（沿用 11-08 定稿） -->
+        <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at 32% 26%, rgba(232,188,110,.20), transparent 58%), linear-gradient(to top, rgba(28,27,24,.94), transparent 48%), rgba(28,27,24,.42)"></div>
+        <div class="fixed z-[26] bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 pointer-events-none">
+          <div class="h-[2px] w-44 rounded-full bg-[#F7F4EE]/20 overflow-hidden">
+            <div class="prelude-progress h-full w-0 bg-[#C88A32]"></div>
+          </div>
+          <span class="font-mono text-[10px] tracking-[0.22em] text-[#F7F4EE]/85">点击任意处跳过</span>
+        </div>
       </div>
     </section>
 

@@ -938,3 +938,34 @@ Awwwards 2026 与 GSAP 案例的共同手法：单一被坚持的编辑方向、
 **还原方式**：删 `src/lib/viewTransition.js`、`src/style.css` 的 View Transitions 段、两个视图里的 `hero-seed` class 与 click 包装；或直接解压上述备份覆盖。
 
 验证：构建零 Error；新增 `audit-vt.js`（验证 VT 被调用、`vt-active` 期间类存在且结束清理、减少动效回退不调用 VT、控制台零错误），`npm run audit` **11/11 全绿**。⚠️ headless 浏览器不渲染 `::view-transition` 伪元素，过渡中间态截图会呈白屏（真实 DOM 在 VT 期间被隐藏）；`audit-vt.js` 已验证 DOM 与导航完整，但**动画观感需在真实浏览器点一次 CTA 确认**。数量口径、路由、色板、字体、布局均未变化。
+
+## ✨ 二十四、2026-11-09 16:40 「技术栈不限、token 无限」前提下的三处视觉精进
+
+用户问「哪里还能精进」，并放开技术栈与投入上限。**判断前提**：按 11-08 12:02 的最高优先级标准，技术栈不限解锁的是**以前怕麻烦没用的视觉手段**，不是后端 / TypeScript / CI 这类零分项。实拍首页首屏、首页中段、科普页与移动端后，诊断是「一套执行度很高的平面印刷品，但项目叫 3D 展馆」，即缺纵深与时间维度。三处精进全部**在既有语言内加深，不换风格、不加色块、不铺硬色带**。
+
+### 1. 首页首屏：一次性入场镜头 + 自托管中文衬线
+
+* `HomeView.vue` 新增 `.hero-prelude`：6.4 秒 GSAP 时间线，黑土剖面推近 → 等高线田野拉远 → 沙盘俯视落定 → 淡出到稳定首屏。三张图版用 `mix-blend-mode: luminosity` 统一色调，叠「金圆柔光晕 + 底部暗角 + 统一压暗」（沿用 11-08 纯光影定稿）。
+* **不是循环背景视频**：点击任意处或按任意键立即跳过，`pointer-events: none` 让点击穿透到 CTA，不阻塞 View Transitions；`prefers-reduced-motion` 下 `v-if` 整个不渲染。进度条用 `fixed` 避免被超出视口的 section 裁掉。
+* `scripts/fetch_font.py`：扫描全站 1636 个去重汉字，分批请求 Google Fonts 的 `text=` 接口，下载 **Noto Serif SC**（SIL OFL 1.1）精简 woff2 共 6 片 / 336 KB，生成 `src/fonts.css`。`main.js` 引入，`'Jiyun Serif'` 置于 `.display-*` / `.font-editorial` / `.watermark` 字体栈首位，正文仍走系统字体。
+* 字体是开源授权，可随项目分发；不依赖运行时联网。
+
+### 2. `/strata-3d`：3D 展柜突破展框
+
+* 新增 `.stage-breakout { isolation: isolate }` 包裹层，所有「溢出」元素放在 bezel **外面**，不改 `WebGLStage`、不动任何 Three.js 渲染参数、不破坏 `bezel-core` 的圆角裁切。
+* 框外元素：底部投影（左右溢出纸面）、左上金色柔光、跨在边框上的 `LIVE SPECIMEN · PLATE 01` 金属铭牌、右侧旋转的「LAYER 02 / 淀积心土层」展签、左侧 `0 CM` 深度引线。展签上移到 `top-24%` 避开回到顶部按钮。
+* 移动端全部溢出元素用 `hidden sm:flex` / `hidden lg:block` 隐藏，投影与柔光在小屏收回边界内，保证零横向溢出。
+
+### 3. 移动端首页首屏：竖屏单独构图
+
+* 图版卡从 `hidden lg:block` 改为 `order-first` 提到标题之前，比例改 `aspect-[16/10]`（桌面仍 `4/5`），先给场景再落字。
+* `style.css` 的 `@media (max-width: 1023px)` 把 `.hero-seed` 金圆缩到 70vw 并退到右上作背景，不再压住标题；旋转角收敛到 -2deg。
+* 图版下方补「下滑进入展馆」引导（放在视口内），桌面端 SCROLL 提示保持原样。桌面布局未变。
+
+### 验证
+
+* `npm run build` 零 Error 零 Warning；主包 237 KB（gzip 89 KB），6 个字体分片由 Vite 单独产出。
+* `npm run audit` **11/11 全绿**：对比度仍只剩 `/machinery-3d` 4 项已登记假阳性、移动端 `[]`、死链 0、a11y 零欠账、round19 Reveal 全就绪、VT 探针正常、四个科普实验探针正常。控制台 0 Error / 0 Warning。
+* 专项实测：`document.fonts.check('700 48px "Jiyun Serif"')` 为 true；入场层 1.5s 存在 / 7.7s 消失；reduced-motion 下不渲染；点击与 Escape 均可跳过；`heroSeedCount` 保持 1，VT 未被遮罩干扰。
+* 截图：`.workbuddy/shots/final-1-prelude.png`（入场中间态）、`final-2-home.png`（最终首屏）、`final-3-strata-breakout.png`（3D 突破）、`final-4-mobile.png`（竖屏重做）。
+* 数量口径 18 路由 / 13 展陈单元 / 10 专题 / 1 展览地图 / 4 科普实验全部未变；色板、纯光影定稿、动效降级、WebGL 兜底、每页首屏不同等硬约束均未违反。

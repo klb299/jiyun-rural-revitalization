@@ -57,13 +57,16 @@ npm run dev       # 本地开发
 npm run build     # 生产构建，输出到 dist/
 npm run preview   # 预览构建产物
 npm run art       # 重新生成 public/art/ 下 10 张程序化 SVG 图版
+npm run font      # 重新生成全站中文衬线精简分片（需联网，字体为 OFL 授权）
 npm run audit     # 一键跑 11 个探针（需先启动 preview 服务）
 npm run snapshot  # 把源码与文档快照到 .workbuddy/backup/
 ```
 
 `npm run audit` 的前置：另开终端执行 `npm run preview -- --host 127.0.0.1 --port 4173`。它会依次跑对比度、移动端触控、死链、低对比定位、交互、第十九轮回归、可访问性、第四个科普实验、实验一、稻作实验与原生 View Transitions 共 11 个探针，汇总结果写入 `.workbuddy/audit/latest.log`。探针脚本在 `.workbuddy/tools/`，新增页面时记得把路径补进前四个脚本的 `paths`。
 
-构建产物约 2.5 MB（含 10 张 SVG 图版）。首屏只加载主包约 233 KB（gzip 约 88 KB）、Vue runtime 62 KB、Pinia 与图标两个小 chunk，FCP 约 80 ms，不加载任何 Three.js 或 ECharts。Three.js（693 KB / gzip 175 KB）与按需注册后的 ECharts（576 KB / gzip 195 KB）都是异步 chunk，只在进入 3D 展厅与图表页时下载；`/exhibit-map` 是独立的 23 KB（gzip 7.7 KB）异步 chunk，首页沙盘还要等滚入视口才挂载。
+中文标题使用自托管的 **Noto Serif SC** 精简子集（SIL OFL 1.1，1636 个全站用字分 6 个 woff2 分片，合计 336 KB，见 `src/fonts.css` 与 `scripts/fetch_font.py`）。正文仍走系统字体栈，字体只作用于 `.display-*` / `.font-editorial` / `.watermark`。更换用字后需重跑 `npm run font`。
+
+构建产物约 2.9 MB（含 10 张 SVG 图版与 6 个字体分片）。首屏只加载主包约 237 KB（gzip 约 89 KB）、Vue runtime 62 KB、Pinia 与图标两个小 chunk，FCP 约 80 ms，不加载任何 Three.js 或 ECharts。Three.js（693 KB / gzip 175 KB）与按需注册后的 ECharts（576 KB / gzip 195 KB）都是异步 chunk，只在进入 3D 展厅与图表页时下载；`/exhibit-map` 是独立的 23 KB（gzip 7.7 KB）异步 chunk，首页沙盘还要等滚入视口才挂载。
 
 ## 四、技术栈
 
