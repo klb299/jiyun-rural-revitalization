@@ -168,13 +168,8 @@ const depthTicks = [
       </Reveal>
 
       <Reveal :delay="100" variant="scale" class="mt-12">
-        <div class="stage-breakout relative">
-          <!-- 展柜投在纸面上的影子与柔光，左右溢出边框 -->
-          <div class="absolute inset-x-0 sm:-inset-x-6 -bottom-7 h-20 rounded-[50%] bg-[#1C1B18]/25 blur-2xl pointer-events-none" aria-hidden="true"></div>
-          <div class="absolute left-0 top-0 w-48 h-48 sm:-top-10 sm:-left-10 sm:w-72 sm:h-72 rounded-full bg-[#C88A32]/12 blur-3xl pointer-events-none" aria-hidden="true"></div>
-
-          <div class="bezel relative z-10">
-            <div class="bezel-core relative">
+        <div class="bezel">
+          <div class="bezel-core relative">
             <div class="relative h-[600px] sm:h-[700px] overflow-hidden">
               <WebGLStage scene="strata"><SoilStrata3D /></WebGLStage>
               <!-- 左侧深度尺，与首屏层位柱呼应 -->
@@ -193,22 +188,6 @@ const depthTicks = [
                 <div class="text-xs leading-relaxed text-[#3A3630]">{{ n.v }}</div>
               </div>
             </div>
-          </div>
-        </div>
-
-          <!-- 跨出展框的策展层：铭牌、层位展签、深度引线，只在宽屏显示以免移动端溢出 -->
-          <div class="hidden sm:flex absolute -top-4 left-10 z-20 items-center gap-3 px-4 py-2 rounded-full bg-[#1C1B18] text-[#F7F4EE] shadow-lg">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#C88A32]"></span>
-            <span class="font-mono text-[9px] tracking-[0.2em]">LIVE SPECIMEN · PLATE 01</span>
-          </div>
-          <div class="hidden lg:block absolute -right-6 top-[24%] z-20 bg-[#FFFDF9] border border-[#1C1B18]/12 px-4 py-3 shadow-xl" style="transform: rotate(3deg)">
-            <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324] mb-1">LAYER 02</div>
-            <div class="font-editorial text-sm font-bold text-[#1C1B18]">淀积心土层</div>
-            <div class="text-[10px] text-[#5A564E] mt-1">20 – 50 cm</div>
-          </div>
-          <div class="hidden sm:flex absolute -left-6 top-[30%] z-20 items-center gap-2">
-            <span class="w-8 h-px bg-[#C88A32]"></span>
-            <span class="font-mono text-[9px] tracking-[0.16em] text-[#8A6324]">0 CM</span>
           </div>
         </div>
       </Reveal>

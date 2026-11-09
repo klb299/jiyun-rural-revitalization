@@ -331,3 +331,29 @@ npm run preview    # 预览构建产物
 新增 `audit-rice.js`，`npm run audit` 扩到 **10/10 全绿**：对比度仅剩 `/machinery-3d` 4 项已知假阳性，移动端 `[]`。截图 `.workbuddy/shots/rice-seedling.png` / `rice-harvest.png`。
 
 > **经验**：探针覆盖面比探针数量更重要——把 paths 从 8 页扩到 17 页，一次就查出 6 类从未被发现的触控目标问题。以后新增页面必须同步所有探针的 `paths`，不能只补 `audit-links`。
+
+### 9.5 第六轮：北斗 RTK 场景精度补齐（2026-11-09 17:20）
+
+量化四个科普场景后发现：`buildBeidouScene` 是**唯一 `pickTargets: []`** 的场景（438 行 / 50 Mesh，数量不低但不可点、无结构卡）。按「不改概念、复用现有结构」推进。
+
+**补齐可拾取结构**：新增 `groups = {}` 与 `keys = ['sat','station','rover','track']`。卫星壳从 `satRoot` 移进新建的 `satGroup`；`tractor`、`station` 直接带 `userData.key` 注册；计划线与实际轨迹段从 `root` 移进新建的 `trackGroup`。`applyFocus()` 复用 `highlight / clearHighlight`，`pickTargets` 改为 `keys.map(...)`，`setParam` 支持 `p.focus`。页面侧 `ScienceView.vue` 加 `beidouStructures` 四条档案、`beidouFocus`、`activeBeidou`，并补 `param` / `onSelect` / `hoverName` / `resetLab` 四个分支与结构卡网格。
+
+> **注意**：`highlight()` 只处理 `isMesh && material.emissive`，`Line` 与 `MeshBasicMaterial`（信号线、脉冲、误差圈）会被安全跳过，所以分组里带这些对象不会报错，但也不会高亮。别指望靠改信号线材质来做焦点效果。
+
+**建模收敛与补件**（沿用 9.1 的「次要结构让位给主结构」）：
+
+| 动作 | 数量 | 处理 |
+| --- | --- | --- |
+| 轮胎花纹收敛 | 40 → 24 | 每轮 10→6 块，避免次要结构盖住红色机罩 |
+| 农机细节 | 9 件 | 格栅竖条 5、排气立管、驾驶舱 A 柱 2、RTK 天线底座；统一 `0x2A2622` 压暗 |
+| 基准站散热槽 | 3 件 | 复用同一压暗材质 |
+| 太阳能板金边 | 12 件 | 每板一条，金色细边不抢主体 |
+| 轮圈金属环 | 4 件 | `TorusGeometry` + 金色轮毂材质 |
+| 地面尺度标尺 | 1 面 + 3 刻度 | `labelTexture('0 5 10 m')`，与实验一 / 稻作展签语言一致 |
+| 四类展签 | 放大 | `1.28×0.32 → 1.45×0.36`，改正数展签同步 |
+
+**两轮实机截图自查**：第一轮标尺文字用深金 `#8A6324` 落在深色土面上几乎不可见，第二轮改亮金 `#F0C275` 并把平面从 `y=-1.13` 抬到 `-1.09`（高于垄沟与轨迹线，且 z=1.92 不与轨迹重叠）后可读。红色机罩、金色 RTK 天线、绿色改正数链路仍是最突出的三个主结构。
+
+新增 `audit-beidou.js`（四类结构卡存在且说明联动、遮挡/恢复、切回实验一无残留、canvas 872×600 非兜底、控制台），`npm run audit` 扩到 **12/12 全绿**。截图 `.workbuddy/shots/beidou-stage-1.png` / `beidou-stage-2.png` / `beidou-final.png`。
+
+> **经验**：判断场景「精不精」不能只看行数与 Mesh 数，要看有没有可拾取结构和结构卡。北斗 50 Mesh 却不可点，反而比 20 Mesh 可点的稻作场景显得像示意图。另外给已有场景补分组时，**把 Mesh 从 `root` 移进新 Group 会改变它的坐标父级**，若新 Group 留在原点就没问题；一旦给 Group 加了位移，所有用局部坐标写的 `layout()` / `update()` 都会错位。本次 `satGroup` / `trackGroup` 都保持在原点，正是为了避开这个坑。

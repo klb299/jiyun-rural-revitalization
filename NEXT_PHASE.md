@@ -33,9 +33,13 @@
 | 自查 + 稻作重建 | 稻作场景 119→247 行、四类可点结构；三探针 `paths` 扩到 17 路由，修 6 类触控目标与 1 处金色对比 | `b5062a2` |
 | 备份 + VT 样张 | 见下方挂起 A | `c632e0d` |
 | 收编交接指针 | 单一执行依据、作废 B+C 阶段路线 | `a419a7c` |
-| 三处视觉精进 | 首页入场镜头 + 中文衬线 + 3D 突破展框 + 竖屏重做 | 见 `PROJECT_HANDOVER.md` 第二十四节 |
+| 三处视觉精进 | 首页入场镜头 + 中文衬线 + 3D 突破展框 + 竖屏重做 | `6439ed6`（后两处已回滚，见下方状态段） |
+| 三选一 + 备份回滚 | 只保留首页方向，另两处入 tag 与 zip 后撤销 | 见 `PROJECT_HANDOVER.md` 第二十五节 |
+| 北斗 3D 精进 | 四类可拾取结构、结构卡、建模收敛与补件、新探针 | 同上 |
 
-**16:40 视觉精进已落地，工作树干净。** 按用户「技术栈不限、token 无限」的前提，只做视觉手段：首页 6.4 秒一次性入场（可跳过 / 动效降级 / 不阻塞 VT）、自托管 Noto Serif SC 精简子集（OFL，6 片 336 KB）、`/strata-3d` 展签与投影溢出 bezel、移动端图版提到标题之前。没有换风格、没有加色块、没有做后端 / TypeScript / CI。`npm run audit` 11/11 全绿，截图在 `.workbuddy/shots/final-*.png`。
+**17:20 三选一后当前状态（接手以本段为准）**：用户从三处视觉精进里**只保留「首页入场镜头 + 中文衬线」**，另两处（3D 突破展框、竖屏重做）已回滚。回滚前的完整状态备份在 git tag `visual3-20261109`（指向 `6439ed6`）与 `.workbuddy/backup/backup-visual3-src-20261109-1721.zip`（105 文件 / 0.92 MB / CRC OK），随时可取回。随后按「3D 模型接着精进」补齐北斗 RTK 场景的四类可拾取结构、结构卡与建模细节，新增 `audit-beidou.js`，探针扩到 12/12 全绿。详见 `PROJECT_HANDOVER.md` 第二十四、二十五节。
+
+**别把已回滚的两处当当前状态**：`final-3-strata-breakout.png` / `final-4-mobile.png` 是回滚前截图，当前对应画面见 `pick-3-rollback-strata.png` / `pick-4-rollback-mobile.png`。
 
 ### 挂起 A：View Transitions 观感**未定稿**，等用户确认
 
@@ -91,7 +95,7 @@
 | 文档 | README / VISUAL_HANDOFF / PROJECT_HANDOVER / 3D_HANDOFF + 本文；行数随每轮追加变化，别把它当校验基准 |
 | 构建 | `dist` 约 2.9 MB；主包 237 KB（gzip 89 KB）、`stage` 693 KB、`echarts` 576 KB、图版合计 320.6 KB、中文衬线 6 片合计 336 KB |
 | 数量口径 | **18 条路由 / 13 个展陈单元（3 个 3D + 10 图文）/ 10 个专题章节 / 1 张展览地图**（地图是总览索引，不计入展陈单元）；科普实验室 4 个 3D 实验 |
-| 探针 | `.workbuddy/tools/` **11 个**，`npm run audit` 实测 **11/11** 取到结果；`audit-contrast` / `audit-mobile` / `audit-a11y` / `audit-links` / `audit-detail` 均覆盖 **17 条可访问路由** |
+| 探针 | `.workbuddy/tools/` **12 个**，`npm run audit` 实测 **12/12** 取到结果；`audit-contrast` / `audit-mobile` / `audit-a11y` / `audit-links` / `audit-detail` 均覆盖 **17 条可访问路由** |
 | 脚本 | `npm run art` / `font` / `audit` / `snapshot`（Python 实现，见第 11 节；`font` 需联网重新拉 OFL 字体分片） |
 | 备份 | `.workbuddy/backup/backup-20261109-142448.zip`（改动前完整快照，见第 0 节） |
 
@@ -100,7 +104,7 @@
 1. ~~19 处品牌金大字~~ 已于 11-08 由 3 号定稿按底色分档解决，对比度探针现为 **0 项**（仅剩下列 `/machinery-3d` 假阳性）。
 2. `/machinery-3d` 4 项对比度告警是**已知假阳性**（白字落在非祖先的赤红定位块上，实约 5.4:1），别据此改色。
 3. 无后端：`/admin` 是 `admin123456` 前端门禁 + localStorage，README 明确写了「请勿用于真实数据」。
-4. 无单元测试 / E2E 框架 / CI；11 个自定义浏览器探针靠 `npm run audit` 一键跑。
+4. 无单元测试 / E2E 框架 / CI；12 个自定义浏览器探针靠 `npm run audit` 一键跑。
 5. OG 静态兜底，所有子页分享卡片相同；无预渲染、无部署流程（部署挂起见第 0 节挂起 B）。
 6. 探针已覆盖 17 条路由的 Chromium 多视口；**iOS Safari 真机未验**。
 7. `RuralSandbox3D.vue` 2387 行、`textures.js` 1306 行未拆分。
@@ -205,7 +209,7 @@
 git status                 # 应干净
 npm run build              # 零 Error / 零 Warning
 npm run preview -- --host 127.0.0.1 --port 4173   # 另开终端
-npm run audit              # 11/11 探针，基线：mobile []、links 17/[]/[]/[]、interactions 全绿
+npm run audit              # 12/12 探针，基线：mobile []、links 17/[]/[]/[]、interactions 全绿
 npm run snapshot           # 大改前留一份快照
 ```
 

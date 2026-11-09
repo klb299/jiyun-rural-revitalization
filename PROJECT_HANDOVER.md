@@ -969,3 +969,47 @@ Awwwards 2026 与 GSAP 案例的共同手法：单一被坚持的编辑方向、
 * 专项实测：`document.fonts.check('700 48px "Jiyun Serif"')` 为 true；入场层 1.5s 存在 / 7.7s 消失；reduced-motion 下不渲染；点击与 Escape 均可跳过；`heroSeedCount` 保持 1，VT 未被遮罩干扰。
 * 截图：`.workbuddy/shots/final-1-prelude.png`（入场中间态）、`final-2-home.png`（最终首屏）、`final-3-strata-breakout.png`（3D 突破）、`final-4-mobile.png`（竖屏重做）。
 * 数量口径 18 路由 / 13 展陈单元 / 10 专题 / 1 展览地图 / 4 科普实验全部未变；色板、纯光影定稿、动效降级、WebGL 兜底、每页首屏不同等硬约束均未违反。
+
+## 🎯 二十五、2026-11-09 17:20 三选一保留、备份回滚与北斗 3D 精进
+
+用户要求「选一个最好看的做吧，其他的记得备份，另外 3D 模型接着精进」。
+
+### 1. 选择：只保留首页入场镜头 + 中文衬线
+
+按 11-08 12:02 的标准（评委只认真看 2–3 页），三个方向里只有这一项同时满足「覆盖评委第一眼」与「让全部 18 页标题都变好看」。3D 突破只在 `/strata-3d` 一页中段，竖屏重做评委多半看不到。**中文衬线是全局资产，入场镜头是首页资产，另两项是局部资产**，取舍据此。
+
+### 2. 备份（回滚前完成）
+
+| 形式 | 位置 | 内容 |
+| --- | --- | --- |
+| git tag | `visual3-20261109` → `6439ed6` | 三处精进完整提交，可 `git checkout visual3-20261109 -- <文件>` 取回 |
+| 源码 zip | `.workbuddy/backup/backup-visual3-src-20261109-1721.zip` | 105 文件 / 0.92 MB / CRC OK，排除 node_modules、dist、截图与备份自身 |
+| 单文件 | `.workbuddy/backup/scienceScenes-before-beidou.js` | 北斗精进前的 `scienceScenes.js` |
+
+第一版 zip 因误打包历史截图膨胀到 34.68 MB，已删除重打精简包。
+
+### 3. 回滚（只撤销 ② ③）
+
+* `SoilStrataView.vue`：用 `git show 86bfaf4:...` 整体恢复，移除 `.stage-breakout`、跨框铭牌、层位展签、深度引线、投影与柔光。
+* `HomeView.vue`：图版恢复 `hidden lg:block` / `aspect-[4/5]`，删 `order-first` 与竖屏引导，SCROLL 提示回原样。**入场逻辑与字体调用保留**。
+* `style.css`：删 `.stage-breakout` 与 `@media (max-width: 1023px)` 竖屏块，保留 `.prelude-plate` / reduced-motion 规则与 `Jiyun Serif` 字体栈。
+
+实机截图 `pick-3-rollback-strata.png` 确认跨框元素全部消失，展柜回到原本双层 bezel。
+
+### 4. 3D 精进：北斗 RTK 场景（延续 11-09 建模路线）
+
+量化发现四个科普场景里 `buildBeidouScene` 是**唯一 `pickTargets: []`** 的（438 行 / 50 Mesh，数量不少但不可点、无结构卡）。按「不改概念、能复用现有结构」的稳妥路线补齐：
+
+* **四类可拾取结构**：`sat`（卫星）/ `station`（基准站）/ `rover`（农机）/ `track`（作业轨迹）各自成组并带 `userData.key`，`applyFocus` 复用 `highlight / clearHighlight`，`pickTargets` 改为 `keys.map(...)`，`setParam` 支持 `focus`。
+* **页面联动**：`ScienceView.vue` 加 `beidouStructures` 四条档案、`beidouFocus` / `activeBeidou`、`param` 带 focus、`onSelect` / `hoverName` / `resetLab` 三个分支，控制面板加结构卡网格。
+* **建模收敛与补件**（遵循 11-09「先收敛再出图、次要结构压暗」）：轮胎花纹 40→24；农机补格栅竖条 5、排气立管、驾驶舱 A 柱 2、RTK 天线底座；基准站补散热槽 3；卫星太阳能板补金边 12；轮圈补金属环 4；地面补 0/5/10 m 尺度标尺与刻度 3；四类展签放大。
+* **两轮实机截图自查**：第一轮发现标尺文字在深色土面上几乎不可见，改亮金 `#F0C275` 并把平面抬高到 `-1.09` 后可读。没有堆元素盖住主结构，红色机罩、金色 RTK 天线与改正数链路仍突出。
+* 新增 `audit-beidou.js`（四类结构卡联动、遮挡/恢复、切回实验一无残留、canvas 非兜底、控制台），探针数 **11 → 12**，README / NEXT_PHASE / VISUAL_HANDOFF 计数同步。
+
+### 5. 验证
+
+* `npm run build` 零 Error 零 Warning。
+* `npm run audit` **12/12 全绿**：新增探针四类结构 `found:1 / desc:true` 全通过、`blocked:true`、`restored:true`、`backToSoil:true`、`errors:[]`；对比度仍只剩 `/machinery-3d` 4 项已登记假阳性、移动端 `[]`、死链 0、VT 正常。
+* 控制台 0 Error / 0 Warning。
+* 截图：`.workbuddy/shots/pick-1-home-final.png`、`pick-2-prelude.png`（保留项）、`pick-3-rollback-strata.png`、`pick-4-rollback-mobile.png`（回滚确认）、`beidou-final.png`（3D 精进）。
+* 数量口径、色板、纯光影定稿、动效降级、WebGL 兜底、每页首屏不同均未变化；未复活 `PageHero`，未换风格。

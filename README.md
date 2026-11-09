@@ -58,11 +58,11 @@ npm run build     # 生产构建，输出到 dist/
 npm run preview   # 预览构建产物
 npm run art       # 重新生成 public/art/ 下 10 张程序化 SVG 图版
 npm run font      # 重新生成全站中文衬线精简分片（需联网，字体为 OFL 授权）
-npm run audit     # 一键跑 11 个探针（需先启动 preview 服务）
+npm run audit     # 一键跑 12 个探针（需先启动 preview 服务）
 npm run snapshot  # 把源码与文档快照到 .workbuddy/backup/
 ```
 
-`npm run audit` 的前置：另开终端执行 `npm run preview -- --host 127.0.0.1 --port 4173`。它会依次跑对比度、移动端触控、死链、低对比定位、交互、第十九轮回归、可访问性、第四个科普实验、实验一、稻作实验与原生 View Transitions 共 11 个探针，汇总结果写入 `.workbuddy/audit/latest.log`。探针脚本在 `.workbuddy/tools/`，新增页面时记得把路径补进前四个脚本的 `paths`。
+`npm run audit` 的前置：另开终端执行 `npm run preview -- --host 127.0.0.1 --port 4173`。它会依次跑对比度、移动端触控、死链、低对比定位、交互、第十九轮回归、可访问性、第四个科普实验、实验一、稻作实验、北斗实验与原生 View Transitions 共 12 个探针，汇总结果写入 `.workbuddy/audit/latest.log`。探针脚本在 `.workbuddy/tools/`，新增页面时记得把路径补进前四个脚本的 `paths`。
 
 中文标题使用自托管的 **Noto Serif SC** 精简子集（SIL OFL 1.1，1636 个全站用字分 6 个 woff2 分片，合计 336 KB，见 `src/fonts.css` 与 `scripts/fetch_font.py`）。正文仍走系统字体栈，字体只作用于 `.display-*` / `.font-editorial` / `.watermark`。更换用字后需重跑 `npm run font`。
 

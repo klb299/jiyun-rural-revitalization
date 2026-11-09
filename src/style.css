@@ -578,24 +578,6 @@ html.vt-active .reveal {
 ::-webkit-scrollbar-thumb { background: #D5CFC4; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent-gold); }
 
-/* 3D 展柜突破层：独立层叠上下文，让溢出展签不与导航抢层级 */
-.stage-breakout { isolation: isolate; }
-
-/* 竖屏首屏单独构图：图版在前、标题在后，金圆退成上方背景不压字 */
-@media (max-width: 1023px) {
-  .hero-seed {
-    right: -20%;
-    top: -10%;
-    width: 70vw;
-    height: 70vw;
-    min-width: 0;
-    min-height: 0;
-    opacity: 0.92;
-  }
-  .hero-seed .hero-core { opacity: 0.5; }
-  .hero-plate-mobile .hero-plate { transform: rotate(-2deg); }
-}
-
 /* 首屏一次性入场镜头：首帧不闪现，动效降级时彻底关闭 */
 .prelude-plate { opacity: 0; visibility: hidden; }
 @media (prefers-reduced-motion: reduce) {

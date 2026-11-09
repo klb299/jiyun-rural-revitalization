@@ -639,6 +639,10 @@ export function buildBeidouScene(scene, stage) {
   pedestal(root, 3.4, -1.7)
 
   const rnd = mulberry32(7721)
+  // 四类结构各自成组，便于拾取与高亮（与其余三个科普实验一致）
+  const groups = {}
+  const keys = ['sat', 'station', 'rover', 'track']
+  let focus = 'sat'
   const soilMat = chernozemMaterial({ repeat: [7, 5], bumpScale: 0.02 })
   const furrowMat = new THREE.MeshStandardMaterial({ color: 0x2B2119, roughness: 0.98 })
   const darkMetal = metalMaterial(0x3A3833, { roughness: 0.46, metalness: 0.62 })
@@ -661,14 +665,37 @@ export function buildBeidouScene(scene, stage) {
     root.add(edge)
   }
 
+  // 地面尺度标尺：与实验一 / 稻作场景的展签语言一致
+  const rulerTex = labelTexture('0       5       10 m', {
+    width: 512, height: 96, font: '600 40px ui-monospace, monospace', color: '#F0C275'
+  })
+  const ruler = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.2, 0.34),
+    new THREE.MeshBasicMaterial({ map: rulerTex, transparent: true, depthWrite: false, toneMapped: false })
+  )
+  ruler.rotation.x = -Math.PI / 2
+  ruler.position.set(-1.75, -1.09, 1.92)
+  ruler.userData.excludeFromAO = true
+  root.add(ruler)
+  for (let i = 0; i < 3; i++) {
+    const tick = new THREE.Mesh(roundedBox(0.02, 0.012, 0.14, 0.004, 2), goldMetal)
+    tick.position.set(-2.55 + i * 0.8, -1.085, 1.92)
+    root.add(tick)
+  }
+
   // ---------- 计划路线与实际路线：一眼看懂厘米级意味着什么 ----------
+  const trackGroup = new THREE.Group()
+  trackGroup.userData.key = 'track'
+  root.add(trackGroup)
+  groups.track = trackGroup
+
   const planLine = new THREE.Mesh(
     roundedBox(0.055, 0.014, 4.15, 0.007, 2),
     new THREE.MeshBasicMaterial({ color: PALETTE.gold })
   )
   planLine.position.set(0, -1.138, 0)
   planLine.userData.excludeFromAO = true
-  root.add(planLine)
+  trackGroup.add(planLine)
 
   const actualSegs = []
   const actualMat = new THREE.MeshStandardMaterial({
@@ -679,13 +706,15 @@ export function buildBeidouScene(scene, stage) {
   for (let i = 0; i < 24; i++) {
     const seg = new THREE.Mesh(segGeo, actualMat)
     seg.position.set(0.012, -1.116, -1.98 + i * 0.172)
-    root.add(seg)
+    trackGroup.add(seg)
     actualSegs.push(seg)
   }
 
   // ---------- 农机（移动站） ----------
   const tractor = new THREE.Group()
+  tractor.userData.key = 'rover'
   tractor.position.set(0, -1.0, 0)
+  groups.rover = tractor
   const chassis = new THREE.Mesh(roundedBox(0.92, 0.16, 1.52, 0.05, 5), darkMetal)
   chassis.position.y = 0.19
   chassis.castShadow = true
@@ -724,15 +753,39 @@ export function buildBeidouScene(scene, stage) {
       hub.rotation.z = Math.PI / 2
       hub.position.set(sx * 0.625, 0.22, sz * 0.48)
       tractor.add(hub)
-      for (let k = 0; k < 10; k++) {
-        const a = (k / 10) * Math.PI * 2
+      for (let k = 0; k < 6; k++) {
+        const a = (k / 6) * Math.PI * 2
         const lug = new THREE.Mesh(roundedBox(0.19, 0.035, 0.055, 0.01, 2), tireMat)
         lug.position.set(sx * 0.53, 0.22 + Math.cos(a) * 0.225, sz * 0.48 + Math.sin(a) * 0.225)
         lug.rotation.x = a
         tractor.add(lug)
       }
+      const rim = new THREE.Mesh(new THREE.TorusGeometry(0.19, 0.012, 8, 24), hubMat)
+      rim.rotation.y = Math.PI / 2
+      rim.position.set(sx * 0.625, 0.22, sz * 0.48)
+      tractor.add(rim)
     }
   }
+  // 收敛后的农机细节：格栅竖条、排气立管、驾驶舱 A 柱、天线底座分件
+  // 次要结构一律压暗，避免盖住红色机罩与金色 RTK 天线这两个主结构
+  const darkTrim = new THREE.MeshStandardMaterial({ color: 0x2A2622, roughness: 0.9 })
+  for (let i = 0; i < 5; i++) {
+    const bar = new THREE.Mesh(roundedBox(0.028, 0.2, 0.02, 0.006, 2), darkTrim)
+    bar.position.set(-0.2 + i * 0.1, 0.4, 0.782)
+    tractor.add(bar)
+  }
+  const exhaust = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.028, 0.42, 12), darkTrim)
+  exhaust.position.set(0.31, 0.72, 0.22)
+  tractor.add(exhaust)
+  for (const sx of [-1, 1]) {
+    const pillar = new THREE.Mesh(roundedBox(0.035, 0.5, 0.035, 0.008, 2), darkTrim)
+    pillar.position.set(sx * 0.4, 0.76, -0.3)
+    tractor.add(pillar)
+  }
+  const antennaBase = new THREE.Mesh(bevelCylinder(0.09, 0.05, { bevel: 0.012, segments: 24 }), darkTrim)
+  antennaBase.position.set(0, 1.1, -0.3)
+  tractor.add(antennaBase)
+
   // 播种机具：说明这条轨迹对应的是真实农活
   const seeder = new THREE.Mesh(roundedBox(1.12, 0.1, 0.3, 0.03, 3), darkMetal)
   seeder.position.set(0, 0.16, -0.98)
@@ -759,7 +812,9 @@ export function buildBeidouScene(scene, stage) {
 
   // ---------- 田边基准站：RTK 的关键第三方 ----------
   const station = new THREE.Group()
+  station.userData.key = 'station'
   station.position.set(-2.42, -1.16, 1.3)
+  groups.station = station
   const plinth = new THREE.Mesh(
     bevelCylinder(0.34, 0.09, { bevel: 0.02, segments: 40 }),
     gravelMaterial({ repeat: [2, 2], bumpScale: 0.01 })
@@ -780,6 +835,11 @@ export function buildBeidouScene(scene, stage) {
   box.position.y = 0.72
   box.castShadow = true
   station.add(box)
+  for (let i = 0; i < 3; i++) {
+    const slot = new THREE.Mesh(roundedBox(0.2, 0.012, 0.012, 0.004, 2), darkTrim)
+    slot.position.set(0, 0.66 + i * 0.05, 0.125)
+    station.add(slot)
+  }
   const beacon = new THREE.Mesh(new THREE.SphereGeometry(0.085, 20, 14), goldMetal)
   beacon.position.y = 0.95
   station.add(beacon)
@@ -843,6 +903,10 @@ export function buildBeidouScene(scene, stage) {
   const satPulses = []
   const satRoot = new THREE.Group()
   root.add(satRoot)
+  const satGroup = new THREE.Group()
+  satGroup.userData.key = 'sat'
+  satRoot.add(satGroup)
+  groups.sat = satGroup
   const maxSats = 6
   const panelMat = lacquerMaterial(0x2C3C46, { roughness: 0.24, metalness: 0.5, clearcoat: 0.9 })
   const shellMat = porcelainMaterial({ repeat: [1, 1], roughness: 0.32 })
@@ -858,6 +922,10 @@ export function buildBeidouScene(scene, stage) {
       panel.position.x = s * 0.41
       panel.rotation.z = s * 0.12
       g.add(panel)
+      const panelEdge = new THREE.Mesh(roundedBox(0.46, 0.008, 0.014, 0.003, 2), goldMetal)
+      panelEdge.position.set(s * 0.41, 0.022, 0.115)
+      panelEdge.rotation.z = s * 0.12
+      g.add(panelEdge)
       for (let k = -1; k <= 1; k++) {
         const grid = new THREE.Mesh(roundedBox(0.012, 0.006, 0.22, 0.003, 2), goldMetal)
         grid.position.set(s * 0.41 + k * 0.11, 0.017, 0)
@@ -869,7 +937,7 @@ export function buildBeidouScene(scene, stage) {
     dish.position.y = 0.17
     g.add(dish)
     g.rotation.set(0.1 * (i % 2 ? 1 : -1), i * 0.4, 0.06)
-    satRoot.add(g)
+    satGroup.add(g)
 
     const mkLine = (opacity) => {
       const geo = new THREE.BufferGeometry()
@@ -948,7 +1016,7 @@ export function buildBeidouScene(scene, stage) {
     const sp = new THREE.Sprite(new THREE.SpriteMaterial({
       map: tex, transparent: true, depthWrite: false, toneMapped: false
     }))
-    sp.scale.set(1.28, 0.32, 1)
+    sp.scale.set(1.45, 0.36, 1)
     sp.userData.excludeFromAO = true
     root.add(sp)
     return sp
@@ -959,7 +1027,7 @@ export function buildBeidouScene(scene, stage) {
   labelTractor.position.set(0.12, 0.92, -0.3)
   const labelFix = makeLabel('改正数', 'CORRECTION')
   labelFix.position.set(-1.18, 0.84, 0.72)
-  labelFix.scale.set(0.92, 0.23, 1)
+  labelFix.scale.set(1.02, 0.26, 1)
   const labelSats = makeLabel('北斗卫星', 'BEIDOU')
   labelSats.position.set(1.7, 2.5, -1.1)
 
@@ -1024,13 +1092,22 @@ export function buildBeidouScene(scene, stage) {
   }
   layout()
 
+  function applyFocus(next) {
+    if (!next || !groups[next]) return
+    if (groups[focus]) clearHighlight(groups[focus])
+    focus = next
+    highlight(groups[focus], { intensity: 0.1 })
+  }
+  applyFocus('sat')
+
   stage.addContactShadow({ size: 8, opacity: 0.38, position: [0, -1.5, 0], parent: root })
 
   return {
     root,
-    pickTargets: [],
+    pickTargets: keys.map((k) => groups[k]),
     setParam(p) {
       if (!p) return
+      if (p.focus) applyFocus(p.focus)
       if (p.sats !== undefined) satCount = Math.max(3, Math.min(6, Number(p.sats)))
       if (p.blocked !== undefined) blocked = !!p.blocked
       layout()

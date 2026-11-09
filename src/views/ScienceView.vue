@@ -92,6 +92,13 @@ const riceStructures = [
   { key: 'canal', no: '04', name: '灌渠与水位标尺', en: 'IRRIGATION', desc: '侧向灌渠与闸门控制进排水，0 / 5 / 15 cm 刻度对应不同生育期的适宜水层。' }
 ]
 
+const beidouStructures = [
+  { key: 'sat', no: '01', name: '北斗卫星', en: 'BEIDOU SATELLITES', desc: '六颗卫星按可见数量增减，双频太阳能板与碟形天线分件建模。淡金细线把同一份信号同时送给农机与基准站。' },
+  { key: 'station', no: '02', name: '地面基准站', en: 'REFERENCE STATION', desc: '位置早就测准的三脚架机箱，也收同样的卫星信号，一对照就知道信号偏了多少，再把改正数发回农机。' },
+  { key: 'rover', no: '03', name: '农机移动站', en: 'ROVER', desc: '红色机罩、玻璃驾驶舱、金色 RTK 蘑菇头与后挂播种机具。收到改正数才能把作业压在同一条垄线上。' },
+  { key: 'track', no: '04', name: '作业轨迹', en: 'WORKING TRACK', desc: '金色计划线笔直，实际线正常时贴合、遮挡时跑偏成红色锯齿。一眼看懂 2.5 厘米在田里意味着什么。' }
+]
+
 const ricePhases = [
   { no: 0, name: '育秧', time: '4 月下旬 – 5 月中', en: 'SEEDLING', desc: '温室浸种催芽，秧床保持浅水层。株高只有十几厘米，根系先在黑土表层铺开。', metric: '株高 12–18 cm' },
   { no: 1, name: '分蘖', time: '5 月下 – 6 月', en: 'TILLERING', desc: '稻株从基部分出侧茎，田间进入旺盛营养生长。浅水勤灌促使根系向深层黑土下扎。', metric: '单株 8–15 个分蘖' },
@@ -103,6 +110,7 @@ const ricePhases = [
 const soilFocus = ref('crumb')
 const riceStage = ref(0)
 const riceFocus = ref('plant')
+const beidouFocus = ref('sat')
 const satCount = ref(4)
 const blocked = ref(false)
 const coverage = ref(60)
@@ -121,7 +129,7 @@ const param = computed(() => {
       rain: rainLevel.value, part: partFocus.value
     }
   }
-  return { sats: satCount.value, blocked: blocked.value }
+  return { sats: satCount.value, blocked: blocked.value, focus: beidouFocus.value }
 })
 
 const activeSoil = computed(() => soils.find((s) => s.key === soilFocus.value) || soils[0])
@@ -141,12 +149,14 @@ const coverReadout = computed(() => {
 })
 const activePhase = computed(() => ricePhases[riceStage.value])
 const activeRice = computed(() => riceStructures.find((s) => s.key === riceFocus.value) || riceStructures[0])
+const activeBeidou = computed(() => beidouStructures.find((s) => s.key === beidouFocus.value) || beidouStructures[0])
 const hoverName = computed(() => {
   const k = hoverKey.value
   if (!k) return ''
   if (activeMode.value === 'soil') return soils.find((s) => s.key === k)?.name || ''
   if (activeMode.value === 'rice') return riceStructures.find((s) => s.key === k)?.name || ''
   if (activeMode.value === 'notill') return notillStructures.find((s) => s.key === k)?.name || ''
+  if (activeMode.value === 'beidou') return beidouStructures.find((s) => s.key === k)?.name || ''
   return ''
 })
 const accuracy = computed(() => {
@@ -188,12 +198,14 @@ const onSelect = (key) => {
   if (activeMode.value === 'soil') soilFocus.value = key
   else if (activeMode.value === 'notill') notillFocus.value = key
   else if (activeMode.value === 'rice') riceFocus.value = key
+  else if (activeMode.value === 'beidou') beidouFocus.value = key
 }
 
 const resetLab = () => {
   soilFocus.value = 'crumb'
   riceStage.value = 0
   riceFocus.value = 'plant'
+  beidouFocus.value = 'sat'
   satCount.value = 4
   blocked.value = false
   coverage.value = 60
@@ -471,6 +483,24 @@ const resetLab = () => {
                   </p>
                   <div class="mt-4 pt-3 border-t border-[#1C1B18]/8 font-mono text-[9px] leading-[1.8] text-[#6E6960]">
                     术语：RTK 即实时动态载波相位差分，基准站与移动站对 B1/B2 双频观测值做差分。
+                  </div>
+                </div>
+              </Reveal>
+
+              <!-- 四类可点结构：与其余三个科普实验一致 -->
+              <Reveal :delay="240">
+                <div class="card-linen p-6 sm:p-7">
+                  <div class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960] mb-4">SELECT A STRUCTURE / 点击模型或下方结构</div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button v-for="s in beidouStructures" :key="s.key" @click="beidouFocus = s.key"
+                      class="px-3 py-3 min-h-[40px] rounded-xl text-xs font-bold text-left transition-all duration-400 cursor-pointer"
+                      :class="beidouFocus === s.key ? 'bg-[#1C1B18] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E] hover:bg-[#C88A32]/20'">
+                      <span class="font-mono text-[9px] tracking-[0.16em] opacity-60 block mb-1">{{ s.no }}</span>{{ s.name }}
+                    </button>
+                  </div>
+                  <div class="mt-5 pt-4 border-t border-[#1C1B18]/10">
+                    <div class="font-mono text-[9px] tracking-[0.2em] text-[#8A6324] mb-2">{{ activeBeidou.en }}</div>
+                    <p class="text-[12px] leading-[1.9] text-[#5A564E]">{{ activeBeidou.desc }}</p>
                   </div>
                 </div>
               </Reveal>

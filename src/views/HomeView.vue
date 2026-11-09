@@ -210,20 +210,19 @@ onUnmounted(() => endPrelude())
             </Reveal>
           </div>
 
-          <!-- Z 轴层叠图版：竖屏时提到标题之前，先给场景再落字 -->
-          <div class="hero-plate-mobile lg:col-span-5 relative order-first lg:order-none" data-parallax="-8">
+          <!-- Z 轴层叠图版 -->
+          <div class="lg:col-span-5 relative hidden lg:block" data-parallax="-8">
             <div class="bezel z-card hero-plate">
               <div class="bezel-core">
-                <img src="/art/diorama.svg" alt="松辽平原田块俯视图版" class="w-full aspect-[16/10] lg:aspect-[4/5] object-cover" />
+                <img src="/art/diorama.svg" alt="松辽平原田块俯视图版" class="w-full aspect-[4/5] object-cover" />
               </div>
             </div>
-            <div class="card-ink z-card absolute -bottom-10 -left-14 w-64 p-6 hidden lg:block" style="transform: rotate(5deg)">
+            <div class="card-ink z-card absolute -bottom-10 -left-14 w-64 p-6" style="transform: rotate(5deg)">
               <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-3">FIELD NOTE / 001</div>
               <div class="font-editorial text-4xl font-bold leading-none">200<span class="text-lg ml-1">年</span></div>
               <p class="text-[12px] leading-relaxed text-[#F7F4EE]/90 mt-3">形成一厘米黑土所需的时间。整座展馆，从这一个数字开始。</p>
             </div>
-            <div class="absolute -top-4 -right-2 lg:-top-5 lg:-right-3 z-20 px-3 py-2 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[10px] font-bold tracking-[0.16em] shadow-lg">PLATE 00</div>
-            <div class="lg:hidden absolute -bottom-5 left-3 font-mono text-[9px] tracking-[0.18em] text-[#8A6324]">下滑进入展馆 · FIELD PLATE / 松辽平原</div>
+            <div class="absolute -top-5 -right-3 z-20 px-3 py-2 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[10px] font-bold tracking-[0.16em] shadow-lg">PLATE 00</div>
           </div>
         </div>
 
