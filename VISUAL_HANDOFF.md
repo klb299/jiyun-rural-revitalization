@@ -637,3 +637,11 @@ playwright-cli console 2>&1 | grep -E "Total messages|\[ERROR\]|\[WARNING\]"
 `npm run build` 零警告；`npm run audit` 7/7 全绿；**对比度探针从 19 项降到 0 项**（浅底金大字达标、深底保持原金）；移动端 `[]` 零溢出；10 张 SVG XML 合法；工作树干净。
 
 > **当前基线已变化**：截至 11-09 15:32 是 11 个探针 / 11/11、`c632e0d`、源码 16533 行。以 `NEXT_PHASE.md` 第 3 节为准，本节及第 13 节的 7/7 均为当时记录。
+
+## 15. 全站联动层（2026-11-12）
+
+* `src/data/exhibitTrail.js` 是 13 个展陈单元顺序与振兴归属的**单一数据源**，`src/components/TrailNav.vue` 是唯一渲染「动线索引条」的全局组件，在 `App.vue` 的 `<main>` 内、router-view 之后挂载。新增单元时在动线表与 `ExhibitMapView.vue` 的 segments 各补一行，编号必须一致。
+* 索引条是**墨色薄带**，与页脚同色贴在页脚上沿。不要用浅色卡片：实拍会夹在墨色收束区与墨色页脚之间形成白条。
+* 措辞必须用「索引 · 前一段 / 后一段」并标注「按展览地图编号」。多数页面自带 NEXT CHAPTER 叙事卡，两者语义不同，用「下一站」会与页内叙事互相矛盾。
+* 视角状态在 `appStore.lensMode`（sessionStorage 只存枚举），方向在 `appStore.trailDirection`，由 `App.vue` 的 `clearTrail()` 在转场结束后清空。`main` 上的 `data-trail` 供观测。
+* 动效清单：`.trail-nav__line` 金色细线 scaleX 横扫、`.trail-item` 按 `--trail-i` 错峰 70ms、`.trail-edge` hover scaleX 生长、`Transition name="trail"` 独立 out-in、`route-enter-from--back` 左侧滑入。全部有 reduced-motion 降级。

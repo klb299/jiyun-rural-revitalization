@@ -611,3 +611,40 @@ html.vt-active .reveal {
 @media (max-width: 640px) {
   .lens-title { font-size: 7.4vw; letter-spacing: -0.04em; }
 }
+
+/* ------------------------------------------------------------------ *
+ * 全站动线续接：金色细线扫过、条目错峰、前后翻页方向感、独立转场
+ * 只走 opacity / transform；fill-mode backwards 保证 hover 不受影响
+ * ------------------------------------------------------------------ */
+.trail-nav__line { transform-origin: left; animation: trailLine 1s var(--ease-luxe) backwards; }
+@keyframes trailLine {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 1; }
+}
+
+.trail-nav .trail-item {
+  animation: trailItemIn 0.56s var(--ease-luxe) backwards;
+  animation-delay: calc(var(--trail-i, 0) * 70ms);
+}
+@keyframes trailItemIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+.group:hover .trail-edge { transform: scaleX(1); }
+
+.trail-enter-active { transition: opacity 0.4s var(--ease-luxe), transform 0.4s var(--ease-luxe); }
+.trail-leave-active { transition: opacity 0.18s ease; }
+.trail-enter-from { opacity: 0; transform: translateY(12px); }
+.trail-leave-to { opacity: 0; }
+
+/* 沿动线往回走，新页从左侧滑入；向前走沿用默认的自下而上 */
+.route-enter-from.route-enter-from--back { transform: translateY(22px) translateX(-26px); }
+.route-leave-to.route-leave-to--back { transform: translateY(-8px) translateX(26px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .trail-nav__line, .trail-nav .trail-item { animation: none !important; }
+  .trail-edge { transition: none !important; }
+  .trail-enter-active, .trail-leave-active { transition: none !important; }
+  .trail-enter-from, .trail-leave-to { opacity: 1 !important; transform: none !important; }
+  .route-enter-from, .route-leave-to { opacity: 1 !important; transform: none !important; filter: none !important; }
+}

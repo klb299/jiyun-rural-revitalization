@@ -7,10 +7,25 @@ import { ArrowUp } from 'lucide-vue-next'
 import AppNavbar from './components/AppNavbar.vue'
 import AppFooter from './components/AppFooter.vue'
 import CustomCursor from './components/CustomCursor.vue'
+import TrailNav from './components/TrailNav.vue'
+import { useAppStore } from './stores/appStore'
+import { unitOf } from './data/exhibitTrail'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const route = useRoute()
+const appStore = useAppStore()
+
+// 13 个展陈单元页才出现动线续接带；序厅、地图、白皮书、后台与 404 不显示。
+const isTrailPage = computed(() => !!unitOf(route.path))
+
+// 沿动线往回走时，新页从左侧轻微滑入，与「向前推进」的默认转场区分开。
+const enterFromClass = computed(() =>
+  appStore.trailDirection === 'back' ? 'route-enter-from route-enter-from--back' : 'route-enter-from'
+)
+const leaveToClass = computed(() =>
+  appStore.trailDirection === 'back' ? 'route-leave-to route-leave-to--back' : 'route-leave-to'
+)
 
 // 逐字节奏按页面气质分档，避免所有页面共用一套入场（见 VISUAL_HANDOFF P1-1）。
 // fast：3D 三页把注意力让给场景；reverse：助农三页数据先到、标题后到；
@@ -56,6 +71,12 @@ const onResize = () => {
 }
 
 const toTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
+
+// 转场结束再清空方向，之后的普通跳转回到默认过渡
+const onRouteEntered = () => {
+  scheduleMotion(60)
+  appStore.clearTrail()
+}
 
 /** 滚动编排：视差、遮罩揭示、错峰入场、层叠卡深度 */
 function initMotion() {
@@ -136,19 +157,24 @@ onUnmounted(() => {
 
     <AppNavbar />
 
-    <main id="main-content" class="flex-grow" :data-motion="motionMode" tabindex="-1">
+    <main id="main-content" class="flex-grow" :data-motion="motionMode" :data-trail="appStore.trailDirection || ''" tabindex="-1">
       <router-view v-slot="{ Component }">
         <transition
           enter-active-class="route-enter-active"
-          enter-from-class="route-enter-from"
+          :enter-from-class="enterFromClass"
           leave-active-class="route-leave-active"
-          leave-to-class="route-leave-to"
+          :leave-to-class="leaveToClass"
           mode="out-in"
-          @after-enter="scheduleMotion(60)"
+          @after-enter="onRouteEntered"
         >
           <component :is="Component" :key="route.fullPath" />
         </transition>
       </router-view>
+
+      <!-- 全局动线续接：一处覆盖 13 个展陈单元页，与页面各自完成同节奏转场 -->
+      <Transition name="trail" mode="out-in">
+        <TrailNav v-if="isTrailPage" :key="route.fullPath" />
+      </Transition>
     </main>
 
     <!-- 后台是独立控制台：AdminView 用低于悬浮导航的层级铺满视口，

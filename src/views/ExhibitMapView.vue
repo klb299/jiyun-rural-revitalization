@@ -7,7 +7,8 @@
  * 六段分组与先后顺序是策展编排，不是地理方位。
  * 数量表述只写页面里真实可数的单元数：十三个展陈单元、六段尺度。
  */
-import { ref } from 'vue'
+import { computed } from 'vue'
+import { useAppStore } from '../stores/appStore'
 import Reveal from '../components/editorial/Reveal.vue'
 import FigurePlate from '../components/editorial/FigurePlate.vue'
 import { ArrowUpRight, ArrowRight } from 'lucide-vue-next'
@@ -116,7 +117,12 @@ const revitalizations = [
   }
 ]
 const unitsOf = (pillar) => allUnits.filter((u) => pillar.nos.includes(u.no))
-const viewMode = ref('scale')
+
+// 视角写进全局 store：从五大振兴视角点进任一单元，那间展厅与动线续接条
+// 会继续沿用同一把尺子，回到地图也保持，不会每次都重置成按尺度看。
+const appStore = useAppStore()
+const viewMode = computed(() => appStore.lensMode)
+const setView = (id) => appStore.setLens(id)
 </script>
 
 <template>
@@ -239,7 +245,7 @@ const viewMode = ref('scale')
               <button v-for="opt in [
                 { id: 'scale', label: '按尺度看' },
                 { id: 'revital', label: '按五大振兴看' }
-              ]" :key="opt.id" @click="viewMode = opt.id"
+              ]" :key="opt.id" @click="setView(opt.id)"
                 class="w-[124px] sm:w-[152px] py-2.5 rounded-full text-[11px] sm:text-xs font-bold tracking-[0.08em] transition-all duration-500 cursor-pointer"
                 :class="viewMode === opt.id
                   ? 'bg-[#C88A32] text-[#1C1B18] shadow-[inset_0_1px_0_rgba(255,255,255,.38)]'

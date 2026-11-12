@@ -1049,3 +1049,38 @@ Awwwards 2026 与 GSAP 案例的共同手法：单一被坚持的编辑方向、
 * 专项实测：切换器选中态 `rgb(200,138,50)`，两视图 6 卡 / 5 列互切正常，振兴视图 **13 个单元链接**齐全，「本展馆未展开」存在；320 / 390 / 430 三档零横向溢出且切换器可见；移动端标题 1 行；reduced-motion 下切换后仍为 5 列。
 * 截图：`.workbuddy/shots/deliver-lens-scale.png`、`deliver-lens-revital.png`、`deliver-lens-mobile.png`、`final-lastmile-gaps2.png`、`final-science-note.png`。
 * 数量口径 18 路由 / 13 展陈单元 / 10 专题 / 1 展览地图 / 4 科普实验未变；色板、纯光影定稿、动效降级、WebGL 兜底、每页首屏不同、不换风格等硬约束均未违反。
+
+## 🔗 二十七、2026-11-12 全站联动层：一条贯穿 13 页的策展线索
+
+用户要求「不增加页面数量，强化各页面与模块之间的联动性，整体契合主题，动效高级流畅」。
+
+### 1. 诊断
+
+* 各页「NEXT CHAPTER」是**手写死文案**，只有 5 页有，助农三页、痛点页、地图页、科普页、物产页没有统一续接。
+* 全局路由转场只有基础淡入淡出，沿动线前进与返回没有方向区分。
+* 上一轮做的「五大振兴视角」只活在 `/exhibit-map`，离开地图就丢，主题框架没有贯穿全站。
+
+### 2. 实现（全部在现有页面之上，不新增任何路由）
+
+| 落点 | 内容 |
+| --- | --- |
+| `src/data/exhibitTrail.js` | 13 个展陈单元的**单一动线表**：编号、路由、名称、尺度段、振兴归属、一句话；导出 `unitOf / indexOfPath / prevOf / nextOf`。首尾以序厅与展览地图作边界，形成闭环。与 `ExhibitMapView.vue` 的 segments 通过编号关联，新增单元两处同步 |
+| `src/stores/appStore.js` | 加 `lensMode`（scale / revital，用 sessionStorage 只存一个枚举，刷新后仍沿用同一把尺子）与 `trailDirection`（forward / back），配 `setLens / markTrail / clearTrail` |
+| `ExhibitMapView.vue` | `viewMode` 从组件内 ref 改为读写全局 store，五大振兴选择可贯穿到每个单元页 |
+| `src/components/TrailNav.vue` | 全局动线索引条，**一处覆盖 13 个展陈单元页**；序厅 / 地图 / 白皮书 / 后台 / 404 不显示。五大振兴视角下中间栏显示当前单元所属振兴与编号，并给「回到展览地图，保持此视角」 |
+| `src/App.vue` | 渲染 TrailNav 并独立过渡；按 `trailDirection` 选择 `route-enter-from--back`，往回走时新页从左侧滑入，转场结束清除方向；`main` 加 `data-trail` 便于观测 |
+| `src/style.css` | 金色细线横扫（`scaleX`）、条目 70ms 错峰、hover 金色边线生长、TrailNav 独立 `out-in` 过渡、方向位移；全部只走 opacity / transform，reduced-motion 全禁用 |
+
+### 3. 两处实机自查后的关键修正
+
+1. **浅色双卡 → 墨色薄带**：初版是浅底双卡，实拍发现它夹在墨色 NEXT CHAPTER 收束区与墨色页脚之间，像一条突兀白条，割裂整体节奏。改成与页脚同色的极薄三栏索引条，贴在页脚上沿，视觉连成一体。
+2. **「下一站」→「索引 · 前一段 / 后一段」**：页内叙事卡写「下一章走进查干湖」，而编号索引的下一段是二十四节气，两个「下一站」互相打架。改用索引措辞并标注「按展览地图编号」，明确它是索引导航而非叙事推荐，两者不再冲突。
+
+另修正方向转场时序：RouterLink 内部导航可能抢在方向标记之前执行，改成先 `markTrail` 再 `router.push`（保留 href 语义），实测转场期间 `route-enter-from--back` 类正确生效、`data-trail` 在转场结束后清空。
+
+### 4. 验证
+
+* `npm run build` 零 Error 零 Warning；`npm run audit` **12/12 全绿**：对比度仍只剩 `/machinery-3d` 4 项已登记假阳性、移动端 `[]`、死链 0、VT 正常；控制台 0 Error / 0 Warning。
+* 专项实测：13 单元页 TrailNav 全在（抽查 6 页），4 个非单元页全不在；从五大振兴视角点进 `/aid-projects` 显示「组织振兴 · 10 / 13」；刷新后地图仍保持振兴视角（`rgb(200,138,50)`）；点击前一段后 `data-trail="back"` 且 back 转场类出现、转场结束清空；320 / 390 / 430 三档零横向溢出。
+* 截图：`.workbuddy/shots/trail-ink-journey.png`、`trail-ink-mobile.png`、`trail-lens-on-unit.png`、`trail-view-strata.png`。
+* 数量口径 18 路由 / 13 展陈单元 / 10 专题 / 1 展览地图 / 4 科普实验未变；色板、纯光影定稿、动效降级、WebGL 兜底、每页首屏不同、不换风格均未违反；**没有扩展 View Transitions 使用范围**（挂起 A 仍未定稿）。
