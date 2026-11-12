@@ -12,13 +12,20 @@ async page => {
   out.supported = await page.evaluate(() => typeof document.startViewTransition === 'function')
   await page.evaluate(() => {
     window.__vtCount = 0
+    window.__vtPreludeAtStart = null
     const orig = document.startViewTransition.bind(document)
-    document.startViewTransition = (cb) => { window.__vtCount++; return orig(cb) }
+    document.startViewTransition = (cb) => {
+      window.__vtCount++
+      // 定稿回归：VT 截旧快照时入场遮罩必须已经从 DOM 移除
+      window.__vtPreludeAtStart = !!document.querySelector('.hero-prelude')
+      return orig(cb)
+    }
   })
 
   await page.getByRole('link', { name: /从一米黑土开始/ }).first().click()
   await page.waitForTimeout(160)
   out.vtActiveMid = await page.evaluate(() => document.documentElement.classList.contains('vt-active'))
+  out.preludeAtVT = await page.evaluate(() => window.__vtPreludeAtStart)
   await page.screenshot({ path: shot + 'vt-mid.png' })
   await page.waitForTimeout(1400)
   out.url = new URL(page.url()).pathname

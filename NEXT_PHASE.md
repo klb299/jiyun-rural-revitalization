@@ -31,7 +31,7 @@
 | 第 4 实验精修 | 18 件 / 13 组开沟总成可拆解、剖面分层与深度标尺、溅蚀与沿孔隙下渗、降雨双参数 | `7071f80` `42bcb60` |
 | 实验一补齐 | 三层分带、贯通蚯蚓通道、菌丝分叉网络、结核同心层理 | `16bec44` |
 | 自查 + 稻作重建 | 稻作场景 119→247 行、四类可点结构；三探针 `paths` 扩到 17 路由，修 6 类触控目标与 1 处金色对比 | `b5062a2` |
-| 备份 + VT 样张 | 见下方挂起 A | `c632e0d` |
+| 备份 + VT 样张 | 见下方定稿 A | `c632e0d` |
 | 收编交接指针 | 单一执行依据、作废 B+C 阶段路线 | `a419a7c` |
 | 三处视觉精进 | 首页入场镜头 + 中文衬线 + 3D 突破展框 + 竖屏重做 | `6439ed6`（后两处已回滚，见下方状态段） |
 | 三选一 + 备份回滚 | 只保留首页方向，另两处入 tag 与 zip 后撤销 | 见 `PROJECT_HANDOVER.md` 第二十五节 |
@@ -53,14 +53,20 @@
 
 **11-12 19:00 最新状态（接手以本段为准）**：新增**全站联动层**，不新增任何路由。`src/data/exhibitTrail.js` 单一动线表驱动全局 `TrailNav.vue` 索引条（一处覆盖 13 个展陈单元页，非单元页不显示）；`appStore` 的 `lensMode` 用 sessionStorage 保持五大振兴视角，从地图点进任一单元后该页索引条显示所属振兴与编号；`trailDirection` 让往回走时新页从左侧滑入，转场结束自动清除。索引条改为墨色薄带、措辞用「索引 · 前一段 / 后一段」，避免与页内 NEXT CHAPTER 叙事冲突。`npm run audit` 12/12 全绿、对比度仍只剩 machinery 4 项假阳性、320/390/430 零溢出。详见 `PROJECT_HANDOVER.md` 第二十七节与 `VISUAL_HANDOFF.md` 第 15 节。
 
-**挂起 A 仍有效**：本轮没有扩展 View Transitions 的使用范围，首页入场 + VT 叠加观感仍需用户在真实浏览器点一次 CTA 确认。
+**定稿 A 已处理（11-12 19:50）**：入场时长与 VT 叠加已拍板落地，不再等用户确认。本轮仍未扩展 View Transitions 的使用范围，只保持首页两个 CTA → 3D 展厅这一处。
 
-### 挂起 A：View Transitions 观感**未定稿**，等用户确认
+### 定稿 A：入场时长与 VT 叠加（2026-11-12 19:50）
 
-- 改动前已打包备份：`.workbuddy/backup/backup-20261109-142448.zip`（137 文件 / 1.30 MB，CRC OK）。
-- 只在首页两个 CTA → 3D 展厅启用原生 View Transitions；配色 / 字体 / 布局**一律未动**（「保持原样」结论仍有效，这不是换风格）。
-- **headless 浏览器不渲染 `::view-transition` 伪元素，中间态截图呈白屏**。已用 `getAnimations()` / DOM 内容 / `audit-vt.js` 确认实现正确、控制台零错误，但动画好不好看必须由用户在真实浏览器点一次「从一米黑土开始」判断。**别拿白屏截图下结论，也别当已定稿继续扩展。**
-- 用户若不满意就还原：删 `src/lib/viewTransition.js` + `src/style.css` 的 View Transitions 段 + `HomeView.vue` / `SoilStrataView.vue` 的 `hero-seed` class 与 click 包装，或解压备份覆盖。
+**两个决定**
+
+1. 入场镜头 **6.4 秒 → 3.36 秒**。评委前三秒决定印象，6.4 秒遮罩会让人以为页面没加载完；三幕保留但压缩到 0.5–0.64 秒，并改成**顺序切镜**（上一幕淡出完才淡入下一幕）。压缩版若让两幕重叠，luminosity 混合会把两张图版叠在一起、中间露出拼接线，实拍 1.2 秒处确认过这个瑕疵，改顺序后两张中间态都只剩单一图版。
+2. **点 CTA 时先结束入场再启动 VT**。原来遮罩 `pointer-events: none`，播放中点击 CTA 会穿透触发 View Transitions，旧快照会带着半透明图版一起 morph 到 3D 页，中间态必然脏。`HomeView.vue` 的 `enterGallery` 改为先 `endPrelude()` → `await nextTick()` → 再 `navigateWithViewTransition()`，保证 VT 截旧快照时遮罩已从 DOM 移除。
+
+**依据边界（别误读）**：headless 仍然不渲染 `::view-transition` 伪元素，这里定的是「时长」与「唯一会导致脏画面的机制性因素」，不是亲眼看过真机 VT 动画。配色、字体、布局一律未动，这不是换风格。
+
+**回归断言**：`audit-vt.js` 新增 `preludeAtVT`，在 `startViewTransition` 被包装调用瞬间记录 `.hero-prelude` 是否存在，必须为 `false`；实测 12/12 全绿、`preludeAtVT: false`、控制台零错误。
+
+**还原方式**：删 `src/lib/viewTransition.js` + `src/style.css` 的 View Transitions 段 + `HomeView.vue` / `SoilStrataView.vue` 的 `hero-seed` class 与 click 包装；或解压 `.workbuddy/backup/backup-20261109-142448.zip`（137 文件 / 1.30 MB，CRC OK）覆盖。要单独去掉入场镜头，删 `HomeView.vue` 的 prelude 段与 `style.css` 的 `.prelude-plate` 规则。
 
 ### 挂起 B：GitHub Pages 部署（11-08 起挂起，别重复生成凭据）
 
@@ -73,7 +79,7 @@
 
 1. **第一优先只有视觉冲击力**，火力集中在评委 / 老师真正会看的 **2–3 页**（首页 + 一个 3D 页 + 一个专题页），不要 18 页平均用力。
 2. 「不要主动改视觉」指的是 **不要换风格**（两批共 6 张样张全被否、用户决定保持原样），**不是不许提升观感**。在既有语言内加深是被鼓励的：纯光影、金色按底色分档、主线提亮加实这些已定稿做法。
-3. **挂起 A** 需要用户在真实浏览器点一次 CTA 才能定稿，确认前不要扩展 View Transitions。**挂起 B** 是交付向、按评价标准不计分，只在「要发给评委链接」时推进。
+3. **定稿 A 已销项**，不要再以「等用户点 CTA」为由停手；也不要继续扩展 View Transitions 到其他页面（保持只有首页两处）。**挂起 B** 是交付向、按评价标准不计分，只在「要发给评委链接」时推进。
 4. 真要动视觉：先请用户指认 2–3 页并给一两张具体参考，**只出一张样张**，别一次铺一堆，别贴风格标签。
 5. **明确不做**：TypeScript、后端与真鉴权、CI、单测 E2E、SVG 降采样、拆 `RuralSandbox3D.vue` / `textures.js`、iOS 真机、独立 OG 预渲染、性能数字优化、再加探针、换风格、再出风格样张。
 6. 判断任何改动值不值得做，只问一句「**这会不会更好看**」。技术深度 / 工程规范不构成理由。
@@ -236,4 +242,4 @@ npm run snapshot           # 大改前留一份快照
 3. `VISUAL_HANDOFF.md` 第 2 节（设计系统）、第 6 节（硬约束）、第 7 节（验证方法与探针）、第 8 节与 12.5 / 13.5 节（已知坑）；注意 14.5 是 11-08 快照，别当当前基线
 4. `README.md`（项目速览、数据口径、脚本、部署注意）
 5. 要动 3D 时读 `3D_HANDOFF.md`，尤其第 9～9.4 节（四个科普场景的构建记录与「别堆元素」的教训）
-6. 要还原或继续 View Transitions / 部署时，回看本文第 0 节挂起 A、挂起 B
+6. 要还原或继续 View Transitions / 部署时，回看本文第 0 节定稿 A、挂起 B

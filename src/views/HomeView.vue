@@ -12,7 +12,14 @@ import FigurePlate from '../components/editorial/FigurePlate.vue'
 import { ArrowUpRight, ArrowDown } from 'lucide-vue-next'
 
 const router = useRouter()
-const enterGallery = (to) => navigateWithViewTransition(router, to)
+// 入场没播完就点 CTA 时，先把遮罩从 DOM 移除再启动 View Transitions。
+// 否则 VT 的旧快照会带着半透明图版一起 morph 到 3D 页，中间态会脏。
+// endPrelude 定义在下方，只在点击时调用，不存在 TDZ 问题。
+const enterGallery = async (to) => {
+  endPrelude()
+  await nextTick()
+  navigateWithViewTransition(router, to)
+}
 
 const heroMeta = [
   { k: 'EXHIBITION', v: '2026 / 常设展' },
@@ -131,15 +138,18 @@ onMounted(() => {
     if (!layer) { endPrelude(); return }
     const plates = layer.querySelectorAll('.prelude-plate')
     gsap.set(plates, { autoAlpha: 0, scale: 1.55, filter: 'blur(10px)' })
+    // 定稿时长 3.36 秒：评委前三秒决定印象，6.4 秒遮罩会让人以为没加载完。
+    // 三幕改成顺序切镜（上一幕淡出完才淡入下一幕）：压缩版若让两幕重叠，
+    // luminosity 混合会把两张图版叠在一起，中间露出明显的拼接线。
     preludeTl = gsap.timeline({ onComplete: endPrelude })
     preludeTl
-      .to(plates[0], { autoAlpha: 1, scale: 1.02, filter: 'blur(0px)', duration: 1.15, ease: 'power2.out' })
-      .to(plates[0], { scale: 1.35, autoAlpha: 0, duration: 1.35, ease: 'power1.inOut' }, '+=0.45')
-      .to(plates[1], { autoAlpha: 1, scale: 0.94, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out' }, '-=0.9')
-      .to(plates[1], { scale: 0.72, autoAlpha: 0, duration: 1.25, ease: 'power1.inOut' }, '+=0.3')
-      .to(plates[2], { autoAlpha: 1, scale: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' }, '-=0.75')
-      .to(layer, { autoAlpha: 0, duration: 0.85, ease: 'power2.inOut' }, '+=0.35')
-      .to('.prelude-progress', { width: '100%', duration: 6.4, ease: 'none' }, 0)
+      .to(plates[0], { autoAlpha: 1, scale: 1.02, filter: 'blur(0px)', duration: 0.60, ease: 'power2.out' })
+      .to(plates[0], { scale: 1.35, autoAlpha: 0, duration: 0.58, ease: 'power1.inOut' })
+      .to(plates[1], { autoAlpha: 1, scale: 0.94, filter: 'blur(0px)', duration: 0.64, ease: 'power2.out' })
+      .to(plates[1], { scale: 0.72, autoAlpha: 0, duration: 0.52, ease: 'power1.inOut' })
+      .to(plates[2], { autoAlpha: 1, scale: 1, filter: 'blur(0px)', duration: 0.54, ease: 'power2.out' })
+      .to(layer, { autoAlpha: 0, duration: 0.48, ease: 'power2.inOut' })
+      .to('.prelude-progress', { width: '100%', duration: 3.36, ease: 'none' }, 0)
   })
 })
 

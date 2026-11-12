@@ -1083,4 +1083,25 @@ Awwwards 2026 与 GSAP 案例的共同手法：单一被坚持的编辑方向、
 * `npm run build` 零 Error 零 Warning；`npm run audit` **12/12 全绿**：对比度仍只剩 `/machinery-3d` 4 项已登记假阳性、移动端 `[]`、死链 0、VT 正常；控制台 0 Error / 0 Warning。
 * 专项实测：13 单元页 TrailNav 全在（抽查 6 页），4 个非单元页全不在；从五大振兴视角点进 `/aid-projects` 显示「组织振兴 · 10 / 13」；刷新后地图仍保持振兴视角（`rgb(200,138,50)`）；点击前一段后 `data-trail="back"` 且 back 转场类出现、转场结束清空；320 / 390 / 430 三档零横向溢出。
 * 截图：`.workbuddy/shots/trail-ink-journey.png`、`trail-ink-mobile.png`、`trail-lens-on-unit.png`、`trail-view-strata.png`。
-* 数量口径 18 路由 / 13 展陈单元 / 10 专题 / 1 展览地图 / 4 科普实验未变；色板、纯光影定稿、动效降级、WebGL 兜底、每页首屏不同、不换风格均未违反；**没有扩展 View Transitions 使用范围**（挂起 A 仍未定稿）。
+* 数量口径 18 路由 / 13 展陈单元 / 10 专题 / 1 展览地图 / 4 科普实验未变；色板、纯光影定稿、动效降级、WebGL 兜底、每页首屏不同、不换风格均未违反；**没有扩展 View Transitions 使用范围**（写本节时挂起 A 尚未定稿，已于第二十八节销项）。
+
+## ✅ 二十八、2026-11-12 19:50 定稿 A：入场时长与 VT 叠加销项
+
+用户要求「把入场时长和 VT 叠加的观感定了」。headless 不渲染 `::view-transition` 伪元素，所以定稿依据不是真机肉眼，而是**把唯一会导致脏画面的机制性因素消除**，并把时长按评委前三秒的判断习惯收紧。
+
+### 两个决定
+
+1. **6.4 秒 → 3.36 秒**。三幕（剖面推近 / 田野拉远 / 沙盘落定）保留，每幕压到 0.5–0.64 秒，进度条同步 3.36 秒。理由：6.4 秒遮罩会让人以为页面没加载完，而且此前专门做了「点击任意处跳过」，等于自己也不确定观众愿意等。
+2. **点击 CTA 先结束入场再启动 VT**。原遮罩 `pointer-events: none`，播放中点 CTA 会穿透触发 View Transitions，浏览器截到的旧快照含半透明图版，morph 到 3D 页必然脏。`HomeView.vue` 的 `enterGallery` 改为 `endPrelude()` → `await nextTick()` → `navigateWithViewTransition()`，确保 VT 截取旧快照时遮罩已从 DOM 移除。
+
+### 自查发现并修掉的一处
+
+压缩初版为了保住镜头感让两幕重叠 0.42–0.5 秒，实拍 1.2 秒处发现两张图版在 `mix-blend-mode: luminosity` 下叠在一起，画面中间露出一条明显拼接线。改成**顺序切镜**（上一幕淡出完才淡入下一幕）后，1.3 秒与 2.2 秒两张中间态都只剩单一图版，色调与柔光统一，总时长仍是 3.36 秒。
+
+### 回归与验证
+
+* `audit-vt.js` 新增 `preludeAtVT`：在包装后的 `startViewTransition` 被调用瞬间记录 `.hero-prelude` 是否存在，必须为 `false`。探针数仍为 12。
+* 实测入场从出现到消失 **3293 ms**；点击 CTA 后 `preludeAtVT: false`、`vtActive: true`、落到 `/strata-3d`；reduced-motion 下 `reducedVtCount: 0` 正常回退。
+* `npm run build` 零警告、`npm run audit` **12/12 全绿**、控制台 0 Error 0 Warning。截图 `.workbuddy/shots/vt-prelude-final-1s.png`、`vt-prelude-final-2s.png`、`vt-after-final.png`。
+* 没有扩展 View Transitions 的使用范围，配色 / 字体 / 布局未动，不是换风格。挂起 B（部署）仍是唯一挂起项。
+
