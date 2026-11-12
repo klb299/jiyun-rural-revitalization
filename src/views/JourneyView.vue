@@ -262,7 +262,7 @@ const goToAct = (i) => {
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mt-12">
           <Reveal class="lg:col-span-5">
             <FigurePlate
-              src="/art/rice.svg"
+              src="/photos/green-field.jpg"
               alt="稻穗与积温周期图版"
               index="PLATE 04"
               caption="东北长达十五小时的夏季日照与十五度以上昼夜温差，共同决定支链淀粉与芳香物质的积累。"

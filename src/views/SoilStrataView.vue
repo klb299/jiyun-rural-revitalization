@@ -267,7 +267,7 @@ const depthTicks = [
             </div>
           </Reveal>
           <Reveal :delay="140" class="lg:col-span-5" data-parallax="-6">
-            <FigurePlate src="/art/soil-strata.svg" alt="黑土剖面层位图版" index="PLATE 01"
+            <FigurePlate src="/photos/black-soil.jpg" alt="黑土与耕作层实景示意" index="PLATE 01"
               caption="梨树模式的秸秆覆盖层，正是为了守住最上方 20 厘米的腐殖质熟化层。" credit="CHERNOZEM MONOLITH" />
           </Reveal>
         </div>

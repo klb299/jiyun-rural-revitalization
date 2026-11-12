@@ -5,6 +5,8 @@ import { fileURLToPath } from 'node:url'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // 本地与根域名用 '/'；部署到 GitHub Pages 子路径时设 VITE_BASE=/仓库名/ npm run build
+  base: process.env.VITE_BASE || '/',
   plugins: [
     vue(),
     tailwindcss()

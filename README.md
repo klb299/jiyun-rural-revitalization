@@ -7,7 +7,7 @@
 
 项目不依赖后端与数据库，所有几何、纹理、图版与文案都在本地构建，断网也能完整参观。
 
-`public/photos/` 下的 9 张实景照片来自 Unsplash（Unsplash License 允许免费商用与教育用途、无需署名），用于降低纯程序化图形的 AI 感。它们只是产地示意，不对应吉林具体地块；页面上均标注「实景示意 · UNSPLASH」。首页不放实时 3D 沙盘，完整 WebGL 版本在 `/sandbox-3d`。
+`public/photos/` 下的 10 张实景照片来自 Unsplash（Unsplash License 允许免费商用与教育用途、无需署名），用于降低纯程序化图形的 AI 感。它们只是产地示意，不对应吉林具体地块；页面上均标注「实景示意 · UNSPLASH」。首页不放实时 3D 沙盘，完整 WebGL 版本在 `/sandbox-3d`。
 
 ---
 
@@ -116,6 +116,16 @@ npm run snapshot  # 把源码与文档快照到 .workbuddy/backup/
 | `3D_HANDOFF.md` | 交给外部 AI 修改 3D 时的上下文：文件地图、材质工厂速查、舞台 API、硬约束 |
 
 ## 八、部署注意
+
+本地预览与根域名部署默认 `base: '/'`。部署到 `用户名.github.io/仓库名/` 这类子路径时，构建前设环境变量：
+
+```bash
+VITE_BASE=/仓库名/ npm run build
+```
+
+`index.html` 的 `og:image` 是相对路径，正式发布前请替换成可公开访问的绝对地址，否则分享卡片不会显示缩略图。国内访问 `*.github.io` 不稳定，发给评委建议同时准备一份国内可访问的托管链接。SSH 公钥与 `~/.ssh/config` 已在本机备好，剩余两步需要在 GitHub 网页端完成：添加 SSH 公钥、建一个 public 空仓库（不要勾 README / .gitignore / License）。
+
+
 
 - `vite.config.js` 未设置 `base`，部署到子路径时需要按需配置。
 - `index.html` 里的 Open Graph 标签是静态兜底，抓取器不执行前端路由脚本。若要为不同子页生成独立分享卡片，需要预渲染或服务端注入。

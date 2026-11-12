@@ -652,3 +652,10 @@ playwright-cli console 2>&1 | grep -E "Total messages|\[ERROR\]|\[WARNING\]"
 * **真实图片**：`public/photos/` 9 张，Unsplash License 免费商用无需署名，均标「实景示意 · UNSPLASH / 不对应具体地块」。除首屏外一律 `loading="lazy"`。Unsplash 搜索页需鉴权，取图请用 `images.unsplash.com/photo-{id}?w=1000&q=72&fm=jpg` 直链 + 联系表筛选。
 * **首页不要放实时 3D 沙盘**：滚到第五屏才同步初始化 Three.js 会造成约 4.6 秒主线程阻塞。完整 WebGL 沙盘只在 `/sandbox-3d`，首页用真实航拍照片 + 进馆按钮。
 * **性能红线**：不给 `.reveal` 常驻 `will-change`；不用大面积 `blur-3xl`（改静态径向渐变）；滚动编排里不要给每层卡加 `scale` scrub；入场三幕不要 `filter: blur()` 动画与 `mix-blend-mode`。改后首页滚动约 17.8 ms/帧。
+
+## 17. 真实图片的落点与边界（2026-11-12 收尾）
+
+* `public/photos/` 10 张，Unsplash License。三处 `FigurePlate`（地层馆 / 旅程 / 冬捕）换实景；助农三页与痛点页用 `src/components/editorial/PhotoNote.vue` 在首屏后插一条统一横幅。
+* **不要把所有程序化图版都换掉**：`hero-field.svg`（纯光影定稿）、`atlas.svg`、`panorama.svg` 与各展厅图版是既有设计语言，全换会散掉整体感。真实照片只补在「原本全是色块与文字」的页面。
+* 取图流程：Unsplash 搜索页需鉴权，用 `images.unsplash.com/photo-{id}?w=1000&q=72&fm=jpg` 直链批量拉候选 → 浏览器拼联系表 → 一次看清再挑 → 复拍验证内容。**ID 与内容必须看图确认**，凭编号猜会配错图（本轮下错过两次）。
+* 部署前置已就绪：`VITE_BASE` 可配 `base`，README 第八节有完整步骤；但推送与建仓库属于需要用户授权的外部动作，不要自行执行。

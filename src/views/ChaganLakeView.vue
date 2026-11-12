@@ -214,7 +214,7 @@ const heroMeta = [
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         <Reveal class="lg:col-span-5">
           <FigurePlate
-            src="/art/lake.svg"
+            src="/photos/winter.jpg"
             alt="冰湖同心裂艺术图版"
             index="PLATE 05"
             caption="六寸网孔、增殖放流与湿地净化，共同决定这片水面能否年年有鱼。"

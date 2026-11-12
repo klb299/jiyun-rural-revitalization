@@ -4,6 +4,7 @@
  * 只讲公开可查的带农机制与风险承担方式，不出现人名、自述、采访与统计数字。
  */
 import Reveal from '../components/editorial/Reveal.vue'
+import PhotoNote from '../components/editorial/PhotoNote.vue'
 import SectionHead from '../components/editorial/SectionHead.vue'
 import { ArrowUpRight, ArrowRight } from 'lucide-vue-next'
 
@@ -142,6 +143,13 @@ const layers = [
           </span>
         </div>
       </div>
+    </section>
+
+    <!-- 田野实景：首屏与内容之间的一处真实影像，避免全页程序化图形 -->
+    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20">
+      <Reveal>
+        <PhotoNote src="/photos/grain-ear.jpg" alt="成熟谷穗的实景特写" label="FIELD NOTE / 收成与账本" note="五笔收入讲的是机制与风险分配，读数均为示意。照片用来提醒这些机制最终要落到一季真实的收成上。" />
+      </Reveal>
     </section>
 
     <!-- 02 五笔机制档案 -->

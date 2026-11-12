@@ -1147,3 +1147,27 @@ Awwwards 2026 与 GSAP 案例的共同手法：单一被坚持的编辑方向、
 * 专项：绿底眉题 computed `rgb(240,194,117)`；苔绿收束 computed `rgb(240,194,117)`；导航两项 y 均为 25；入场仍 3.36 秒且 VT 旧快照干净（`preludeAtVT: false`）。
 * 截图：`.workbuddy/shots/fix-1-green2.png`、`final-green.png`、`final-watermark.png`、`fix-4-origins2.png`、`fix-5-science2.png`、`final-lastmile.png`。
 * 数量口径未变；色板、纯光影定稿、动效降级、WebGL 兜底（3D 展厅页仍有）、每页首屏不同、不换风格均未违反。
+
+## 🖼 三十、2026-11-12 22:20 收尾：真实图片铺开与部署前置
+
+用户先问「怎么打开」（已在预览面板重新打开首页），随后要求「继续完成未完成的任务」。盘点出两件真正未做完的：真实照片只覆盖 3 / 17 个视图页面；挂起 B 的部署前置配置一直没做。
+
+### 1. 真实图片覆盖 3 页 → 10 页
+
+* 第二批候选仍用「直链 + 联系表一次看清」法筛出 12 张，挑 2 张贴题的新图补入：**绿色农田平原**（稻作 / 田野）、**雪地寒林日出**（查干湖冬捕季节）。另 2 张下载后未使用已删除，`farmers.jpg` 等未引用文件一并清理，最终 `public/photos/` 10 张。
+* 过程中发现一次 ID 映射错误：`green-field.jpg` 下成了层叠山雾、`winter.jpg` 下成了山岩森林。重新按联系表编号对应下载并复拍验证，两张内容正确后才入库。**凭 ID 猜图不可靠，必须看图**。
+* 三处 `FigurePlate` 的程序化图版换成实景：`/strata-3d` → 黑土铁锹、`/journey` → 绿色农田、`/chagan-lake` → 雪地寒林。
+* 新建 `src/components/editorial/PhotoNote.vue`，在助农三页与痛点页的首屏之后各插入一条统一的田野实景横幅（不同照片、不同图注），一处组件覆盖 4 页，避免全页只剩色块与文字。纯光影定稿的 `hero-field.svg` 与其它展厅的程序化图版保留，不破坏既有设计语言。
+
+### 2. 挂起 B 前置配置（不替用户做外部动作）
+
+* `vite.config.js` 加 `base: process.env.VITE_BASE || '/'`，本地与根域名不受影响，部署到 `用户名.github.io/仓库名/` 时用 `VITE_BASE=/仓库名/ npm run build`。
+* `README.md` 第八节补齐部署步骤、`og:image` 绝对路径提醒、国内托管备选，以及 GitHub 网页端剩余两步（加 SSH 公钥、建 public 空仓库）。
+* **没有创建 remote、没有推送、没有重复生成 SSH 凭据**：这些是需要用户授权的外部动作，也不在「只要好看」的评价维度里。挂起 B 仍是唯一挂起项，但前置工作已全部就绪。
+
+### 3. 验证
+
+* `npm run build` 零 Error 零 Warning；`npm run audit` **12/12 全绿**；对比度仍只剩 `/machinery-3d` 4 项已登记假阳性；控制台 0 Error 0 Warning；320 / 390 / 430 × 5 页共 15 组合零横向溢出。
+* 六页真实照片实测：助农三页横幅 `naturalWidth` 正常，三处 FigurePlate 为 `loading="lazy"`，滚动到图版后 `naturalWidth=1000` 全部加载成功。VT `preludeAtVT:false` 未回退。
+* 截图 `.workbuddy/shots/photo-aid-note.png`、`verify-photos.png`。
+* 数量口径、色板、动效降级、WebGL 兜底、每页首屏不同、不换风格均未违反。

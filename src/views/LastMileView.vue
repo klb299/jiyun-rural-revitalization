@@ -7,6 +7,7 @@
  */
 import { ref, computed } from 'vue'
 import Reveal from '../components/editorial/Reveal.vue'
+import PhotoNote from '../components/editorial/PhotoNote.vue'
 import SectionHead from '../components/editorial/SectionHead.vue'
 import { ArrowUpRight, ArrowRight, Check, AlertTriangle } from 'lucide-vue-next'
 
@@ -215,6 +216,13 @@ const fixes = [
           </span>
         </div>
       </div>
+    </section>
+
+    <!-- 田野实景：首屏与内容之间的一处真实影像，避免全页程序化图形 -->
+    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20">
+      <Reveal>
+        <PhotoNote src="/photos/furrows.jpg" alt="规整垄沟的农田航拍实景" label="FIELD NOTE / 技术落地的现场" note="三个实验讲的都是技术为什么难落地。照片是它最终要回去的地方，不是某个示范工程的数据来源。" />
+      </Reveal>
     </section>
 
     <!-- 02 实验一：三年才见效 -->

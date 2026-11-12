@@ -6,6 +6,7 @@
  */
 import { ref, computed } from 'vue'
 import Reveal from '../components/editorial/Reveal.vue'
+import PhotoNote from '../components/editorial/PhotoNote.vue'
 import SectionHead from '../components/editorial/SectionHead.vue'
 import { ArrowUpRight, ArrowRight, Check, Sprout } from 'lucide-vue-next'
 
@@ -186,6 +187,13 @@ const makeCertificate = () => { certificate.value = true }
           </span>
         </div>
       </div>
+    </section>
+
+    <!-- 田野实景：首屏与内容之间的一处真实影像，避免全页程序化图形 -->
+    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20">
+      <Reveal>
+        <PhotoNote src="/photos/seedlings.jpg" alt="育秧盘中的幼苗实景" label="FIELD NOTE / 育秧与农时" note="认养流程是教学演示，不产生真实交易。照片只用来对照一季农事从育秧开始的真实节奏。" />
+      </Reveal>
     </section>
 
     <!-- 02 四步流程 + 生长时间轴 -->

@@ -6,6 +6,7 @@
  */
 import { ref, computed } from 'vue'
 import Reveal from '../components/editorial/Reveal.vue'
+import PhotoNote from '../components/editorial/PhotoNote.vue'
 import SectionHead from '../components/editorial/SectionHead.vue'
 import { ArrowUpRight, ArrowRight } from 'lucide-vue-next'
 
@@ -185,6 +186,13 @@ const goArchive = (p) => {
           </span>
         </div>
       </div>
+    </section>
+
+    <!-- 田野实景：首屏与内容之间的一处真实影像，避免全页程序化图形 -->
+    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20">
+      <Reveal>
+        <PhotoNote src="/photos/green-field.jpg" alt="六类带农路径所在的田野实景" label="FIELD NOTE / 六类带农路径" note="照片用于对照真实田野与作业环境，页面里的项目编号、机制与成效仍为教学演示整理，不对应具体地块或经营主体。" />
+      </Reveal>
     </section>
 
     <!-- 02 项目档案 -->
