@@ -238,7 +238,7 @@ const resetLab = () => {
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-9">
             <span class="eyebrow">INTERACTIVE SCIENCE LAB / 互动科普实验室</span>
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#F7F4EE]/80">CHAPTER 10 · FOUR EXPERIMENTS</span>
+            <span class="font-mono text-[10px] tracking-[0.2em] text-[#FFFDF9]/95">CHAPTER 10 · FOUR EXPERIMENTS</span>
           </div>
         </Reveal>
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
@@ -249,8 +249,8 @@ const resetLab = () => {
                 <span v-for="(ch, i) in Array.from('变成可以上手的')" :key="'b' + i" class="kin-char" :style="{ animationDelay: (0.36 + i * 0.05) + 's' }">{{ ch }}</span>
               </span>
             </h1>
-            <Reveal :delay="700"><p class="font-editorial text-xl sm:text-2xl text-[#F7F4EE]/86 mt-7">四个可操作的 3D 原理演示</p></Reveal>
-            <Reveal :delay="780"><p class="lede text-[#F7F4EE]/90 mt-5 max-w-2xl">
+            <Reveal :delay="700"><p class="font-editorial text-xl sm:text-2xl text-[#FFFDF9]/95 mt-7">四个可操作的 3D 原理演示</p></Reveal>
+            <Reveal :delay="780"><p class="lede text-[#FFFDF9]/96 mt-5 max-w-2xl">
               黑土为什么疏松、稻株怎样长成、北斗凭什么定位到厘米、秸秆留在地表会发生什么。文字讲不清的地方，就把它做成可以拖拽、可以切换、可以看见变化的模型。
             </p></Reveal>
           </div>
@@ -316,6 +316,16 @@ const resetLab = () => {
                 <RotateCcw :size="14" class="group-hover:-rotate-45 transition-transform duration-500" /> 重置实验参数
               </button>
             </div>
+
+            <!-- 补左列下半部空白：真实农事影像 + 教具原型说明 -->
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-[150px_1fr] gap-4 rounded-2xl border border-[#1C1B18]/10 bg-[#FFFDF9] p-4">
+              <img src="/photos/seedling-hand.jpg" alt="田间育苗与农事操作实景" class="w-full h-28 sm:h-full min-h-[110px] object-cover rounded-xl" loading="lazy" />
+              <div>
+                <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324] mb-2">FIELD NOTE / 教具原型</div>
+                <p class="text-[11px] leading-[1.85] text-[#3A3630]">四个实验也可作为职业教育与农技培训的教具原型。右侧实景影像用来对照真实农事，模型只解释原理，不替代田间观察。</p>
+                <p class="font-mono text-[9px] tracking-[0.14em] text-[#6E6960] mt-2">实景示意 · UNSPLASH</p>
+              </div>
+            </div>
           </Reveal>
 
           <!-- 控制面板 -->
@@ -339,10 +349,10 @@ const resetLab = () => {
                   <span class="absolute -right-4 -bottom-10 font-editorial font-bold text-[#F7F4EE]/7 select-none" style="font-size: 9rem; line-height: 1">{{ activeSoil.no }}</span>
                   <div class="relative font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-3">{{ activeSoil.en }}</div>
                   <h3 class="display-3 relative mb-4">{{ activeSoil.name }}</h3>
-                  <p class="relative text-[13px] leading-[1.9] text-[#F7F4EE]/86">{{ activeSoil.desc }}</p>
+                  <p class="relative text-[13px] leading-[1.9] text-[#FFFDF9]/95">{{ activeSoil.desc }}</p>
                   <div class="relative mt-7 pt-5 border-t border-[#F7F4EE]/16 flex items-end justify-between gap-3">
                     <div>
-                      <div class="caption text-[#F7F4EE]/90 mb-1">{{ activeSoil.note }}</div>
+                      <div class="caption text-[#FFFDF9]/96 mb-1">{{ activeSoil.note }}</div>
                       <div class="font-editorial text-2xl font-bold text-[#C88A32]">{{ activeSoil.metric }}</div>
                     </div>
                   </div>
@@ -373,12 +383,12 @@ const resetLab = () => {
               <Reveal :delay="90">
                 <div class="card-moss p-6 sm:p-7 flex-1 relative overflow-hidden">
                   <span class="absolute -right-4 -bottom-10 font-editorial font-bold text-[#F7F4EE]/8 select-none" style="font-size: 9rem; line-height: 1">0{{ riceStage + 1 }}</span>
-                  <div class="relative font-mono text-[10px] tracking-[0.2em] text-[#F7F4EE]/80 mb-3">{{ activePhase.en }}</div>
+                  <div class="relative font-mono text-[10px] tracking-[0.2em] text-[#FFFDF9]/95 mb-3">{{ activePhase.en }}</div>
                   <h3 class="display-3 relative mb-2">{{ activePhase.name }}</h3>
                   <div class="relative font-mono text-[11px] text-[#8A6324] mb-4">{{ activePhase.time }}</div>
-                  <p class="relative text-[13px] leading-[1.9] text-[#F7F4EE]/86">{{ activePhase.desc }}</p>
+                  <p class="relative text-[13px] leading-[1.9] text-[#FFFDF9]/95">{{ activePhase.desc }}</p>
                   <div class="relative mt-7 pt-5 border-t border-[#F7F4EE]/16">
-                    <div class="caption text-[#F7F4EE]/90 mb-1">关键指标</div>
+                    <div class="caption text-[#FFFDF9]/96 mb-1">关键指标</div>
                     <div class="font-editorial text-xl font-bold text-[#F7F4EE]">{{ activePhase.metric }}</div>
                   </div>
                 </div>
@@ -409,11 +419,11 @@ const resetLab = () => {
                 <div class="card-ink p-6 sm:p-7">
                   <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-4">POSITIONING ERROR / 定位误差</div>
                   <div class="font-editorial font-bold leading-none text-[#F7F4EE]" style="font-size: clamp(2.4rem, 3.4vw, 3.2rem)">{{ accuracy }}</div>
-                  <p class="text-[12px] leading-[1.85] text-[#F7F4EE]/90 mt-4">
+                  <p class="text-[12px] leading-[1.85] text-[#FFFDF9]/96 mt-4">
                     {{ blocked ? '差不多一步远，农机分不清该在哪一垄下种。' : '不到两根手指宽，农机知道该把种子撒在哪条线上。' }}
                   </p>
                   <div class="mt-5 pt-4 border-t border-[#F7F4EE]/16">
-                    <div class="flex justify-between font-mono text-[9px] tracking-[0.14em] text-[#F7F4EE]/80 mb-2">
+                    <div class="flex justify-between font-mono text-[9px] tracking-[0.14em] text-[#FFFDF9]/95 mb-2">
                       <span>2.5 厘米</span><span>1.2 米</span>
                     </div>
                     <div class="h-1.5 rounded-full bg-[#F7F4EE]/12 relative overflow-hidden">
@@ -562,11 +572,11 @@ const resetLab = () => {
                       { k: '表土流失', v: coverReadout.loss },
                       { k: '蓄水保墒', v: coverReadout.water }
                     ]" :key="r.k" class="flex items-center justify-between gap-3 pb-2 border-b border-[#F7F4EE]/12">
-                      <span class="text-[12px] text-[#F7F4EE]/90">{{ r.k }}</span>
+                      <span class="text-[12px] text-[#FFFDF9]/96">{{ r.k }}</span>
                       <span class="font-editorial text-base font-bold text-[#C88A32]">{{ r.v }}</span>
                     </div>
                   </div>
-                  <p class="text-[11px] leading-[1.9] text-[#F7F4EE]/90 mt-4">
+                  <p class="text-[11px] leading-[1.9] text-[#FFFDF9]/96 mt-4">
                     秸秆盖得越密，雨滴越难直接砸实表土；连续孔隙保留下来，水往里渗而不是带着土往外流。
                   </p>
                 </div>
@@ -630,7 +640,7 @@ const resetLab = () => {
           <div class="card-ink h-full p-7 sm:p-8">
             <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-6">EXPERIMENT 01</div>
             <h3 class="display-3 mb-4">黑土为什么疏松</h3>
-            <p class="text-[13px] leading-[1.9] text-[#F7F4EE]/86">把一厘米土层放大到可交互的尺度，剖面按 0–100 cm 分层并标出深度：团粒负责胶结，孔隙负责通气透水，菌丝负责稳定与供肥，结核记录淋溶历史。点击任一结构即可聚焦并读取档案。</p>
+            <p class="text-[13px] leading-[1.9] text-[#FFFDF9]/95">把一厘米土层放大到可交互的尺度，剖面按 0–100 cm 分层并标出深度：团粒负责胶结，孔隙负责通气透水，菌丝负责稳定与供肥，结核记录淋溶历史。点击任一结构即可聚焦并读取档案。</p>
             <div class="mt-7 flex flex-wrap gap-2">
               <span v-for="t in ['团粒', '孔隙', '菌丝', '结核']" :key="t" class="px-2.5 py-1 rounded-full bg-[#F7F4EE]/10 text-[11px]">{{ t }}</span>
             </div>
@@ -638,9 +648,9 @@ const resetLab = () => {
         </Reveal>
         <Reveal :delay="90">
           <div class="card-moss h-full p-7">
-            <div class="font-mono text-[10px] tracking-[0.2em] text-[#F7F4EE]/80 mb-6">EXPERIMENT 02</div>
+            <div class="font-mono text-[10px] tracking-[0.2em] text-[#FFFDF9]/95 mb-6">EXPERIMENT 02</div>
             <h3 class="display-3 mb-4">一百八十天怎么长</h3>
-            <p class="text-[13px] leading-[1.9] text-[#F7F4EE]/86">拖动时间轴，稻株高度、颜色、穗头倾角与田间水位同步变化。五个阶段对应吉林中部真实农时，读数来自公开农技资料的典型区间。</p>
+            <p class="text-[13px] leading-[1.9] text-[#FFFDF9]/95">拖动时间轴，稻株高度、颜色、穗头倾角与田间水位同步变化。五个阶段对应吉林中部真实农时，读数来自公开农技资料的典型区间。</p>
             <div class="mt-7 font-mono text-[11px] text-[#8A6324]">SEEDLING → HARVEST</div>
           </div>
         </Reveal>
@@ -690,7 +700,7 @@ const resetLab = () => {
       <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-14 sm:py-18 flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
         <Reveal>
           <div class="eyebrow mb-4">DATA NOTE / 数据说明</div>
-          <p class="text-[13px] leading-[2] text-[#F7F4EE]/90 max-w-2xl">
+          <p class="text-[13px] leading-[2] text-[#FFFDF9]/96 max-w-2xl">
             四个实验为教学演示用的参数化模型，结构与量级参考中国科学院东北地理与农业生态研究所「黑土粮仓」科技会战公开成果、吉林省农技推广资料、保护性耕作公开科普材料与北斗 RTK 通用原理，非实物扫描与工程测量数据。覆盖率、下渗与径流比例均为模型内部示意，用于观察趋势，不作生产决策依据。
           </p>
         </Reveal>

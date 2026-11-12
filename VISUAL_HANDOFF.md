@@ -645,3 +645,10 @@ playwright-cli console 2>&1 | grep -E "Total messages|\[ERROR\]|\[WARNING\]"
 * 措辞必须用「索引 · 前一段 / 后一段」并标注「按展览地图编号」。多数页面自带 NEXT CHAPTER 叙事卡，两者语义不同，用「下一站」会与页内叙事互相矛盾。
 * 视角状态在 `appStore.lensMode`（sessionStorage 只存枚举），方向在 `appStore.trailDirection`，由 `App.vue` 的 `clearTrail()` 在转场结束后清空。`main` 上的 `data-trail` 供观测。
 * 动效清单：`.trail-nav__line` 金色细线 scaleX 横扫、`.trail-item` 按 `--trail-i` 错峰 70ms、`.trail-edge` hover scaleX 生长、`Transition name="trail"` 独立 out-in、`route-enter-from--back` 左侧滑入。全部有 reduced-motion 降级。
+
+## 16. 深底可读性与真实图片（2026-11-12）
+
+* **深底文字**：`style.css` 末尾有按底色分档的兜底规则，用属性选择器匹配 Tailwind 任意值类名，一处覆盖全站。内联渐变深底必须加 `data-tone="dark"` 才会被纳入。亮金规则**只作用于 `.eyebrow`**，不要改回 blanket 匹配 `text-[#8A6324]` —— 深底区块里常嵌套浅色卡片，会把表格数字与提示文字一起提亮到看不清（dashboard / sandbox 已踩过）。
+* **真实图片**：`public/photos/` 9 张，Unsplash License 免费商用无需署名，均标「实景示意 · UNSPLASH / 不对应具体地块」。除首屏外一律 `loading="lazy"`。Unsplash 搜索页需鉴权，取图请用 `images.unsplash.com/photo-{id}?w=1000&q=72&fm=jpg` 直链 + 联系表筛选。
+* **首页不要放实时 3D 沙盘**：滚到第五屏才同步初始化 Three.js 会造成约 4.6 秒主线程阻塞。完整 WebGL 沙盘只在 `/sandbox-3d`，首页用真实航拍照片 + 进馆按钮。
+* **性能红线**：不给 `.reveal` 常驻 `will-change`；不用大面积 `blur-3xl`（改静态径向渐变）；滚动编排里不要给每层卡加 `scale` scrub；入场三幕不要 `filter: blur()` 动画与 `mix-blend-mode`。改后首页滚动约 17.8 ms/帧。

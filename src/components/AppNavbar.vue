@@ -114,7 +114,7 @@ const playNarration = () => {
       <nav class="hidden lg:flex items-center gap-1 h-full">
         <RouterLink
           to="/"
-          class="px-4 py-2 min-h-[40px] text-xs font-semibold transition-colors duration-300"
+          class="inline-flex items-center px-4 py-2 min-h-[40px] text-xs font-semibold transition-colors duration-300"
           :class="route.path === '/' ? 'text-[#8A6324]' : 'text-[#5A564E] hover:text-[#1C1B18]'"
         >序厅</RouterLink>
         <div

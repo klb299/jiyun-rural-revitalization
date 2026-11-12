@@ -20,32 +20,32 @@ const products = [
   {
     id: 1, category: 'grain', name: '吉林秋田小町 / 稻花香粳米', origin: '长春九台 / 饮马河流域',
     tag: '国家地理标志', desc: '有机黑土栽培，松花江水源灌溉。米粒饱满半透明，煮饭油亮微甜，冷饭不回生。',
-    price: '¥ 68.00 / 5kg', sales: '月销 12,000+ 件', image: '/art/rice.svg', plate: 'PLATE 04', no: '01'
+    price: '¥ 68.00 / 5kg', sales: '月销 12,000+ 件', image: '/photos/grain-ear.jpg', plate: 'PLATE 04', no: '01'
   },
   {
     id: 2, category: 'grain', name: '东北黄金甜糯玉米真空棒', origin: '四平 / 公主岭黄金玉米带',
     tag: '非转基因 · 鲜摘锁鲜', desc: '从采摘到真空高压灭菌不超过五小时，保留天然高膳食纤维与甜脆多汁。',
-    price: '¥ 39.90 / 8 支装', sales: '月销 35,000+ 件', image: '/art/harvest.svg', plate: 'PLATE 07', no: '02'
+    price: '¥ 39.90 / 8 支装', sales: '月销 35,000+ 件', image: '/photos/forest.jpg', plate: 'PLATE 07', no: '02'
   },
   {
     id: 3, category: 'mountain', name: '长白山野生椴树雪蜜', origin: '长白山脉深山原始森林',
     tag: '天然成熟原蜜', desc: '每年夏至前后椴树花开，蜜蜂采自深山天然粉源，洁白如雪，带清雅薄荷淡香。',
-    price: '¥ 88.00 / 500g', sales: '月销 8,600+ 件', image: '/art/seasons.svg', plate: 'PLATE 06', no: '03'
+    price: '¥ 88.00 / 500g', sales: '月销 8,600+ 件', image: '/photos/seedlings.jpg', plate: 'PLATE 06', no: '03'
   },
   {
     id: 4, category: 'mountain', name: '长白山红松子仁 / 破壁人参片', origin: '抚松 / 长白山腹地',
     tag: '药食同源', desc: '手工精选野生红松大籽，仁香醇厚；林下野山参低温超微打粉破壁。',
-    price: '¥ 128.00 / 盒', sales: '月销 5,400+ 件', image: '/art/atlas.svg', plate: 'PLATE 08', no: '04'
+    price: '¥ 128.00 / 盒', sales: '月销 5,400+ 件', image: '/photos/seedling-hand.jpg', plate: 'PLATE 08', no: '04'
   },
   {
     id: 5, category: 'lake', name: '查干湖生态胖头鱼', origin: '松原 / 查干湖冬捕非遗区',
     tag: '国家非遗传统冬捕', desc: '天然大水面自然生长五年以上，纯野生无投喂，肉质紧密肥嫩，冬捕冷链直达。',
-    price: '¥ 198.00 / 条约 6 斤', sales: '冬捕预订 28,000+ 件', image: '/art/lake.svg', plate: 'PLATE 05', no: '05'
+    price: '¥ 198.00 / 条约 6 斤', sales: '冬捕预订 28,000+ 件', image: '/photos/field-sunset.jpg', plate: 'PLATE 05', no: '05'
   },
   {
     id: 6, category: 'grain', name: '延边有机黑豆与杂粮礼盒', origin: '延边朝鲜族自治州',
     tag: '绿色富硒认证', desc: '长白山矿泉水与火山灰土孕育，包含黑米、薏仁、红小豆、燕麦。',
-    price: '¥ 79.00 / 礼盒装', sales: '月销 9,200+ 件', image: '/art/soil-strata.svg', plate: 'PLATE 01', no: '06'
+    price: '¥ 79.00 / 礼盒装', sales: '月销 9,200+ 件', image: '/photos/black-soil.jpg', plate: 'PLATE 01', no: '06'
   }
 ]
 
@@ -219,20 +219,31 @@ onUnmounted(() => clearTimeout(toastTimer))
     <section id="origins" class="surface-linen border-y border-[#1C1B18]/10">
       <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+          <!-- 原抽象等高线「地图」信息量太低，改为三类产地的实景索引卡 -->
           <Reveal class="lg:col-span-6">
-            <FigurePlate
-              src="/art/atlas.svg"
-              alt="吉林物产产地经纬图版"
-              index="PLATE 08"
-              caption="中部平原粳稻与玉米、东南山林特产、西北湖泊渔业，构成三条清晰的物产带。"
-              credit="RESEARCH ATLAS"
-            />
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div v-for="o in [
+                { k: 'PLAIN', t: '中部平原', d: '粳稻 / 甜糯玉米', img: '/photos/field-sunset.jpg' },
+                { k: 'FOREST', t: '东南山林', d: '椴树雪蜜 / 红松子', img: '/photos/forest.jpg' },
+                { k: 'GRAIN', t: '黑土田块', d: '大豆 / 杂粮', img: '/photos/soybean.jpg' }
+              ]" :key="o.k" class="group rounded-2xl overflow-hidden border border-[#1C1B18]/12 bg-[#FFFDF9]">
+                <div class="aspect-[3/4] overflow-hidden">
+                  <img :src="o.img" :alt="o.t + '实景示意'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+                </div>
+                <div class="p-4">
+                  <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324] mb-1">{{ o.k }}</div>
+                  <div class="font-editorial text-base font-bold text-[#1C1B18]">{{ o.t }}</div>
+                  <div class="text-[10px] text-[#6E6960] mt-1">{{ o.d }}</div>
+                </div>
+              </div>
+            </div>
+            <p class="caption mt-4">实景影像为产地示意，不对应具体地块；不接地图服务、不使用经纬度。</p>
           </Reveal>
           <div class="lg:col-span-6">
             <Reveal>
               <SectionHead
                 index="02 / 04"
-                eyebrow="ORIGIN MAP / 产地与流通"
+                eyebrow="ORIGIN / 三类产地"
                 title="一件风物，背后是一整片地貌"
               />
             </Reveal>

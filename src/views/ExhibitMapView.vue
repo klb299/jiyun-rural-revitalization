@@ -217,7 +217,7 @@ const setView = (id) => appStore.setLens(id)
 
       <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#1C1B18]/10 bg-[#1C1B18] py-2.5" aria-hidden="true">
         <div class="marquee-track">
-          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#FFFDF9]/95 whitespace-nowrap">
             <span>微观 / 工业 / 宏观</span><span class="text-[#C88A32]">✳</span>
             <span>人文 / 助农 / 痛点</span><span class="text-[#C88A32]">✳</span>
             <span>十三个展陈单元，一条策展动线</span><span class="text-[#C88A32]">✳</span>
@@ -365,11 +365,11 @@ const setView = (id) => appStore.setLens(id)
               <div class="flex items-center gap-3">
                 <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324]">{{ industrial.no }} / 06</span>
                 <span class="w-3 h-3 rounded-sm" :style="{ background: industrial.dot }"></span>
-                <span class="font-mono text-[10px] tracking-[0.18em] text-[#F7F4EE]/80">{{ industrial.en }}</span>
+                <span class="font-mono text-[10px] tracking-[0.18em] text-[#FFFDF9]/95">{{ industrial.en }}</span>
               </div>
               <h2 class="display-2 mt-5 text-[#F7F4EE]">{{ industrial.scale }} · {{ industrial.title }}</h2>
             </div>
-            <p class="lede text-[#F7F4EE]/86 max-w-md">{{ industrial.lead }}</p>
+            <p class="lede text-[#FFFDF9]/95 max-w-md">{{ industrial.lead }}</p>
           </div>
         </Reveal>
 
@@ -389,7 +389,7 @@ const setView = (id) => appStore.setLens(id)
                 </div>
                 <div>
                   <div class="font-editorial text-xl font-bold text-[#F7F4EE] mb-2 group-hover:text-[#C88A32] transition-colors">{{ u.name }}</div>
-                  <div class="text-[12px] leading-[1.85] text-[#F7F4EE]/86">{{ u.line }}</div>
+                  <div class="text-[12px] leading-[1.85] text-[#FFFDF9]/95">{{ u.line }}</div>
                 </div>
               </RouterLink>
             </Reveal>
@@ -413,10 +413,10 @@ const setView = (id) => appStore.setLens(id)
                 style="font-size: clamp(7rem, 14vw, 12rem); line-height: 1" aria-hidden="true">05</span>
               <div class="relative flex items-center gap-3">
                 <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324]">{{ macro.no }} / 06</span>
-                <span class="font-mono text-[10px] tracking-[0.18em] text-[#F7F4EE]/80">{{ macro.en }}</span>
+                <span class="font-mono text-[10px] tracking-[0.18em] text-[#FFFDF9]/95">{{ macro.en }}</span>
               </div>
               <h2 class="display-2 mt-5 text-[#F7F4EE]">{{ macro.scale }} · {{ macro.title }}</h2>
-              <p class="lede text-[#F7F4EE]/90 mt-5">{{ macro.lead }}</p>
+              <p class="lede text-[#FFFDF9]/96 mt-5">{{ macro.lead }}</p>
               <RouterLink v-for="u in macro.units" :key="u.no" :to="u.to"
                 class="group mt-9 block border-t border-[#F7F4EE]/25 pt-6">
                 <div class="flex items-center gap-3">
@@ -424,7 +424,7 @@ const setView = (id) => appStore.setLens(id)
                   <ArrowUpRight :size="16" class="text-[#C88A32] arrow-shift" />
                 </div>
                 <div class="font-editorial text-2xl sm:text-3xl font-bold text-[#F7F4EE] mt-3 group-hover:text-[#C88A32] transition-colors">{{ u.name }}</div>
-                <div class="text-[13px] leading-[1.9] text-[#F7F4EE]/90 mt-3">{{ u.line }}</div>
+                <div class="text-[13px] leading-[1.9] text-[#FFFDF9]/96 mt-3">{{ u.line }}</div>
               </RouterLink>
             </div>
           </Reveal>
@@ -521,16 +521,16 @@ const setView = (id) => appStore.setLens(id)
           <div class="relative max-w-2xl">
             <div class="flex items-center gap-3">
               <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324]">{{ pain.no }} / 06 · 动线终点</span>
-              <span class="font-mono text-[10px] tracking-[0.18em] text-[#F7F4EE]/80">{{ pain.en }}</span>
+              <span class="font-mono text-[10px] tracking-[0.18em] text-[#FFFDF9]/95">{{ pain.en }}</span>
             </div>
             <h2 class="display-2 mt-6 text-[#F7F4EE]">{{ pain.scale }} · {{ pain.title }}</h2>
-            <p class="lede text-[#F7F4EE]/90 mt-6">{{ pain.lead }}</p>
+            <p class="lede text-[#FFFDF9]/96 mt-6">{{ pain.lead }}</p>
             <RouterLink v-for="u in pain.units" :key="u.no" :to="u.to"
               class="group inline-flex items-center gap-4 mt-10 min-h-[44px]">
               <span class="font-editorial text-2xl sm:text-3xl font-bold text-[#F7F4EE] group-hover:text-[#C88A32] transition-colors">{{ u.name }}</span>
               <ArrowUpRight :size="22" class="text-[#C88A32] arrow-shift" />
             </RouterLink>
-            <div class="text-[12px] leading-[1.9] text-[#F7F4EE]/80 mt-4">{{ pain.units[0].line }}</div>
+            <div class="text-[12px] leading-[1.9] text-[#FFFDF9]/95 mt-4">{{ pain.units[0].line }}</div>
           </div>
         </Reveal>
       </div>

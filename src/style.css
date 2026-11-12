@@ -648,3 +648,23 @@ html.vt-active .reveal {
   .trail-enter-from, .trail-leave-to { opacity: 1 !important; transform: none !important; }
   .route-enter-from, .route-leave-to { opacity: 1 !important; transform: none !important; filter: none !important; }
 }
+
+/* ------------------------------------------------------------------ *
+ * 深底可读性兜底：浅底用的暗金 / 中灰字落到墨绿苔绿上时统一提亮。
+ * 用属性选择器匹配 Tailwind 任意值类名，一处覆盖全站，不逐页改 class。
+ * ------------------------------------------------------------------ */
+:is([class*="surface-ink"], [class*="bg-[#2E5A44]"], [class*="bg-[#1C1B18]"],
+    [class*="card-ink"], [class*="card-moss"], [class*="bg-[#221E19]"], [data-tone="dark"])
+  :is(.lede, .body-copy, .caption, [class*="text-[#5A564E]"], [class*="text-[#6E6960]"],
+      [class*="text-[#8C867B]"], [class*="text-[#3A3630]"], [class*="text-[#1C1B18]/"]) {
+  color: rgba(247, 244, 238, 0.94);
+}
+:is([class*="surface-ink"], [class*="bg-[#2E5A44]"], [class*="bg-[#1C1B18]"],
+    [class*="card-ink"], [class*="card-moss"], [class*="bg-[#221E19]"], [data-tone="dark"])
+  .eyebrow {
+  color: #F0C275;
+}
+
+/* 性能：大量 .reveal 常驻 will-change 会创建过多合成层，交给浏览器按需提升 */
+.reveal { will-change: auto; }
+.kinetic-char { will-change: transform, opacity; }

@@ -147,7 +147,7 @@ const fixes = [
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-8">
             <span class="px-3 py-1.5 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[10px] tracking-[0.2em] font-bold">LAST MILE / 最后一公里</span>
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#F7F4EE]/80">基于 2025–2026 年公开讨论的痛点实验</span>
+            <span class="font-mono text-[10px] tracking-[0.2em] text-[#FFFDF9]/95">基于 2025–2026 年公开讨论的痛点实验</span>
           </div>
         </Reveal>
 
@@ -162,10 +162,10 @@ const fixes = [
               </span>
             </h1>
             <Reveal :delay="600">
-              <p class="font-editorial text-lg sm:text-2xl text-[#F7F4EE]/90 mt-7">别的展馆展示成果，这里把「为什么落不了地」做成展品</p>
+              <p class="font-editorial text-lg sm:text-2xl text-[#FFFDF9]/96 mt-7">别的展馆展示成果，这里把「为什么落不了地」做成展品</p>
             </Reveal>
             <Reveal :delay="680">
-              <p class="lede text-[#F7F4EE]/90 mt-5 max-w-2xl">
+              <p class="lede text-[#FFFDF9]/96 mt-5 max-w-2xl">
                 公开讨论里最集中的痛点已经不是技术够不够先进，而是小农户用不起、系统给的数据对不上、见效要等三五年。下面三个实验都源自公开报道与政策文件，读数只是教学演示示意，矛盾类型和机制才是要讲的东西。
               </p>
             </Reveal>
@@ -183,7 +183,7 @@ const fixes = [
                   { k: 'RULE', v: '读数均为示意' }
                 ]" :key="n.k" class="border-t border-[#F7F4EE]/25 pt-3">
                   <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324]">{{ n.k }}</div>
-                  <div class="text-[11px] mt-1.5 text-[#F7F4EE]/92">{{ n.v }}</div>
+                  <div class="text-[11px] mt-1.5 text-[#FFFDF9]/96">{{ n.v }}</div>
                 </div>
               </div>
             </Reveal>
@@ -195,9 +195,9 @@ const fixes = [
                 class="group flex items-center gap-4 p-5 border border-[#F7F4EE]/18 bg-[#F7F4EE]/5 hover:bg-[#F7F4EE]/10 transition-colors duration-500">
                 <span class="font-mono text-[10px] tracking-[0.18em] text-[#8A6324] w-7 shrink-0">{{ g.no }}</span>
                 <div class="flex-1">
-                  <div class="font-mono text-[9px] tracking-[0.16em] text-[#F7F4EE]/86 mb-1">{{ g.k }}</div>
+                  <div class="font-mono text-[9px] tracking-[0.16em] text-[#FFFDF9]/95 mb-1">{{ g.k }}</div>
                   <div class="font-editorial text-lg font-bold text-[#F7F4EE] group-hover:text-[#C88A32] transition-colors">{{ g.t }}</div>
-                  <div class="text-[11px] text-[#F7F4EE]/92 mt-1">{{ g.d }}</div>
+                  <div class="text-[11px] text-[#FFFDF9]/96 mt-1">{{ g.d }}</div>
                 </div>
                 <ArrowUpRight :size="16" class="text-[#C88A32] arrow-shift shrink-0" />
               </a>
@@ -208,7 +208,7 @@ const fixes = [
 
       <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#F7F4EE]/12 bg-[#1C1B18]/70 py-2.5" aria-hidden="true">
         <div class="marquee-track">
-          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#FFFDF9]/95 whitespace-nowrap">
             <span>等不起 / 对不上 / 买不起</span><span class="text-[#C88A32]">✳</span>
             <span>盆景要变成风景，靠的是组织方式</span><span class="text-[#C88A32]">✳</span>
             <span>不造盆景 · 不搞一刀切 · 不为基层添负担</span><span class="text-[#C88A32]">✳</span>
@@ -389,10 +389,10 @@ const fixes = [
         <Reveal :delay="100" class="lg:col-span-5">
           <div class="card-ink h-full p-7 sm:p-8">
             <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-6">INPUT / 两个变量</div>
-            <label class="block font-mono text-[9px] tracking-[0.16em] text-[#F7F4EE]/80 mb-2" for="acre-range">经营规模（亩）</label>
+            <label class="block font-mono text-[9px] tracking-[0.16em] text-[#FFFDF9]/95 mb-2" for="acre-range">经营规模（亩）</label>
             <input id="acre-range" v-model.number="acres" type="range" min="10" max="300" step="10" aria-label="经营规模"
               class="w-full accent-[#C88A32] cursor-pointer" />
-            <div class="flex justify-between font-mono text-[9px] text-[#F7F4EE]/80 mt-1"><span>10</span><span>150</span><span>300</span></div>
+            <div class="flex justify-between font-mono text-[9px] text-[#FFFDF9]/95 mt-1"><span>10</span><span>150</span><span>300</span></div>
             <div class="font-editorial text-4xl font-bold text-[#F7F4EE] mt-5">{{ acres }} <span class="text-base font-normal">亩</span></div>
 
             <div class="mt-8 space-y-2">
@@ -401,9 +401,9 @@ const fixes = [
                 :class="mode === m.id ? 'border-[#C88A32] bg-[#F7F4EE]/10' : 'border-[#F7F4EE]/18 hover:bg-[#F7F4EE]/5'">
                 <div class="flex items-center justify-between gap-2">
                   <span class="text-[13px] font-bold text-[#F7F4EE]">{{ m.t }}</span>
-                  <span class="font-mono text-[9px]" :class="mode === m.id ? 'text-[#8A6324]' : 'text-[#F7F4EE]/80'">{{ mode === m.id ? '当前' : '切换' }}</span>
+                  <span class="font-mono text-[9px]" :class="mode === m.id ? 'text-[#8A6324]' : 'text-[#FFFDF9]/95'">{{ mode === m.id ? '当前' : '切换' }}</span>
                 </div>
-                <div class="text-[11px] text-[#F7F4EE]/92 mt-1">{{ m.d }}</div>
+                <div class="text-[11px] text-[#FFFDF9]/96 mt-1">{{ m.d }}</div>
               </button>
             </div>
           </div>
@@ -460,18 +460,18 @@ const fixes = [
     <section class="bg-[#2E5A44]">
       <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <Reveal>
-          <div class="font-mono text-[10px] tracking-[0.22em] text-[#8A6324] mb-4">FROM SHOWCASE TO LANDSCAPE / 从盆景到风景</div>
+          <div class="font-mono text-[10px] tracking-[0.22em] text-[#F0C275] mb-4">FROM SHOWCASE TO LANDSCAPE / 从盆景到风景</div>
           <h2 class="display-2 text-[#FFFDF9] max-w-3xl">解开这三道关卡的，不是更炫的技术</h2>
-          <p class="lede text-[#F7F4EE]/92 mt-6 max-w-2xl">
+          <p class="lede text-[#FFFDF9]/96 mt-6 max-w-2xl">
             公开报道与政策文件里反复出现的答案，是组织方式：托管分摊投入、共享替代购置、统一编码打通数据、农技力量下沉到村。下面四条都能在公开资料里查到。
           </p>
         </Reveal>
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mt-12" data-stagger>
           <Reveal v-for="(f, i) in fixes" :key="f.k" :delay="i * 70">
             <div class="h-full border border-[#F7F4EE]/22 bg-[#F7F4EE]/6 p-6">
-              <div class="font-mono text-[10px] tracking-[0.18em] text-[#8A6324] mb-4">{{ f.k }} / {{ f.y }}</div>
+              <div class="font-mono text-[10px] tracking-[0.18em] text-[#F0C275] mb-4">{{ f.k }} / {{ f.y }}</div>
               <div class="font-editorial text-lg font-bold text-[#FFFDF9] mb-3">{{ f.t }}</div>
-              <p class="text-[11px] leading-[1.9] text-[#F7F4EE]/90">{{ f.d }}</p>
+              <p class="text-[11px] leading-[1.9] text-[#FFFDF9]/96">{{ f.d }}</p>
             </div>
           </Reveal>
         </div>
@@ -488,7 +488,7 @@ const fixes = [
               <div class="space-y-2">
                 <div v-for="it in g.items" :key="it" class="flex items-start gap-2 border-t border-dashed border-[#F7F4EE]/18 pt-2">
                   <span class="w-1 h-1 rounded-full bg-[#C88A32] mt-1.5 shrink-0"></span>
-                  <span class="text-[11px] leading-[1.7] text-[#F7F4EE]/82">{{ it }}</span>
+                  <span class="text-[11px] leading-[1.7] text-[#FFFDF9]/95">{{ it }}</span>
                 </div>
               </div>
               <div class="mt-4 font-mono text-[9px] tracking-[0.14em] text-[#F0C275]">本展馆未展开 · 政策方向</div>
@@ -498,13 +498,13 @@ const fixes = [
 
         <Reveal :delay="160">
           <div class="mt-12 border-t border-[#F7F4EE]/20 pt-8">
-            <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-5">PUBLIC SOURCES / 本页依据的公开资料</div>
+            <div class="font-mono text-[10px] tracking-[0.2em] text-[#F0C275] mb-5">PUBLIC SOURCES / 本页依据的公开资料</div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
               <div v-for="s in sources" :key="s.n" class="flex gap-4 py-3 border-b border-[#F7F4EE]/12">
-                <span class="font-mono text-[10px] text-[#8A6324] shrink-0 w-16">{{ s.y }}</span>
+                <span class="font-mono text-[10px] text-[#F0C275] shrink-0 w-16">{{ s.y }}</span>
                 <div>
                   <div class="text-[11px] font-semibold text-[#FFFDF9] leading-snug">{{ s.n }}</div>
-                  <div class="text-[10px] text-[#F7F4EE]/80 mt-1">{{ s.u }}</div>
+                  <div class="text-[10px] text-[#FFFDF9]/95 mt-1">{{ s.u }}</div>
                 </div>
               </div>
             </div>
@@ -512,10 +512,10 @@ const fixes = [
         </Reveal>
         <Reveal :delay="200">
           <div class="mt-12 pt-7 border-t border-[#F7F4EE]/20 flex flex-wrap items-center justify-between gap-5">
-            <p class="text-[11px] leading-[1.9] text-[#F7F4EE]/90 max-w-2xl">
+            <p class="text-[11px] leading-[1.9] text-[#FFFDF9]/96 max-w-2xl">
               本页的矛盾类型、时间区间与成本量级均来自 2025–2026 年公开报道与政策文件，具体读数、地块编号与示意指数为教学演示，不写人名、不外推地方调研样本，也不构成任何投资或生产建议。
             </p>
-            <RouterLink to="/about#references" class="inline-flex items-center gap-2 text-xs font-bold text-[#8A6324] shrink-0">
+            <RouterLink to="/about#references" class="inline-flex items-center gap-2 text-xs font-bold text-[#F0C275] shrink-0">
               查看公开资料索引 <ArrowUpRight :size="15" class="arrow-shift" />
             </RouterLink>
           </div>

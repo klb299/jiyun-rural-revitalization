@@ -105,13 +105,10 @@ function initMotion() {
       })
     })
 
+    // 层叠卡的景深改为静态：原先每层一个 scrub 动画，滚动时逐帧改 scale，
+    // 是首页掉帧的主要来源之一。静态数值在视觉上几乎看不出差别。
     root.querySelectorAll('[data-stack] > *').forEach((el, i) => {
-      gsap.to(el, {
-        scale: 1 - Math.min(i, 3) * 0.018,
-        y: -i * 5,
-        ease: 'none',
-        scrollTrigger: { trigger: el.parentElement, start: 'top 32%', end: 'bottom top', scrub: 1 }
-      })
+      gsap.set(el, { scale: 1 - Math.min(i, 3) * 0.018, y: -i * 5 })
     })
   }, root)
 
