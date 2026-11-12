@@ -7,6 +7,7 @@
  * 六段分组与先后顺序是策展编排，不是地理方位。
  * 数量表述只写页面里真实可数的单元数：十三个展陈单元、六段尺度。
  */
+import { ref } from 'vue'
 import Reveal from '../components/editorial/Reveal.vue'
 import FigurePlate from '../components/editorial/FigurePlate.vue'
 import { ArrowUpRight, ArrowRight } from 'lucide-vue-next'
@@ -75,6 +76,47 @@ const pain = {
 }
 
 const segments = [micro, industrial, macro, humanities, aid, pain]
+
+/* ---------------- 第二种策展视角：五大振兴 ----------------
+ * 13 个单元仍从 segments 派生，不另写一份清单，新增单元只需在段落与下面的 nos 各补一行。
+ * 归属按「这个单元最能说明哪个振兴」判定，每个单元只出现一次，合计 13。
+ * 人才与治理的缺口是策展边界，不是遗漏，显式标注为「本展馆未展开」。
+ */
+const allUnits = segments.flatMap((s) => s.units.map((u) => ({
+  ...u, seg: s.scale, segNo: s.no, dot: s.dot, deep: s.deep
+})))
+
+const revitalizations = [
+  {
+    key: 'industry', no: '01', name: '产业振兴', en: 'INDUSTRY', color: '#C88A32',
+    goal: '产业兴旺 · 生活富裕', nos: ['03', '04', '06', '09', '11'],
+    note: '装备、遥测、溯源、流通与认养，连成从田间到餐桌的产业链。', gaps: []
+  },
+  {
+    key: 'talent', no: '02', name: '人才振兴', en: 'TALENT', color: '#8C583A',
+    goal: '人才支撑 · 队伍建设', nos: [],
+    note: '本展馆未展开人才培育叙事，科普实验室只作为科教教具原型。',
+    gaps: ['谁来种地 / 本土人才培育', '返乡创业与人才下乡服务', '产业带头人与治理人才培育']
+  },
+  {
+    key: 'culture', no: '03', name: '文化振兴', en: 'CULTURE', color: '#B83828',
+    goal: '乡风文明 · 社会文明程度', nos: ['07', '08'],
+    note: '节气物候与冬捕非遗，是可观赏的乡土文脉。', gaps: []
+  },
+  {
+    key: 'ecology', no: '04', name: '生态振兴', en: 'ECOLOGY', color: '#2E5A44',
+    goal: '绿色发展 · 生态支撑点', nos: ['01', '02', '05'],
+    note: '黑土剖面、免耕实验与平原沙盘，把耕地与水系放进同一幅图景。', gaps: []
+  },
+  {
+    key: 'organization', no: '05', name: '组织振兴', en: 'ORGANIZATION', color: '#8EBACB',
+    goal: '现代乡村社会治理体制', nos: ['10', '12', '13'],
+    note: '合作社、托管与统一编码讲清经营组织，治理维度尚未展开。',
+    gaps: ['村党组织与村「两委」', '村民自治与村规民约', '新型农村集体经济监管']
+  }
+]
+const unitsOf = (pillar) => allUnits.filter((u) => pillar.nos.includes(u.no))
+const viewMode = ref('scale')
 </script>
 
 <template>
@@ -175,6 +217,103 @@ const segments = [micro, industrial, macro, humanities, aid, pain]
             <span>十三个展陈单元，一条策展动线</span><span class="text-[#C88A32]">✳</span>
             <span>策展动线示意，非行政区划地图</span><span class="text-[#C88A32]">✳</span>
           </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01b 政策视角：同一批 13 个单元，按尺度 / 按五大振兴两种归组方式 -->
+    <section class="relative surface-linen border-y border-[#1C1B18]/10 overflow-hidden">
+      <div class="absolute top-0 left-0 right-0 h-px pointer-events-none"
+        style="background: linear-gradient(90deg, transparent, rgba(200,138,50,.55), transparent)"></div>
+      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+          <div class="lg:col-span-7">
+            <div class="eyebrow mb-4">POLICY LENS / 换一把尺子</div>
+            <h2 class="display-2 lens-title text-[#1C1B18]">同一座展馆，两种看法</h2>
+            <p class="lede mt-5 max-w-2xl">
+              按尺度看是策展顺序，按五大振兴看是政策坐标。十三个单元不增不减，只是重新归位，尚未展开的维度会如实标注，不硬凑满五项。
+            </p>
+          </div>
+          <div class="lg:col-span-5 flex lg:justify-end">
+            <div class="inline-flex items-center p-1 rounded-full bg-[#1C1B18] shadow-[0_18px_40px_-24px_rgba(28,27,24,.7)]">
+              <button v-for="opt in [
+                { id: 'scale', label: '按尺度看' },
+                { id: 'revital', label: '按五大振兴看' }
+              ]" :key="opt.id" @click="viewMode = opt.id"
+                class="w-[124px] sm:w-[152px] py-2.5 rounded-full text-[11px] sm:text-xs font-bold tracking-[0.08em] transition-all duration-500 cursor-pointer"
+                :class="viewMode === opt.id
+                  ? 'bg-[#C88A32] text-[#1C1B18] shadow-[inset_0_1px_0_rgba(255,255,255,.38)]'
+                  : 'bg-[#1C1B18] text-[#F7F4EE]/78 hover:text-[#F7F4EE]'">
+                {{ opt.label }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-10 sm:mt-12 min-h-[360px] sm:min-h-[420px]">
+          <Transition name="lens" mode="out-in">
+            <!-- 视角 A：六段尺度 -->
+            <div v-if="viewMode === 'scale'" key="scale" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div v-for="(seg, i) in segments" :key="seg.id" class="lens-item group relative bg-[#FFFDF9] border border-[#1C1B18]/10 rounded-2xl p-5 sm:p-6 overflow-hidden lift"
+                :style="{ '--lens-i': i }">
+                <div class="absolute top-0 left-0 right-0 h-1" :style="{ background: seg.dot }"></div>
+                <div class="flex items-baseline justify-between gap-2 mb-4">
+                  <span class="font-mono text-[9px] tracking-[0.18em] text-[#6E6960]">{{ seg.no }} / 06 · {{ seg.range }}</span>
+                  <span class="font-mono text-[10px] tracking-[0.14em] text-[#6E6960]">{{ seg.count }} 个单元</span>
+                </div>
+                <div class="font-editorial text-xl font-bold text-[#1C1B18]">{{ seg.scale }} · {{ seg.title }}</div>
+                <div class="font-mono text-[10px] tracking-[0.12em] text-[#6E6960] mt-1">{{ seg.en }}</div>
+                <p class="text-[11px] leading-[1.85] text-[#5A564E] mt-3">{{ seg.lead }}</p>
+                <div class="mt-4 pt-3 border-t border-[#1C1B18]/10 space-y-1.5">
+                  <RouterLink v-for="u in seg.units" :key="u.no" :to="u.to" class="flex items-center gap-2 group/link">
+                    <span class="font-mono text-[9px] text-[#8A6324] w-5 shrink-0">{{ u.no }}</span>
+                    <span class="text-[12px] text-[#3A3630] group-hover/link:text-[#8A6324] transition-colors truncate">{{ u.name }}</span>
+                    <ArrowUpRight :size="12" class="ml-auto shrink-0 text-[#8A6324]" />
+                  </RouterLink>
+                </div>
+              </div>
+            </div>
+
+            <!-- 视角 B：五大振兴 -->
+            <div v-else key="revital" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+              <div v-for="(pillar, i) in revitalizations" :key="pillar.key"
+                class="lens-item relative bg-[#FFFDF9] border border-[#1C1B18]/10 rounded-2xl p-4 sm:p-5 flex flex-col"
+                :style="{ '--lens-i': i }">
+                <div class="h-[3px] w-10 rounded-full mb-4" :style="{ background: pillar.color }"></div>
+                <div class="font-mono text-[9px] tracking-[0.18em] text-[#6E6960]">{{ pillar.no }} / 05</div>
+                <div class="font-editorial text-lg font-bold text-[#1C1B18] mt-1">{{ pillar.name }}</div>
+                <div class="font-mono text-[9px] tracking-[0.14em] text-[#6E6960] mt-0.5">{{ pillar.en }}</div>
+                <div class="text-[11px] leading-[1.6] text-[#8A6324] mt-2">{{ pillar.goal }}</div>
+
+                <div class="mt-4 pt-3 border-t border-[#1C1B18]/10 flex-1 space-y-1.5">
+                  <RouterLink v-for="u in unitsOf(pillar)" :key="u.no" :to="u.to"
+                    class="flex items-center gap-2 rounded-lg bg-[#EFECE6]/70 px-2.5 py-2 hover:bg-[#C88A32]/15 transition-colors duration-300">
+                    <span class="font-mono text-[9px] text-[#8A6324] w-5 shrink-0">{{ u.no }}</span>
+                    <span class="text-[11px] leading-snug text-[#3A3630]">{{ u.name }}</span>
+                  </RouterLink>
+                  <div v-if="!pillar.nos.length" class="rounded-lg border border-dashed border-[#1C1B18]/25 bg-[#EFECE6]/60 px-2.5 py-3">
+                    <div class="font-mono text-[9px] tracking-[0.16em] text-[#8A6324] mb-1">本展馆未展开</div>
+                    <p class="text-[10px] leading-[1.7] text-[#5A564E]">{{ pillar.note }}</p>
+                  </div>
+                  <div v-for="g in pillar.gaps" :key="g" class="flex items-start gap-2 rounded-lg border border-dashed border-[#1C1B18]/18 px-2.5 py-2">
+                    <span class="w-1 h-1 rounded-full bg-[#8C867B] mt-1.5 shrink-0"></span>
+                    <span class="text-[11px] leading-[1.6] text-[#6E6960]">{{ g }}</span>
+                  </div>
+                </div>
+
+                <div class="mt-3 text-[10px] leading-[1.65] text-[#6E6960]" v-if="pillar.nos.length">{{ pillar.note }}</div>
+                <div class="mt-3 pt-3 border-t border-[#1C1B18]/10 flex items-center justify-between gap-2">
+                  <span class="font-mono text-[10px] tracking-[0.14em] text-[#6E6960]">{{ pillar.nos.length }} 个展陈单元</span>
+                  <span v-if="pillar.gaps.length" class="font-mono text-[10px] text-[#8A6324]">待展开 {{ pillar.gaps.length }}</span>
+                </div>
+              </div>
+            </div>
+          </Transition>
+        </div>
+
+        <div class="mt-9 pt-5 border-t border-[#1C1B18]/10 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+          <span class="font-mono text-[9px] tracking-[0.16em] text-[#6E6960]">二十字总要求 / 产业兴旺 · 生态宜居 · 乡风文明 · 治理有效 · 生活富裕</span>
+          <span class="text-[10px] text-[#5A564E]">五个振兴共同指向农业全面升级、农村全面进步、农民全面发展</span>
         </div>
       </div>
     </section>

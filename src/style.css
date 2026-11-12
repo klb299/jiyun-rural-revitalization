@@ -583,3 +583,31 @@ html.vt-active .reveal {
 @media (prefers-reduced-motion: reduce) {
   .hero-prelude { display: none !important; }
 }
+
+/* ------------------------------------------------------------------ *
+ * 展览地图政策视角：视图交叉淡入 + 卡片错峰，全部走 opacity / transform
+ * fill-mode 用 backwards，动画结束后释放 transform，不干扰 .lift 的 hover
+ * ------------------------------------------------------------------ */
+.lens-enter-active { transition: opacity 0.38s var(--ease-luxe), transform 0.38s var(--ease-luxe); }
+.lens-leave-active { transition: opacity 0.2s ease, transform 0.2s ease; }
+.lens-enter-from { opacity: 0; transform: translateY(14px); }
+.lens-leave-to { opacity: 0; transform: translateY(-8px); }
+.lens-enter-active .lens-item {
+  animation: lensItemIn 0.52s var(--ease-luxe) backwards;
+  animation-delay: calc(var(--lens-i, 0) * 42ms);
+}
+@keyframes lensItemIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lens-enter-active, .lens-leave-active { transition: none !important; }
+  .lens-enter-from, .lens-leave-to { opacity: 1 !important; transform: none !important; }
+  .lens-enter-active .lens-item { animation: none !important; }
+}
+
+/* 展览地图视角标题：窄屏收字号，避免中文长标题被折出孤字 */
+@media (max-width: 640px) {
+  .lens-title { font-size: 7.4vw; letter-spacing: -0.04em; }
+}

@@ -236,6 +236,27 @@ const buildEngine = () => {
   hood.receiveShadow = true
   group.add(hood)
 
+  // 前脸型号铭牌与一对牵引钩：工业解构的收尾细节，压暗不抢红色机罩
+  const faceBadgeTex = labelTexture('260 HP  ·  BD-5G', {
+    width: 512, height: 96, font: '600 44px Georgia, serif', color: '#F0C275'
+  })
+  labelTextures.push(faceBadgeTex)
+  const faceBadge = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.72, 0.135),
+    new THREE.MeshBasicMaterial({ map: faceBadgeTex, transparent: true, depthWrite: false, toneMapped: false })
+  )
+  // 贴在可见的机罩侧面（前脸会被黑色格栅与保险杠挡住）
+  faceBadge.rotation.y = Math.PI / 2
+  faceBadge.position.set(0.782, 0.18, 0.15)
+  faceBadge.userData.excludeFromAO = true
+  group.add(faceBadge)
+  const hookMat = metalMaterial(0x6A655C, { roughness: 0.55, metalness: 0.72 })
+  for (const sx of [-1, 1]) {
+    const hook = new THREE.Mesh(new THREE.TorusGeometry(0.055, 0.016, 8, 16), hookMat)
+    hook.position.set(sx * 0.42, -0.38, 0.99)
+    group.add(hook)
+  }
+
   // 顶部隆起筋线
   const ridgeMat = lacquerMaterial(0xC64A38, { roughness: 0.3, metalness: 0.18, clearcoat: 0.8 })
   for (const sx of [-1, 1]) {

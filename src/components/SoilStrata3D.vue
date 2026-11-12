@@ -275,33 +275,53 @@ const buildStrata = () => {
     // 矿物团粒改用噪声雕塑的不规则多面体，避免光滑球体的塑料感
     const mineralGeo = sculptedAggregateGeometry(0.022, 1, 3109 + idx * 17, 0.34)
     const mineralMat = new THREE.MeshStandardMaterial({
-      color: idx === 0 ? 0xB6A88C : 0xC9B896, roughness: 0.92, metalness: 0.02
+      color: idx === 0 ? 0x9A8A70 : 0xB0A084, roughness: 0.94, metalness: 0.02
     })
-    const mineralCount = idx === 0 ? 110 : 72
+    // 收敛：团粒数量减半并按层位递减尺寸，避免剖口像撒满芝麻
+    const mineralCount = idx === 0 ? 64 : 46
     const minerals = new THREE.InstancedMesh(mineralGeo, mineralMat, mineralCount)
-    const poreGeo = new THREE.SphereGeometry(0.032, 8, 6)
-    const poreMat = new THREE.MeshStandardMaterial({ color: 0x120F0D, roughness: 1 })
-    const pores = new THREE.InstancedMesh(poreGeo, poreMat, 46)
     const dummy = new THREE.Object3D()
     for (let i = 0; i < mineralCount; i++) {
       dummy.position.set((rnd() - 0.5) * 2.62, (rnd() - 0.5) * (cfg.h - 0.12), 1.402 + rnd() * 0.02)
-      const s = 0.45 + rnd() * 1.15
+      const s = (0.4 + rnd() * 0.95) * (1 - idx * 0.12)
       dummy.scale.set(s, s * (0.6 + rnd() * 0.5), s * 0.55)
       dummy.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3)
       dummy.updateMatrix()
       minerals.setMatrixAt(i, dummy.matrix)
     }
-    for (let i = 0; i < 46; i++) {
-      dummy.position.set((rnd() - 0.5) * 2.6, (rnd() - 0.5) * (cfg.h - 0.14), 1.398)
-      const s = 0.5 + rnd() * 1.3
-      dummy.scale.set(s, s * 0.7, s * 0.4)
-      dummy.rotation.set(0, 0, rnd() * 3)
-      dummy.updateMatrix()
-      pores.setMatrixAt(i, dummy.matrix)
-    }
     minerals.instanceMatrix.needsUpdate = true
-    pores.instanceMatrix.needsUpdate = true
-    group.add(minerals, pores)
+    group.add(minerals)
+
+    // 贯通蚯蚓通道：主干 + 地表孔口 + 侧枝，压暗后不再像涂鸦
+    const poreMat = new THREE.MeshStandardMaterial({ color: 0x1A1510, roughness: 1 })
+    const poreGroup = new THREE.Group()
+    for (let i = 0; i < 5; i++) {
+      const x0 = (rnd() - 0.5) * 2.3
+      const pts = []
+      for (let k = 0; k < 5; k++) {
+        pts.push(new THREE.Vector3(
+          x0 + Math.sin(k * 1.1 + i) * 0.22,
+          cfg.h / 2 - 0.04 - k * (cfg.h * 0.21),
+          1.402 + rnd() * 0.008
+        ))
+      }
+      const tube = new THREE.Mesh(
+        new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 22, 0.022, 7, false), poreMat
+      )
+      poreGroup.add(tube)
+      const mouth = new THREE.Mesh(new THREE.TorusGeometry(0.032, 0.008, 6, 12), poreMat)
+      mouth.position.set(x0, cfg.h / 2 - 0.03, 1.408)
+      poreGroup.add(mouth)
+      if (i < 3) {
+        const branch = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([
+          new THREE.Vector3(x0, cfg.h * 0.1, 1.404),
+          new THREE.Vector3(x0 + 0.18, cfg.h * 0.04, 1.404),
+          new THREE.Vector3(x0 + 0.3, -cfg.h * 0.06, 1.404)
+        ]), 12, 0.012, 6, false), poreMat)
+        poreGroup.add(branch)
+      }
+    }
+    group.add(poreGroup)
 
     // 钙质结核与铁锰锈斑：只有心土与母质层才有结核，符合真实成土过程
     const noduleCount = idx === 0 ? 0 : 14
@@ -309,6 +329,10 @@ const buildStrata = () => {
       const noduleGeo = sculptedAggregateGeometry(0.042, 2, 5501 + idx * 31, 0.3)
       const noduleMat = new THREE.MeshStandardMaterial({ color: 0xC9B99A, roughness: 0.94 })
       const nodules = new THREE.InstancedMesh(noduleGeo, noduleMat, noduleCount)
+      // 同心层理内芯：与结核共用一个变换循环，不额外增加散布对象
+      const coreGeo = new THREE.SphereGeometry(0.016, 10, 8)
+      const coreMat = new THREE.MeshStandardMaterial({ color: 0xE4D8BE, roughness: 0.9 })
+      const cores = new THREE.InstancedMesh(coreGeo, coreMat, noduleCount)
       for (let i = 0; i < noduleCount; i++) {
         dummy.position.set((rnd() - 0.5) * 2.55, (rnd() - 0.5) * (cfg.h - 0.24), 1.405)
         const s = 0.45 + rnd() * 1.35
@@ -316,9 +340,15 @@ const buildStrata = () => {
         dummy.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3)
         dummy.updateMatrix()
         nodules.setMatrixAt(i, dummy.matrix)
+        dummy.scale.set(s * 0.42, s * 0.42, s * 0.2)
+        dummy.position.z = 1.414
+        dummy.rotation.set(0, 0, 0)
+        dummy.updateMatrix()
+        cores.setMatrixAt(i, dummy.matrix)
       }
       nodules.instanceMatrix.needsUpdate = true
-      group.add(nodules)
+      cores.instanceMatrix.needsUpdate = true
+      group.add(nodules, cores)
     }
     const rustGeo = new THREE.SphereGeometry(0.021, 8, 6)
     const rustMat = new THREE.MeshStandardMaterial({ color: 0x8C583A, roughness: 0.96 })
@@ -335,11 +365,12 @@ const buildStrata = () => {
     group.add(rusts)
 
     // 腐殖根须 / 菌丝：平滑空间曲线管
+    // 菌丝压暗并收敛到 3 主干 + 2 侧枝，让土体与层理重新成为主角
     const rootMat = new THREE.MeshStandardMaterial({
-      color: idx === 2 ? 0x9A825E : 0xC88A32,
-      roughness: 0.86, metalness: 0.08, transparent: true, opacity: 0.66
+      color: idx === 2 ? 0x6B5A42 : 0x4A3F30,
+      roughness: 0.92, metalness: 0.02, transparent: true, opacity: 0.52
     })
-    for (let r = 0; r < 5; r++) {
+    for (let r = 0; r < 3; r++) {
       const x0 = (rnd() - 0.5) * 2.3
       const y0 = cfg.h / 2 - 0.05
       const pts = []
@@ -353,6 +384,14 @@ const buildStrata = () => {
       const curve = new THREE.CatmullRomCurve3(pts)
       const tube = new THREE.Mesh(new THREE.TubeGeometry(curve, 28, 0.007 + rnd() * 0.005, 7, false), rootMat)
       group.add(tube)
+      if (r < 2) {
+        const branch = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([
+          pts[2],
+          new THREE.Vector3(pts[2].x + 0.16, pts[2].y - 0.12, 1.404),
+          new THREE.Vector3(pts[2].x + 0.24, pts[2].y - 0.22, 1.404)
+        ]), 14, 0.005, 6, false), rootMat)
+        group.add(branch)
+      }
     }
 
     // 层位铭牌（浮雕小瓷片）

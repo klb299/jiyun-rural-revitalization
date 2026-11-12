@@ -259,6 +259,7 @@ const resetLab = () => {
               <div class="font-mono text-[10px] tracking-[0.2em] text-[#1C1B18]/65 mb-5">HOW TO USE</div>
               <p class="font-editorial text-xl leading-[1.7] font-bold">选一个实验，<br />然后动手改参数。</p>
               <p class="text-[13px] leading-[1.85] text-[#1C1B18]/72 mt-4">拖拽旋转模型，点击高亮结构，拖动时间轴或开关，观察场景与读数的实时变化。</p>
+              <p class="text-[11px] leading-[1.8] text-[#1C1B18]/62 mt-3 pt-3 border-t border-[#1C1B18]/12">四个实验也可作为职业教育与农技培训的教具原型，用来讲清黑土、稻作与定位的原理。</p>
             </div>
           </Reveal>
         </div>

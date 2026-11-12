@@ -648,6 +648,17 @@ const buildRoadNetwork = () => {
   waterline.position.set(0, 0.11, 18.42)
   waterline.userData.excludeFromAO = true
   scene.add(waterline)
+
+  // 渠水方向线：两道极淡的浅色细条，让静态水面有流向，不增加场景密度
+  const flowMat = new THREE.MeshBasicMaterial({
+    color: 0xF2FAF6, transparent: true, opacity: 0.46, depthWrite: false
+  })
+  for (let i = 0; i < 2; i++) {
+    const flow = new THREE.Mesh(roundedBox(34.4, 0.006, 0.012, 0.003, 2), flowMat)
+    flow.position.set(0, 0.128, 18.42 + (i ? 0.09 : -0.09))
+    flow.userData.excludeFromAO = true
+    scene.add(flow)
+  }
 }
 
 /* ---------------- 1d. 蜿蜒河床、生态阶梯驳岸、亲水栈桥与金秋芦苇荡 ---------------- */

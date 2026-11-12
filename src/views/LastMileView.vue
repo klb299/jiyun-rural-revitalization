@@ -132,7 +132,7 @@ const fixes = [
   { k: '01', t: '先作业、后核验、再补助', d: '把补贴发在真实作业之后，减少重复填报，也让保护性耕作的收益早一点到账。', y: '四平市 2026 公开纪实' },
   { k: '02', t: '合作社全程托管', d: '碎片化地块整合成规模化生产单元，大农机才有用武之地，单户不必自购装备。', y: '梨树模式 3.0 / 中国农大' },
   { k: '03', t: '农机共享与 AI 农服', d: '从「买重装备」转向「买轻服务」，复杂分析留在后台，农户只收可执行的农事建议。', y: '中国农网 2026.09' },
-  { k: '04', t: '农技推广体系下沉', d: '农技员县管乡用、下沉到村，科技小院与驻社研究生补上「最后一公里」的人。', y: '2026 中央一号文件' }
+  { k: '04', t: '农技下沉与村域治理', d: '农技员县管乡用、下沉到村，科技小院与驻社研究生补上「最后一公里」的人；村「两委」与村规民约则把服务稳在村庄里。', y: '2026 中央一号文件' }
 ]
 </script>
 
@@ -475,6 +475,27 @@ const fixes = [
             </div>
           </Reveal>
         </div>
+
+        <!-- 人才与治理：本展馆尚未展开的两个维度，只列公开政策方向，不编数据与人名 -->
+        <Reveal :delay="140">
+          <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div v-for="g in [
+              { k: 'TALENT / 人才振兴', t: '谁来种地，技术怎么传到田里', items: ['科技小院与驻社研究生', '返乡创业与人才下乡服务', '产业带头人与治理人才培育'] },
+              { k: 'GOVERNANCE / 组织振兴', t: '经营组织之外，还有乡村治理', items: ['村党组织与村「两委」', '村民自治与村规民约', '新型农村集体经济监管'] }
+            ]" :key="g.k" class="border border-[#F7F4EE]/20 bg-[#F7F4EE]/6 p-6">
+              <div class="font-mono text-[9px] tracking-[0.18em] text-[#F0C275] mb-3">{{ g.k }}</div>
+              <div class="font-editorial text-lg font-bold text-[#FFFDF9] mb-4">{{ g.t }}</div>
+              <div class="space-y-2">
+                <div v-for="it in g.items" :key="it" class="flex items-start gap-2 border-t border-dashed border-[#F7F4EE]/18 pt-2">
+                  <span class="w-1 h-1 rounded-full bg-[#C88A32] mt-1.5 shrink-0"></span>
+                  <span class="text-[11px] leading-[1.7] text-[#F7F4EE]/82">{{ it }}</span>
+                </div>
+              </div>
+              <div class="mt-4 font-mono text-[9px] tracking-[0.14em] text-[#F0C275]">本展馆未展开 · 政策方向</div>
+            </div>
+          </div>
+        </Reveal>
+
         <Reveal :delay="160">
           <div class="mt-12 border-t border-[#F7F4EE]/20 pt-8">
             <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-5">PUBLIC SOURCES / 本页依据的公开资料</div>
