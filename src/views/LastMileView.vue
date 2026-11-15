@@ -5,9 +5,11 @@
  * 矛盾类型、时间区间与成本量级均标注公开出处，具体读数为教学演示示意，
  * 不写人名、不外推地方调研样本、不编统计数字。
  */
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import Reveal from '../components/editorial/Reveal.vue'
 import PhotoNote from '../components/editorial/PhotoNote.vue'
+import LabChallenge from '../components/editorial/LabChallenge.vue'
+import { useAppStore } from '../stores/appStore'
 import SectionHead from '../components/editorial/SectionHead.vue'
 import { ArrowUpRight, ArrowRight, Check, AlertTriangle } from 'lucide-vue-next'
 
@@ -135,6 +137,40 @@ const fixes = [
   { k: '03', t: '农机共享与 AI 农服', d: '从「买重装备」转向「买轻服务」，复杂分析留在后台，农户只收可执行的农事建议。', y: '中国农网 2026.09' },
   { k: '04', t: '农技下沉与村域治理', d: '农技员县管乡用、下沉到村，科技小院与驻社研究生补上「最后一公里」的人；村「两委」与村规民约则把服务稳在村庄里。', y: '2026 中央一号文件' }
 ]
+
+/* ---------------- 三关通关进度（与科普实验室共用全局徽章） ----------------
+ * 只复用本页既有状态：时间账的判定、报表是否统一、经济账比较过几种方式。
+ * 不改任何既有按钮名与控件，探针不受影响。 */
+const appStore = useAppStore()
+const lmBadgeDefs = [
+  { id: 'lm1', no: '01', name: '时间账' },
+  { id: 'lm2', no: '02', name: '数据账' },
+  { id: 'lm3', no: '03', name: '经济账' }
+]
+const lmStates = computed(() => [
+  verdict.value.tone === 'good',
+  unified.value,
+  appStore.labVisited.lm3.length >= 2
+])
+const lmCurrent = computed(() => lmStates.value.filter(Boolean).length)
+const lmHint = computed(() => {
+  if (!lmStates.value[0]) return '先在「时间账」里换条件，找到能等到地力回升那一年的方案'
+  if (!lmStates.value[1]) return '再合并六张报表，并统一地块编码'
+  if (!lmStates.value[2]) return '最后在「经济账」里比较两种经营方式'
+  return '三道关卡都解开了，落地这件事从来不是单靠技术'
+})
+const lmBadges = computed(() => lmBadgeDefs.map((b) => ({ ...b, done: appStore.labBadges.includes(b.id) })))
+const lmAllDone = computed(() => lmCurrent.value === 3)
+
+watch(lmStates, (arr) => {
+  arr.forEach((v, i) => { if (v) appStore.awardLab(lmBadgeDefs[i].id) })
+}, { immediate: true })
+
+const pickMode = (id) => {
+  mode.value = id
+  appStore.visitLab('lm3', id)
+}
+
 </script>
 
 <template>
@@ -222,6 +258,17 @@ const fixes = [
     <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20">
       <Reveal>
         <PhotoNote src="/photos/furrows.jpg" alt="规整垄沟的农田航拍实景" label="FIELD NOTE / 技术落地的现场" note="三个实验讲的都是技术为什么难落地。照片是它最终要回去的地方，不是某个示范工程的数据来源。" />
+      </Reveal>
+    </section>
+
+    <!-- 三关通关进度 -->
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20">
+      <Reveal>
+        <LabChallenge
+          eyebrow="THREE GATES / 三道关卡" goal="把三道落地关卡逐一解开"
+          :hint="lmHint" :current="lmCurrent" :total="3" :done="lmCurrent > 0"
+          :badges="lmBadges" badge-label="LAST MILE BADGES / 通关徽章"
+          :all-done="lmAllDone" all-done-text="三关全通 · 落地观察员" />
       </Reveal>
     </section>
 
@@ -404,7 +451,7 @@ const fixes = [
             <div class="font-editorial text-4xl font-bold text-[#F7F4EE] mt-5">{{ acres }} <span class="text-base font-normal">亩</span></div>
 
             <div class="mt-8 space-y-2">
-              <button v-for="m in modes" :key="m.id" @click="mode = m.id"
+              <button v-for="m in modes" :key="m.id" @click="pickMode(m.id)"
                 class="w-full text-left p-4 border transition-all duration-400 cursor-pointer"
                 :class="mode === m.id ? 'border-[#C88A32] bg-[#F7F4EE]/10' : 'border-[#F7F4EE]/18 hover:bg-[#F7F4EE]/5'">
                 <div class="flex items-center justify-between gap-2">

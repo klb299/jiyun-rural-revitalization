@@ -1,10 +1,12 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import ScienceStage from '../components/science/ScienceStage.vue'
 import WebGLStage from '../components/editorial/WebGLStage.vue'
 import SectionHead from '../components/editorial/SectionHead.vue'
 import FigurePlate from '../components/editorial/FigurePlate.vue'
 import Reveal from '../components/editorial/Reveal.vue'
+import LabChallenge from '../components/editorial/LabChallenge.vue'
+import { useAppStore } from '../stores/appStore'
 import { ArrowUpRight, RotateCcw } from 'lucide-vue-next'
 
 const activeMode = ref('soil')
@@ -194,8 +196,80 @@ const rtResult = computed(() => blocked.value
     }
 )
 
+
+/* ---------------- 四关挑战：给每个实验一个明确目标 ----------------
+ * 不改任何既有按钮名与参数控件，只在外层记录「看过什么 / 达成什么」。
+ * 阈值全部来自页面自身的教学演示参数，不引入新数据。 */
+const appStore = useAppStore()
+const soilKeys = soils.map((s) => s.key)
+const phaseNos = ricePhases.map((p) => p.no)
+
+const mission = computed(() => {
+  const m = activeMode.value
+  if (m === 'soil') {
+    const seen = appStore.labVisited.soil.filter((k) => soilKeys.includes(k))
+    const done = seen.length >= soilKeys.length
+    return {
+      goal: '集齐四类黑土结构档案',
+      hint: done ? '四类都看过了，这一关的档案齐了' : `还差 ${soilKeys.length - seen.length} 类，点右侧结构卡或直接点模型里的结构`,
+      current: seen.length, total: soilKeys.length, done
+    }
+  }
+  if (m === 'rice') {
+    const seen = appStore.labVisited.rice.filter((v) => phaseNos.includes(v))
+    const done = seen.length >= phaseNos.length
+    return {
+      goal: '走完一季稻的五个生育阶段',
+      hint: done ? '一季稻从育秧到收割，全看过了' : `还差 ${phaseNos.length - seen.length} 个阶段，点时间轴上的农时`,
+      current: seen.length, total: phaseNos.length, done
+    }
+  }
+  if (m === 'beidou') {
+    const steps = [satCount.value >= 5, !blocked.value]
+    const done = steps.every(Boolean)
+    return {
+      goal: '把定位误差压到厘米级',
+      hint: blocked.value
+        ? '林带还挡着改正信号，点「移开林带」'
+        : satCount.value < 5 ? '卫星还不够，把可见卫星调到 5 颗以上' : '厘米级定位已达成',
+      current: steps.filter(Boolean).length, total: 2, done
+    }
+  }
+  const steps = [coverage.value >= 60, exploded.value]
+  const done = steps.every(Boolean)
+  return {
+    goal: '让雨水渗进黑土，而不是冲走表土',
+    hint: coverage.value < 60
+      ? '秸秆覆盖率还不够，点到 60% 以上'
+      : !exploded.value ? '再展开播种机，看开沟器怎么只开一条窄缝' : '覆盖保水与免耕播种都试过了',
+    current: steps.filter(Boolean).length, total: 2, done
+  }
+})
+
+const badgeDefs = [
+  { id: 'soil', no: '01', name: '团粒' },
+  { id: 'rice', no: '02', name: '稻作' },
+  { id: 'beidou', no: '03', name: '北斗' },
+  { id: 'notill', no: '04', name: '免耕' }
+]
+const badges = computed(() => badgeDefs.map((b) => ({ ...b, done: appStore.labBadges.includes(b.id) })))
+const allLabsDone = computed(() => badgeDefs.every((b) => appStore.labBadges.includes(b.id)))
+
+watch(() => mission.value.done, (v) => {
+  if (v) appStore.awardLab(activeMode.value)
+}, { immediate: true })
+
+const pickSoil = (k) => {
+  soilFocus.value = k
+  appStore.visitLab('soil', k)
+}
+const pickPhase = (n) => {
+  riceStage.value = n
+  appStore.visitLab('rice', n)
+}
+
 const onSelect = (key) => {
-  if (activeMode.value === 'soil') soilFocus.value = key
+  if (activeMode.value === 'soil') { soilFocus.value = key; appStore.visitLab('soil', key) }
   else if (activeMode.value === 'notill') notillFocus.value = key
   else if (activeMode.value === 'rice') riceFocus.value = key
   else if (activeMode.value === 'beidou') beidouFocus.value = key
@@ -294,6 +368,12 @@ const resetLab = () => {
           :eyebrow="labs.find(l => l.id === activeMode).en" :title="labs.find(l => l.id === activeMode).name"
           :description="labs.find(l => l.id === activeMode).short" /></Reveal>
 
+        <Reveal :delay="60" class="mt-10">
+          <LabChallenge
+            :goal="mission.goal" :hint="mission.hint" :current="mission.current" :total="mission.total"
+            :done="mission.done" :badges="badges" :all-done="allLabsDone" />
+        </Reveal>
+
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-14">
           <!-- 3D 舞台 -->
           <Reveal variant="scale" class="lg:col-span-8">
@@ -336,7 +416,7 @@ const resetLab = () => {
                 <div class="card-linen p-6 sm:p-7">
                   <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960] mb-4">SELECT A STRUCTURE</div>
                   <div class="grid grid-cols-2 gap-2">
-                    <button v-for="s in soils" :key="s.key" @click="soilFocus = s.key"
+                    <button v-for="s in soils" :key="s.key" @click="pickSoil(s.key)"
                       class="px-3 py-3 rounded-xl text-xs font-bold text-left transition-all duration-400 cursor-pointer"
                       :class="soilFocus === s.key ? 'bg-[#1C1B18] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E] hover:bg-[#C88A32]/20'">
                       <span class="font-mono text-[0.5625rem] tracking-[0.16em] opacity-60 block mb-1">{{ s.no }}</span>{{ s.name }}
@@ -371,7 +451,7 @@ const resetLab = () => {
                   <input v-model.number="riceStage" type="range" min="0" max="4" step="1"
                     aria-label="稻作生长阶段" class="w-full accent-[#C88A32] cursor-pointer" />
                   <div class="grid grid-cols-5 gap-1.5 mt-4">
-                    <button v-for="p in ricePhases" :key="p.no" @click="riceStage = p.no"
+                    <button v-for="p in ricePhases" :key="p.no" @click="pickPhase(p.no)"
                       class="py-2.5 min-h-[2.5rem] rounded-lg text-[0.6875rem] font-bold transition-all duration-300 cursor-pointer"
                       :class="riceStage === p.no ? 'bg-[#2E5A44] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E]'">{{ p.name }}</button>
                   </div>

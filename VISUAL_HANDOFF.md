@@ -675,3 +675,11 @@ playwright-cli console 2>&1 | grep -E "Total messages|\[ERROR\]|\[WARNING\]"
 * **保留 px 的例外**：≤3px 的细线、1px 边框、阴影、滚动条宽度、`backdrop-filter`。它们随字号缩放会变形或消失。
 * 触控目标 `min-h-[2.5rem]` 在 16px 基准下正好 40px，不要改回更小的固定值。
 * 加新断点前先想清楚：小屏不缩根字号是有意的，9–11px 展签小字再缩会不可读。
+
+## 20. 交互挑战层（2026-11-15）
+
+* `LabChallenge.vue` 是唯一挑战卡组件，科普实验室四关与最后一公里三关共用。新增关卡改 `ScienceView.vue` / `LastMileView.vue` 里的 `mission` / `lmStates` 条件即可，不要复制组件。
+* 状态在 `appStore.labVisited / labBadges`，`sessionStorage` 键 `jiyun-labs`。徽章只增不减，`resetLab` 不清。
+* **不要改既有按钮名与参数控件**：`audit-soil / rice / notill / beidou` 按可读名称查找，改名会连带破坏四个探针。
+* 挑战卡刻意不做卡通游戏 UI：纸感浅底、细边框、金色扫线、中文衬线，完成态用浅底分档金 `#A9701F`。新动效只走 color / transform 并给 reduced-motion 降级。
+* 自动测试定位结构卡时用 `.last()` 或按编号：实验切换 tab 的可读名称含「团粒 / 孔隙 / 菌丝 / 钙质结核」，`.first()` 会误点。

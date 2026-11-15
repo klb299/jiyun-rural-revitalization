@@ -31,6 +31,32 @@ export const useAppStore = defineStore('app', () => {
   // 动线方向：由全局 TrailNav 写入，App.vue 的路由转场据此选择滑入方向，
   // 转场结束后清空，之后的普通跳转回到默认过渡。
   const trailDirection = ref(null) // 'forward' | 'back' | null
+
+  // 互动实验的挑战进度：科普实验室四关 + 最后一公里三关共用一套徽章状态，
+  // 两页之间联动。只记「看过哪些结构 / 拿到哪些章」，不存任何业务数据。
+  const LAB_KEY = 'jiyun-labs'
+  const emptyVisited = () => ({ soil: [], rice: [], beidou: [], notill: [], lm3: [] })
+  const readLabs = () => {
+    try {
+      if (typeof sessionStorage === 'undefined') return null
+      const d = JSON.parse(sessionStorage.getItem(LAB_KEY) || 'null')
+      if (!d || typeof d !== 'object') return null
+      return {
+        visited: { ...emptyVisited(), ...(d.visited || {}) },
+        badges: Array.isArray(d.badges) ? d.badges : []
+      }
+    } catch (e) { return null }
+  }
+  const savedLabs = readLabs()
+  const labVisited = ref(savedLabs?.visited || emptyVisited())
+  const labBadges = ref(savedLabs?.badges || [])
+  const persistLabs = () => {
+    try {
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.setItem(LAB_KEY, JSON.stringify({ visited: labVisited.value, badges: labBadges.value }))
+      }
+    } catch (e) { /* 隐私模式下写入失败，降级为本次会话内状态 */ }
+  }
   
   // Real-time environmental telemetries (Simulated IoT sensors)
   const sensorsData = ref({
@@ -69,6 +95,19 @@ export const useAppStore = defineStore('app', () => {
     trailDirection.value = null
   }
 
+  const visitLab = (lab, key) => {
+    const arr = labVisited.value[lab]
+    if (!arr || key === undefined || key === null || arr.includes(key)) return
+    labVisited.value = { ...labVisited.value, [lab]: [...arr, key] }
+    persistLabs()
+  }
+
+  const awardLab = (id) => {
+    if (labBadges.value.includes(id)) return
+    labBadges.value = [...labBadges.value, id]
+    persistLabs()
+  }
+
   return {
     activeFocusPoint,
     isAudioPlaying,
@@ -77,11 +116,15 @@ export const useAppStore = defineStore('app', () => {
     sensorsData,
     lensMode,
     trailDirection,
+    labVisited,
+    labBadges,
     setFocusPoint,
     toggleNightMode,
     toggleAudio,
     setLens,
     markTrail,
-    clearTrail
+    clearTrail,
+    visitLab,
+    awardLab
   }
 })

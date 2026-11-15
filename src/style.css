@@ -61,7 +61,6 @@
  * ------------------------------------------------------------------ */
 html { font-size: clamp(16px, 0.4vw + 10.2px, 20px); }
 
-
 /* 跳到主内容：键盘用户不必逐项穿过导航 */
 .skip-link {
   position: fixed;
@@ -692,5 +691,18 @@ html.vt-active .reveal {
 @media (prefers-reduced-motion: reduce) {
   .cinema-line .kin-char { animation: none !important; opacity: 1 !important; transform: none !important; }
   [data-cinema-progress] { transform: scaleX(1) !important; }
+}
+
+/* ------------------------------------------------------------------ *
+ * 实验挑战卡：进度格、徽章点亮、达标金线。只走 color / transform。
+ * ------------------------------------------------------------------ */
+.lab-sweep { transition: transform 0.6s var(--ease-luxe); }
+.lab-cell { transition: background-color 0.45s var(--ease-luxe), transform 0.45s var(--ease-luxe); }
+.lab-cell--on { animation: labCellPop 0.45s var(--ease-luxe) backwards; }
+@keyframes labCellPop { from { transform: scaleX(0.55); } to { transform: scaleX(1); } }
+.lab-badge--on { animation: labBadgePop 0.5s var(--ease-luxe) backwards; }
+@keyframes labBadgePop { from { opacity: 0; transform: translateY(6px) scale(0.96); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .lab-sweep, .lab-cell, .lab-badge { transition: none !important; animation: none !important; }
 }
 
