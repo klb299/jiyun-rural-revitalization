@@ -21,7 +21,7 @@ defineProps({
     <div class="relative">
       <div class="flex items-center gap-3" :class="align === 'center' ? 'justify-center' : ''">
         <span class="eyebrow" :class="dark ? 'text-[#C88A32]!' : ''">{{ eyebrow }}</span>
-        <span v-if="index" class="font-mono text-[10px] tracking-[0.2em]" :class="dark ? 'text-[#F7F4EE]/80' : 'text-[#6E6960]'">{{ index }}</span>
+        <span v-if="index" class="font-mono text-[0.625rem] tracking-[0.2em]" :class="dark ? 'text-[#F7F4EE]/80' : 'text-[#6E6960]'">{{ index }}</span>
       </div>
 
       <div class="mt-5 mb-6 h-[3px] w-full rounded-full"
@@ -34,7 +34,7 @@ defineProps({
         <div :class="align === 'center' ? '' : 'lg:col-span-5'">
           <p v-if="description" class="body-copy" :class="dark ? 'text-[#F7F4EE]/90' : ''">{{ description }}</p>
           <RouterLink v-if="to" :to="to"
-            class="inline-flex items-center gap-3 mt-4 min-h-[40px] text-xs font-bold group"
+            class="inline-flex items-center gap-3 mt-4 min-h-[2.5rem] text-xs font-bold group"
             :class="dark ? 'text-[#C88A32]' : 'text-[#8A6324]'">
             <span class="link-line">{{ linkLabel }}</span>
             <span class="w-8 h-8 rounded-full grid place-items-center border border-current/30 group-hover:bg-[#C88A32] group-hover:text-[#1C1B18] group-hover:border-[#C88A32] transition-all duration-500">

@@ -20,7 +20,7 @@ defineProps({
             class="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-[1.05]"
             :class="contain ? 'object-contain!' : ''" />
           <span v-if="index"
-            class="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[10px] font-bold tracking-[0.16em] shadow-lg">
+            class="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[0.625rem] font-bold tracking-[0.16em] shadow-lg">
             {{ index }}
           </span>
           <div class="absolute inset-4 border border-[#1C1B18]/10 rounded-2xl pointer-events-none"></div>

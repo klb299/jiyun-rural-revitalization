@@ -74,13 +74,13 @@ onUnmounted(() => clearTimeout(toastTimer))
     <section class="relative min-h-[100dvh] flex items-center overflow-hidden"
       style="background: linear-gradient(148deg, #F0DFC0 0%, #E4BE79 48%, #C88A32 100%)">
       <div class="absolute inset-0 coord-rule opacity-30 pointer-events-none"></div>
-      <div data-parallax="-8" class="absolute -left-[12%] -bottom-[26%] w-[42vw] h-[42vw] min-w-[360px] min-h-[360px] rounded-full bg-[#FFFDF9]/15 blur-2xl pointer-events-none"></div>
+      <div data-parallax="-8" class="absolute -left-[12%] -bottom-[26%] w-[42vw] h-[42vw] min-w-[22.5rem] min-h-[22.5rem] rounded-full bg-[#FFFDF9]/15 blur-2xl pointer-events-none"></div>
 
-      <div class="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
+      <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-8">
-            <span class="px-3 py-1.5 rounded-full bg-[#1C1B18] text-[#F7F4EE] font-mono text-[10px] tracking-[0.2em] font-bold">CHAPTER 08</span>
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#1C1B18]/70">SPECIALTY AGRI-FAIR / 吉林风物特产集市</span>
+            <span class="px-3 py-1.5 rounded-full bg-[#1C1B18] text-[#F7F4EE] font-mono text-[0.625rem] tracking-[0.2em] font-bold">CHAPTER 08</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#1C1B18]/70">SPECIALTY AGRI-FAIR / 吉林风物特产集市</span>
           </div>
         </Reveal>
 
@@ -109,7 +109,7 @@ onUnmounted(() => clearTimeout(toastTimer))
             <Reveal :delay="820">
               <div class="flex flex-wrap gap-2 mt-12 max-w-lg">
                 <span v-for="t in ['产地到县域', '国家地理标志', '一袋一码', '冷链直达', '助农直采']" :key="t"
-                  class="rounded-full border border-[#1C1B18]/30 px-3 py-1.5 font-mono text-[9px] tracking-[0.14em] text-[#1C1B18]/75">{{ t }}</span>
+                  class="rounded-full border border-[#1C1B18]/30 px-3 py-1.5 font-mono text-[0.5625rem] tracking-[0.14em] text-[#1C1B18]/75">{{ t }}</span>
               </div>
             </Reveal>
           </div>
@@ -123,18 +123,18 @@ onUnmounted(() => clearTimeout(toastTimer))
                   :class="activeFilter === c.id ? 'ring-2 ring-[#1C1B18]' : ''"
                   :style="{ transform: `rotate(${[-3, 2.5, -2, 3][i]}deg)` }">
                   <div class="flex items-start justify-between gap-2 mb-5">
-                    <span class="font-mono text-[10px] tracking-[0.18em] text-[#8A6324]">TAG 0{{ i + 1 }}</span>
+                    <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#8A6324]">TAG 0{{ i + 1 }}</span>
                     <span class="w-6 h-6 rounded-full bg-[#1C1B18] text-[#F7F4EE] grid place-items-center">
                       <ArrowUpRight :size="13" class="arrow-shift" />
                     </span>
                   </div>
                   <div class="font-editorial text-lg sm:text-xl font-bold leading-snug mb-3">{{ c.name }}</div>
-                  <div class="text-[11px] leading-relaxed text-[#5A564E] min-h-[32px]">
+                  <div class="text-[0.6875rem] leading-relaxed text-[#5A564E] min-h-[2rem]">
                     {{ products.find(p => p.category === c.id)?.name || '四类风物 · 产地直采' }}
                   </div>
                   <div class="mt-5 pt-4 border-t border-dashed border-[#1C1B18]/20 flex items-center justify-between gap-2">
-                    <span class="font-mono text-[9px] tracking-[0.14em] text-[#6E6960]">JILIN / ORIGIN</span>
-                    <span class="text-[11px] font-bold text-[#8A6324]">
+                    <span class="font-mono text-[0.5625rem] tracking-[0.14em] text-[#6E6960]">JILIN / ORIGIN</span>
+                    <span class="text-[0.6875rem] font-bold text-[#8A6324]">
                       {{ products.find(p => p.category === c.id)?.price || '查看全部' }}
                     </span>
                   </div>
@@ -147,7 +147,7 @@ onUnmounted(() => clearTimeout(toastTimer))
 
       <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#1C1B18]/15 bg-[#1C1B18] py-2.5" aria-hidden="true">
         <div class="marquee-track">
-          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.625rem] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
             <span>黑土粳稻 / 黄金玉米</span><span class="text-[#C88A32]">✳</span>
             <span>长白山椴树雪蜜 / 红松子</span><span class="text-[#C88A32]">✳</span>
             <span>查干湖生态胖头鱼</span><span class="text-[#C88A32]">✳</span>
@@ -158,7 +158,7 @@ onUnmounted(() => clearTimeout(toastTimer))
     </section>
 
     <!-- 目录 -->
-    <section id="catalog" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
+    <section id="catalog" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
       <Reveal>
         <SectionHead
           index="01 / 04"
@@ -174,12 +174,12 @@ onUnmounted(() => clearTimeout(toastTimer))
             v-for="c in categories"
             :key="c.id"
             @click="activeFilter = c.id"
-            class="px-4 py-2.5 min-h-[40px] rounded-lg text-xs font-semibold cursor-pointer transition-all duration-300"
+            class="px-4 py-2.5 min-h-[2.5rem] rounded-lg text-xs font-semibold cursor-pointer transition-all duration-300"
             :class="activeFilter === c.id
               ? 'bg-[#1C1B18] text-[#F7F4EE]'
               : 'border border-[#1C1B18]/14 text-[#5A564E] hover:border-[#C88A32] hover:text-[#C88A32]'"
           >{{ c.name }}</button>
-          <span class="ml-auto font-mono text-[10px] tracking-[0.16em] text-[#6E6960]">{{ filtered.length }} ITEMS</span>
+          <span class="ml-auto font-mono text-[0.625rem] tracking-[0.16em] text-[#6E6960]">{{ filtered.length }} ITEMS</span>
         </div>
       </Reveal>
 
@@ -188,17 +188,17 @@ onUnmounted(() => clearTimeout(toastTimer))
           <article class="h-full border border-[#1C1B18]/10 bg-[#FFFDF9]/70 lift flex flex-col overflow-hidden">
             <div class="art-frame aspect-[16/9]">
               <img :src="p.image" :alt="p.name" loading="lazy" />
-              <span class="absolute top-3 left-3 px-2 py-1 font-mono text-[10px] tracking-[0.16em] bg-[#FFFDF9]/88 text-[#1C1B18]">{{ p.plate }}</span>
+              <span class="absolute top-3 left-3 px-2 py-1 font-mono text-[0.625rem] tracking-[0.16em] bg-[#FFFDF9]/88 text-[#1C1B18]">{{ p.plate }}</span>
               <span class="absolute bottom-3 right-3 font-editorial text-xl font-bold text-[#F7F4EE]/92">{{ p.no }}</span>
             </div>
             <div class="p-6 flex flex-col flex-1">
               <div class="flex items-start justify-between gap-3 mb-4">
-                <span class="px-2.5 py-1 bg-[#C88A32]/12 text-[#8A6324] text-[10px] font-mono">{{ p.tag }}</span>
+                <span class="px-2.5 py-1 bg-[#C88A32]/12 text-[#8A6324] text-[0.625rem] font-mono">{{ p.tag }}</span>
                 <span class="caption">{{ p.plate }}</span>
               </div>
               <h3 class="display-3 mb-2">{{ p.name }}</h3>
-              <div class="font-mono text-[10px] tracking-[0.1em] text-[#6E6960] mb-4">产地 / {{ p.origin }}</div>
-              <p class="body-copy text-[13px]! flex-1">{{ p.desc }}</p>
+              <div class="font-mono text-[0.625rem] tracking-[0.1em] text-[#6E6960] mb-4">产地 / {{ p.origin }}</div>
+              <p class="body-copy text-[0.8125rem]! flex-1">{{ p.desc }}</p>
               <div class="mt-6 pt-5 border-t border-[#1C1B18]/10 flex items-baseline justify-between gap-3">
                 <span class="font-editorial text-lg font-bold text-[#B83828]">{{ p.price }}</span>
                 <span class="caption">{{ p.sales }}</span>
@@ -217,7 +217,7 @@ onUnmounted(() => clearTimeout(toastTimer))
 
     <!-- 产地地图 -->
     <section id="origins" class="surface-linen border-y border-[#1C1B18]/10">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           <!-- 原抽象等高线「地图」信息量太低，改为三类产地的实景索引卡 -->
           <Reveal class="lg:col-span-6">
@@ -231,9 +231,9 @@ onUnmounted(() => clearTimeout(toastTimer))
                   <img :src="o.img" :alt="o.t + '实景示意'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                 </div>
                 <div class="p-4">
-                  <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324] mb-1">{{ o.k }}</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8A6324] mb-1">{{ o.k }}</div>
                   <div class="font-editorial text-base font-bold text-[#1C1B18]">{{ o.t }}</div>
-                  <div class="text-[10px] text-[#6E6960] mt-1">{{ o.d }}</div>
+                  <div class="text-[0.625rem] text-[#6E6960] mt-1">{{ o.d }}</div>
                 </div>
               </div>
             </div>
@@ -257,7 +257,7 @@ onUnmounted(() => clearTimeout(toastTimer))
                   { k: 'FOREST', v: '长白山林区', d: '椴树雪蜜 / 红松子 / 人参' },
                   { k: 'LAKE', v: '查干湖湿地', d: '冬捕胖头鱼 / 生态渔业' }
                 ]" :key="n.k" class="grid grid-cols-[92px_1fr_auto] items-center gap-4 py-4">
-                  <span class="font-mono text-[10px] tracking-[0.16em] text-[#8A6324]">{{ n.k }}</span>
+                  <span class="font-mono text-[0.625rem] tracking-[0.16em] text-[#8A6324]">{{ n.k }}</span>
                   <span class="text-sm font-semibold">{{ n.v }}</span>
                   <span class="caption text-right hidden sm:block">{{ n.d }}</span>
                 </div>
@@ -269,7 +269,7 @@ onUnmounted(() => clearTimeout(toastTimer))
     </section>
 
     <!-- 助农说明 -->
-    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal>
         <SectionHead
           index="03 / 04"
@@ -285,24 +285,24 @@ onUnmounted(() => clearTimeout(toastTimer))
         ]" :key="n.no" :delay="i * 100">
           <div class="border-t border-[#1C1B18]/16 pt-6">
             <div class="flex items-baseline justify-between mb-4">
-              <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324]">{{ n.k }}</span>
-              <span class="font-mono text-[10px] text-[#6E6960]">{{ n.no }}</span>
+              <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324]">{{ n.k }}</span>
+              <span class="font-mono text-[0.625rem] text-[#6E6960]">{{ n.no }}</span>
             </div>
             <h3 class="font-editorial text-xl font-bold mb-3">{{ n.t }}</h3>
-            <p class="body-copy text-[13px]!">{{ n.d }}</p>
+            <p class="body-copy text-[0.8125rem]!">{{ n.d }}</p>
           </div>
         </Reveal>
       </div>
     </section>
 
     <section class="surface-ink">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-10">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-10">
         <Reveal>
           <div class="eyebrow mb-4">04 / 04 · COLOPHON</div>
-          <p class="text-[13px] leading-[2] text-[#F7F4EE]/90 max-w-2xl">本集市为教学演示模块，商品、价格、销量与下单交互均为模拟数据，不产生真实交易。</p>
+          <p class="text-[0.8125rem] leading-[2] text-[#F7F4EE]/90 max-w-2xl">本集市为教学演示模块，商品、价格、销量与下单交互均为模拟数据，不产生真实交易。</p>
         </Reveal>
         <Reveal :delay="120">
-          <RouterLink to="/about" class="inline-flex items-baseline gap-3 min-h-[40px] group">
+          <RouterLink to="/about" class="inline-flex items-baseline gap-3 min-h-[2.5rem] group">
             <span class="font-editorial text-2xl sm:text-3xl font-bold text-[#F7F4EE] group-hover:text-[#C88A32] transition-colors">长春智库与答辩说明</span>
             <ArrowUpRight :size="22" class="text-[#C88A32] arrow-shift" />
           </RouterLink>

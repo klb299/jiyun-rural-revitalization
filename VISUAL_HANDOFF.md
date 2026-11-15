@@ -667,3 +667,11 @@ playwright-cli console 2>&1 | grep -E "Total messages|\[ERROR\]|\[WARNING\]"
 * **动效配方集中在 `src/App.vue` 的 `initMotion()`**，来源：`kash-123/cinematic-scroll-landing`（clipPath morph / 图片视差 / 进度线）、`ChillMonger04/Axel-Vanhessche-Portfolio`（mask 揭示）、`flash-hero/GOATED-UI-SKILL`（磁吸）。统一用 `gsap.matchMedia('(min-width: 1024px) and (prefers-reduced-motion: no-preference)')`，路由切换要 `motionMedia?.revert()`。
 * **`[data-reveal-img]` 起始只裁 22%**，不要改回 100%：全页截图与打印会整块空白。首屏滚动镜头**不要 pin**，锁滚动会放大冗长感。
 * 精简后首页滚动 14.7 ms/帧，比精简前更快。加动效前先想「这段能不能删」，比加特效有效。
+
+## 19. 单位约定（2026-11-15）
+
+* **排版与布局一律用 rem**：字号、间距、尺寸、位置、圆角、容器宽度。新增代码不要写 `text-[12px]` 这类固定像素任意值，写 `text-[0.75rem]`（按 16px 基准换算）。
+* `html` 有流式根字号 `clamp(16px, 0.4vw + 10.2px, 20px)`，1440 及以下保持 16px、1920 起放大到 20px 上限。Tailwind 默认 spacing 本来就是 rem，会自动一起缩放。
+* **保留 px 的例外**：≤3px 的细线、1px 边框、阴影、滚动条宽度、`backdrop-filter`。它们随字号缩放会变形或消失。
+* 触控目标 `min-h-[2.5rem]` 在 16px 基准下正好 40px，不要改回更小的固定值。
+* 加新断点前先想清楚：小屏不缩根字号是有意的，9–11px 展签小字再缩会不可读。

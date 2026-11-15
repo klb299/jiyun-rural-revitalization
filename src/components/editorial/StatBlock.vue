@@ -55,7 +55,7 @@ onUnmounted(() => {
     <div class="relative flex items-start justify-between gap-3">
       <div class="font-editorial font-bold tabular-nums leading-none"
         :style="{ color: accent, fontSize: 'clamp(2.2rem, 4vw, 3.8rem)' }">{{ display }}</div>
-      <span v-if="index" class="font-mono text-[10px] tracking-[0.2em] px-2 py-1 rounded-full"
+      <span v-if="index" class="font-mono text-[0.625rem] tracking-[0.2em] px-2 py-1 rounded-full"
         :class="dark ? 'bg-[#F7F4EE]/10 text-[#F7F4EE]/80' : 'bg-[#EFECE6] text-[#6E6960]'">{{ index }}</span>
     </div>
     <div class="relative mt-4 text-sm font-bold" :class="dark ? 'text-[#F7F4EE]' : 'text-[#1C1B18]'">{{ label }}</div>

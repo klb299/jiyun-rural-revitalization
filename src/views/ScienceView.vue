@@ -221,7 +221,7 @@ const resetLab = () => {
     <!-- 封面 -->
     <section class="surface-ink relative overflow-hidden">
       <div class="absolute inset-0 coord-rule opacity-25 pointer-events-none"></div>
-      <div data-parallax="-12" class="absolute -right-[6%] -top-[30%] w-[34vw] h-[34vw] min-w-[340px] min-h-[340px] rounded-full pointer-events-none"
+      <div data-parallax="-12" class="absolute -right-[6%] -top-[30%] w-[34vw] h-[34vw] min-w-[21.25rem] min-h-[21.25rem] rounded-full pointer-events-none"
         style="background: radial-gradient(circle at 35% 30%, #E8BC6E, #C88A32 55%, #A46C20); box-shadow: 0 60px 140px -60px rgba(168,111,34,.6)">
         <svg viewBox="0 0 200 200" class="absolute inset-0 w-full h-full animate-[spin_32s_linear_infinite] opacity-70">
           <defs><path id="lab-ring" d="M100,100 m-84,0 a84,84 0 1,1 168,0 a84,84 0 1,1 -168,0"></path></defs>
@@ -234,11 +234,11 @@ const resetLab = () => {
         </div>
       </div>
 
-      <div class="relative max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 sm:pt-32 pb-16 sm:pb-20">
+      <div class="relative max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 sm:pt-32 pb-16 sm:pb-20">
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-9">
             <span class="eyebrow">INTERACTIVE SCIENCE LAB / 互动科普实验室</span>
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#FFFDF9]/95">CHAPTER 10 · FOUR EXPERIMENTS</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#FFFDF9]/95">CHAPTER 10 · FOUR EXPERIMENTS</span>
           </div>
         </Reveal>
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
@@ -256,10 +256,10 @@ const resetLab = () => {
           </div>
           <Reveal :delay="300" class="lg:col-span-4">
             <div class="card-gold p-7 sm:p-8 relative overflow-hidden">
-              <div class="font-mono text-[10px] tracking-[0.2em] text-[#1C1B18]/65 mb-5">HOW TO USE</div>
+              <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#1C1B18]/65 mb-5">HOW TO USE</div>
               <p class="font-editorial text-xl leading-[1.7] font-bold">选一个实验，<br />然后动手改参数。</p>
-              <p class="text-[13px] leading-[1.85] text-[#1C1B18]/72 mt-4">拖拽旋转模型，点击高亮结构，拖动时间轴或开关，观察场景与读数的实时变化。</p>
-              <p class="text-[11px] leading-[1.8] text-[#1C1B18]/62 mt-3 pt-3 border-t border-[#1C1B18]/12">四个实验也可作为职业教育与农技培训的教具原型，用来讲清黑土、稻作与定位的原理。</p>
+              <p class="text-[0.8125rem] leading-[1.85] text-[#1C1B18]/72 mt-4">拖拽旋转模型，点击高亮结构，拖动时间轴或开关，观察场景与读数的实时变化。</p>
+              <p class="text-[0.6875rem] leading-[1.8] text-[#1C1B18]/62 mt-3 pt-3 border-t border-[#1C1B18]/12">四个实验也可作为职业教育与农技培训的教具原型，用来讲清黑土、稻作与定位的原理。</p>
             </div>
           </Reveal>
         </div>
@@ -267,10 +267,10 @@ const resetLab = () => {
     </section>
 
     <!-- 实验选择 -->
-    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-14 sm:py-20">
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-14 sm:py-20">
       <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4" data-stagger>
         <button v-for="lab in labs" :key="lab.id" @click="activeMode = lab.id"
-          class="group text-left rounded-[26px] p-6 sm:p-7 border transition-all duration-500 cursor-pointer"
+          class="group text-left rounded-[1.625rem] p-6 sm:p-7 border transition-all duration-500 cursor-pointer"
           :class="activeMode === lab.id
             ? 'bg-[#1C1B18] border-[#1C1B18] text-[#F7F4EE] shadow-[0_28px_60px_-30px_rgba(28,27,24,0.65)]'
             : 'bg-[#FFFDF9]/75 border-[#1C1B18]/8 text-[#1C1B18] hover:border-[#C88A32]/50'">
@@ -280,16 +280,16 @@ const resetLab = () => {
               <ArrowUpRight :size="15" class="arrow-shift" />
             </span>
           </div>
-          <div class="font-mono text-[10px] tracking-[0.18em] opacity-55 mb-2">{{ lab.en }}</div>
+          <div class="font-mono text-[0.625rem] tracking-[0.18em] opacity-55 mb-2">{{ lab.en }}</div>
           <h3 class="font-editorial text-xl sm:text-2xl font-bold">{{ lab.name }}</h3>
-          <p class="text-[12px] leading-relaxed mt-2 opacity-70">{{ lab.short }}</p>
+          <p class="text-[0.75rem] leading-relaxed mt-2 opacity-70">{{ lab.short }}</p>
         </button>
       </div>
     </section>
 
     <!-- 主实验台 -->
     <section class="surface-linen border-y border-[#1C1B18]/10">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
         <Reveal><SectionHead :index="activeMode === 'soil' ? '01 / 04' : activeMode === 'rice' ? '02 / 04' : activeMode === 'beidou' ? '03 / 04' : '04 / 04'"
           :eyebrow="labs.find(l => l.id === activeMode).en" :title="labs.find(l => l.id === activeMode).name"
           :description="labs.find(l => l.id === activeMode).short" /></Reveal>
@@ -299,12 +299,12 @@ const resetLab = () => {
           <Reveal variant="scale" class="lg:col-span-8">
             <div class="bezel">
               <div class="bezel-core relative">
-                <div class="h-[480px] sm:h-[600px] relative">
+                <div class="h-[30rem] sm:h-[37.5rem] relative">
                   <WebGLStage scene="science">
                     <ScienceStage :mode="activeMode" :param="param" @select="onSelect" @hover="hoverKey = $event" />
                   </WebGLStage>
                   <div v-if="hoverName"
-                    class="absolute top-4 right-4 z-10 rounded-full bg-[#C88A32] text-[#1C1B18] px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] font-bold pointer-events-none">
+                    class="absolute top-4 right-4 z-10 rounded-full bg-[#C88A32] text-[#1C1B18] px-3 py-1.5 font-mono text-[0.625rem] tracking-[0.16em] font-bold pointer-events-none">
                     点击聚焦 · {{ hoverName }}
                   </div>
                 </div>
@@ -312,18 +312,18 @@ const resetLab = () => {
             </div>
             <div class="flex flex-wrap items-center justify-between gap-3 mt-4">
               <p class="caption">实时 WebGL / 程序化几何与材质 / 可自由旋转与缩放</p>
-              <button @click="resetLab" class="inline-flex items-center gap-2 min-h-[40px] text-xs font-bold text-[#8A6324] cursor-pointer group">
+              <button @click="resetLab" class="inline-flex items-center gap-2 min-h-[2.5rem] text-xs font-bold text-[#8A6324] cursor-pointer group">
                 <RotateCcw :size="14" class="group-hover:-rotate-45 transition-transform duration-500" /> 重置实验参数
               </button>
             </div>
 
             <!-- 补左列下半部空白：真实农事影像 + 教具原型说明 -->
             <div class="mt-4 grid grid-cols-1 sm:grid-cols-[150px_1fr] gap-4 rounded-2xl border border-[#1C1B18]/10 bg-[#FFFDF9] p-4">
-              <img src="/photos/seedling-hand.jpg" alt="田间育苗与农事操作实景" class="w-full h-28 sm:h-full min-h-[110px] object-cover rounded-xl" loading="lazy" />
+              <img src="/photos/seedling-hand.jpg" alt="田间育苗与农事操作实景" class="w-full h-28 sm:h-full min-h-[6.875rem] object-cover rounded-xl" loading="lazy" />
               <div>
-                <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324] mb-2">FIELD NOTE / 教具原型</div>
-                <p class="text-[11px] leading-[1.85] text-[#3A3630]">四个实验也可作为职业教育与农技培训的教具原型。右侧实景影像用来对照真实农事，模型只解释原理，不替代田间观察。</p>
-                <p class="font-mono text-[9px] tracking-[0.14em] text-[#6E6960] mt-2">实景示意 · UNSPLASH</p>
+                <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8A6324] mb-2">FIELD NOTE / 教具原型</div>
+                <p class="text-[0.6875rem] leading-[1.85] text-[#3A3630]">四个实验也可作为职业教育与农技培训的教具原型。右侧实景影像用来对照真实农事，模型只解释原理，不替代田间观察。</p>
+                <p class="font-mono text-[0.5625rem] tracking-[0.14em] text-[#6E6960] mt-2">实景示意 · UNSPLASH</p>
               </div>
             </div>
           </Reveal>
@@ -334,12 +334,12 @@ const resetLab = () => {
             <template v-if="activeMode === 'soil'">
               <Reveal>
                 <div class="card-linen p-6 sm:p-7">
-                  <div class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960] mb-4">SELECT A STRUCTURE</div>
+                  <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960] mb-4">SELECT A STRUCTURE</div>
                   <div class="grid grid-cols-2 gap-2">
                     <button v-for="s in soils" :key="s.key" @click="soilFocus = s.key"
                       class="px-3 py-3 rounded-xl text-xs font-bold text-left transition-all duration-400 cursor-pointer"
                       :class="soilFocus === s.key ? 'bg-[#1C1B18] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E] hover:bg-[#C88A32]/20'">
-                      <span class="font-mono text-[9px] tracking-[0.16em] opacity-60 block mb-1">{{ s.no }}</span>{{ s.name }}
+                      <span class="font-mono text-[0.5625rem] tracking-[0.16em] opacity-60 block mb-1">{{ s.no }}</span>{{ s.name }}
                     </button>
                   </div>
                 </div>
@@ -347,9 +347,9 @@ const resetLab = () => {
               <Reveal :delay="90">
                 <div class="card-ink p-6 sm:p-7 flex-1 relative overflow-hidden">
                   <span class="absolute -right-4 -bottom-10 font-editorial font-bold text-[#F7F4EE]/7 select-none" style="font-size: 9rem; line-height: 1">{{ activeSoil.no }}</span>
-                  <div class="relative font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-3">{{ activeSoil.en }}</div>
+                  <div class="relative font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324] mb-3">{{ activeSoil.en }}</div>
                   <h3 class="display-3 relative mb-4">{{ activeSoil.name }}</h3>
-                  <p class="relative text-[13px] leading-[1.9] text-[#FFFDF9]/95">{{ activeSoil.desc }}</p>
+                  <p class="relative text-[0.8125rem] leading-[1.9] text-[#FFFDF9]/95">{{ activeSoil.desc }}</p>
                   <div class="relative mt-7 pt-5 border-t border-[#F7F4EE]/16 flex items-end justify-between gap-3">
                     <div>
                       <div class="caption text-[#FFFDF9]/96 mb-1">{{ activeSoil.note }}</div>
@@ -365,14 +365,14 @@ const resetLab = () => {
               <Reveal>
                 <div class="card-linen p-6 sm:p-7">
                   <div class="flex items-center justify-between gap-3 mb-5">
-                    <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">GROWTH TIMELINE</span>
-                    <span class="font-mono text-[10px] text-[#8A6324]">{{ riceStage + 1 }} / 5</span>
+                    <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">GROWTH TIMELINE</span>
+                    <span class="font-mono text-[0.625rem] text-[#8A6324]">{{ riceStage + 1 }} / 5</span>
                   </div>
                   <input v-model.number="riceStage" type="range" min="0" max="4" step="1"
                     aria-label="稻作生长阶段" class="w-full accent-[#C88A32] cursor-pointer" />
                   <div class="grid grid-cols-5 gap-1.5 mt-4">
                     <button v-for="p in ricePhases" :key="p.no" @click="riceStage = p.no"
-                      class="py-2.5 min-h-[40px] rounded-lg text-[11px] font-bold transition-all duration-300 cursor-pointer"
+                      class="py-2.5 min-h-[2.5rem] rounded-lg text-[0.6875rem] font-bold transition-all duration-300 cursor-pointer"
                       :class="riceStage === p.no ? 'bg-[#2E5A44] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E]'">{{ p.name }}</button>
                   </div>
                   <div class="mt-5 h-2 rounded-full bg-[#EFECE6] overflow-hidden">
@@ -383,10 +383,10 @@ const resetLab = () => {
               <Reveal :delay="90">
                 <div class="card-moss p-6 sm:p-7 flex-1 relative overflow-hidden">
                   <span class="absolute -right-4 -bottom-10 font-editorial font-bold text-[#F7F4EE]/8 select-none" style="font-size: 9rem; line-height: 1">0{{ riceStage + 1 }}</span>
-                  <div class="relative font-mono text-[10px] tracking-[0.2em] text-[#FFFDF9]/95 mb-3">{{ activePhase.en }}</div>
+                  <div class="relative font-mono text-[0.625rem] tracking-[0.2em] text-[#FFFDF9]/95 mb-3">{{ activePhase.en }}</div>
                   <h3 class="display-3 relative mb-2">{{ activePhase.name }}</h3>
-                  <div class="relative font-mono text-[11px] text-[#8A6324] mb-4">{{ activePhase.time }}</div>
-                  <p class="relative text-[13px] leading-[1.9] text-[#FFFDF9]/95">{{ activePhase.desc }}</p>
+                  <div class="relative font-mono text-[0.6875rem] text-[#8A6324] mb-4">{{ activePhase.time }}</div>
+                  <p class="relative text-[0.8125rem] leading-[1.9] text-[#FFFDF9]/95">{{ activePhase.desc }}</p>
                   <div class="relative mt-7 pt-5 border-t border-[#F7F4EE]/16">
                     <div class="caption text-[#FFFDF9]/96 mb-1">关键指标</div>
                     <div class="font-editorial text-xl font-bold text-[#F7F4EE]">{{ activePhase.metric }}</div>
@@ -396,17 +396,17 @@ const resetLab = () => {
 
               <Reveal :delay="160">
                 <div class="card-linen p-6 sm:p-7">
-                  <div class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960] mb-4">SELECT A STRUCTURE / 点击模型或下方结构</div>
+                  <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960] mb-4">SELECT A STRUCTURE / 点击模型或下方结构</div>
                   <div class="grid grid-cols-2 gap-2">
                     <button v-for="s in riceStructures" :key="s.key" @click="riceFocus = s.key"
-                      class="px-3 py-3 min-h-[40px] rounded-xl text-xs font-bold text-left transition-all duration-400 cursor-pointer"
+                      class="px-3 py-3 min-h-[2.5rem] rounded-xl text-xs font-bold text-left transition-all duration-400 cursor-pointer"
                       :class="riceFocus === s.key ? 'bg-[#1C1B18] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E] hover:bg-[#C88A32]/20'">
-                      <span class="font-mono text-[9px] tracking-[0.16em] opacity-60 block mb-1">{{ s.no }}</span>{{ s.name }}
+                      <span class="font-mono text-[0.5625rem] tracking-[0.16em] opacity-60 block mb-1">{{ s.no }}</span>{{ s.name }}
                     </button>
                   </div>
                   <div class="mt-5 pt-4 border-t border-[#1C1B18]/10">
-                    <div class="font-mono text-[9px] tracking-[0.2em] text-[#8A6324] mb-2">{{ activeRice.en }}</div>
-                    <p class="text-[12px] leading-[1.9] text-[#5A564E]">{{ activeRice.desc }}</p>
+                    <div class="font-mono text-[0.5625rem] tracking-[0.2em] text-[#8A6324] mb-2">{{ activeRice.en }}</div>
+                    <p class="text-[0.75rem] leading-[1.9] text-[#5A564E]">{{ activeRice.desc }}</p>
                   </div>
                 </div>
               </Reveal>
@@ -417,13 +417,13 @@ const resetLab = () => {
               <!-- 读数 -->
               <Reveal>
                 <div class="card-ink p-6 sm:p-7">
-                  <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-4">POSITIONING ERROR / 定位误差</div>
+                  <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324] mb-4">POSITIONING ERROR / 定位误差</div>
                   <div class="font-editorial font-bold leading-none text-[#F7F4EE]" style="font-size: clamp(2.4rem, 3.4vw, 3.2rem)">{{ accuracy }}</div>
-                  <p class="text-[12px] leading-[1.85] text-[#FFFDF9]/96 mt-4">
+                  <p class="text-[0.75rem] leading-[1.85] text-[#FFFDF9]/96 mt-4">
                     {{ blocked ? '差不多一步远，农机分不清该在哪一垄下种。' : '不到两根手指宽，农机知道该把种子撒在哪条线上。' }}
                   </p>
                   <div class="mt-5 pt-4 border-t border-[#F7F4EE]/16">
-                    <div class="flex justify-between font-mono text-[9px] tracking-[0.14em] text-[#FFFDF9]/95 mb-2">
+                    <div class="flex justify-between font-mono text-[0.5625rem] tracking-[0.14em] text-[#FFFDF9]/95 mb-2">
                       <span>2.5 厘米</span><span>1.2 米</span>
                     </div>
                     <div class="h-1.5 rounded-full bg-[#F7F4EE]/12 relative overflow-hidden">
@@ -437,20 +437,20 @@ const resetLab = () => {
               <!-- 三步看懂 -->
               <Reveal :delay="80">
                 <div class="card-linen p-6 sm:p-7">
-                  <div class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960] mb-5">三步看懂 / HOW IT WORKS</div>
+                  <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960] mb-5">三步看懂 / HOW IT WORKS</div>
                   <div class="space-y-4">
                     <div v-for="s in rtSteps" :key="s.no" class="flex gap-3">
-                      <span class="shrink-0 w-7 h-7 rounded-full grid place-items-center font-mono text-[10px] font-bold"
+                      <span class="shrink-0 w-7 h-7 rounded-full grid place-items-center font-mono text-[0.625rem] font-bold"
                         :class="blocked && s.no === '03' ? 'bg-[#B83828] text-[#F7F4EE]' : 'bg-[#1C1B18] text-[#F7F4EE]'">{{ s.no }}</span>
                       <div>
-                        <div class="text-[13px] font-bold leading-snug">{{ s.t }}</div>
-                        <div class="text-[11px] leading-[1.8] text-[#5A564E] mt-1">{{ s.d }}</div>
+                        <div class="text-[0.8125rem] font-bold leading-snug">{{ s.t }}</div>
+                        <div class="text-[0.6875rem] leading-[1.8] text-[#5A564E] mt-1">{{ s.d }}</div>
                       </div>
                     </div>
                   </div>
                   <div class="mt-5 rounded-xl border border-[#C88A32]/35 bg-[#C88A32]/8 px-4 py-3">
-                    <div class="font-mono text-[9px] tracking-[0.16em] text-[#8A6324] mb-1.5">打个比方</div>
-                    <p class="text-[11px] leading-[1.85] text-[#3A3630]">{{ rtAnalogy }}</p>
+                    <div class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#8A6324] mb-1.5">打个比方</div>
+                    <p class="text-[0.6875rem] leading-[1.85] text-[#3A3630]">{{ rtAnalogy }}</p>
                   </div>
                 </div>
               </Reveal>
@@ -459,29 +459,29 @@ const resetLab = () => {
               <Reveal :delay="140">
                 <div class="rounded-2xl border p-5 transition-colors duration-500"
                   :class="blocked ? 'border-[#B83828]/30 bg-[#B83828]/6' : 'border-[#2E5A44]/25 bg-[#2E5A44]/6'">
-                  <div class="font-mono text-[9px] tracking-[0.18em] mb-3" :class="blocked ? 'text-[#B83828]' : 'text-[#2E5A44]'">
+                  <div class="font-mono text-[0.5625rem] tracking-[0.18em] mb-3" :class="blocked ? 'text-[#B83828]' : 'text-[#2E5A44]'">
                     田里会发生什么 / IN THE FIELD
                   </div>
                   <div class="relative h-9 rounded-lg bg-[#FFFDF9]/70 overflow-hidden mb-3">
-                    <div class="absolute left-3 right-3 top-[13px] h-[2px] bg-[#C88A32]"></div>
+                    <div class="absolute left-3 right-3 top-[0.8125rem] h-[2px] bg-[#C88A32]"></div>
                     <div class="absolute left-3 right-3 h-[2px] transition-all duration-700"
-                      :class="blocked ? 'top-[25px] bg-[#B83828]' : 'top-[14px] bg-[#2E5A44]'"></div>
-                    <span class="absolute right-3 top-1 font-mono text-[8px] text-[#6E6960]">计划线</span>
+                      :class="blocked ? 'top-[1.5625rem] bg-[#B83828]' : 'top-[0.875rem] bg-[#2E5A44]'"></div>
+                    <span class="absolute right-3 top-1 font-mono text-[0.5rem] text-[#6E6960]">计划线</span>
                   </div>
-                  <div class="text-[13px] font-bold" :class="blocked ? 'text-[#B83828]' : 'text-[#2E5A44]'">{{ rtResult.title }}</div>
-                  <p class="text-[11px] leading-[1.85] text-[#3A3630] mt-1.5">{{ rtResult.desc }}</p>
+                  <div class="text-[0.8125rem] font-bold" :class="blocked ? 'text-[#B83828]' : 'text-[#2E5A44]'">{{ rtResult.title }}</div>
+                  <p class="text-[0.6875rem] leading-[1.85] text-[#3A3630] mt-1.5">{{ rtResult.desc }}</p>
                 </div>
               </Reveal>
 
               <!-- 动手调参 -->
               <Reveal :delay="190">
                 <div class="card-linen p-6 sm:p-7">
-                  <div class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960] mb-4">试试看 / TRY IT</div>
+                  <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960] mb-4">试试看 / TRY IT</div>
                   <input v-model.number="satCount" type="range" min="3" max="6" step="1" aria-label="可见卫星数量" class="w-full accent-[#C88A32] cursor-pointer" />
                   <div class="flex items-center justify-between mt-2 text-xs font-semibold">
                     <span>天上能看见几颗卫星</span><span class="font-mono text-[#8A6324]">{{ satCount }} 颗</span>
                   </div>
-                  <div class="flex justify-between font-mono text-[9px] text-[#6E6960] mt-1 px-0.5">
+                  <div class="flex justify-between font-mono text-[0.5625rem] text-[#6E6960] mt-1 px-0.5">
                     <span>3</span><span>4</span><span>5</span><span>6</span>
                   </div>
                   <button @click="blocked = !blocked"
@@ -489,10 +489,10 @@ const resetLab = () => {
                     :class="blocked ? 'bg-[#B83828] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E] hover:bg-[#C88A32]/20'">
                     {{ blocked ? '移开林带，恢复改正信号' : '让林带挡住改正信号' }}
                   </button>
-                  <p class="text-[10px] leading-[1.8] text-[#5A564E] mt-3">
+                  <p class="text-[0.625rem] leading-[1.8] text-[#5A564E] mt-3">
                     卫星多几颗会更稳，但真正把误差压到厘米级的，是田边基准站那句「改正数」有没有送到。
                   </p>
-                  <div class="mt-4 pt-3 border-t border-[#1C1B18]/8 font-mono text-[9px] leading-[1.8] text-[#6E6960]">
+                  <div class="mt-4 pt-3 border-t border-[#1C1B18]/8 font-mono text-[0.5625rem] leading-[1.8] text-[#6E6960]">
                     术语：RTK 即实时动态载波相位差分，基准站与移动站对 B1/B2 双频观测值做差分。
                   </div>
                 </div>
@@ -501,17 +501,17 @@ const resetLab = () => {
               <!-- 四类可点结构：与其余三个科普实验一致 -->
               <Reveal :delay="240">
                 <div class="card-linen p-6 sm:p-7">
-                  <div class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960] mb-4">SELECT A STRUCTURE / 点击模型或下方结构</div>
+                  <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960] mb-4">SELECT A STRUCTURE / 点击模型或下方结构</div>
                   <div class="grid grid-cols-2 gap-2">
                     <button v-for="s in beidouStructures" :key="s.key" @click="beidouFocus = s.key"
-                      class="px-3 py-3 min-h-[40px] rounded-xl text-xs font-bold text-left transition-all duration-400 cursor-pointer"
+                      class="px-3 py-3 min-h-[2.5rem] rounded-xl text-xs font-bold text-left transition-all duration-400 cursor-pointer"
                       :class="beidouFocus === s.key ? 'bg-[#1C1B18] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E] hover:bg-[#C88A32]/20'">
-                      <span class="font-mono text-[9px] tracking-[0.16em] opacity-60 block mb-1">{{ s.no }}</span>{{ s.name }}
+                      <span class="font-mono text-[0.5625rem] tracking-[0.16em] opacity-60 block mb-1">{{ s.no }}</span>{{ s.name }}
                     </button>
                   </div>
                   <div class="mt-5 pt-4 border-t border-[#1C1B18]/10">
-                    <div class="font-mono text-[9px] tracking-[0.2em] text-[#8A6324] mb-2">{{ activeBeidou.en }}</div>
-                    <p class="text-[12px] leading-[1.9] text-[#5A564E]">{{ activeBeidou.desc }}</p>
+                    <div class="font-mono text-[0.5625rem] tracking-[0.2em] text-[#8A6324] mb-2">{{ activeBeidou.en }}</div>
+                    <p class="text-[0.75rem] leading-[1.9] text-[#5A564E]">{{ activeBeidou.desc }}</p>
                   </div>
                 </div>
               </Reveal>
@@ -522,36 +522,36 @@ const resetLab = () => {
               <Reveal>
                 <div class="card-linen p-6 sm:p-7">
                   <div class="flex items-center justify-between gap-3 mb-5">
-                    <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">RESIDUE COVER / 秸秆覆盖率</span>
-                    <span class="font-mono text-[10px] text-[#8A6324]">{{ coverage }}%</span>
+                    <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">RESIDUE COVER / 秸秆覆盖率</span>
+                    <span class="font-mono text-[0.625rem] text-[#8A6324]">{{ coverage }}%</span>
                   </div>
                   <input v-model.number="coverage" type="range" min="0" max="100" step="10"
                     aria-label="秸秆覆盖率" class="w-full accent-[#C88A32] cursor-pointer" />
                   <div class="grid grid-cols-4 gap-1.5 mt-4">
                     <button v-for="c in coverLevels" :key="c" @click="coverage = c"
-                      class="py-2.5 min-h-[40px] rounded-lg text-[11px] font-bold transition-all duration-300 cursor-pointer"
+                      class="py-2.5 min-h-[2.5rem] rounded-lg text-[0.6875rem] font-bold transition-all duration-300 cursor-pointer"
                       :class="coverage === c ? 'bg-[#2E5A44] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E]'">{{ c }}%</button>
                   </div>
                   <div class="mt-5 flex gap-1.5 h-2">
                     <div class="rounded-full bg-[#8EBACB] transition-all duration-700" :style="{ width: coverReadout.infilPct + '%' }"></div>
                     <div class="rounded-full bg-[#8C583A] transition-all duration-700" :style="{ width: coverReadout.runoffPct + '%' }"></div>
                   </div>
-                  <div class="flex justify-between font-mono text-[9px] tracking-[0.12em] text-[#6E6960] mt-2">
+                  <div class="flex justify-between font-mono text-[0.5625rem] tracking-[0.12em] text-[#6E6960] mt-2">
                     <span>下渗 {{ coverReadout.infilPct }}%</span><span>径流 {{ coverReadout.runoffPct }}%</span>
                   </div>
-                  <p class="text-[10px] leading-[1.8] text-[#5A564E] mt-3">模型内部的示意比例，用于观察趋势，不是实测统计值。</p>
+                  <p class="text-[0.625rem] leading-[1.8] text-[#5A564E] mt-3">模型内部的示意比例，用于观察趋势，不是实测统计值。</p>
 
                   <div class="mt-5 pt-4 border-t border-[#1C1B18]/8">
                     <div class="flex items-center justify-between gap-3 mb-3">
-                      <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">RAINFALL / 降雨强度</span>
-                      <span class="font-mono text-[10px] text-[#8A6324]">{{ rainLabel }}</span>
+                      <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">RAINFALL / 降雨强度</span>
+                      <span class="font-mono text-[0.625rem] text-[#8A6324]">{{ rainLabel }}</span>
                     </div>
                     <div class="grid grid-cols-3 gap-1.5">
                       <button v-for="r in rainLevels" :key="r.no" @click="rainLevel = r.no"
-                        class="py-2.5 min-h-[40px] rounded-lg text-[11px] font-bold transition-all duration-300 cursor-pointer"
+                        class="py-2.5 min-h-[2.5rem] rounded-lg text-[0.6875rem] font-bold transition-all duration-300 cursor-pointer"
                         :class="rainLevel === r.no ? 'bg-[#2E5A44] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E]'">{{ r.name }}</button>
                     </div>
-                    <p class="text-[10px] leading-[1.8] text-[#5A564E] mt-2">雨越大，同一覆盖率下被打松的表土越多；和覆盖率一起调，差别最明显。</p>
+                    <p class="text-[0.625rem] leading-[1.8] text-[#5A564E] mt-2">雨越大，同一覆盖率下被打松的表土越多；和覆盖率一起调，差别最明显。</p>
                   </div>
 
                   <button @click="exploded = !exploded"
@@ -559,24 +559,24 @@ const resetLab = () => {
                     :class="exploded ? 'bg-[#2E5A44] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E] hover:bg-[#C88A32]/20'">
                     {{ exploded ? '合拢播种机零件' : '展开播种机零件（18 件）' }}
                   </button>
-                  <p class="text-[10px] leading-[1.8] text-[#5A564E] mt-2">展开后可逐个查看缺刻圆盘、弹簧加压、输种管与镇压轮等装配细节。</p>
+                  <p class="text-[0.625rem] leading-[1.8] text-[#5A564E] mt-2">展开后可逐个查看缺刻圆盘、弹簧加压、输种管与镇压轮等装配细节。</p>
                 </div>
               </Reveal>
 
               <Reveal :delay="80">
                 <div class="card-ink p-6 sm:p-7">
-                  <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-4">WHAT CHANGES / 田里会怎样</div>
+                  <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324] mb-4">WHAT CHANGES / 田里会怎样</div>
                   <div class="space-y-3">
                     <div v-for="r in [
                       { k: '地表径流', v: coverReadout.runoff },
                       { k: '表土流失', v: coverReadout.loss },
                       { k: '蓄水保墒', v: coverReadout.water }
                     ]" :key="r.k" class="flex items-center justify-between gap-3 pb-2 border-b border-[#F7F4EE]/12">
-                      <span class="text-[12px] text-[#FFFDF9]/96">{{ r.k }}</span>
+                      <span class="text-[0.75rem] text-[#FFFDF9]/96">{{ r.k }}</span>
                       <span class="font-editorial text-base font-bold text-[#C88A32]">{{ r.v }}</span>
                     </div>
                   </div>
-                  <p class="text-[11px] leading-[1.9] text-[#FFFDF9]/96 mt-4">
+                  <p class="text-[0.6875rem] leading-[1.9] text-[#FFFDF9]/96 mt-4">
                     秸秆盖得越密，雨滴越难直接砸实表土；连续孔隙保留下来，水往里渗而不是带着土往外流。
                   </p>
                 </div>
@@ -585,18 +585,18 @@ const resetLab = () => {
               <Reveal :delay="140">
                 <div class="card-linen p-6 sm:p-7 flex-1 relative overflow-hidden">
                   <span class="absolute -right-4 -bottom-10 font-editorial font-bold text-[#1C1B18]/6 select-none" style="font-size: 9rem; line-height: 1">{{ activeNotill.no }}</span>
-                  <div class="relative font-mono text-[10px] tracking-[0.2em] text-[#6E6960] mb-4">SELECT A STRUCTURE / 点击模型或下方结构</div>
+                  <div class="relative font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960] mb-4">SELECT A STRUCTURE / 点击模型或下方结构</div>
                   <div class="relative grid grid-cols-2 gap-2">
                     <button v-for="s in notillStructures" :key="s.key" @click="notillFocus = s.key"
                       class="px-3 py-3 rounded-xl text-xs font-bold text-left transition-all duration-400 cursor-pointer"
                       :class="notillFocus === s.key ? 'bg-[#1C1B18] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E] hover:bg-[#C88A32]/20'">
-                      <span class="font-mono text-[9px] tracking-[0.16em] opacity-60 block mb-1">{{ s.no }}</span>{{ s.name }}
+                      <span class="font-mono text-[0.5625rem] tracking-[0.16em] opacity-60 block mb-1">{{ s.no }}</span>{{ s.name }}
                     </button>
                   </div>
                   <div class="relative mt-6 pt-5 border-t border-[#1C1B18]/10">
-                    <div class="font-mono text-[9px] tracking-[0.2em] text-[#8A6324] mb-2">{{ activeNotill.en }}</div>
+                    <div class="font-mono text-[0.5625rem] tracking-[0.2em] text-[#8A6324] mb-2">{{ activeNotill.en }}</div>
                     <h3 class="font-editorial text-xl font-bold mb-2">{{ activeNotill.name }}</h3>
-                    <p class="text-[12px] leading-[1.9] text-[#5A564E]">{{ activeNotill.desc }}</p>
+                    <p class="text-[0.75rem] leading-[1.9] text-[#5A564E]">{{ activeNotill.desc }}</p>
                     <div class="flex items-end justify-between gap-3 mt-4">
                       <span class="caption">{{ activeNotill.note }}</span>
                       <span class="font-editorial text-lg font-bold text-[#8A6324]">{{ activeNotill.metric }}</span>
@@ -608,22 +608,22 @@ const resetLab = () => {
               <Reveal :delay="190">
                 <div class="card-linen p-6 sm:p-7">
                   <div class="flex items-center justify-between gap-3 mb-4">
-                    <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">ASSEMBLY / 零件清单</span>
-                    <span class="font-mono text-[10px] text-[#8A6324]">18 件 · 13 组</span>
+                    <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">ASSEMBLY / 零件清单</span>
+                    <span class="font-mono text-[0.625rem] text-[#8A6324]">18 件 · 13 组</span>
                   </div>
-                  <div class="grid grid-cols-2 gap-1.5 max-h-[220px] overflow-y-auto pr-1">
+                  <div class="grid grid-cols-2 gap-1.5 max-h-[13.75rem] overflow-y-auto pr-1">
                     <button v-for="p in notillParts" :key="p.no"
                       @click="partFocus = p.key; notillFocus = 'opener'; exploded = true"
-                      class="px-2.5 py-2 min-h-[36px] rounded-lg text-[11px] font-bold text-left transition-all duration-300 cursor-pointer"
+                      class="px-2.5 py-2 min-h-[2.25rem] rounded-lg text-[0.6875rem] font-bold text-left transition-all duration-300 cursor-pointer"
                       :class="partFocus === p.key ? 'bg-[#2E5A44] text-[#F7F4EE]' : 'bg-[#EFECE6] text-[#5A564E] hover:bg-[#C88A32]/20'">
-                      <span class="font-mono text-[9px] opacity-60 mr-1.5">{{ p.no }}</span>{{ p.name }}
+                      <span class="font-mono text-[0.5625rem] opacity-60 mr-1.5">{{ p.no }}</span>{{ p.name }}
                     </button>
                   </div>
                   <div v-if="activePart" class="mt-4 pt-4 border-t border-[#1C1B18]/10">
-                    <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324] mb-1.5">{{ activePart.en }}</div>
-                    <p class="text-[11px] leading-[1.85] text-[#5A564E]">{{ activePart.desc }}</p>
+                    <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8A6324] mb-1.5">{{ activePart.en }}</div>
+                    <p class="text-[0.6875rem] leading-[1.85] text-[#5A564E]">{{ activePart.desc }}</p>
                   </div>
-                  <p v-else class="text-[10px] leading-[1.8] text-[#5A564E] mt-3">点任一零件，总成会自动展开并在模型里高亮这一组。</p>
+                  <p v-else class="text-[0.625rem] leading-[1.8] text-[#5A564E] mt-3">点任一零件，总成会自动展开并在模型里高亮这一组。</p>
                 </div>
               </Reveal>
             </template>
@@ -633,41 +633,41 @@ const resetLab = () => {
     </section>
 
     <!-- 四个实验说明 -->
-    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal><SectionHead index="LAB NOTES" eyebrow="FOUR EXPERIMENTS / 实验档案" title="每个模型，回答一个具体问题" description="不是为了炫技，而是把文字讲不清的结构与过程，变成可以亲手改变的东西。" /></Reveal>
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 mt-14" data-stagger>
         <Reveal>
           <div class="card-ink h-full p-7 sm:p-8">
-            <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-6">EXPERIMENT 01</div>
+            <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324] mb-6">EXPERIMENT 01</div>
             <h3 class="display-3 mb-4">黑土为什么疏松</h3>
-            <p class="text-[13px] leading-[1.9] text-[#FFFDF9]/95">把一厘米土层放大到可交互的尺度，剖面按 0–100 cm 分层并标出深度：团粒负责胶结，孔隙负责通气透水，菌丝负责稳定与供肥，结核记录淋溶历史。点击任一结构即可聚焦并读取档案。</p>
+            <p class="text-[0.8125rem] leading-[1.9] text-[#FFFDF9]/95">把一厘米土层放大到可交互的尺度，剖面按 0–100 cm 分层并标出深度：团粒负责胶结，孔隙负责通气透水，菌丝负责稳定与供肥，结核记录淋溶历史。点击任一结构即可聚焦并读取档案。</p>
             <div class="mt-7 flex flex-wrap gap-2">
-              <span v-for="t in ['团粒', '孔隙', '菌丝', '结核']" :key="t" class="px-2.5 py-1 rounded-full bg-[#F7F4EE]/10 text-[11px]">{{ t }}</span>
+              <span v-for="t in ['团粒', '孔隙', '菌丝', '结核']" :key="t" class="px-2.5 py-1 rounded-full bg-[#F7F4EE]/10 text-[0.6875rem]">{{ t }}</span>
             </div>
           </div>
         </Reveal>
         <Reveal :delay="90">
           <div class="card-moss h-full p-7">
-            <div class="font-mono text-[10px] tracking-[0.2em] text-[#FFFDF9]/95 mb-6">EXPERIMENT 02</div>
+            <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#FFFDF9]/95 mb-6">EXPERIMENT 02</div>
             <h3 class="display-3 mb-4">一百八十天怎么长</h3>
-            <p class="text-[13px] leading-[1.9] text-[#FFFDF9]/95">拖动时间轴，稻株高度、颜色、穗头倾角与田间水位同步变化。五个阶段对应吉林中部真实农时，读数来自公开农技资料的典型区间。</p>
-            <div class="mt-7 font-mono text-[11px] text-[#8A6324]">SEEDLING → HARVEST</div>
+            <p class="text-[0.8125rem] leading-[1.9] text-[#FFFDF9]/95">拖动时间轴，稻株高度、颜色、穗头倾角与田间水位同步变化。五个阶段对应吉林中部真实农时，读数来自公开农技资料的典型区间。</p>
+            <div class="mt-7 font-mono text-[0.6875rem] text-[#8A6324]">SEEDLING → HARVEST</div>
           </div>
         </Reveal>
         <Reveal :delay="180">
           <div class="card-gold h-full p-7">
-            <div class="font-mono text-[10px] tracking-[0.2em] text-[#1C1B18]/65 mb-6">EXPERIMENT 03</div>
+            <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#1C1B18]/65 mb-6">EXPERIMENT 03</div>
             <h3 class="display-3 mb-4">厘米级从哪来</h3>
-            <p class="text-[13px] leading-[1.9] text-[#1C1B18]/78">天上卫星、田边基准站、地里农机，三者怎么配合才能让播种不重不漏。挡住改正信号，看轨迹立刻跑偏。</p>
-            <div class="mt-7 font-mono text-[11px] font-bold">2.5 cm ↔ 1.2 m</div>
+            <p class="text-[0.8125rem] leading-[1.9] text-[#1C1B18]/78">天上卫星、田边基准站、地里农机，三者怎么配合才能让播种不重不漏。挡住改正信号，看轨迹立刻跑偏。</p>
+            <div class="mt-7 font-mono text-[0.6875rem] font-bold">2.5 cm ↔ 1.2 m</div>
           </div>
         </Reveal>
         <Reveal :delay="240">
           <div class="card-linen h-full p-7">
-            <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-6">EXPERIMENT 04</div>
+            <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324] mb-6">EXPERIMENT 04</div>
             <h3 class="display-3 mb-4">秸秆留在地表</h3>
-            <p class="text-[13px] leading-[1.9] text-[#5A564E]">把覆盖率从 0 拉到 90%，看雨滴从「沿地表冲走表土」变成「顺着孔隙往下渗」。翻不翻那一下的差别，被直接画进同一个模型里。</p>
-            <div class="mt-7 font-mono text-[11px] text-[#8A6324]">0% → 100% COVER</div>
+            <p class="text-[0.8125rem] leading-[1.9] text-[#5A564E]">把覆盖率从 0 拉到 90%，看雨滴从「沿地表冲走表土」变成「顺着孔隙往下渗」。翻不翻那一下的差别，被直接画进同一个模型里。</p>
+            <div class="mt-7 font-mono text-[0.6875rem] text-[#8A6324]">0% → 100% COVER</div>
           </div>
         </Reveal>
       </div>
@@ -675,7 +675,7 @@ const resetLab = () => {
 
     <!-- 图文收束 -->
     <section class="surface-linen border-y border-[#1C1B18]/10">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         <Reveal class="lg:col-span-5">
           <FigurePlate src="/art/soil-strata.svg" alt="黑土层位图版" index="PLATE 01" caption="科普实验里出现的结构，都能在真实的一米剖面中找到对应层位。" credit="CHERNOZEM MONOLITH" />
         </Reveal>
@@ -697,10 +697,10 @@ const resetLab = () => {
 
     <!-- 注释 -->
     <section class="surface-ink">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-14 sm:py-18 flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-14 sm:py-18 flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
         <Reveal>
           <div class="eyebrow mb-4">DATA NOTE / 数据说明</div>
-          <p class="text-[13px] leading-[2] text-[#FFFDF9]/96 max-w-2xl">
+          <p class="text-[0.8125rem] leading-[2] text-[#FFFDF9]/96 max-w-2xl">
             四个实验为教学演示用的参数化模型，结构与量级参考中国科学院东北地理与农业生态研究所「黑土粮仓」科技会战公开成果、吉林省农技推广资料、保护性耕作公开科普材料与北斗 RTK 通用原理，非实物扫描与工程测量数据。覆盖率、下渗与径流比例均为模型内部示意，用于观察趋势，不作生产决策依据。
           </p>
         </Reveal>

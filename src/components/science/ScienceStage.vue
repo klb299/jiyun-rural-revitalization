@@ -88,13 +88,13 @@ onUnmounted(() => {
       class="absolute inset-0 bg-[#F7F4EE] flex items-center justify-center z-20">
       <div class="flex flex-col items-center gap-3">
         <div class="w-8 h-8 rounded-full border-2 border-[#C88A32]/25 border-t-[#C88A32] animate-spin"></div>
-        <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">CALIBRATING LAB</span>
+        <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">CALIBRATING LAB</span>
       </div>
     </div>
 
     <div class="absolute bottom-4 left-4 z-10 rounded-full bg-[#1C1B18] px-3 py-1.5 flex items-center gap-2 pointer-events-none">
       <span class="w-1.5 h-1.5 rounded-full bg-[#C88A32] animate-pulse"></span>
-      <span class="font-mono text-[10px] tracking-[0.16em] text-[#F7F4EE]">拖拽旋转 · 滚轮缩放 · 点击结构</span>
+      <span class="font-mono text-[0.625rem] tracking-[0.16em] text-[#F7F4EE]">拖拽旋转 · 滚轮缩放 · 点击结构</span>
     </div>
   </div>
 </template>

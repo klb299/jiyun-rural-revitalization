@@ -15,24 +15,24 @@ defineProps({
 </script>
 
 <template>
-  <RouterLink :to="to" class="group block h-full rounded-[30px] overflow-hidden z-card lift"
+  <RouterLink :to="to" class="group block h-full rounded-[1.875rem] overflow-hidden z-card lift"
     :class="dark ? 'card-ink' : 'card-linen'">
-    <div v-if="image" data-reveal-img class="relative m-2.5 rounded-[22px] overflow-hidden bg-[#EFECE6]">
+    <div v-if="image" data-reveal-img class="relative m-2.5 rounded-[1.375rem] overflow-hidden bg-[#EFECE6]">
       <img :src="image" :alt="title" loading="lazy" class="w-full aspect-[16/10] object-cover transition-transform duration-[1.4s] group-hover:scale-[1.07]" />
-      <span class="absolute bottom-3 right-4 font-mono text-[10px] tracking-[0.2em] px-2 py-1 rounded-full bg-[#1C1B18]/80 text-[#F7F4EE]">{{ index }}</span>
+      <span class="absolute bottom-3 right-4 font-mono text-[0.625rem] tracking-[0.2em] px-2 py-1 rounded-full bg-[#1C1B18]/80 text-[#F7F4EE]">{{ index }}</span>
     </div>
     <div class="relative p-6 sm:p-8">
       <span class="absolute -top-6 right-4 font-editorial font-bold select-none pointer-events-none"
         :class="dark ? 'text-[#F7F4EE]/8' : 'text-[#1C1B18]/7'"
         style="font-size: 7rem; line-height: 1">{{ index.slice(-2) }}</span>
       <div class="relative flex items-center justify-between gap-3 mb-5">
-        <span class="font-mono text-[10px] tracking-[0.2em] px-2.5 py-1 rounded-full"
+        <span class="font-mono text-[0.625rem] tracking-[0.2em] px-2.5 py-1 rounded-full"
           :class="dark ? 'bg-[#C88A32]/20 text-[#E1B265]' : 'bg-[#C88A32]/14 text-[#8A6324]'">{{ tag }}</span>
-        <span class="font-mono text-[10px] tracking-[0.12em]" :class="dark ? 'text-[#F7F4EE]/80' : 'text-[#6E6960]'">{{ meta }}</span>
+        <span class="font-mono text-[0.625rem] tracking-[0.12em]" :class="dark ? 'text-[#F7F4EE]/80' : 'text-[#6E6960]'">{{ meta }}</span>
       </div>
       <h3 class="display-3 mb-3 relative transition-colors duration-500"
         :class="dark ? 'text-[#F7F4EE] group-hover:text-[#E1B265]' : 'text-[#1C1B18] group-hover:text-[#8A6324]'">{{ title }}</h3>
-      <p class="body-copy text-[13px]! mb-7 relative" :class="dark ? 'text-[#F7F4EE]/90' : ''">{{ desc }}</p>
+      <p class="body-copy text-[0.8125rem]! mb-7 relative" :class="dark ? 'text-[#F7F4EE]/90' : ''">{{ desc }}</p>
       <div class="relative inline-flex items-center gap-3 text-xs font-bold"
         :class="dark ? 'text-[#E1B265]' : 'text-[#1C1B18]'">
         <span class="link-line">{{ cta }}</span>

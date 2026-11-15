@@ -1220,3 +1220,50 @@ Awwwards 2026 与 GSAP 案例的共同手法：单一被坚持的编辑方向、
 * reduced-motion 下 `[data-reveal-img]` 的 `clipPath` 为 `none`，图片完整显示。VT `preludeAtVT: false` 未回退。
 * 截图 `.workbuddy/shots/final-slim-hero.png`、`final-slim-galleries.png`、`final-slim-full2.png`、`3d-covers.png`、`slim-plain-photo2.png`。
 * 数量口径、色板、纯光影定稿、动效降级、WebGL 兜底、每页首屏不同、不换风格均未违反。
+
+## 📐 三十二、2026-11-15 16:20 全站 px → rem 流式适配
+
+用户要求「把单位 px 改成那个通用自适应的单位，可以适配更多分辨率」。
+
+### 1. 判断：只换 rem 是不够的
+
+单纯把 `10px` 写成 `0.625rem`，在根字号仍是浏览器默认 16px 时视觉**完全一样**，不会适配更多分辨率。真正起作用的是让**根字号随视口平滑变化**，全站 rem（包括 Tailwind 默认的 `px-5`、`gap-4` 等本来就是 rem 的 spacing）才会一起缩放。所以做了两件事，而不是只做字符串替换。
+
+### 2. 流式根字号
+
+```css
+html { font-size: clamp(16px, 0.4vw + 10.2px, 20px); }
+```
+
+* **1440px 及以下恰好 16px**：与改版前逐像素一致，所有既有断点布局、对比度、触控目标零回归。
+* **1920px 约 17.88px、2560px 到 20px 上限**：宽屏上文字、留白、卡片一起放大，不再显得内容缩在一小块里。
+* **小屏不缩字号**：`text-[9px]` / `text-[10px]` 的展签小字如果再随根字号缩小会更难读，所以下限锁 16px。
+* 浏览器用户自定义字号也能通过 rem 生效，比纯 px 更易访问。
+
+### 3. 转换范围
+
+| 类别 | 处理 |
+| --- | --- |
+| `text-[Npx]`（638 处，9/10/11/12/13/15/16px 等） | 按 16px 基准换 rem，如 `10px → 0.625rem`、`9px → 0.5625rem` |
+| `max-w-[1440px]` / `max-w-[1400px]`（99 处） | `90rem` / `87.5rem`，宽屏容器随之变宽，真正利用分辨率 |
+| `min-h/min-w/h/w/top/pt/left/rounded/max-h`（约 160 处） | 同样换 rem |
+| `style.css` 的 `scroll-margin-top: 92px`、skip-link 的 `padding / font-size / border-radius` | 换 rem |
+| 内联 style 的 `96px` 列宽、`minHeight: 34px`、刻度渐变 `5px / 14px` | 换 rem |
+| **保留固定 px** | 15 处 ≤3px 的细线（`h-[2px]`、`h-[3px]`、`border-t-[3px]`）、`1px` 边框、阴影、滚动条宽度、`box-shadow` 与 `backdrop-filter` —— 这些随字号缩放会变形或消失 |
+
+最终全站只剩 15 处显式 px 任意值类，且全是刻意保留的细线。`min-h-[40px]` 转成 `2.5rem` 后在 16px 基准仍是 40px，大屏更大，触控目标不会变小。
+
+### 4. 七档实测
+
+| 视口 | 根字号 | h1 | 横向溢出 |
+| --- | --- | --- | --- |
+| 320 / 390 / 768 | 16px | 51.2 / 51.2 / 62.98px | 无 |
+| 1024 / 1440 | 16px | 83.97 / 118.08px | 无 |
+| 1920 | 17.88px | 146.62px | 无 |
+| 2560 | 20px | 164px | 无 |
+
+1920 实拍确认标题、图版、留白比例协调，无裁切错位。`npm run audit` **12/12 全绿**，对比度仍只剩 `/machinery-3d` 4 项已登记假阳性，移动端 `[]`，a11y 干净，控制台 0 Error 0 Warning；触控目标实测 320 / 1440 / 1920 均不低于 40px。
+
+### 5. 未改动
+
+阴影、边框、细线、滚动条、WebGL canvas 的内部尺寸、CSS `clamp()` 里已有的 vw/rem 表达式保持原样。数量口径、色板、动效降级、3D 展厅与上一轮的精简结果均未变化。

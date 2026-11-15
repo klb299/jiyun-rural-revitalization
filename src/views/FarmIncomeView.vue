@@ -62,11 +62,11 @@ const layers = [
       <div class="absolute inset-0 coord-rule opacity-50 pointer-events-none"></div>
       <div class="absolute -right-10 -top-16 watermark text-[24vw] leading-none select-none pointer-events-none">账</div>
 
-      <div class="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
+      <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-8">
-            <span class="px-3 py-1.5 rounded-full bg-[#B83828] text-[#FFFDF9] font-mono text-[10px] tracking-[0.2em] font-bold">FARM INCOME / 带农机制</span>
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">JILIN RURAL REVITALIZATION · 农户账本</span>
+            <span class="px-3 py-1.5 rounded-full bg-[#B83828] text-[#FFFDF9] font-mono text-[0.625rem] tracking-[0.2em] font-bold">FARM INCOME / 带农机制</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">JILIN RURAL REVITALIZATION · 农户账本</span>
           </div>
         </Reveal>
 
@@ -101,8 +101,8 @@ const layers = [
                   { k: 'ACTORS', v: '农户 / 合作社 / 企业' },
                   { k: 'RULE', v: '收益与风险同写' }
                 ]" :key="n.k" class="border-t border-[#1C1B18]/25 pt-3">
-                  <div class="font-mono text-[9px] tracking-[0.18em] text-[#B83828]">{{ n.k }}</div>
-                  <div class="text-[11px] mt-1.5 text-[#3A3630]">{{ n.v }}</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#B83828]">{{ n.k }}</div>
+                  <div class="text-[0.6875rem] mt-1.5 text-[#3A3630]">{{ n.v }}</div>
                 </div>
               </div>
             </Reveal>
@@ -113,18 +113,18 @@ const layers = [
             <div class="bezel">
               <div class="bezel-core p-6 sm:p-8">
                 <div class="flex items-center justify-between gap-3 pb-4 mb-2 border-b border-[#1C1B18]/12">
-                  <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">HOUSEHOLD LEDGER / 示意账本</span>
-                  <span class="font-mono text-[9px] tracking-[0.14em] text-[#B83828]">五笔，不是五次</span>
+                  <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">HOUSEHOLD LEDGER / 示意账本</span>
+                  <span class="font-mono text-[0.5625rem] tracking-[0.14em] text-[#B83828]">五笔，不是五次</span>
                 </div>
                 <div class="divide-y divide-[#1C1B18]/10">
                   <div v-for="(it, i) in incomes" :key="it.no" class="flex items-center gap-4 py-4">
-                    <span class="font-mono text-[10px] tracking-[0.16em] text-[#6E6960] w-7 shrink-0">{{ it.no }}</span>
+                    <span class="font-mono text-[0.625rem] tracking-[0.16em] text-[#6E6960] w-7 shrink-0">{{ it.no }}</span>
                     <span class="w-2.5 h-2.5 rounded-sm shrink-0" :style="{ background: it.color }"></span>
                     <span class="font-editorial text-base sm:text-lg font-bold flex-1">{{ it.name }}</span>
                     <span class="h-1.5 rounded-full shrink-0" :style="{ background: it.color, width: 18 + i * 9 + 'px' }"></span>
                   </div>
                 </div>
-                <div class="mt-5 pt-4 border-t border-[#1C1B18]/12 text-[11px] leading-[1.85] text-[#5A564E]">
+                <div class="mt-5 pt-4 border-t border-[#1C1B18]/12 text-[0.6875rem] leading-[1.85] text-[#5A564E]">
                   同一块地可以同时产生几笔收入，这正是合作社、订单农业与产地仓存在的理由。条形长短仅为视觉节奏，不代表金额或比例。
                 </div>
               </div>
@@ -135,7 +135,7 @@ const layers = [
 
       <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#1C1B18]/12 bg-[#1C1B18] py-2.5" aria-hidden="true">
         <div class="marquee-track">
-          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.625rem] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
             <span>土地托管 / 订单收购</span><span class="text-[#C88A32]">✳</span>
             <span>合作社分红 / 就地务工</span><span class="text-[#C88A32]">✳</span>
             <span>品牌溢价与一袋一码</span><span class="text-[#C88A32]">✳</span>
@@ -146,14 +146,14 @@ const layers = [
     </section>
 
     <!-- 田野实景：首屏与内容之间的一处真实影像，避免全页程序化图形 -->
-    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20">
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20">
       <Reveal>
         <PhotoNote src="/photos/grain-ear.jpg" alt="成熟谷穗的实景特写" label="FIELD NOTE / 收成与账本" note="五笔收入讲的是机制与风险分配，读数均为示意。照片用来提醒这些机制最终要落到一季真实的收成上。" />
       </Reveal>
     </section>
 
     <!-- 02 五笔机制档案 -->
-    <section id="mechanisms" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section id="mechanisms" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal>
         <SectionHead index="01 / 03" eyebrow="FIVE MECHANISMS / 机制档案" title="收益从哪来，风险谁担着"
           description="每条都按「谁参与 / 钱从哪来 / 风险谁担」三段写。只讲机制，不写收益承诺。" />
@@ -166,7 +166,7 @@ const layers = [
             <span class="absolute -right-2 -bottom-8 font-editorial font-bold text-[#1C1B18]/6 select-none" style="font-size: 8rem; line-height: 1">{{ it.no }}</span>
             <div class="relative flex items-center gap-3 mb-6">
               <span class="w-3 h-3 rounded-sm" :style="{ background: it.color }"></span>
-              <span class="font-mono text-[10px] tracking-[0.18em] text-[#6E6960]">INCOME {{ it.no }}</span>
+              <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#6E6960]">INCOME {{ it.no }}</span>
             </div>
             <h3 class="relative font-editorial text-xl sm:text-2xl font-bold mb-6">{{ it.name }}</h3>
             <div class="relative grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -175,12 +175,12 @@ const layers = [
                 { k: '钱从哪来', v: it.money },
                 { k: '风险谁担', v: it.risk }
               ]" :key="b.k" class="border-t border-[#1C1B18]/12 pt-4">
-                <div class="font-mono text-[9px] tracking-[0.16em] text-[#8A6324] mb-2">{{ b.k }}</div>
-                <p class="text-[12px] leading-[1.9] text-[#3A3630]">{{ b.v }}</p>
+                <div class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#8A6324] mb-2">{{ b.k }}</div>
+                <p class="text-[0.75rem] leading-[1.9] text-[#3A3630]">{{ b.v }}</p>
               </div>
             </div>
             <div class="relative mt-6 pt-4 border-t border-[#1C1B18]/10">
-              <RouterLink :to="it.link" class="inline-flex items-center gap-2 text-[11px] font-bold text-[#8A6324] group">
+              <RouterLink :to="it.link" class="inline-flex items-center gap-2 text-[0.6875rem] font-bold text-[#8A6324] group">
                 对应展陈 · {{ it.linkLabel }} <ArrowUpRight :size="14" class="arrow-shift" />
               </RouterLink>
             </div>
@@ -191,7 +191,7 @@ const layers = [
 
     <!-- 03 叠加账本 + 口径 -->
     <section class="surface-ink">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <Reveal>
           <SectionHead index="02 / 03" eyebrow="STACKED LEDGER / 叠加账本" title="五笔，是叠在一起的"
             description="同一季里，托管保底、订单收购、分红、务工与品牌溢价可以同时发生，而不是五选一。" dark />
@@ -202,18 +202,18 @@ const layers = [
             <div class="flex items-end gap-6">
               <div class="w-24 sm:w-32 flex flex-col gap-1.5">
                 <div v-for="l in layers" :key="l.k"
-                  class="rounded-sm flex items-center justify-center font-mono text-[9px] tracking-[0.12em] text-[#1C1B18]"
-                  :style="{ height: l.h, minHeight: '34px', background: l.k === '订单收购' ? '#C88A32' : l.k === '合作社分红' ? '#8FBFA2' : l.k === '就地务工' ? '#D8C7A4' : l.k === '品牌溢价' ? '#E4A49A' : '#F0E6D2' }">
+                  class="rounded-sm flex items-center justify-center font-mono text-[0.5625rem] tracking-[0.12em] text-[#1C1B18]"
+                  :style="{ height: l.h, minHeight: '2.125rem', background: l.k === '订单收购' ? '#C88A32' : l.k === '合作社分红' ? '#8FBFA2' : l.k === '就地务工' ? '#D8C7A4' : l.k === '品牌溢价' ? '#E4A49A' : '#F0E6D2' }">
                 </div>
               </div>
               <div class="flex-1 space-y-3">
                 <div v-for="l in layers" :key="l.k" class="flex items-center gap-3">
                   <span class="h-px w-6 bg-[#F7F4EE]/30 shrink-0"></span>
-                  <span class="text-[12px] text-[#F7F4EE]/92">{{ l.k }}</span>
+                  <span class="text-[0.75rem] text-[#F7F4EE]/92">{{ l.k }}</span>
                 </div>
               </div>
             </div>
-            <p class="text-[11px] leading-[1.9] text-[#F7F4EE]/86 mt-7">
+            <p class="text-[0.6875rem] leading-[1.9] text-[#F7F4EE]/86 mt-7">
               色块高度仅用于表达「可以叠加」这件事，是示意图层，不代表金额、比例或统计结果。
             </p>
           </Reveal>
@@ -226,9 +226,9 @@ const layers = [
                 { k: 'WHY TRACE', t: '为什么要一袋一码', d: '优质优价的前提是能证明优质，分批留样与检测让产地能被查到。' },
                 { k: 'WHY MIX', t: '为什么要多业态', d: '农忙与冬捕季节错开，务工收入才不会只集中在短短几周。' }
               ]" :key="n.k" class="border border-[#F7F4EE]/18 bg-[#F7F4EE]/5 p-5">
-                <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324] mb-3">{{ n.k }}</div>
+                <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8A6324] mb-3">{{ n.k }}</div>
                 <div class="font-editorial text-base font-bold text-[#F7F4EE] mb-2">{{ n.t }}</div>
-                <p class="text-[11px] leading-[1.9] text-[#F7F4EE]/90">{{ n.d }}</p>
+                <p class="text-[0.6875rem] leading-[1.9] text-[#F7F4EE]/90">{{ n.d }}</p>
               </div>
             </div>
           </Reveal>
@@ -237,8 +237,8 @@ const layers = [
         <Reveal :delay="240">
           <div class="mt-14 pt-8 border-t border-[#F7F4EE]/18 flex flex-wrap items-center justify-between gap-6">
             <div>
-              <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324] mb-2">DATA NOTE / 口径说明</div>
-              <p class="text-[12px] leading-[1.9] text-[#F7F4EE]/90 max-w-2xl">
+              <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8A6324] mb-2">DATA NOTE / 口径说明</div>
+              <p class="text-[0.75rem] leading-[1.9] text-[#F7F4EE]/90 max-w-2xl">
                 五条机制均为公开可查的带农方式，页面不含具体金额、户数、比例与人物信息。全站量级示意数字的性质与参照年份，见「关于」页附录 A。
               </p>
             </div>
@@ -251,7 +251,7 @@ const layers = [
     </section>
 
     <!-- 04 回链 -->
-    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal>
         <SectionHead index="03 / 03" eyebrow="KEEP EXPLORING / 继续参观" title="从机制回到土地"
           description="机制讲完，可以回到项目库看具体路径，或去认养页把那一季走一遍。" />
@@ -263,9 +263,9 @@ const layers = [
           { to: '/products', k: 'RELATED / 产出', t: '吉林风物集市', d: '产地、认证与流通方式' }
         ]" :key="n.to" :delay="0">
           <RouterLink :to="n.to" class="group h-full bg-[#FFFDF9] border border-[#1C1B18]/10 p-7 lift block">
-            <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324] mb-5">{{ n.k }}</div>
+            <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8A6324] mb-5">{{ n.k }}</div>
             <div class="font-editorial text-xl font-bold mb-2 group-hover:text-[#8A6324] transition-colors">{{ n.t }}</div>
-            <div class="text-[11px] leading-relaxed text-[#5A564E]">{{ n.d }}</div>
+            <div class="text-[0.6875rem] leading-relaxed text-[#5A564E]">{{ n.d }}</div>
           </RouterLink>
         </Reveal>
       </div>

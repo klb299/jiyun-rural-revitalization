@@ -135,16 +135,16 @@ onUnmounted(() => {
     <div class="xl:col-span-3 museum-card rounded-2xl border border-[#1C1B18]/10 p-5">
       <div class="flex items-center justify-between mb-2">
         <h3 class="text-sm font-bold text-[#1C1B18] font-editorial">近七日访问趋势</h3>
-        <span class="text-[10px] font-mono text-[#6E6960]">VISITORS / 7 DAYS</span>
+        <span class="text-[0.625rem] font-mono text-[#6E6960]">VISITORS / 7 DAYS</span>
       </div>
-      <div ref="trendEl" class="w-full h-[230px]"></div>
+      <div ref="trendEl" class="w-full h-[14.375rem]"></div>
     </div>
     <div class="xl:col-span-2 museum-card rounded-2xl border border-[#1C1B18]/10 p-5">
       <div class="flex items-center justify-between mb-2">
         <h3 class="text-sm font-bold text-[#1C1B18] font-editorial">3D 展厅热度占比</h3>
-        <span class="text-[10px] font-mono text-[#6E6960]">HALL SHARE</span>
+        <span class="text-[0.625rem] font-mono text-[#6E6960]">HALL SHARE</span>
       </div>
-      <div ref="heatEl" class="w-full h-[230px]"></div>
+      <div ref="heatEl" class="w-full h-[14.375rem]"></div>
     </div>
   </div>
 </template>

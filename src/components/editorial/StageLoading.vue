@@ -29,7 +29,7 @@ defineProps({
         <span class="stage-mark__dot"></span>
       </div>
 
-      <div class="font-mono text-[10px] tracking-[0.26em] mt-8 mb-3 opacity-60">{{ label }}</div>
+      <div class="font-mono text-[0.625rem] tracking-[0.26em] mt-8 mb-3 opacity-60">{{ label }}</div>
       <div class="font-editorial text-lg sm:text-xl font-bold tracking-tight">{{ note }}</div>
       <div class="mt-6 h-px w-16 bg-current opacity-30"></div>
 
@@ -37,12 +37,12 @@ defineProps({
         <span
           v-for="(t, i) in tags"
           :key="t"
-          class="font-mono text-[9px] tracking-[0.16em] px-2.5 py-1 rounded-full border border-current/25 opacity-70"
+          class="font-mono text-[0.5625rem] tracking-[0.16em] px-2.5 py-1 rounded-full border border-current/25 opacity-70"
         >{{ String(i + 1).padStart(2, '0') }} {{ t }}</span>
       </div>
     </div>
 
-    <div class="absolute bottom-4 left-0 right-0 text-center font-mono text-[9px] tracking-[0.22em] opacity-45">
+    <div class="absolute bottom-4 left-0 right-0 text-center font-mono text-[0.5625rem] tracking-[0.22em] opacity-45">
       JILIN RURAL REVITALIZATION / DIGITAL EXHIBITION
     </div>
   </div>

@@ -70,6 +70,10 @@ npm run snapshot  # 把源码与文档快照到 .workbuddy/backup/
 
 构建产物约 2.9 MB（含 10 张 SVG 图版与 6 个字体分片）。首屏只加载主包约 237 KB（gzip 约 89 KB）、Vue runtime 62 KB、Pinia 与图标两个小 chunk，FCP 约 80 ms，不加载任何 Three.js 或 ECharts。Three.js（693 KB / gzip 175 KB）与按需注册后的 ECharts（576 KB / gzip 195 KB）都是异步 chunk，只在进入 3D 展厅与图表页时下载；`/exhibit-map` 是独立的 23 KB（gzip 7.7 KB）异步 chunk，首页沙盘还要等滚入视口才挂载。
 
+## 三·补、响应式单位
+
+排版与布局统一用 **rem**，`html` 根字号为 `clamp(16px, 0.4vw + 10.2px, 20px)`：1440px 及以下保持 16px 基准，1920px 起随视口平滑放大到 20px 上限，小屏不缩字号以保证展签小字可读。Tailwind 默认 spacing 本身即 rem，会一起缩放。≤3px 细线、1px 边框、阴影与滚动条仍保留固定 px。新增样式请写 `text-[0.75rem]` 而非 `text-[12px]`。
+
 ## 四、技术栈
 
 | 层 | 选型 |

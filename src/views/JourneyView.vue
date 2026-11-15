@@ -57,14 +57,14 @@ const goToAct = (i) => {
     <!-- 01 五幕物候：纵向幕次刻度尺，首屏即可点选剧情 -->
     <section class="relative min-h-[100dvh] bg-[#F7F4EE] flex items-center overflow-hidden">
       <div class="absolute inset-0 coord-rule opacity-70 pointer-events-none"></div>
-      <div data-parallax="-9" class="absolute -right-[13%] -bottom-[30%] w-[44vw] h-[44vw] min-w-[380px] min-h-[380px] rounded-full border border-[#C88A32]/30 pointer-events-none"></div>
+      <div data-parallax="-9" class="absolute -right-[13%] -bottom-[30%] w-[44vw] h-[44vw] min-w-[23.75rem] min-h-[23.75rem] rounded-full border border-[#C88A32]/30 pointer-events-none"></div>
       <div class="absolute -left-16 top-1/4 watermark text-[22vw] leading-none select-none pointer-events-none">米</div>
 
-      <div class="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
+      <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-8">
-            <span class="px-3 py-1.5 rounded-full bg-[#2E5A44] text-[#F7F4EE] font-mono text-[10px] tracking-[0.2em] font-bold">CHAPTER 05</span>
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">GRAIN ODYSSEY / 一粒米的旅程 · 吉林大米数字生命周期</span>
+            <span class="px-3 py-1.5 rounded-full bg-[#2E5A44] text-[#F7F4EE] font-mono text-[0.625rem] tracking-[0.2em] font-bold">CHAPTER 05</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">GRAIN ODYSSEY / 一粒米的旅程 · 吉林大米数字生命周期</span>
           </div>
         </Reveal>
 
@@ -93,8 +93,8 @@ const goToAct = (i) => {
             <Reveal :delay="820">
               <div class="grid grid-cols-3 gap-4 mt-12 max-w-lg">
                 <div v-for="m in heroMeta" :key="m.k" class="border-t border-[#1C1B18]/25 pt-3">
-                  <div class="font-mono text-[9px] tracking-[0.18em] text-[#2E5A44]">{{ m.k }}</div>
-                  <div class="text-[11px] mt-1.5 text-[#3A3630]">{{ m.v }}</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#2E5A44]">{{ m.k }}</div>
+                  <div class="text-[0.6875rem] mt-1.5 text-[#3A3630]">{{ m.v }}</div>
                 </div>
               </div>
             </Reveal>
@@ -106,7 +106,7 @@ const goToAct = (i) => {
                   <span class="flex-[3] bg-[#C88A32]"></span><span class="flex-[2] bg-[#B83828]"></span>
                   <span class="flex-[2] bg-[#8C583A]"></span>
                 </div>
-                <div class="flex justify-between font-mono text-[9px] tracking-[0.14em] text-[#6E6960] mt-2">
+                <div class="flex justify-between font-mono text-[0.5625rem] tracking-[0.14em] text-[#6E6960] mt-2">
                   <span>11 月 冬养</span><span>4 月 春灌</span><span>6 月 夏耕</span><span>9 月 秋收</span><span>全年 保供</span>
                 </div>
               </div>
@@ -117,20 +117,20 @@ const goToAct = (i) => {
             <div class="bezel">
               <div class="bezel-core p-6 sm:p-8">
                 <div class="flex items-center justify-between gap-3 mb-6">
-                  <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">ACT INDEX / 五幕剧情</span>
-                  <span class="font-mono text-[9px] tracking-[0.16em] text-[#8A6324]">点击切换</span>
+                  <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">ACT INDEX / 五幕剧情</span>
+                  <span class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#8A6324]">点击切换</span>
                 </div>
                 <div class="relative pl-7">
-                  <div class="absolute left-[5px] top-3 bottom-3 w-px bg-[#C88A32]/35"></div>
+                  <div class="absolute left-[0.3125rem] top-3 bottom-3 w-px bg-[#C88A32]/35"></div>
                   <button v-for="(s, i) in steps" :key="s.no" @click="goToAct(i)"
                     class="relative block w-full text-left py-3.5 group cursor-pointer">
                     <span class="absolute -left-7 top-5 w-2.5 h-2.5 rotate-45 border transition-all duration-500"
                       :class="currentStep === i ? 'bg-[#C88A32] border-[#C88A32] scale-125' : 'bg-[#FFFDF9] border-[#C88A32]/60 group-hover:bg-[#C88A32]'"></span>
                     <div class="flex items-baseline gap-3">
-                      <span class="font-mono text-[10px] tracking-[0.16em]" :class="currentStep === i ? 'text-[#8A6324]' : 'text-[#6E6960]'">{{ s.no }}</span>
+                      <span class="font-mono text-[0.625rem] tracking-[0.16em]" :class="currentStep === i ? 'text-[#8A6324]' : 'text-[#6E6960]'">{{ s.no }}</span>
                       <span class="font-editorial text-lg font-bold group-hover:text-[#8A6324] transition-colors">{{ s.stage }}</span>
                     </div>
-                    <div class="text-[11px] text-[#5A564E] mt-1 pl-8">{{ s.time }} · {{ s.badge }}</div>
+                    <div class="text-[0.6875rem] text-[#5A564E] mt-1 pl-8">{{ s.time }} · {{ s.badge }}</div>
                   </button>
                 </div>
               </div>
@@ -141,7 +141,7 @@ const goToAct = (i) => {
 
       <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#1C1B18]/10 bg-[#1C1B18] py-2.5" aria-hidden="true">
         <div class="marquee-track">
-          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.625rem] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
             <span>黑土冬养 · 秸秆免耕</span><span class="text-[#C88A32]">✳</span>
             <span>长白山雪水灌溉</span><span class="text-[#C88A32]">✳</span>
             <span>北斗农机与稻蟹共生</span><span class="text-[#C88A32]">✳</span>
@@ -152,7 +152,7 @@ const goToAct = (i) => {
     </section>
 
     <!-- 时间轴 -->
-    <section id="timeline" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
+    <section id="timeline" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
       <Reveal>
         <SectionHead
           index="01 / 04"
@@ -164,9 +164,9 @@ const goToAct = (i) => {
 
       <Reveal :delay="100" class="mt-12">
         <div class="relative">
-          <div class="hidden sm:block absolute left-0 right-0 top-[23px] h-px bg-[#1C1B18]/14"></div>
+          <div class="hidden sm:block absolute left-0 right-0 top-[1.4375rem] h-px bg-[#1C1B18]/14"></div>
           <div
-            class="hidden sm:block absolute left-0 top-[23px] h-[2px] bg-[#C88A32] transition-all duration-700"
+            class="hidden sm:block absolute left-0 top-[1.4375rem] h-[2px] bg-[#C88A32] transition-all duration-700"
             :style="{ width: `${(currentStep / (steps.length - 1)) * 100}%` }"
           ></div>
           <div class="grid grid-cols-5 gap-2 sm:gap-4">
@@ -184,9 +184,9 @@ const goToAct = (i) => {
                     ? 'bg-[#C88A32]/15 text-[#C88A32] border-[#C88A32]/45'
                     : 'bg-[#FFFDF9] text-[#6E6960] border-[#1C1B18]/14 group-hover:border-[#C88A32]'"
               >{{ s.icon }}</div>
-              <div class="font-mono text-[10px] tracking-[0.14em] mt-3 hidden sm:block"
+              <div class="font-mono text-[0.625rem] tracking-[0.14em] mt-3 hidden sm:block"
                 :class="i === currentStep ? 'text-[#C88A32]' : 'text-[#6E6960]'">{{ s.no }}</div>
-              <div class="text-[11px] font-semibold mt-1 hidden md:block truncate"
+              <div class="text-[0.6875rem] font-semibold mt-1 hidden md:block truncate"
                 :class="i === currentStep ? 'text-[#1C1B18]' : 'text-[#5A564E]'">{{ s.stage.split(' · ')[1] }}</div>
             </button>
           </div>
@@ -198,30 +198,30 @@ const goToAct = (i) => {
         <div class="border border-[#1C1B18]/12 bg-[#FFFDF9]/80 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
           <div class="lg:col-span-8 p-7 sm:p-10">
             <div class="flex flex-wrap items-center gap-3 mb-6">
-              <span class="px-3 py-1 bg-[#C88A32]/12 text-[#8A6324] font-mono text-[10px] tracking-[0.18em]">{{ steps[currentStep].badge }}</span>
-              <span class="font-mono text-[10px] tracking-[0.16em] text-[#6E6960]">{{ steps[currentStep].stage }}</span>
+              <span class="px-3 py-1 bg-[#C88A32]/12 text-[#8A6324] font-mono text-[0.625rem] tracking-[0.18em]">{{ steps[currentStep].badge }}</span>
+              <span class="font-mono text-[0.625rem] tracking-[0.16em] text-[#6E6960]">{{ steps[currentStep].stage }}</span>
             </div>
             <h3 class="display-2 mb-5">{{ steps[currentStep].title }}</h3>
             <p class="lede max-w-2xl">{{ steps[currentStep].desc }}</p>
             <div class="mt-8 p-5 border-l-2 border-[#C88A32] bg-[#EFECE6]/60 flex items-start gap-4">
-              <span class="font-mono text-[10px] tracking-[0.18em] text-[#6E6960] pt-1">KEY METRIC</span>
+              <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#6E6960] pt-1">KEY METRIC</span>
               <div>
                 <div class="font-editorial text-lg font-bold text-[#1C1B18]">{{ steps[currentStep].highlight }}</div>
                 <div class="caption mt-1">长春农高区监测认证 / 教学展示指标</div>
               </div>
             </div>
             <div class="flex flex-wrap items-center justify-between gap-4 mt-9 pt-6 border-t border-[#1C1B18]/10">
-              <div class="font-mono text-[11px] text-[#5A564E]">{{ steps[currentStep].time }} · {{ steps[currentStep].location }}</div>
+              <div class="font-mono text-[0.6875rem] text-[#5A564E]">{{ steps[currentStep].time }} · {{ steps[currentStep].location }}</div>
               <div class="flex items-center gap-2">
                 <button
                   @click="currentStep = Math.max(0, currentStep - 1)"
                   :disabled="currentStep === 0"
-                  class="px-4 py-2.5 min-h-[40px] rounded-lg border border-[#1C1B18]/16 text-xs font-semibold disabled:opacity-35 cursor-pointer hover:border-[#C88A32] transition-colors flex items-center gap-1.5"
+                  class="px-4 py-2.5 min-h-[2.5rem] rounded-lg border border-[#1C1B18]/16 text-xs font-semibold disabled:opacity-35 cursor-pointer hover:border-[#C88A32] transition-colors flex items-center gap-1.5"
                 ><ArrowLeft :size="14" /> 上一幕</button>
                 <button
                   @click="currentStep = Math.min(steps.length - 1, currentStep + 1)"
                   :disabled="currentStep === steps.length - 1"
-                  class="px-4 py-2.5 min-h-[40px] rounded-lg bg-[#1C1B18] text-[#F7F4EE] text-xs font-semibold disabled:opacity-35 cursor-pointer hover:bg-[#C88A32] transition-colors flex items-center gap-1.5"
+                  class="px-4 py-2.5 min-h-[2.5rem] rounded-lg bg-[#1C1B18] text-[#F7F4EE] text-xs font-semibold disabled:opacity-35 cursor-pointer hover:bg-[#C88A32] transition-colors flex items-center gap-1.5"
                 >下一幕 <ArrowRight :size="14" /></button>
               </div>
             </div>
@@ -235,13 +235,13 @@ const goToAct = (i) => {
                 {{ steps[currentStep].icon }}
               </div>
               <h4 class="font-editorial text-xl font-bold text-[#F7F4EE] mb-2">长春农高区监测认证</h4>
-              <p class="font-mono text-[11px] text-[#8A6324]">ID: JL-RICE-2026-0{{ currentStep + 1 }}</p>
-              <p class="text-[12px] leading-[1.9] text-[#F7F4EE]/90 mt-6">
+              <p class="font-mono text-[0.6875rem] text-[#8A6324]">ID: JL-RICE-2026-0{{ currentStep + 1 }}</p>
+              <p class="text-[0.75rem] leading-[1.9] text-[#F7F4EE]/90 mt-6">
                 每一批次绑定地块编号、农事日期与检测报告。扫码即可回看本幕对应的灌溉、施肥、收割与烘干记录。
               </p>
             </div>
             <div class="mt-9 pt-5 border-t border-[#F7F4EE]/16 flex items-center justify-between">
-              <span class="font-mono text-[10px] text-[#F7F4EE]/80">BLOCKCHAIN VERIFIED</span>
+              <span class="font-mono text-[0.625rem] text-[#F7F4EE]/80">BLOCKCHAIN VERIFIED</span>
               <span class="w-2 h-2 rounded-full bg-[#C88A32]"></span>
             </div>
           </div>
@@ -251,7 +251,7 @@ const goToAct = (i) => {
 
     <!-- 图文与速览 -->
     <section id="trace" class="surface-linen border-y border-[#1C1B18]/10">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <Reveal>
           <SectionHead
             index="02 / 04"
@@ -285,7 +285,7 @@ const goToAct = (i) => {
                   <span class="block text-sm font-semibold group-hover:text-[#C88A32] transition-colors">{{ s.title }}</span>
                   <span class="caption block mt-0.5">{{ s.time }}</span>
                 </span>
-                <span class="font-mono text-[11px] text-[#6E6960] hidden sm:block">{{ s.highlight }}</span>
+                <span class="font-mono text-[0.6875rem] text-[#6E6960] hidden sm:block">{{ s.highlight }}</span>
               </button>
             </div>
           </div>
@@ -294,7 +294,7 @@ const goToAct = (i) => {
     </section>
 
     <!-- 收束 -->
-    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal>
         <SectionHead
           index="03 / 04"
@@ -310,7 +310,7 @@ const goToAct = (i) => {
             { k: 'TIME', v: '180 天', d: '从泡田到包装的周期' },
             { k: 'TRACE', v: '1 码', d: '回看全生命周期' }
           ]" :key="n.k" class="border-t border-[#1C1B18]/16 pt-5">
-            <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-2">{{ n.k }}</div>
+            <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324] mb-2">{{ n.k }}</div>
             <div class="font-editorial text-3xl font-bold mb-1.5">{{ n.v }}</div>
             <div class="caption">{{ n.d }}</div>
           </div>
@@ -319,13 +319,13 @@ const goToAct = (i) => {
     </section>
 
     <section class="surface-ink">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-10">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-10">
         <Reveal>
           <div class="eyebrow mb-4">04 / 04 · NEXT CHAPTER</div>
-          <p class="text-[13px] leading-[2] text-[#F7F4EE]/90 max-w-2xl">同一片黑土，冬天还有另一副面孔。下一章走进查干湖冰面，看千年渔猎仪轨如何与生态永续并行。</p>
+          <p class="text-[0.8125rem] leading-[2] text-[#F7F4EE]/90 max-w-2xl">同一片黑土，冬天还有另一副面孔。下一章走进查干湖冰面，看千年渔猎仪轨如何与生态永续并行。</p>
         </Reveal>
         <Reveal :delay="120">
-          <RouterLink to="/chagan-lake" class="inline-flex items-baseline gap-3 min-h-[40px] group">
+          <RouterLink to="/chagan-lake" class="inline-flex items-baseline gap-3 min-h-[2.5rem] group">
             <span class="font-editorial text-2xl sm:text-3xl font-bold text-[#F7F4EE] group-hover:text-[#C88A32] transition-colors">查干湖冬捕生态非遗馆</span>
             <ArrowUpRight :size="22" class="text-[#C88A32] arrow-shift" />
           </RouterLink>

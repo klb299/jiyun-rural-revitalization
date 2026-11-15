@@ -55,7 +55,7 @@ const columns = [
         </span>
       </div>
     </div>
-    <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-20 sm:pt-28 pb-10">
+    <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-20 sm:pt-28 pb-10">
       <!-- 大标语 -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end pb-16 border-b border-[#F7F4EE]/14">
         <div class="lg:col-span-8">
@@ -82,19 +82,19 @@ const columns = [
             <div class="w-9 h-9 bg-[#C88A32] text-[#1C1B18] flex items-center justify-center font-editorial font-bold">吉</div>
             <div class="font-editorial font-bold text-[#F7F4EE]">吉韵新程 · 黑土粮仓</div>
           </div>
-          <p class="text-[12px] leading-[1.9] text-[#F7F4EE]/90 max-w-xs">
+          <p class="text-[0.75rem] leading-[1.9] text-[#F7F4EE]/90 max-w-xs">
             长春市高校大学生网页设计作品。以 Vue 3 与 Three.js 构建吉林现代数字乡村振兴展陈，把黑土保育、智慧农机与生态非遗放进同一座可漫游的线上美术馆。
           </p>
           <div class="flex flex-wrap gap-2 mt-5">
-            <span v-for="t in ['Vue 3.5', 'Three.js', 'ECharts', 'WebGL']" :key="t" class="px-2.5 py-1 border border-[#F7F4EE]/18 text-[10px] font-mono text-[#F7F4EE]/80">{{ t }}</span>
+            <span v-for="t in ['Vue 3.5', 'Three.js', 'ECharts', 'WebGL']" :key="t" class="px-2.5 py-1 border border-[#F7F4EE]/18 text-[0.625rem] font-mono text-[#F7F4EE]/80">{{ t }}</span>
           </div>
         </div>
         <div v-for="col in columns" :key="col.title">
-          <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-2">{{ col.caption }}</div>
+          <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324] mb-2">{{ col.caption }}</div>
           <h4 class="text-sm font-bold text-[#F7F4EE] mb-5">{{ col.title }}</h4>
           <ul class="space-y-2.5">
             <li v-for="l in col.links" :key="l.to + l.name">
-              <RouterLink :to="l.to" class="link-line inline-flex items-center min-h-[36px] text-[12px] text-[#F7F4EE]/90 hover:text-[#F7F4EE] transition-colors">
+              <RouterLink :to="l.to" class="link-line inline-flex items-center min-h-[2.25rem] text-[0.75rem] text-[#F7F4EE]/90 hover:text-[#F7F4EE] transition-colors">
                 {{ l.name }}
               </RouterLink>
             </li>
@@ -107,7 +107,7 @@ const columns = [
         <p class="caption text-[#F7F4EE]/90 max-w-2xl">
           文献与数据参考：中国科学院东北地理与农业生态研究所（长春）、吉林省农业农村厅公开年报、长春国家农业高新技术产业示范区。展陈数据为教学演示用途。
         </p>
-        <div class="font-mono text-[10px] tracking-[0.14em] text-[#F7F4EE]/80 shrink-0">
+        <div class="font-mono text-[0.625rem] tracking-[0.14em] text-[#F7F4EE]/80 shrink-0">
           © 2026 JILIN DIGITAL RURAL MUSEUM
         </div>
       </div>

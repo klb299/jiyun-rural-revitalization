@@ -142,13 +142,13 @@ const fixes = [
     <!-- 01 首屏：三道关卡 -->
     <section class="relative min-h-[100dvh] surface-ink flex items-center overflow-hidden">
       <div class="absolute inset-0 coord-rule opacity-30 pointer-events-none"></div>
-      <div data-parallax="-9" class="absolute -right-[10%] -top-[18%] w-[42vw] h-[42vw] min-w-[380px] min-h-[380px] rounded-full border border-[#C88A32]/25 pointer-events-none"></div>
+      <div data-parallax="-9" class="absolute -right-[10%] -top-[18%] w-[42vw] h-[42vw] min-w-[23.75rem] min-h-[23.75rem] rounded-full border border-[#C88A32]/25 pointer-events-none"></div>
 
-      <div class="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
+      <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-8">
-            <span class="px-3 py-1.5 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[10px] tracking-[0.2em] font-bold">LAST MILE / 最后一公里</span>
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#FFFDF9]/95">基于 2025–2026 年公开讨论的痛点实验</span>
+            <span class="px-3 py-1.5 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[0.625rem] tracking-[0.2em] font-bold">LAST MILE / 最后一公里</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#FFFDF9]/95">基于 2025–2026 年公开讨论的痛点实验</span>
           </div>
         </Reveal>
 
@@ -183,8 +183,8 @@ const fixes = [
                   { k: 'SOURCES', v: '6 组公开资料' },
                   { k: 'RULE', v: '读数均为示意' }
                 ]" :key="n.k" class="border-t border-[#F7F4EE]/25 pt-3">
-                  <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324]">{{ n.k }}</div>
-                  <div class="text-[11px] mt-1.5 text-[#FFFDF9]/96">{{ n.v }}</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8A6324]">{{ n.k }}</div>
+                  <div class="text-[0.6875rem] mt-1.5 text-[#FFFDF9]/96">{{ n.v }}</div>
                 </div>
               </div>
             </Reveal>
@@ -194,11 +194,11 @@ const fixes = [
             <div class="space-y-3">
               <a v-for="g in gates" :key="g.no" :href="g.to"
                 class="group flex items-center gap-4 p-5 border border-[#F7F4EE]/18 bg-[#F7F4EE]/5 hover:bg-[#F7F4EE]/10 transition-colors duration-500">
-                <span class="font-mono text-[10px] tracking-[0.18em] text-[#8A6324] w-7 shrink-0">{{ g.no }}</span>
+                <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#8A6324] w-7 shrink-0">{{ g.no }}</span>
                 <div class="flex-1">
-                  <div class="font-mono text-[9px] tracking-[0.16em] text-[#FFFDF9]/95 mb-1">{{ g.k }}</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#FFFDF9]/95 mb-1">{{ g.k }}</div>
                   <div class="font-editorial text-lg font-bold text-[#F7F4EE] group-hover:text-[#C88A32] transition-colors">{{ g.t }}</div>
-                  <div class="text-[11px] text-[#FFFDF9]/96 mt-1">{{ g.d }}</div>
+                  <div class="text-[0.6875rem] text-[#FFFDF9]/96 mt-1">{{ g.d }}</div>
                 </div>
                 <ArrowUpRight :size="16" class="text-[#C88A32] arrow-shift shrink-0" />
               </a>
@@ -209,7 +209,7 @@ const fixes = [
 
       <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#F7F4EE]/12 bg-[#1C1B18]/70 py-2.5" aria-hidden="true">
         <div class="marquee-track">
-          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#FFFDF9]/95 whitespace-nowrap">
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.625rem] tracking-[0.22em] text-[#FFFDF9]/95 whitespace-nowrap">
             <span>等不起 / 对不上 / 买不起</span><span class="text-[#C88A32]">✳</span>
             <span>盆景要变成风景，靠的是组织方式</span><span class="text-[#C88A32]">✳</span>
             <span>不造盆景 · 不搞一刀切 · 不为基层添负担</span><span class="text-[#C88A32]">✳</span>
@@ -219,14 +219,14 @@ const fixes = [
     </section>
 
     <!-- 田野实景：首屏与内容之间的一处真实影像，避免全页程序化图形 -->
-    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20">
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20">
       <Reveal>
         <PhotoNote src="/photos/furrows.jpg" alt="规整垄沟的农田航拍实景" label="FIELD NOTE / 技术落地的现场" note="三个实验讲的都是技术为什么难落地。照片是它最终要回去的地方，不是某个示范工程的数据来源。" />
       </Reveal>
     </section>
 
     <!-- 02 实验一：三年才见效 -->
-    <section id="lab-1" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section id="lab-1" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal>
         <SectionHead index="01 / 03" eyebrow="EXPERIMENT 01 / 时间账" title="三年才见效，你等得起吗"
           description="公开研究指出保护性耕作的增产提质通常要 3–5 年才显现，农户追的却是当年收益。拖年份、换条件，看这一户能不能撑到反超那年。" />
@@ -237,8 +237,8 @@ const fixes = [
           <div class="bezel h-full">
             <div class="bezel-core p-6 sm:p-8">
               <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-                <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">SOIL & YIELD INDEX / 地力与收成示意指数</span>
-                <span class="font-mono text-[9px] tracking-[0.14em] text-[#8A6324]">示意趋势，非实测值</span>
+                <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">SOIL & YIELD INDEX / 地力与收成示意指数</span>
+                <span class="font-mono text-[0.5625rem] tracking-[0.14em] text-[#8A6324]">示意趋势，非实测值</span>
               </div>
               <svg viewBox="0 0 600 230" class="w-full h-auto" role="img" aria-label="免耕与传统翻耕六年示意趋势对比">
                 <g stroke="rgba(28,27,24,0.1)" stroke-width="1">
@@ -256,18 +256,18 @@ const fixes = [
                   <text v-for="(p, i) in trend" :key="'t' + i" :x="40 + i * 104" y="226" text-anchor="middle">第 {{ p.y }} 年</text>
                 </g>
               </svg>
-              <div class="flex flex-wrap gap-5 mt-4 text-[11px]">
+              <div class="flex flex-wrap gap-5 mt-4 text-[0.6875rem]">
                 <span class="flex items-center gap-2"><span class="w-5 h-0.5 bg-[#2E5A44]"></span>秸秆覆盖免耕</span>
                 <span class="flex items-center gap-2"><span class="w-5 h-0.5 bg-[#8C867B]"></span>传统翻耕</span>
                 <span class="flex items-center gap-2"><span class="w-0.5 h-3 bg-[#C88A32]"></span>当前年份</span>
               </div>
               <div class="mt-6">
-                <label class="block font-mono text-[9px] tracking-[0.16em] text-[#6E6960] mb-2" for="year-range">观察年份</label>
+                <label class="block font-mono text-[0.5625rem] tracking-[0.16em] text-[#6E6960] mb-2" for="year-range">观察年份</label>
                 <input id="year-range" v-model.number="year" type="range" min="1" max="6" step="1" aria-label="观察年份"
                   class="w-full accent-[#C88A32] cursor-pointer" />
-                <div class="flex justify-between font-mono text-[9px] text-[#6E6960] mt-1"><span>1</span><span>3</span><span>6</span></div>
+                <div class="flex justify-between font-mono text-[0.5625rem] text-[#6E6960] mt-1"><span>1</span><span>3</span><span>6</span></div>
               </div>
-              <div class="mt-6 pt-5 border-t border-[#1C1B18]/10 font-mono text-[9px] leading-[1.9] text-[#6E6960]">
+              <div class="mt-6 pt-5 border-t border-[#1C1B18]/10 font-mono text-[0.5625rem] leading-[1.9] text-[#6E6960]">
                 趋势依据：中国发展门户网 2025.12 区域适宜性评估（收益迟滞 3–5 年）、中国农大梨树 16 年定位试验（有机质 1.7% 升至 2.8%）。曲线为教学演示示意，不代表任何实测产量。
               </div>
             </div>
@@ -277,23 +277,23 @@ const fixes = [
         <Reveal :delay="180" class="lg:col-span-5">
           <div class="h-full flex flex-col gap-4">
             <div class="bg-[#FFFDF9] border border-[#1C1B18]/12 p-5 sm:p-6">
-              <div class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960] mb-5">换三个条件试试</div>
+              <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960] mb-5">换三个条件试试</div>
               <div v-for="o in [
                 { k: '经营方式', key: 'scale', opts: [{ v: 'small', t: '单户自担' }, { v: 'coop', t: '合作社托管' }] },
                 { k: '秸秆用途', key: 'straw', opts: [{ v: 'all', t: '全量还田' }, { v: 'partial', t: '部分离田' }] },
                 { k: '地块条件', key: 'terrain', opts: [{ v: 'flat', t: '平地' }, { v: 'slope', t: '坡岗地' }] }
               ]" :key="o.key" class="mb-4">
-                <div class="text-[11px] font-semibold text-[#3A3630] mb-2">{{ o.k }}</div>
+                <div class="text-[0.6875rem] font-semibold text-[#3A3630] mb-2">{{ o.k }}</div>
                 <div class="grid grid-cols-2 gap-2">
                   <button v-for="op in o.opts" :key="op.v" @click="setOpt(o.key, op.v)"
-                    class="py-2.5 min-h-[40px] rounded-lg text-[11px] font-semibold border transition-all duration-300 cursor-pointer"
+                    class="py-2.5 min-h-[2.5rem] rounded-lg text-[0.6875rem] font-semibold border transition-all duration-300 cursor-pointer"
                     :class="(o.key === 'scale' ? scale : o.key === 'straw' ? straw : terrain) === op.v
                       ? 'bg-[#1C1B18] text-[#F7F4EE] border-[#1C1B18]' : 'bg-[#EFECE6] text-[#5A564E] border-transparent hover:border-[#C88A32]'">
                     {{ op.t }}
                   </button>
                 </div>
               </div>
-              <div class="font-mono text-[9px] tracking-[0.14em] text-[#6E6960]">
+              <div class="font-mono text-[0.5625rem] tracking-[0.14em] text-[#6E6960]">
                 开关依据：机具投入高、秸秆与饲料燃料争资源、坡岗地出苗不齐、合作社托管分摊成本。
               </div>
             </div>
@@ -303,13 +303,13 @@ const fixes = [
               <div class="flex items-center gap-2 mb-3">
                 <Check v-if="verdict.tone === 'good'" :size="15" class="text-[#2E5A44]" />
                 <AlertTriangle v-else :size="15" :class="verdict.tone === 'bad' ? 'text-[#B83828]' : 'text-[#8A6324]'" />
-                <span class="font-mono text-[9px] tracking-[0.18em] text-[#6E6960]">第 {{ year }} 年 · 反超约在第 {{ crossover }} 年</span>
+                <span class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#6E6960]">第 {{ year }} 年 · 反超约在第 {{ crossover }} 年</span>
               </div>
               <div class="font-editorial text-lg sm:text-xl font-bold mb-2"
                 :class="verdict.tone === 'good' ? 'text-[#2E5A44]' : verdict.tone === 'bad' ? 'text-[#B83828]' : 'text-[#8A6324]'">
                 {{ verdict.t }}
               </div>
-              <p class="text-[12px] leading-[1.9] text-[#3A3630]">{{ verdict.d }}</p>
+              <p class="text-[0.75rem] leading-[1.9] text-[#3A3630]">{{ verdict.d }}</p>
             </div>
           </div>
         </Reveal>
@@ -318,7 +318,7 @@ const fixes = [
 
     <!-- 03 实验二：六张报表 -->
     <section id="lab-2" class="surface-linen border-y border-[#1C1B18]/10">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <Reveal>
           <SectionHead index="02 / 03" eyebrow="EXPERIMENT 02 / 数据账" title="一块地，六张报表"
             description="同一块示意黑土地，六个系统各记一套。先点合并，看看会撞上什么，再点统一编码，看一张底图怎么把六张表对齐。" />
@@ -343,15 +343,15 @@ const fixes = [
               :class="unified ? 'border-[#2E5A44]/40' : merged ? 'border-[#B83828]/35' : 'border-[#1C1B18]/12'">
               <div class="flex items-center gap-2 mb-5">
                 <span class="w-2.5 h-2.5 rounded-sm" :style="{ background: b.color }"></span>
-                <span class="font-mono text-[9px] tracking-[0.18em] text-[#6E6960]">{{ b.en }}</span>
-                <span class="ml-auto text-[11px] font-bold">{{ b.k }}</span>
+                <span class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#6E6960]">{{ b.en }}</span>
+                <span class="ml-auto text-[0.6875rem] font-bold">{{ b.k }}</span>
               </div>
-              <div class="space-y-2 font-mono text-[11px]">
+              <div class="space-y-2 font-mono text-[0.6875rem]">
                 <div class="flex justify-between gap-2"><span class="text-[#6E6960]">地块编号</span><span :class="unified ? 'text-[#2E5A44] font-bold' : merged ? 'text-[#B83828]' : 'text-[#1C1B18]'">{{ unified ? 'A-07' : b.id }}</span></div>
                 <div class="flex justify-between gap-2"><span class="text-[#6E6960]">面积（亩）</span><span :class="unified ? 'text-[#2E5A44] font-bold' : merged ? 'text-[#B83828]' : 'text-[#1C1B18]'">{{ unified ? '12.6' : b.area }}</span></div>
                 <div class="flex justify-between gap-2"><span class="text-[#6E6960]">作业日期</span><span :class="unified ? 'text-[#2E5A44] font-bold' : merged ? 'text-[#B83828]' : 'text-[#1C1B18]'">{{ unified ? '4 月 18 日' : b.date }}</span></div>
               </div>
-              <div class="mt-4 pt-3 border-t border-[#1C1B18]/10 text-[10px]"
+              <div class="mt-4 pt-3 border-t border-[#1C1B18]/10 text-[0.625rem]"
                 :class="unified ? 'text-[#2E5A44]' : 'text-[#6E6960]'">
                 {{ unified ? '已并入一张底图' : merged ? '与其他系统冲突' : '独立记录，未校验' }}
               </div>
@@ -360,18 +360,18 @@ const fixes = [
         </div>
 
         <div v-if="merged && !unified" class="mt-8 rounded-2xl border border-[#B83828]/30 bg-[#B83828]/6 p-6">
-          <div class="font-mono text-[10px] tracking-[0.18em] text-[#B83828] mb-4">合并失败 · 撞上四类矛盾</div>
+          <div class="font-mono text-[0.625rem] tracking-[0.18em] text-[#B83828] mb-4">合并失败 · 撞上四类矛盾</div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div v-for="c in conflicts" :key="c.k" class="border-t border-[#B83828]/25 pt-3">
-              <div class="text-[12px] font-bold mb-1">{{ c.k }}</div>
-              <div class="text-[11px] leading-[1.8] text-[#3A3630]">{{ c.d }}</div>
+              <div class="text-[0.75rem] font-bold mb-1">{{ c.k }}</div>
+              <div class="text-[0.6875rem] leading-[1.8] text-[#3A3630]">{{ c.d }}</div>
             </div>
           </div>
         </div>
         <div v-if="unified" class="mt-8 rounded-2xl border border-[#2E5A44]/35 bg-[#2E5A44]/8 p-6 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div class="font-mono text-[10px] tracking-[0.18em] text-[#2E5A44] mb-2">一张底图 · A-07</div>
-            <p class="text-[12px] leading-[1.9] text-[#3A3630] max-w-2xl">
+            <div class="font-mono text-[0.625rem] tracking-[0.18em] text-[#2E5A44] mb-2">一张底图 · A-07</div>
+            <p class="text-[0.75rem] leading-[1.9] text-[#3A3630] max-w-2xl">
               统一地块编码之后，土壤、气象、农机、补贴、保险与电商读到的是同一块地。重复填报消失，核验有了共同基数，数据才谈得上在保险、信贷这些场景里被用起来。
             </p>
           </div>
@@ -380,14 +380,14 @@ const fixes = [
           </RouterLink>
         </div>
 
-        <div class="mt-8 font-mono text-[9px] leading-[1.9] text-[#5A564E]">
+        <div class="mt-8 font-mono text-[0.5625rem] leading-[1.9] text-[#5A564E]">
           矛盾类型依据：经济参考报 2025.06（涉农平台互不互通、植保数据接不进监管平台、补贴重复填报）、2025 中央一号文件（整治指尖上的形式主义）、2026 中央一号文件（健全天空地一体化观测网络、建设农业农村大数据平台）。六张表的编号与读数均为教学演示示意，不是任何真实系统的数据。
         </div>
       </div>
     </section>
 
     <!-- 04 实验三：算得过账吗 -->
-    <section id="lab-3" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section id="lab-3" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal>
         <SectionHead index="03 / 03" eyebrow="EXPERIMENT 03 / 经济账" title="算得过账吗"
           description="公开报道里最常见的一句话是「买不起、不会用、不敢用」。换个经营规模，再换一种获得技术的方式，看单户的账怎么变。" />
@@ -396,11 +396,11 @@ const fixes = [
       <div class="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6">
         <Reveal :delay="100" class="lg:col-span-5">
           <div class="card-ink h-full p-7 sm:p-8">
-            <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-6">INPUT / 两个变量</div>
-            <label class="block font-mono text-[9px] tracking-[0.16em] text-[#FFFDF9]/95 mb-2" for="acre-range">经营规模（亩）</label>
+            <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324] mb-6">INPUT / 两个变量</div>
+            <label class="block font-mono text-[0.5625rem] tracking-[0.16em] text-[#FFFDF9]/95 mb-2" for="acre-range">经营规模（亩）</label>
             <input id="acre-range" v-model.number="acres" type="range" min="10" max="300" step="10" aria-label="经营规模"
               class="w-full accent-[#C88A32] cursor-pointer" />
-            <div class="flex justify-between font-mono text-[9px] text-[#FFFDF9]/95 mt-1"><span>10</span><span>150</span><span>300</span></div>
+            <div class="flex justify-between font-mono text-[0.5625rem] text-[#FFFDF9]/95 mt-1"><span>10</span><span>150</span><span>300</span></div>
             <div class="font-editorial text-4xl font-bold text-[#F7F4EE] mt-5">{{ acres }} <span class="text-base font-normal">亩</span></div>
 
             <div class="mt-8 space-y-2">
@@ -408,10 +408,10 @@ const fixes = [
                 class="w-full text-left p-4 border transition-all duration-400 cursor-pointer"
                 :class="mode === m.id ? 'border-[#C88A32] bg-[#F7F4EE]/10' : 'border-[#F7F4EE]/18 hover:bg-[#F7F4EE]/5'">
                 <div class="flex items-center justify-between gap-2">
-                  <span class="text-[13px] font-bold text-[#F7F4EE]">{{ m.t }}</span>
-                  <span class="font-mono text-[9px]" :class="mode === m.id ? 'text-[#8A6324]' : 'text-[#FFFDF9]/95'">{{ mode === m.id ? '当前' : '切换' }}</span>
+                  <span class="text-[0.8125rem] font-bold text-[#F7F4EE]">{{ m.t }}</span>
+                  <span class="font-mono text-[0.5625rem]" :class="mode === m.id ? 'text-[#8A6324]' : 'text-[#FFFDF9]/95'">{{ mode === m.id ? '当前' : '切换' }}</span>
                 </div>
-                <div class="text-[11px] text-[#FFFDF9]/96 mt-1">{{ m.d }}</div>
+                <div class="text-[0.6875rem] text-[#FFFDF9]/96 mt-1">{{ m.d }}</div>
               </button>
             </div>
           </div>
@@ -420,21 +420,21 @@ const fixes = [
         <Reveal :delay="180" class="lg:col-span-7">
           <div class="bezel h-full">
             <div class="bezel-core p-7 sm:p-9 h-full">
-              <div class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960] mb-7">OUTPUT / 单户要承担什么</div>
+              <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960] mb-7">OUTPUT / 单户要承担什么</div>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 <div v-for="n in [
                   { k: '固定投入', v: modes.find(m => m.id === mode).t, d: ledger.label },
                   { k: '回本周期', v: ledger.payback, d: '公开报道里数字化项目常超 5 年' },
                   { k: '农户门槛', v: mode === 'buy' ? '买不起 + 不会用' : mode === 'share' ? '会用服务即可' : '手机收指令即可', d: '从看数据变成可执行建议' }
                 ]" :key="n.k" class="border-t border-[#1C1B18]/15 pt-4">
-                  <div class="font-mono text-[9px] tracking-[0.16em] text-[#8A6324] mb-2">{{ n.k }}</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#8A6324] mb-2">{{ n.k }}</div>
                   <div class="font-editorial text-lg sm:text-xl font-bold mb-2">{{ n.v }}</div>
-                  <div class="text-[11px] leading-[1.8] text-[#5A564E]">{{ n.d }}</div>
+                  <div class="text-[0.6875rem] leading-[1.8] text-[#5A564E]">{{ n.d }}</div>
                 </div>
               </div>
 
               <div class="mt-9">
-                <div class="flex justify-between font-mono text-[9px] tracking-[0.14em] text-[#6E6960] mb-2">
+                <div class="flex justify-between font-mono text-[0.5625rem] tracking-[0.14em] text-[#6E6960] mb-2">
                   <span>单户相对负担（示意档位）</span><span>{{ ledger.level }} / 4</span>
                 </div>
                 <div class="h-3 rounded-full bg-[#EFECE6] overflow-hidden">
@@ -445,8 +445,8 @@ const fixes = [
               </div>
 
               <div class="mt-8 rounded-xl border border-[#C88A32]/35 bg-[#C88A32]/8 px-5 py-4">
-                <div class="font-mono text-[9px] tracking-[0.16em] text-[#8A6324] mb-2">公开讨论里的破局方向</div>
-                <p class="text-[12px] leading-[1.9] text-[#3A3630]">
+                <div class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#8A6324] mb-2">公开讨论里的破局方向</div>
+                <p class="text-[0.75rem] leading-[1.9] text-[#3A3630]">
                   从「买重装备」转向「买轻服务」。合作社集中购置、多人共享、按需服务，复杂分析留在后台，农户只收能执行的农事指令。中国农网 2026.09 的对话里提到，集中服务模式可大幅降低单户智慧农业服务成本。
                 </p>
               </div>
@@ -466,9 +466,9 @@ const fixes = [
 
     <!-- 05 收束：从盆景到风景 -->
     <section class="bg-[#2E5A44]">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <Reveal>
-          <div class="font-mono text-[10px] tracking-[0.22em] text-[#F0C275] mb-4">FROM SHOWCASE TO LANDSCAPE / 从盆景到风景</div>
+          <div class="font-mono text-[0.625rem] tracking-[0.22em] text-[#F0C275] mb-4">FROM SHOWCASE TO LANDSCAPE / 从盆景到风景</div>
           <h2 class="display-2 text-[#FFFDF9] max-w-3xl">解开这三道关卡的，不是更炫的技术</h2>
           <p class="lede text-[#FFFDF9]/96 mt-6 max-w-2xl">
             公开报道与政策文件里反复出现的答案，是组织方式：托管分摊投入、共享替代购置、统一编码打通数据、农技力量下沉到村。下面四条都能在公开资料里查到。
@@ -477,9 +477,9 @@ const fixes = [
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mt-12" data-stagger>
           <Reveal v-for="(f, i) in fixes" :key="f.k" :delay="i * 70">
             <div class="h-full border border-[#F7F4EE]/22 bg-[#F7F4EE]/6 p-6">
-              <div class="font-mono text-[10px] tracking-[0.18em] text-[#F0C275] mb-4">{{ f.k }} / {{ f.y }}</div>
+              <div class="font-mono text-[0.625rem] tracking-[0.18em] text-[#F0C275] mb-4">{{ f.k }} / {{ f.y }}</div>
               <div class="font-editorial text-lg font-bold text-[#FFFDF9] mb-3">{{ f.t }}</div>
-              <p class="text-[11px] leading-[1.9] text-[#FFFDF9]/96">{{ f.d }}</p>
+              <p class="text-[0.6875rem] leading-[1.9] text-[#FFFDF9]/96">{{ f.d }}</p>
             </div>
           </Reveal>
         </div>
@@ -491,28 +491,28 @@ const fixes = [
               { k: 'TALENT / 人才振兴', t: '谁来种地，技术怎么传到田里', items: ['科技小院与驻社研究生', '返乡创业与人才下乡服务', '产业带头人与治理人才培育'] },
               { k: 'GOVERNANCE / 组织振兴', t: '经营组织之外，还有乡村治理', items: ['村党组织与村「两委」', '村民自治与村规民约', '新型农村集体经济监管'] }
             ]" :key="g.k" class="border border-[#F7F4EE]/20 bg-[#F7F4EE]/6 p-6">
-              <div class="font-mono text-[9px] tracking-[0.18em] text-[#F0C275] mb-3">{{ g.k }}</div>
+              <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#F0C275] mb-3">{{ g.k }}</div>
               <div class="font-editorial text-lg font-bold text-[#FFFDF9] mb-4">{{ g.t }}</div>
               <div class="space-y-2">
                 <div v-for="it in g.items" :key="it" class="flex items-start gap-2 border-t border-dashed border-[#F7F4EE]/18 pt-2">
                   <span class="w-1 h-1 rounded-full bg-[#C88A32] mt-1.5 shrink-0"></span>
-                  <span class="text-[11px] leading-[1.7] text-[#FFFDF9]/95">{{ it }}</span>
+                  <span class="text-[0.6875rem] leading-[1.7] text-[#FFFDF9]/95">{{ it }}</span>
                 </div>
               </div>
-              <div class="mt-4 font-mono text-[9px] tracking-[0.14em] text-[#F0C275]">本展馆未展开 · 政策方向</div>
+              <div class="mt-4 font-mono text-[0.5625rem] tracking-[0.14em] text-[#F0C275]">本展馆未展开 · 政策方向</div>
             </div>
           </div>
         </Reveal>
 
         <Reveal :delay="160">
           <div class="mt-12 border-t border-[#F7F4EE]/20 pt-8">
-            <div class="font-mono text-[10px] tracking-[0.2em] text-[#F0C275] mb-5">PUBLIC SOURCES / 本页依据的公开资料</div>
+            <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#F0C275] mb-5">PUBLIC SOURCES / 本页依据的公开资料</div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
               <div v-for="s in sources" :key="s.n" class="flex gap-4 py-3 border-b border-[#F7F4EE]/12">
-                <span class="font-mono text-[10px] text-[#F0C275] shrink-0 w-16">{{ s.y }}</span>
+                <span class="font-mono text-[0.625rem] text-[#F0C275] shrink-0 w-16">{{ s.y }}</span>
                 <div>
-                  <div class="text-[11px] font-semibold text-[#FFFDF9] leading-snug">{{ s.n }}</div>
-                  <div class="text-[10px] text-[#FFFDF9]/95 mt-1">{{ s.u }}</div>
+                  <div class="text-[0.6875rem] font-semibold text-[#FFFDF9] leading-snug">{{ s.n }}</div>
+                  <div class="text-[0.625rem] text-[#FFFDF9]/95 mt-1">{{ s.u }}</div>
                 </div>
               </div>
             </div>
@@ -520,7 +520,7 @@ const fixes = [
         </Reveal>
         <Reveal :delay="200">
           <div class="mt-12 pt-7 border-t border-[#F7F4EE]/20 flex flex-wrap items-center justify-between gap-5">
-            <p class="text-[11px] leading-[1.9] text-[#FFFDF9]/96 max-w-2xl">
+            <p class="text-[0.6875rem] leading-[1.9] text-[#FFFDF9]/96 max-w-2xl">
               本页的矛盾类型、时间区间与成本量级均来自 2025–2026 年公开报道与政策文件，具体读数、地块编号与示意指数为教学演示，不写人名、不外推地方调研样本，也不构成任何投资或生产建议。
             </p>
             <RouterLink to="/about#references" class="inline-flex items-center gap-2 text-xs font-bold text-[#F0C275] shrink-0">

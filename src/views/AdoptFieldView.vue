@@ -90,15 +90,15 @@ const makeCertificate = () => { certificate.value = true }
     <section class="relative min-h-[100dvh] overflow-hidden flex items-center"
       style="background: linear-gradient(148deg, #F0DFC0 0%, #E4BE79 48%, #C88A32 100%)">
       <div class="absolute inset-0 coord-rule opacity-30 pointer-events-none"></div>
-      <div data-parallax="-8" class="absolute -left-[12%] -bottom-[26%] w-[42vw] h-[42vw] min-w-[360px] min-h-[360px] rounded-full bg-[#FFFDF9]/15 blur-2xl pointer-events-none"></div>
+      <div data-parallax="-8" class="absolute -left-[12%] -bottom-[26%] w-[42vw] h-[42vw] min-w-[22.5rem] min-h-[22.5rem] rounded-full bg-[#FFFDF9]/15 blur-2xl pointer-events-none"></div>
 
-      <div class="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
+      <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
         <!-- 演示声明放最前，不藏在小字里 -->
         <Reveal>
           <div class="mb-8 inline-flex flex-wrap items-center gap-3 rounded-full border border-[#1C1B18]/35 bg-[#FFFDF9]/75 px-4 py-2.5">
             <span class="w-2 h-2 rounded-full bg-[#B83828] shrink-0"></span>
-            <span class="text-[11px] font-semibold text-[#1C1B18]">教学演示的认养流程示意</span>
-            <span class="text-[11px] text-[#5A564E]">不产生真实交易，不对应真实地块与农户，不收集个人信息</span>
+            <span class="text-[0.6875rem] font-semibold text-[#1C1B18]">教学演示的认养流程示意</span>
+            <span class="text-[0.6875rem] text-[#5A564E]">不产生真实交易，不对应真实地块与农户，不收集个人信息</span>
           </div>
         </Reveal>
 
@@ -134,8 +134,8 @@ const makeCertificate = () => { certificate.value = true }
                   { k: 'STEPS', v: '4 步农事流程' },
                   { k: 'STAGES', v: '5 个生长阶段' }
                 ]" :key="n.k" class="border-t border-[#1C1B18]/30 pt-3">
-                  <div class="font-mono text-[9px] tracking-[0.18em] text-[#1C1B18]/70">{{ n.k }}</div>
-                  <div class="text-[11px] mt-1.5 text-[#1C1B18]">{{ n.v }}</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#1C1B18]/70">{{ n.k }}</div>
+                  <div class="text-[0.6875rem] mt-1.5 text-[#1C1B18]">{{ n.v }}</div>
                 </div>
               </div>
             </Reveal>
@@ -146,30 +146,30 @@ const makeCertificate = () => { certificate.value = true }
             <div class="bezel">
               <div class="bezel-core p-5 sm:p-6">
                 <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
-                  <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">PLOT INDEX / 地块索引</span>
-                  <span class="font-mono text-[9px] tracking-[0.14em] text-[#8A6324]">示意分区，非真实地块</span>
+                  <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">PLOT INDEX / 地块索引</span>
+                  <span class="font-mono text-[0.5625rem] tracking-[0.14em] text-[#8A6324]">示意分区，非真实地块</span>
                 </div>
                 <div class="grid grid-cols-3 gap-2.5">
                   <button v-for="(p, i) in plots" :key="p.id" @click="activePlot = i; certificate = false"
                     class="group relative aspect-[4/3] border text-left p-3 transition-all duration-500 cursor-pointer overflow-hidden"
                     :class="activePlot === i ? 'border-[#1C1B18] ring-2 ring-[#1C1B18]/25' : 'border-[#1C1B18]/12 hover:border-[#1C1B18]/40'">
-                    <span class="absolute inset-0 opacity-14" :style="{ background: `repeating-linear-gradient(90deg, ${p.color} 0 5px, transparent 5px 14px)` }"></span>
-                    <span class="relative font-mono text-[10px] font-bold text-[#1C1B18]">{{ p.id }}</span>
-                    <span class="relative block text-[11px] font-semibold leading-snug text-[#1C1B18] mt-2">{{ p.crop }}</span>
+                    <span class="absolute inset-0 opacity-14" :style="{ background: `repeating-linear-gradient(90deg, ${p.color} 0 0.3125rem, transparent 0.3125rem 0.875rem)` }"></span>
+                    <span class="relative font-mono text-[0.625rem] font-bold text-[#1C1B18]">{{ p.id }}</span>
+                    <span class="relative block text-[0.6875rem] font-semibold leading-snug text-[#1C1B18] mt-2">{{ p.crop }}</span>
                   </button>
                 </div>
                 <div class="mt-5 pt-4 border-t border-[#1C1B18]/10 grid grid-cols-2 gap-3">
                   <div>
-                    <div class="font-mono text-[9px] tracking-[0.16em] text-[#6E6960] mb-1">示意地块</div>
+                    <div class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#6E6960] mb-1">示意地块</div>
                     <div class="font-editorial text-lg font-bold">{{ plot.id }} · {{ plot.crop }}</div>
                   </div>
                   <div>
-                    <div class="font-mono text-[9px] tracking-[0.16em] text-[#6E6960] mb-1">方位与农时</div>
-                    <div class="text-[11px] text-[#3A3630]">{{ plot.zone }} · {{ plot.season }}</div>
+                    <div class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#6E6960] mb-1">方位与农时</div>
+                    <div class="text-[0.6875rem] text-[#3A3630]">{{ plot.zone }} · {{ plot.season }}</div>
                   </div>
                   <div class="col-span-2">
-                    <div class="font-mono text-[9px] tracking-[0.16em] text-[#6E6960] mb-1">对应公开项目类型</div>
-                    <div class="text-[12px] font-semibold text-[#8A6324]">{{ plot.type }}</div>
+                    <div class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#6E6960] mb-1">对应公开项目类型</div>
+                    <div class="text-[0.75rem] font-semibold text-[#8A6324]">{{ plot.type }}</div>
                   </div>
                 </div>
               </div>
@@ -180,7 +180,7 @@ const makeCertificate = () => { certificate.value = true }
 
       <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#1C1B18]/15 bg-[#1C1B18] py-2.5" aria-hidden="true">
         <div class="marquee-track">
-          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.625rem] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
             <span>春耕备耕 / 夏管巡田</span><span class="text-[#C88A32]">✳</span>
             <span>秋收烘干 / 分装直邮</span><span class="text-[#C88A32]">✳</span>
             <span>一袋一码 · 分批留样 · 冷链直达</span><span class="text-[#C88A32]">✳</span>
@@ -190,14 +190,14 @@ const makeCertificate = () => { certificate.value = true }
     </section>
 
     <!-- 田野实景：首屏与内容之间的一处真实影像，避免全页程序化图形 -->
-    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20">
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20">
       <Reveal>
         <PhotoNote src="/photos/seedlings.jpg" alt="育秧盘中的幼苗实景" label="FIELD NOTE / 育秧与农时" note="认养流程是教学演示，不产生真实交易。照片只用来对照一季农事从育秧开始的真实节奏。" />
       </Reveal>
     </section>
 
     <!-- 02 四步流程 + 生长时间轴 -->
-    <section id="process" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section id="process" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal>
         <SectionHead index="01 / 03" eyebrow="FOUR STEPS / 认养流程" title="跟着一块地，走完一季"
           description="点任一步切换，右侧生长阶段会同步跳到对应位置。流程与农时来自公开做法，地块与凭证是演示用。" />
@@ -213,12 +213,12 @@ const makeCertificate = () => { certificate.value = true }
                 <span class="w-9 h-9 rounded-xl grid place-items-center font-editorial text-lg font-bold"
                   :class="activeStep === i ? 'bg-[#C88A32] text-[#1C1B18]' : 'bg-[#EFECE6] text-[#5A564E]'">{{ s.icon }}</span>
                 <div>
-                  <div class="font-mono text-[9px] tracking-[0.18em] text-[#6E6960]">{{ s.no }} / {{ s.time }}</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#6E6960]">{{ s.no }} / {{ s.time }}</div>
                   <div class="font-editorial text-lg font-bold">{{ s.name }}</div>
                 </div>
                 <ArrowRight :size="16" class="ml-auto text-[#C88A32] arrow-shift" />
               </div>
-              <p class="text-[12px] leading-[1.9] text-[#3A3630]">{{ s.desc }}</p>
+              <p class="text-[0.75rem] leading-[1.9] text-[#3A3630]">{{ s.desc }}</p>
             </button>
           </Reveal>
         </div>
@@ -228,33 +228,33 @@ const makeCertificate = () => { certificate.value = true }
             <div class="bezel h-full">
               <div class="bezel-core p-7 sm:p-9 h-full">
                 <div class="flex flex-wrap items-center justify-between gap-3 mb-8">
-                  <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">GROWTH TIMELINE / 生长阶段</span>
-                  <span class="font-mono text-[9px] tracking-[0.14em] text-[#8A6324]">{{ plot.id }} · {{ plot.crop }}</span>
+                  <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">GROWTH TIMELINE / 生长阶段</span>
+                  <span class="font-mono text-[0.5625rem] tracking-[0.14em] text-[#8A6324]">{{ plot.id }} · {{ plot.crop }}</span>
                 </div>
                 <div class="font-editorial text-3xl sm:text-4xl font-bold text-[#1C1B18] mb-2">{{ step.name }}</div>
-                <p class="text-[13px] leading-[1.95] text-[#3A3630] mb-8">{{ step.note }}</p>
+                <p class="text-[0.8125rem] leading-[1.95] text-[#3A3630] mb-8">{{ step.note }}</p>
 
                 <input v-model.number="stageIndex" type="range" min="0" max="4" step="1"
                   aria-label="生长阶段" @input="syncStepFromStage"
                   class="w-full accent-[#C88A32] cursor-pointer" />
-                <div class="flex justify-between font-mono text-[9px] tracking-[0.14em] text-[#6E6960] mt-2">
+                <div class="flex justify-between font-mono text-[0.5625rem] tracking-[0.14em] text-[#6E6960] mt-2">
                   <span v-for="g in growth" :key="g.k">{{ g.k }}</span>
                 </div>
 
                 <div class="mt-9 grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div class="card-moss p-5">
-                    <div class="font-mono text-[9px] tracking-[0.18em] text-[#F7F4EE]/86 mb-2">CURRENT STAGE / 当前阶段</div>
+                    <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#F7F4EE]/86 mb-2">CURRENT STAGE / 当前阶段</div>
                     <div class="font-editorial text-2xl font-bold text-[#FFFDF9] mb-2">{{ growth[stageIndex].k }}</div>
-                    <div class="text-[11px] leading-relaxed text-[#F7F4EE]/92">{{ growth[stageIndex].d }}</div>
+                    <div class="text-[0.6875rem] leading-relaxed text-[#F7F4EE]/92">{{ growth[stageIndex].d }}</div>
                   </div>
                   <div class="card-linen p-5">
-                    <div class="font-mono text-[9px] tracking-[0.18em] text-[#6E6960] mb-2">FARM RECORD / 农事档案</div>
-                    <div class="text-[12px] leading-[1.9] text-[#3A3630]">
+                    <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#6E6960] mb-2">FARM RECORD / 农事档案</div>
+                    <div class="text-[0.75rem] leading-[1.9] text-[#3A3630]">
                       每一次作业都记进地块档案，成为包装上那一枚溯源码能读到的内容。分批留样与检测在秋收环节完成。
                     </div>
                   </div>
                 </div>
-                <div class="mt-7 pt-5 border-t border-[#1C1B18]/10 font-mono text-[9px] tracking-[0.14em] text-[#6E6960]">
+                <div class="mt-7 pt-5 border-t border-[#1C1B18]/10 font-mono text-[0.5625rem] tracking-[0.14em] text-[#6E6960]">
                   阶段名称与农时为公开资料整理，地块编号为教学演示用
                 </div>
               </div>
@@ -266,7 +266,7 @@ const makeCertificate = () => { certificate.value = true }
 
     <!-- 03 示意分配 -->
     <section class="surface-linen border-y border-[#1C1B18]/10">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <Reveal>
           <SectionHead index="02 / 03" eyebrow="WHERE THE MONEY GOES / 收益去向" title="一笔钱，流回哪几处"
             description="只画去向，不给比例。条形长度仅表示相对关系，不构成分配方案，也不含任何统计数字。" />
@@ -277,23 +277,23 @@ const makeCertificate = () => { certificate.value = true }
               <div class="bg-[#FFFDF9]/75 border border-[#1C1B18]/10 p-5">
                 <div class="flex items-baseline justify-between gap-3 mb-3">
                   <span class="font-editorial text-lg font-bold">{{ f.k }}</span>
-                  <span class="font-mono text-[9px] tracking-[0.14em] text-[#6E6960]">0{{ i + 1 }}</span>
+                  <span class="font-mono text-[0.5625rem] tracking-[0.14em] text-[#6E6960]">0{{ i + 1 }}</span>
                 </div>
                 <div class="h-2 rounded-full bg-[#EFECE6] overflow-hidden mb-3">
                   <div class="h-full rounded-full bg-[#C88A32]" :style="{ width: (f.level * 23) + '%' }"></div>
                 </div>
-                <p class="text-[11px] leading-[1.85] text-[#3A3630]">{{ f.d }}</p>
+                <p class="text-[0.6875rem] leading-[1.85] text-[#3A3630]">{{ f.d }}</p>
               </div>
             </Reveal>
           </div>
           <Reveal :delay="160" class="lg:col-span-5">
             <div class="card-ink p-7 sm:p-8">
-              <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-6">DEMO CERTIFICATE / 示意凭证</div>
+              <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324] mb-6">DEMO CERTIFICATE / 示意凭证</div>
               <div class="border border-dashed border-[#F7F4EE]/30 p-6 mb-6">
-                <div class="font-mono text-[9px] tracking-[0.16em] text-[#F7F4EE]/80 mb-4">ADOPT · {{ plot.id }} · 2026</div>
+                <div class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#F7F4EE]/80 mb-4">ADOPT · {{ plot.id }} · 2026</div>
                 <div class="font-editorial text-2xl font-bold text-[#F7F4EE] mb-2">{{ plot.crop }}</div>
-                <div class="text-[11px] text-[#F7F4EE]/90 mb-4">{{ plot.zone }} · {{ plot.type }}</div>
-                <div class="flex flex-wrap items-center justify-between gap-2 text-[11px]">
+                <div class="text-[0.6875rem] text-[#F7F4EE]/90 mb-4">{{ plot.zone }} · {{ plot.type }}</div>
+                <div class="flex flex-wrap items-center justify-between gap-2 text-[0.6875rem]">
                   <span class="flex items-center gap-2 text-[#C88A32]">
                     <Sprout :size="14" /> 当前阶段 · {{ growth[stageIndex].k }}
                   </span>
@@ -306,7 +306,7 @@ const makeCertificate = () => { certificate.value = true }
                 class="w-full py-3 rounded-xl bg-[#C88A32] text-[#1C1B18] text-xs font-bold hover:bg-[#FFFDF9] transition-colors cursor-pointer flex items-center justify-center gap-2">
                 <Check :size="15" /> {{ certificate ? '已生成示意凭证' : '生成示意凭证' }}
               </button>
-              <p class="text-[10px] leading-[1.85] text-[#F7F4EE]/86 mt-4">
+              <p class="text-[0.625rem] leading-[1.85] text-[#F7F4EE]/86 mt-4">
                 仅用于展示认养流程会产出哪些信息，不产生真实交易、不记录任何个人信息。刷新页面即消失。
               </p>
               <div class="mt-6 pt-5 border-t border-[#F7F4EE]/16">
@@ -321,7 +321,7 @@ const makeCertificate = () => { certificate.value = true }
     </section>
 
     <!-- 04 口径与回链 -->
-    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal>
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div class="lg:col-span-5">
@@ -337,7 +337,7 @@ const makeCertificate = () => { certificate.value = true }
                 type="button"
                 :aria-pressed="showMock === m.k"
                 @click="showMock = m.k"
-                class="px-4 py-2 min-h-[40px] rounded-full text-[11px] font-bold transition-colors cursor-pointer"
+                class="px-4 py-2 min-h-[2.5rem] rounded-full text-[0.6875rem] font-bold transition-colors cursor-pointer"
                 :class="showMock === m.k ? 'bg-[#1C1B18] text-[#F7F4EE]' : 'text-[#6E6960] hover:text-[#1C1B18]'"
               >{{ m.t }}</button>
             </div>
@@ -353,27 +353,27 @@ const makeCertificate = () => { certificate.value = true }
 
             <div v-else class="mt-6 rounded-2xl bg-[#1C1B18] text-[#F7F4EE] p-6 border border-[#C88A32]/25">
               <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
-                <div class="font-mono text-[9px] tracking-[0.2em] text-[#F0C275]">ADOPTION RECORD / 认养档案</div>
-                <span class="font-mono text-[9px] tracking-[0.14em] px-2.5 py-1 rounded-full border border-[#F0C275]/45 text-[#F0C275]">演示数据 · 非真实记录</span>
+                <div class="font-mono text-[0.5625rem] tracking-[0.2em] text-[#F0C275]">ADOPTION RECORD / 认养档案</div>
+                <span class="font-mono text-[0.5625rem] tracking-[0.14em] px-2.5 py-1 rounded-full border border-[#F0C275]/45 text-[#F0C275]">演示数据 · 非真实记录</span>
               </div>
               <div class="grid grid-cols-2 gap-x-6 gap-y-4">
                 <div v-for="f in mockFields" :key="f.k">
-                  <div class="font-mono text-[9px] tracking-[0.14em] text-[#F7F4EE]/90 mb-1">{{ f.k }}</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.14em] text-[#F7F4EE]/90 mb-1">{{ f.k }}</div>
                   <div class="font-editorial text-sm font-bold text-[#F7F4EE]">{{ f.v }}</div>
                 </div>
               </div>
               <div class="mt-6 pt-5 border-t border-[#F7F4EE]/18">
-                <div class="flex items-center justify-between font-mono text-[9px] tracking-[0.16em] text-[#F7F4EE]/90 mb-2">
+                <div class="flex items-center justify-between font-mono text-[0.5625rem] tracking-[0.16em] text-[#F7F4EE]/90 mb-2">
                   <span>农事进度 / FARMING STAGE</span><span>04 / 04</span>
                 </div>
                 <div class="flex gap-1.5">
                   <span v-for="i in 4" :key="i" class="h-1.5 flex-1 rounded-full bg-[#C88A32]"></span>
                 </div>
-                <div class="flex justify-between mt-2 font-mono text-[9px] text-[#F7F4EE]/90">
+                <div class="flex justify-between mt-2 font-mono text-[0.5625rem] text-[#F7F4EE]/90">
                   <span>春耕</span><span>夏管</span><span>秋收</span><span>直邮</span>
                 </div>
               </div>
-              <p class="mt-5 text-[10px] leading-[1.9] text-[#F7F4EE]/90">
+              <p class="mt-5 text-[0.625rem] leading-[1.9] text-[#F7F4EE]/90">
                 以上人名、编号、读数与凭证均为虚构，仅用于演示「接入真实业务数据后」的字段结构与交互形态；本页不产生真实认养关系、不收集个人信息、不发生交易。
               </p>
             </div>
@@ -385,9 +385,9 @@ const makeCertificate = () => { certificate.value = true }
               { to: '/journey', k: 'RELATED / 时序', t: '一粒米的旅程', d: '五幕物候与一袋一码溯源' },
               { to: '/products', k: 'RELATED / 产出', t: '吉林风物集市', d: '产地、认证与流通方式' }
             ]" :key="n.to" :to="n.to" class="group bg-[#FFFDF9] border border-[#1C1B18]/10 p-6 lift">
-              <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324] mb-4">{{ n.k }}</div>
+              <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8A6324] mb-4">{{ n.k }}</div>
               <div class="font-editorial text-xl font-bold mb-2 group-hover:text-[#8A6324] transition-colors">{{ n.t }}</div>
-              <div class="text-[11px] leading-relaxed text-[#5A564E]">{{ n.d }}</div>
+              <div class="text-[0.6875rem] leading-relaxed text-[#5A564E]">{{ n.d }}</div>
             </RouterLink>
           </div>
         </div>
@@ -396,15 +396,15 @@ const makeCertificate = () => { certificate.value = true }
 
     <!-- 05 收束 -->
     <section class="bg-[#2E5A44]">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 flex flex-wrap items-end justify-between gap-8">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 flex flex-wrap items-end justify-between gap-8">
         <Reveal>
-          <div class="font-mono text-[10px] tracking-[0.22em] text-[#F7F4EE]/86 mb-4">03 / 03 · SUMMARY</div>
+          <div class="font-mono text-[0.625rem] tracking-[0.22em] text-[#F7F4EE]/86 mb-4">03 / 03 · SUMMARY</div>
           <p class="font-editorial text-2xl sm:text-3xl font-bold text-[#FFFDF9] max-w-2xl leading-snug">
             认养是一扇门，门后是农户账本上实实在在的几笔收入。
           </p>
         </Reveal>
         <Reveal :delay="120">
-          <RouterLink to="/farm-income" class="inline-flex items-baseline gap-3 min-h-[40px] group">
+          <RouterLink to="/farm-income" class="inline-flex items-baseline gap-3 min-h-[2.5rem] group">
             <span class="font-editorial text-2xl sm:text-3xl font-bold text-[#FFFDF9] group-hover:text-[#C88A32] transition-colors">一块地，五笔收入</span>
             <ArrowUpRight :size="22" class="text-[#C88A32] arrow-shift" />
           </RouterLink>

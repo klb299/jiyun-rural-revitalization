@@ -93,29 +93,29 @@ const hint = computed(() =>
     <div class="min-h-full grid grid-cols-1 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
       <!-- 图版侧 -->
       <div class="relative bg-[#EFECE6] border-b lg:border-b-0 lg:border-r border-[#1C1B18]/12 overflow-hidden flex items-center justify-center p-5 sm:p-8">
-        <img :src="data.image" :alt="data.alt" class="w-full h-full min-h-[220px] lg:min-h-[420px] object-contain" />
-        <div class="absolute top-4 left-4 rounded-full bg-[#1C1B18] text-[#F7F4EE] px-3 py-1.5 font-mono text-[9px] tracking-[0.2em]">
+        <img :src="data.image" :alt="data.alt" class="w-full h-full min-h-[13.75rem] lg:min-h-[26.25rem] object-contain" />
+        <div class="absolute top-4 left-4 rounded-full bg-[#1C1B18] text-[#F7F4EE] px-3 py-1.5 font-mono text-[0.5625rem] tracking-[0.2em]">
           {{ data.code }} / STATIC PLATE
         </div>
-        <div class="absolute bottom-4 left-4 font-mono text-[9px] tracking-[0.18em] text-[#1C1B18]/60">
+        <div class="absolute bottom-4 left-4 font-mono text-[0.5625rem] tracking-[0.18em] text-[#1C1B18]/60">
           图版 / 乡村振兴数字展陈
         </div>
       </div>
 
       <!-- 档案侧 -->
       <div class="relative px-6 sm:px-9 py-8 sm:py-10 flex flex-col justify-center">
-        <div class="font-mono text-[10px] tracking-[0.24em] text-[#8A6324] mb-3">{{ data.eyebrow }}</div>
+        <div class="font-mono text-[0.625rem] tracking-[0.24em] text-[#8A6324] mb-3">{{ data.eyebrow }}</div>
         <h3 class="font-editorial text-2xl sm:text-3xl font-bold leading-tight mb-4">{{ data.title }}</h3>
         <p class="text-sm leading-relaxed text-[#3A3630] mb-5">{{ data.lead }}</p>
 
         <div class="rounded-2xl border border-[#C88A32]/40 bg-[#C88A32]/8 px-4 py-3 mb-6">
           <div class="text-xs font-semibold mb-1">{{ headline }}</div>
-          <div class="text-[11px] leading-relaxed text-[#1C1B18]/75">{{ hint }}</div>
+          <div class="text-[0.6875rem] leading-relaxed text-[#1C1B18]/75">{{ hint }}</div>
         </div>
 
         <div class="space-y-3">
           <div v-for="(p, i) in data.points" :key="p[0]" class="flex gap-3 items-start">
-            <span class="font-mono text-[10px] text-[#8A6324] pt-1 shrink-0">{{ String(i + 1).padStart(2, '0') }}</span>
+            <span class="font-mono text-[0.625rem] text-[#8A6324] pt-1 shrink-0">{{ String(i + 1).padStart(2, '0') }}</span>
             <div>
               <div class="text-sm font-bold">{{ p[0] }}</div>
               <div class="text-xs leading-relaxed text-[#3A3630] mt-0.5">{{ p[1] }}</div>

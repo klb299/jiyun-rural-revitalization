@@ -724,7 +724,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="relative w-full h-full min-h-[580px] bg-[#F7F4EE] select-none overflow-hidden rounded-3xl">
+  <div class="relative w-full h-full min-h-[36.25rem] bg-[#F7F4EE] select-none overflow-hidden rounded-3xl">
     <div ref="containerRef" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
 
     <!-- 载入淡出 -->
@@ -734,7 +734,7 @@ onUnmounted(() => {
     >
       <div class="flex flex-col items-center gap-3">
         <div class="w-8 h-8 rounded-full border-2 border-[#C88A32]/25 border-t-[#C88A32] animate-spin"></div>
-        <span class="text-[11px] font-mono text-[#6E6960] tracking-widest">PREPARING SPECIMEN</span>
+        <span class="text-[0.6875rem] font-mono text-[#6E6960] tracking-widest">PREPARING SPECIMEN</span>
       </div>
     </div>
 
@@ -745,7 +745,7 @@ onUnmounted(() => {
         <div class="text-xs font-bold text-[#1C1B18] tracking-wider uppercase font-editorial">
           吉林黑土天然地质切片标本 · 3D
         </div>
-        <div class="text-[10px] text-[#5A564E] font-mono">
+        <div class="text-[0.625rem] text-[#5A564E] font-mono">
           NORTHEAST CHERNOZEM MONOLITH // 1.0 METER
         </div>
       </div>
@@ -755,14 +755,14 @@ onUnmounted(() => {
     <div class="absolute top-5 right-6 flex items-center gap-2">
       <button
         @click="toggleTour"
-        class="museum-panel px-3.5 py-2.5 min-h-[40px] rounded-xl text-xs font-semibold text-[#1C1B18] hover:border-[#C88A32] transition-all duration-200 cursor-pointer shadow-sm"
+        class="museum-panel px-3.5 py-2.5 min-h-[2.5rem] rounded-xl text-xs font-semibold text-[#1C1B18] hover:border-[#C88A32] transition-all duration-200 cursor-pointer shadow-sm"
         :class="[isTouring ? 'bg-[#EFECE6] border-[#C88A32] text-[#C88A32]' : '']"
       >
         <span>{{ isTouring ? '⏸ 停止环视导览' : '🎥 自动环视导览' }}</span>
       </button>
       <button
         @click="toggleExpand"
-        class="museum-panel px-3.5 py-2.5 min-h-[40px] rounded-xl text-xs font-semibold text-[#1C1B18] hover:border-[#C88A32] transition-all duration-200 cursor-pointer shadow-sm"
+        class="museum-panel px-3.5 py-2.5 min-h-[2.5rem] rounded-xl text-xs font-semibold text-[#1C1B18] hover:border-[#C88A32] transition-all duration-200 cursor-pointer shadow-sm"
         :class="[isExpanded ? 'bg-[#EFECE6] border-[#C88A32]' : '']"
       >
         <span>{{ isExpanded ? '📦 原位合拢标本' : '🔬 抽屉分层展开' }}</span>
@@ -775,8 +775,8 @@ onUnmounted(() => {
       class="absolute z-20 pointer-events-none museum-card px-3 py-2 rounded-xl border border-[#C88A32]/40 shadow-lg"
       :style="{ left: `${tooltip.x + 16}px`, top: `${tooltip.y + 16}px`, maxWidth: '250px' }"
     >
-      <div class="text-[11px] font-bold text-[#1C1B18]">{{ tooltip.title }}</div>
-      <div class="text-[10px] text-[#8C6A2E] font-mono mt-0.5">{{ tooltip.sub }}</div>
+      <div class="text-[0.6875rem] font-bold text-[#1C1B18]">{{ tooltip.title }}</div>
+      <div class="text-[0.625rem] text-[#8C6A2E] font-mono mt-0.5">{{ tooltip.sub }}</div>
     </div>
 
     <!-- 左侧地层快速探针导航 -->
@@ -800,9 +800,9 @@ onUnmounted(() => {
             ></span>
             <span class="text-xs font-bold text-[#1C1B18]">{{ layer.name }}</span>
           </div>
-          <span class="text-[10px] font-mono text-[#8A6324] font-semibold">{{ layer.depth }}</span>
+          <span class="text-[0.625rem] font-mono text-[#8A6324] font-semibold">{{ layer.depth }}</span>
         </div>
-        <div class="text-[11px] text-[#5A564E] mt-1 line-clamp-1 group-hover:text-[#1C1B18] transition-colors">
+        <div class="text-[0.6875rem] text-[#5A564E] mt-1 line-clamp-1 group-hover:text-[#1C1B18] transition-colors">
           {{ layer.feature }} · {{ layer.organic }}
         </div>
       </div>
@@ -811,21 +811,21 @@ onUnmounted(() => {
     <!-- 右侧地质科学解读书签卡 -->
     <div class="absolute right-6 bottom-6 hidden md:block w-72 museum-card p-4 rounded-2xl border border-[#1C1B18]/10 shadow-lg pointer-events-auto">
       <div class="flex items-center justify-between border-b border-[#1C1B18]/10 pb-2 mb-2">
-        <span class="text-[10px] font-mono uppercase tracking-widest text-[#8A6324] font-semibold">
+        <span class="text-[0.625rem] font-mono uppercase tracking-widest text-[#8A6324] font-semibold">
           地质物候档案 // STRATA NO. 0{{ currentLayer + 1 }}
         </span>
-        <span class="text-[10px] text-[#6E6960] font-mono">100% 真实取样</span>
+        <span class="text-[0.625rem] text-[#6E6960] font-mono">100% 真实取样</span>
       </div>
       <h3 class="text-sm font-bold text-[#1C1B18] mb-1 font-editorial">
         {{ strataInfo[currentLayer].name }}
       </h3>
-      <div class="inline-block px-2 py-0.5 rounded bg-[#C88A32]/10 text-[#8A6324] text-[10px] font-medium mb-2">
+      <div class="inline-block px-2 py-0.5 rounded bg-[#C88A32]/10 text-[#8A6324] text-[0.625rem] font-medium mb-2">
         {{ strataInfo[currentLayer].organic }}
       </div>
       <p class="text-xs text-[#5A564E] leading-relaxed">
         {{ strataInfo[currentLayer].desc }}
       </p>
-      <div class="mt-3 pt-2 border-t border-[#1C1B18]/5 flex items-center justify-between text-[10px] text-[#6E6960] font-mono">
+      <div class="mt-3 pt-2 border-t border-[#1C1B18]/5 flex items-center justify-between text-[0.625rem] text-[#6E6960] font-mono">
         <span>悬停土层查看细节</span>
         <span>{{ qualityLabel }}</span>
       </div>

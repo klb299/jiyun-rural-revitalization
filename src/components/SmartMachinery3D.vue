@@ -886,7 +886,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="relative w-full h-full min-h-[580px] bg-[#F4F2EC] select-none overflow-hidden rounded-3xl">
+  <div class="relative w-full h-full min-h-[36.25rem] bg-[#F4F2EC] select-none overflow-hidden rounded-3xl">
     <div ref="containerRef" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
 
     <div
@@ -895,7 +895,7 @@ onUnmounted(() => {
     >
       <div class="flex flex-col items-center gap-3">
         <div class="w-8 h-8 rounded-full border-2 border-[#B83828]/25 border-t-[#B83828] animate-spin"></div>
-        <span class="text-[11px] font-mono text-[#6E6960] tracking-widest">ASSEMBLING MACHINERY</span>
+        <span class="text-[0.6875rem] font-mono text-[#6E6960] tracking-widest">ASSEMBLING MACHINERY</span>
       </div>
     </div>
 
@@ -906,7 +906,7 @@ onUnmounted(() => {
         <div class="text-xs font-bold text-[#1C1B18] tracking-wider uppercase font-editorial">
           长春智造 · 北斗智慧农机 3D 数字化装配馆
         </div>
-        <div class="text-[10px] text-[#5A564E] font-mono">
+        <div class="text-[0.625rem] text-[#5A564E] font-mono">
           CHANGCHUN AGRI-ROBOTICS INDUSTRIAL SHOWROOM
         </div>
       </div>
@@ -915,14 +915,14 @@ onUnmounted(() => {
     <div class="absolute top-5 right-6 flex items-center gap-2">
       <button
         @click="toggleTour"
-        class="museum-panel px-3.5 py-2.5 min-h-[40px] rounded-xl text-xs font-semibold text-[#1C1B18] hover:border-[#C88A32] transition-all duration-200 cursor-pointer shadow-sm"
+        class="museum-panel px-3.5 py-2.5 min-h-[2.5rem] rounded-xl text-xs font-semibold text-[#1C1B18] hover:border-[#C88A32] transition-all duration-200 cursor-pointer shadow-sm"
         :class="[isTouring ? 'bg-[#EFECE6] border-[#C88A32] text-[#C88A32]' : '']"
       >
         <span>{{ isTouring ? '⏸ 停止环视导览' : '🎥 自动环视导览' }}</span>
       </button>
       <button
         @click="toggleExplode"
-        class="museum-panel px-4 py-2.5 min-h-[40px] rounded-xl text-xs font-semibold text-[#1C1B18] hover:border-[#C88A32] transition-all duration-200 cursor-pointer shadow-sm"
+        class="museum-panel px-4 py-2.5 min-h-[2.5rem] rounded-xl text-xs font-semibold text-[#1C1B18] hover:border-[#C88A32] transition-all duration-200 cursor-pointer shadow-sm"
         :class="[isExploded ? 'bg-[#EAE4D8] border-[#C88A32]' : '']"
       >
         <span>{{ isExploded ? '🔩 机械合拢总成' : '💥 3D 机械爆炸分解 (Exploded View)' }}</span>
@@ -935,8 +935,8 @@ onUnmounted(() => {
       class="absolute z-20 pointer-events-none museum-card px-3 py-2 rounded-xl border border-[#C88A32]/40 shadow-lg"
       :style="{ left: `${tooltip.x + 16}px`, top: `${tooltip.y + 16}px`, maxWidth: '260px' }"
     >
-      <div class="text-[11px] font-bold text-[#1C1B18]">{{ tooltip.title }}</div>
-      <div class="text-[10px] text-[#8C6A2E] font-mono mt-0.5">{{ tooltip.sub }}</div>
+      <div class="text-[0.6875rem] font-bold text-[#1C1B18]">{{ tooltip.title }}</div>
+      <div class="text-[0.625rem] text-[#8C6A2E] font-mono mt-0.5">{{ tooltip.sub }}</div>
     </div>
 
     <!-- 部件结构聚焦切换按钮 -->
@@ -945,7 +945,7 @@ onUnmounted(() => {
         v-for="(val, key) in partsData"
         :key="key"
         @click="focusPart(key)"
-        class="museum-panel px-3 py-2.5 min-h-[40px] rounded-xl border text-xs font-medium transition-all duration-200 cursor-pointer"
+        class="museum-panel px-3 py-2.5 min-h-[2.5rem] rounded-xl border text-xs font-medium transition-all duration-200 cursor-pointer"
         :class="[
           selectedPart === key
             ? 'border-[#C88A32] bg-[#FFFFFF] text-[#C88A32] shadow-sm font-semibold'
@@ -957,23 +957,23 @@ onUnmounted(() => {
     </div>
 
     <!-- 右侧部件档案：加宽并拉开层级，避免中英混排挤成一行 -->
-    <div class="absolute right-6 bottom-6 hidden lg:block w-[330px] museum-card p-5 rounded-2xl border border-[#1C1B18]/10 shadow-lg pointer-events-auto">
+    <div class="absolute right-6 bottom-6 hidden lg:block w-[20.625rem] museum-card p-5 rounded-2xl border border-[#1C1B18]/10 shadow-lg pointer-events-auto">
       <div class="flex items-center gap-2 pb-3 mb-4 border-b border-[#1C1B18]/10">
         <span class="w-1.5 h-1.5 rounded-full bg-[#B83828] shrink-0"></span>
-        <span class="font-mono text-[10px] tracking-[0.18em] text-[#B83828] font-bold">PART SPEC / 部件档案</span>
-        <span class="ml-auto font-mono text-[9px] tracking-[0.14em] text-[#6E6960]">{{ selectedPart.toUpperCase() }}</span>
+        <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#B83828] font-bold">PART SPEC / 部件档案</span>
+        <span class="ml-auto font-mono text-[0.5625rem] tracking-[0.14em] text-[#6E6960]">{{ selectedPart.toUpperCase() }}</span>
       </div>
-      <div class="font-mono text-[9px] tracking-[0.16em] text-[#6E6960] mb-2">长春 · 汽车工业摇篮 / {{ partsData[selectedPart].tag }}</div>
+      <div class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#6E6960] mb-2">长春 · 汽车工业摇篮 / {{ partsData[selectedPart].tag }}</div>
       <h3 class="font-editorial text-base font-bold text-[#1C1B18] leading-snug mb-3">
         {{ partsData[selectedPart].title }}
       </h3>
-      <div class="inline-flex px-2.5 py-1 rounded-full bg-[#C88A32]/12 text-[#8A6324] text-[11px] font-mono font-semibold">
+      <div class="inline-flex px-2.5 py-1 rounded-full bg-[#C88A32]/12 text-[#8A6324] text-[0.6875rem] font-mono font-semibold">
         {{ partsData[selectedPart].specs }}
       </div>
       <p class="text-xs leading-[1.85] text-[#3A3630] mt-3">
         {{ partsData[selectedPart].desc }}
       </p>
-      <div class="mt-4 pt-3 border-t border-[#1C1B18]/8 flex items-center justify-between gap-2 font-mono text-[9px] tracking-[0.12em] text-[#6E6960]">
+      <div class="mt-4 pt-3 border-t border-[#1C1B18]/8 flex items-center justify-between gap-2 font-mono text-[0.5625rem] tracking-[0.12em] text-[#6E6960]">
         <span>悬停部件即时高亮</span>
         <span class="truncate">{{ qualityLabel }}</span>
       </div>

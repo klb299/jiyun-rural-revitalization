@@ -25,14 +25,14 @@ const routes = [
 <template>
   <div class="relative min-h-[100dvh] surface-ink overflow-hidden flex items-center">
     <div class="absolute inset-0 coord-rule opacity-30 pointer-events-none"></div>
-    <div class="absolute -right-[8%] -top-[20%] w-[40vw] h-[40vw] min-w-[360px] min-h-[360px] rounded-full border border-[#C88A32]/25 pointer-events-none"></div>
+    <div class="absolute -right-[8%] -top-[20%] w-[40vw] h-[40vw] min-w-[22.5rem] min-h-[22.5rem] rounded-full border border-[#C88A32]/25 pointer-events-none"></div>
     <div class="absolute -left-10 bottom-0 watermark text-[30vw] leading-none select-none pointer-events-none">404</div>
 
-    <div class="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
+    <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
       <Reveal>
         <div class="flex flex-wrap items-center gap-3 mb-8">
-          <span class="px-3 py-1.5 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[10px] tracking-[0.2em] font-bold">WAYFINDING / 404</span>
-          <span class="font-mono text-[10px] tracking-[0.2em] text-[#F7F4EE]/80">JILIN DIGITAL RURAL MUSEUM</span>
+          <span class="px-3 py-1.5 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[0.625rem] tracking-[0.2em] font-bold">WAYFINDING / 404</span>
+          <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#F7F4EE]/80">JILIN DIGITAL RURAL MUSEUM</span>
         </div>
       </Reveal>
 
@@ -63,8 +63,8 @@ const routes = [
           </Reveal>
           <Reveal :delay="740">
             <div class="mt-12 border-t border-[#F7F4EE]/18 pt-5 max-w-md">
-              <div class="font-mono text-[9px] tracking-[0.2em] text-[#8A6324] mb-2">FIELD NOTE / 导览提示</div>
-              <p class="text-[11px] leading-relaxed text-[#F7F4EE]/90">
+              <div class="font-mono text-[0.5625rem] tracking-[0.2em] text-[#8A6324] mb-2">FIELD NOTE / 导览提示</div>
+              <p class="text-[0.6875rem] leading-relaxed text-[#F7F4EE]/90">
                 展馆按微观土壤、工业装备、宏观平原、人文专题、助农机制与落地痛点的尺度递进编排。从序厅出发，按兴趣挑几条动线走就好。
               </p>
             </div>
@@ -77,12 +77,12 @@ const routes = [
               <RouterLink :to="r.path"
                 class="group h-full flex flex-col p-6 border border-[#F7F4EE]/16 bg-[#F7F4EE]/5 hover:bg-[#F7F4EE]/10 hover:border-[#C88A32]/60 transition-all duration-500 lift">
                 <div class="flex items-start justify-between gap-3 mb-6">
-                  <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324]">{{ r.no }} / {{ r.tag }}</span>
+                  <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324]">{{ r.no }} / {{ r.tag }}</span>
                   <ArrowUpRight :size="16" class="text-[#C88A32] arrow-shift" />
                 </div>
                 <div class="font-editorial text-xl font-bold text-[#F7F4EE] group-hover:text-[#C88A32] transition-colors">{{ r.name }}</div>
-                <div class="text-[11px] text-[#F7F4EE]/86 mt-2 flex-1">{{ r.note }}</div>
-                <div class="mt-6 pt-4 border-t border-[#F7F4EE]/12 font-mono text-[9px] tracking-[0.14em] text-[#F7F4EE]/80">{{ r.path }}</div>
+                <div class="text-[0.6875rem] text-[#F7F4EE]/86 mt-2 flex-1">{{ r.note }}</div>
+                <div class="mt-6 pt-4 border-t border-[#F7F4EE]/12 font-mono text-[0.5625rem] tracking-[0.14em] text-[#F7F4EE]/80">{{ r.path }}</div>
               </RouterLink>
             </Reveal>
           </div>
@@ -92,7 +92,7 @@ const routes = [
 
     <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#F7F4EE]/12 bg-[#1C1B18]/70 py-2.5" aria-hidden="true">
       <div class="marquee-track">
-        <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#F7F4EE]/80 whitespace-nowrap">
+        <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.625rem] tracking-[0.22em] text-[#F7F4EE]/80 whitespace-nowrap">
           <span>黑土粮仓 · 吉韵新程</span><span class="text-[#C88A32]">✳</span>
           <span>黑土保育 / 智慧装备 / 稻作农时</span><span class="text-[#C88A32]">✳</span>
           <span>生态文旅 / 物产流通</span><span class="text-[#C88A32]">✳</span>

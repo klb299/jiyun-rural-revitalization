@@ -57,7 +57,7 @@ const heroMeta = [
       <div class="absolute inset-0 coord-rule opacity-30 pointer-events-none"></div>
 
       <!-- 右侧冰面同心裂 -->
-      <div data-parallax="-10" class="absolute -right-[10%] top-1/2 -translate-y-1/2 w-[52vw] h-[52vw] min-w-[420px] min-h-[420px] pointer-events-none">
+      <div data-parallax="-10" class="absolute -right-[10%] top-1/2 -translate-y-1/2 w-[52vw] h-[52vw] min-w-[26.25rem] min-h-[26.25rem] pointer-events-none">
         <div class="absolute inset-0 rounded-full border border-[#CFE3E8]/18"></div>
         <div class="absolute inset-[9%] rounded-full border border-[#CFE3E8]/14"></div>
         <div class="absolute inset-[19%] rounded-full border border-[#CFE3E8]/12"></div>
@@ -73,11 +73,11 @@ const heroMeta = [
         </div>
       </div>
 
-      <div class="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
+      <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-8">
-            <span class="px-3 py-1.5 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[10px] tracking-[0.2em] font-bold">CHAPTER 06</span>
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#CFE3E8]/65">INTANGIBLE HERITAGE / 查干湖冬捕生态非遗馆</span>
+            <span class="px-3 py-1.5 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[0.625rem] tracking-[0.2em] font-bold">CHAPTER 06</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#CFE3E8]/65">INTANGIBLE HERITAGE / 查干湖冬捕生态非遗馆</span>
           </div>
         </Reveal>
 
@@ -109,16 +109,16 @@ const heroMeta = [
               <button v-for="(c, i) in customs" :key="c.no" @click="activeCustom = i"
                 class="text-left pt-3 border-t-2 transition-all duration-500 cursor-pointer group"
                 :class="activeCustom === i ? 'border-[#C88A32]' : 'border-[#CFE3E8]/25 hover:border-[#C88A32]/60'">
-                <div class="font-mono text-[9px] tracking-[0.18em] mb-1.5" :class="activeCustom === i ? 'text-[#8A6324]' : 'text-[#CFE3E8]/50'">{{ c.no }} / {{ c.tag }}</div>
-                <div class="text-[12px] font-semibold" :class="activeCustom === i ? 'text-[#F7F4EE]' : 'text-[#CFE3E8]/70 group-hover:text-[#F7F4EE]'">{{ c.title.split(' · ')[0] }}</div>
+                <div class="font-mono text-[0.5625rem] tracking-[0.18em] mb-1.5" :class="activeCustom === i ? 'text-[#8A6324]' : 'text-[#CFE3E8]/50'">{{ c.no }} / {{ c.tag }}</div>
+                <div class="text-[0.75rem] font-semibold" :class="activeCustom === i ? 'text-[#F7F4EE]' : 'text-[#CFE3E8]/70 group-hover:text-[#F7F4EE]'">{{ c.title.split(' · ')[0] }}</div>
               </button>
             </div>
           </Reveal>
           <Reveal :delay="880">
             <div class="grid grid-cols-3 gap-4 mt-10 max-w-lg">
               <div v-for="m in heroMeta" :key="m.k" class="border-t border-[#CFE3E8]/25 pt-3">
-                <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324]">{{ m.k }}</div>
-                <div class="text-[11px] mt-1.5 text-[#CFE3E8]/80">{{ m.v }}</div>
+                <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8A6324]">{{ m.k }}</div>
+                <div class="text-[0.6875rem] mt-1.5 text-[#CFE3E8]/80">{{ m.v }}</div>
               </div>
             </div>
           </Reveal>
@@ -127,7 +127,7 @@ const heroMeta = [
 
       <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#CFE3E8]/15 bg-[#0B1B22]/75 py-2.5" aria-hidden="true">
         <div class="marquee-track">
-          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#CFE3E8]/70 whitespace-nowrap">
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.625rem] tracking-[0.22em] text-[#CFE3E8]/70 whitespace-nowrap">
             <span>祭湖醒网 · 国家级非遗</span><span class="text-[#C88A32]">✳</span>
             <span>马拉绞盘 / 冰下走网</span><span class="text-[#C88A32]">✳</span>
             <span>抓大放小 / 六寸网孔</span><span class="text-[#C88A32]">✳</span>
@@ -138,7 +138,7 @@ const heroMeta = [
     </section>
 
     <!-- 数据 -->
-    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal>
         <SectionHead
           index="01 / 04"
@@ -155,7 +155,7 @@ const heroMeta = [
 
     <!-- 四段仪轨 -->
     <section id="rites" class="surface-linen border-y border-[#1C1B18]/10">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <Reveal>
           <SectionHead
             index="02 / 04"
@@ -176,12 +176,12 @@ const heroMeta = [
               <div class="flex items-start justify-between mb-8">
                 <span class="w-10 h-10 rounded-full border border-[#1C1B18]/16 flex items-center justify-center font-editorial text-lg"
                   :class="activeCustom === i ? 'bg-[#C88A32] text-[#1C1B18] border-[#C88A32]' : 'text-[#5A564E]'">{{ c.icon }}</span>
-                <span class="font-mono text-[10px] tracking-[0.18em] text-[#6E6960]">{{ c.no }}</span>
+                <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#6E6960]">{{ c.no }}</span>
               </div>
               <h3 class="display-3 group-hover:text-[#C88A32] transition-colors">{{ c.title }}</h3>
               <p class="caption mt-3">{{ c.phase }}</p>
               <div class="mt-6 pt-4 border-t border-[#1C1B18]/10 flex items-center justify-between">
-                <span class="px-2 py-1 bg-[#EFECE6] text-[10px] font-mono text-[#5A564E]">{{ c.tag }}</span>
+                <span class="px-2 py-1 bg-[#EFECE6] text-[0.625rem] font-mono text-[#5A564E]">{{ c.tag }}</span>
                 <ArrowUpRight :size="15" class="text-[#C88A32] arrow-shift" />
               </div>
             </button>
@@ -192,7 +192,7 @@ const heroMeta = [
           <div class="border border-[#1C1B18]/12 bg-[#FFFDF9]/85 p-7 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div class="lg:col-span-8">
               <div class="flex items-center gap-3 mb-5">
-                <span class="font-mono text-[11px] tracking-[0.18em] text-[#8A6324]">RITE {{ customs[activeCustom].no }}</span>
+                <span class="font-mono text-[0.6875rem] tracking-[0.18em] text-[#8A6324]">RITE {{ customs[activeCustom].no }}</span>
                 <span class="h-px w-12 bg-[#C88A32]/50"></span>
                 <span class="caption">{{ customs[activeCustom].phase }}</span>
               </div>
@@ -202,7 +202,7 @@ const heroMeta = [
             <div class="lg:col-span-4 border-l-0 lg:border-l border-[#1C1B18]/10 lg:pl-8 pt-6 lg:pt-0 border-t lg:border-t-0">
               <div class="eyebrow mb-4">ECOLOGICAL CODE</div>
               <p class="font-editorial text-lg leading-[1.85] text-[#1C1B18]">{{ customs[activeCustom].detail }}</p>
-              <div class="mt-8 font-mono text-[10px] tracking-[0.16em] text-[#6E6960]">查干湖国家非遗典藏 / 教学整理</div>
+              <div class="mt-8 font-mono text-[0.625rem] tracking-[0.16em] text-[#6E6960]">查干湖国家非遗典藏 / 教学整理</div>
             </div>
           </div>
         </Reveal>
@@ -210,7 +210,7 @@ const heroMeta = [
     </section>
 
     <!-- 生态与文旅 -->
-    <section id="ecology" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section id="ecology" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         <Reveal class="lg:col-span-5">
           <FigurePlate
@@ -239,7 +239,7 @@ const heroMeta = [
                 { k: 'RELEASE', v: '增殖放流', d: '持续补充鱼类种群' },
                 { k: 'WETLAND', v: '湿地净化', d: '维护大水面水质' }
               ]" :key="n.k" class="border-t border-[#1C1B18]/14 pt-4">
-                <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324]">{{ n.k }}</div>
+                <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324]">{{ n.k }}</div>
                 <div class="font-editorial text-lg font-bold mt-1.5">{{ n.v }}</div>
                 <div class="caption mt-1">{{ n.d }}</div>
               </div>
@@ -250,13 +250,13 @@ const heroMeta = [
     </section>
 
     <section class="surface-ink">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-10">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-10">
         <Reveal>
           <div class="eyebrow mb-4">04 / 04 · NEXT CHAPTER</div>
-          <p class="text-[13px] leading-[2] text-[#F7F4EE]/90 max-w-2xl">冬捕是东北一年里最冷的一幕，而农时从不因寒冷停下。下一章把二十四个节气摊开，看黑土如何按时间耕作。</p>
+          <p class="text-[0.8125rem] leading-[2] text-[#F7F4EE]/90 max-w-2xl">冬捕是东北一年里最冷的一幕，而农时从不因寒冷停下。下一章把二十四个节气摊开，看黑土如何按时间耕作。</p>
         </Reveal>
         <Reveal :delay="120">
-          <RouterLink to="/solar-terms" class="inline-flex items-baseline gap-3 min-h-[40px] group">
+          <RouterLink to="/solar-terms" class="inline-flex items-baseline gap-3 min-h-[2.5rem] group">
             <span class="font-editorial text-2xl sm:text-3xl font-bold text-[#F7F4EE] group-hover:text-[#C88A32] transition-colors">二十四节气农耕物候谱</span>
             <ArrowUpRight :size="22" class="text-[#C88A32] arrow-shift" />
           </RouterLink>

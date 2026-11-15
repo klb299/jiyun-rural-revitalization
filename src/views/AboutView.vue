@@ -107,18 +107,18 @@ const references = [
       <div class="absolute inset-0 coord-rule opacity-50 pointer-events-none"></div>
 
       <!-- 左侧墨色书脊 -->
-      <div class="hidden lg:flex relative z-10 w-[86px] shrink-0 bg-[#1C1B18] text-[#F7F4EE] flex-col items-center justify-between py-12">
+      <div class="hidden lg:flex relative z-10 w-[5.375rem] shrink-0 bg-[#1C1B18] text-[#F7F4EE] flex-col items-center justify-between py-12">
         <span class="font-editorial text-3xl font-bold">吉</span>
         <span class="rot-tag text-[#F7F4EE]/92">COLOPHON 09 / CHANGCHUN ACADEMY / 2026</span>
-        <span class="font-mono text-[9px] tracking-[0.2em] text-[#8A6324]">09</span>
+        <span class="font-mono text-[0.5625rem] tracking-[0.2em] text-[#8A6324]">09</span>
       </div>
 
       <div class="relative z-10 flex-1 min-w-0 flex items-center">
-        <div class="w-full max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-14 pt-28 pb-24">
+        <div class="w-full max-w-[82.5rem] mx-auto px-5 sm:px-8 lg:px-14 pt-28 pb-24">
           <Reveal>
             <div class="flex flex-wrap items-center gap-3 mb-9">
-              <span class="px-3 py-1.5 rounded-full bg-[#1C1B18] text-[#F7F4EE] font-mono text-[10px] tracking-[0.2em] font-bold">COLOPHON 09</span>
-              <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">CHANGCHUN ACADEMY / 长春智库与设计说明</span>
+              <span class="px-3 py-1.5 rounded-full bg-[#1C1B18] text-[#F7F4EE] font-mono text-[0.625rem] tracking-[0.2em] font-bold">COLOPHON 09</span>
+              <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">CHANGCHUN ACADEMY / 长春智库与设计说明</span>
             </div>
           </Reveal>
 
@@ -147,16 +147,16 @@ const references = [
               <Reveal :delay="820">
                 <div class="mt-12 border-t border-[#1C1B18]/20 pt-5 grid grid-cols-3 gap-4 max-w-lg">
                   <div>
-                    <div class="font-mono text-[9px] tracking-[0.18em] text-[#8C583A]">CATEGORY</div>
-                    <div class="text-[11px] mt-1.5 text-[#3A3630]">乡村振兴 · 讲好中国故事</div>
+                    <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8C583A]">CATEGORY</div>
+                    <div class="text-[0.6875rem] mt-1.5 text-[#3A3630]">乡村振兴 · 讲好中国故事</div>
                   </div>
                   <div>
-                    <div class="font-mono text-[9px] tracking-[0.18em] text-[#8C583A]">STACK</div>
-                    <div class="text-[11px] mt-1.5 text-[#3A3630]">Vue 3 × Three.js × Vite</div>
+                    <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8C583A]">STACK</div>
+                    <div class="text-[0.6875rem] mt-1.5 text-[#3A3630]">Vue 3 × Three.js × Vite</div>
                   </div>
                   <div>
-                    <div class="font-mono text-[9px] tracking-[0.18em] text-[#8C583A]">YEAR</div>
-                    <div class="text-[11px] mt-1.5 text-[#3A3630]">2026 / 长春</div>
+                    <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8C583A]">YEAR</div>
+                    <div class="text-[0.6875rem] mt-1.5 text-[#3A3630]">2026 / 长春</div>
                   </div>
                 </div>
               </Reveal>
@@ -167,18 +167,18 @@ const references = [
               <div class="bezel">
                 <div class="bezel-core p-6 sm:p-7">
                   <div class="flex items-center justify-between gap-3 mb-5">
-                    <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">CONTENTS / 展览目录</span>
-                    <span class="font-mono text-[9px] tracking-[0.16em] text-[#8C583A]">{{ structure.length }} 章</span>
+                    <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">CONTENTS / 展览目录</span>
+                    <span class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#8C583A]">{{ structure.length }} 章</span>
                   </div>
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
                     <RouterLink v-for="s in structure" :key="s.no" :to="s.path"
                       class="flex items-baseline gap-3 py-2.5 border-b border-[#1C1B18]/10 group">
-                      <span class="font-mono text-[10px] text-[#8C583A] w-12 shrink-0">{{ s.no }}</span>
-                      <span class="text-[12px] font-semibold group-hover:text-[#8C583A] transition-colors">{{ s.name }}</span>
-                      <span class="ml-auto text-[10px] text-[#6E6960] hidden sm:block truncate max-w-[120px]">{{ s.note }}</span>
+                      <span class="font-mono text-[0.625rem] text-[#8C583A] w-12 shrink-0">{{ s.no }}</span>
+                      <span class="text-[0.75rem] font-semibold group-hover:text-[#8C583A] transition-colors">{{ s.name }}</span>
+                      <span class="ml-auto text-[0.625rem] text-[#6E6960] hidden sm:block truncate max-w-[7.5rem]">{{ s.note }}</span>
                     </RouterLink>
                   </div>
-                  <div class="mt-5 pt-4 border-t border-[#1C1B18]/10 font-mono text-[9px] tracking-[0.16em] text-[#6E6960]">
+                  <div class="mt-5 pt-4 border-t border-[#1C1B18]/10 font-mono text-[0.5625rem] tracking-[0.16em] text-[#6E6960]">
                     全部图版 / 几何 / 纹理均为程序化生成 · 离线可运行
                   </div>
                 </div>
@@ -190,7 +190,7 @@ const references = [
 
       <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#1C1B18]/12 bg-[#1C1B18] py-2.5" aria-hidden="true">
         <div class="marquee-track">
-          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.625rem] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
             <span>黑土粮仓 · 吉韵新程</span><span class="text-[#C88A32]">✳</span>
             <span>长春市高校大学生网页设计作品</span><span class="text-[#C88A32]">✳</span>
             <span>科教支撑 / 中科院东北地理所 · 吉林农大 · 长春农高区</span><span class="text-[#C88A32]">✳</span>
@@ -200,7 +200,7 @@ const references = [
     </section>
 
     <!-- 设计亮点 -->
-    <section id="highlights" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
+    <section id="highlights" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
       <Reveal>
         <SectionHead
           index="01 / 04"
@@ -214,10 +214,10 @@ const references = [
           <article class="h-full border border-[#1C1B18]/10 bg-[#FFFDF9]/70 p-7 lift">
             <div class="flex items-center justify-between mb-7">
               <span class="font-editorial text-3xl font-bold text-[#C88A32]">{{ h.no }}</span>
-              <span class="font-mono text-[10px] tracking-[0.18em] text-[#6E6960]">{{ h.k }}</span>
+              <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#6E6960]">{{ h.k }}</span>
             </div>
             <h3 class="display-3 mb-4">{{ h.title }}</h3>
-            <p class="body-copy text-[13px]!">{{ h.desc }}</p>
+            <p class="body-copy text-[0.8125rem]!">{{ h.desc }}</p>
           </article>
         </Reveal>
       </div>
@@ -225,7 +225,7 @@ const references = [
 
     <!-- 技术架构 -->
     <section id="stack" class="surface-linen border-y border-[#1C1B18]/10">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <Reveal>
           <SectionHead
             index="02 / 04"
@@ -237,8 +237,8 @@ const references = [
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-12">
           <Reveal v-for="(t, i) in techStack" :key="t.name" :delay="(i % 3) * 70">
             <div class="border border-[#1C1B18]/10 bg-[#FFFDF9]/70 p-5 h-full hover:border-[#C88A32]/50 transition-colors duration-300">
-              <div class="font-mono text-[12px] font-bold text-[#8A6324] mb-2">{{ t.name }}</div>
-              <div class="text-[12px] leading-[1.8] text-[#5A564E]">{{ t.role }}</div>
+              <div class="font-mono text-[0.75rem] font-bold text-[#8A6324] mb-2">{{ t.name }}</div>
+              <div class="text-[0.75rem] leading-[1.8] text-[#5A564E]">{{ t.role }}</div>
             </div>
           </Reveal>
         </div>
@@ -271,14 +271,14 @@ const references = [
 
     <!-- 附录 A：展陈数据口径与来源 -->
     <section id="data-notes" class="surface-linen border-y border-[#1C1B18]/10">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-24">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-24">
         <Reveal>
           <div class="flex flex-wrap items-end justify-between gap-6 mb-10">
             <div>
-              <div class="font-mono text-[10px] tracking-[0.24em] text-[#8C583A] mb-3">APPENDIX A / DATA PROVENANCE</div>
+              <div class="font-mono text-[0.625rem] tracking-[0.24em] text-[#8C583A] mb-3">APPENDIX A / DATA PROVENANCE</div>
               <h2 class="display-2 text-[#1C1B18]">展陈数据口径与来源</h2>
             </div>
-            <p class="text-[11px] leading-relaxed text-[#5A564E] max-w-sm">
+            <p class="text-[0.6875rem] leading-relaxed text-[#5A564E] max-w-sm">
               展馆内所有数字均为教学演示用的量级与示意指标，不对应某一年的精确统计值，不用于生产决策。
             </p>
           </div>
@@ -288,38 +288,38 @@ const references = [
           <Reveal v-for="(n, i) in (showAllNotes ? dataNotes : dataNotes.slice(0, 6))" :key="n.v" :delay="i * 40">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 py-4 border-b border-[#1C1B18]/12 items-baseline">
               <div class="md:col-span-2 font-editorial text-xl font-bold text-[#8C583A]">{{ n.v }}</div>
-              <div class="md:col-span-2 font-mono text-[10px] tracking-[0.14em] text-[#6E6960]">{{ n.where }}</div>
-              <div class="md:col-span-5 text-[12px] leading-relaxed text-[#3A3630]">{{ n.kind }}</div>
-              <div class="md:col-span-3 md:text-right font-mono text-[10px] tracking-[0.12em] text-[#5A564E]">{{ n.year }}</div>
+              <div class="md:col-span-2 font-mono text-[0.625rem] tracking-[0.14em] text-[#6E6960]">{{ n.where }}</div>
+              <div class="md:col-span-5 text-[0.75rem] leading-relaxed text-[#3A3630]">{{ n.kind }}</div>
+              <div class="md:col-span-3 md:text-right font-mono text-[0.625rem] tracking-[0.12em] text-[#5A564E]">{{ n.year }}</div>
             </div>
           </Reveal>
         </div>
 
         <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
           <button type="button" @click="showAllNotes = !showAllNotes"
-            class="px-5 py-2.5 min-h-[40px] rounded-full border border-[#1C1B18]/18 text-[12px] font-bold text-[#1C1B18] hover:border-[#C88A32] hover:text-[#8A6324] transition-colors cursor-pointer">
+            class="px-5 py-2.5 min-h-[2.5rem] rounded-full border border-[#1C1B18]/18 text-[0.75rem] font-bold text-[#1C1B18] hover:border-[#C88A32] hover:text-[#8A6324] transition-colors cursor-pointer">
             {{ showAllNotes ? '收起，只看前 6 条' : '展开全部 ' + dataNotes.length + ' 条口径' }}
           </button>
-          <span class="font-mono text-[10px] tracking-[0.14em] text-[#6E6960]">默认只列最常被引用的 6 条</span>
+          <span class="font-mono text-[0.625rem] tracking-[0.14em] text-[#6E6960]">默认只列最常被引用的 6 条</span>
         </div>
 
         <Reveal :delay="120">
           <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="card-ink p-6">
-              <div class="font-mono text-[9px] tracking-[0.2em] text-[#8A6324] mb-3">REFERENCE / 参照资料</div>
-              <p class="text-[11px] leading-relaxed text-[#F7F4EE]/90">
+              <div class="font-mono text-[0.5625rem] tracking-[0.2em] text-[#8A6324] mb-3">REFERENCE / 参照资料</div>
+              <p class="text-[0.6875rem] leading-relaxed text-[#F7F4EE]/90">
                 吉林省国民经济和社会发展统计公报、黑土地保护规划公开资料、中科院东北地理所「黑土粮仓」科技会战成果、梨树模式长期定位试验资料、智能农机与北斗高精度定位通用技术参数。
               </p>
             </div>
             <div class="card-gold p-6">
-              <div class="font-mono text-[9px] tracking-[0.2em] text-[#1C1B18]/65 mb-3">MODEL / 模型性质</div>
-              <p class="text-[11px] leading-relaxed text-[#1C1B18]/80">
+              <div class="font-mono text-[0.5625rem] tracking-[0.2em] text-[#1C1B18]/65 mb-3">MODEL / 模型性质</div>
+              <p class="text-[0.6875rem] leading-relaxed text-[#1C1B18]/80">
                 三座 3D 展厅与科普实验的模型均为参数化概念复原，几何、纹理与图版由本地程序化生成，不是实物扫描，也不是特定量产型号的工程图纸。
               </p>
             </div>
             <div class="card-moss p-6">
-              <div class="font-mono text-[9px] tracking-[0.2em] text-[#F7F4EE]/86 mb-3">PURPOSE / 使用范围</div>
-              <p class="text-[11px] leading-relaxed text-[#F7F4EE]/90">
+              <div class="font-mono text-[0.5625rem] tracking-[0.2em] text-[#F7F4EE]/86 mb-3">PURPOSE / 使用范围</div>
+              <p class="text-[0.6875rem] leading-relaxed text-[#F7F4EE]/90">
                 本展馆用于教学展示与竞赛答辩，帮助观众建立对黑土保育、智慧农业与乡村产业的整体认识，不作为农业生产、投资决策或统计引用依据。
               </p>
             </div>
@@ -332,7 +332,7 @@ const references = [
               口径与来源读到这里就够了。展览本身还在前面，回到动线，从任意一段继续参观。
             </p>
             <RouterLink to="/exhibit-map"
-              class="btn-solid px-6 py-3 min-h-[40px] rounded-full text-xs font-bold">
+              class="btn-solid px-6 py-3 min-h-[2.5rem] rounded-full text-xs font-bold">
               回到展览地图 <ArrowUpRight :size="15" class="arrow-shift" />
             </RouterLink>
           </div>
@@ -341,11 +341,11 @@ const references = [
     </section>
 
     <!-- 附录 B：公开资料索引 -->
-    <section id="references" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
+    <section id="references" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
       <Reveal>
         <div class="flex flex-wrap items-end justify-between gap-6 mb-9">
           <div>
-            <div class="font-mono text-[10px] tracking-[0.24em] text-[#8C583A] mb-3">APPENDIX B / REFERENCES</div>
+            <div class="font-mono text-[0.625rem] tracking-[0.24em] text-[#8C583A] mb-3">APPENDIX B / REFERENCES</div>
             <h2 class="display-2 text-[#1C1B18]">公开资料索引</h2>
           </div>
           <RouterLink to="/last-mile" class="inline-flex items-center gap-2 text-xs font-bold text-[#8A6324] group">
@@ -357,10 +357,10 @@ const references = [
         </p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 border-t border-[#1C1B18]/12">
           <div v-for="r in references" :key="r.n" class="flex gap-4 py-4 border-b border-[#1C1B18]/12">
-            <span class="font-mono text-[10px] tracking-[0.14em] text-[#8C583A] shrink-0 w-16">{{ r.y }}</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.14em] text-[#8C583A] shrink-0 w-16">{{ r.y }}</span>
             <div>
-              <div class="text-[12px] font-semibold text-[#1C1B18] leading-snug">{{ r.n }}</div>
-              <div class="text-[11px] text-[#5A564E] mt-1">{{ r.u }}</div>
+              <div class="text-[0.75rem] font-semibold text-[#1C1B18] leading-snug">{{ r.n }}</div>
+              <div class="text-[0.6875rem] text-[#5A564E] mt-1">{{ r.u }}</div>
             </div>
           </div>
         </div>
@@ -368,7 +368,7 @@ const references = [
     </section>
 
     <!-- 科教支撑 -->
-    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal>
         <SectionHead
           index="03 / 04"
@@ -380,11 +380,11 @@ const references = [
         <Reveal v-for="(inst, i) in institutions" :key="inst.no" :delay="i * 100" class="h-full">
           <article class="h-full border-t-2 border-[#C88A32] bg-[#FFFDF9]/70 p-7 lift">
             <div class="flex items-center justify-between mb-5">
-              <span class="font-mono text-[10px] tracking-[0.18em] text-[#6E6960]">{{ inst.no }}</span>
-              <span class="px-2 py-1 bg-[#EFECE6] text-[10px] font-mono text-[#5A564E]">{{ inst.role }}</span>
+              <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#6E6960]">{{ inst.no }}</span>
+              <span class="px-2 py-1 bg-[#EFECE6] text-[0.625rem] font-mono text-[#5A564E]">{{ inst.role }}</span>
             </div>
             <h3 class="font-editorial text-lg font-bold leading-[1.5] mb-4">{{ inst.name }}</h3>
-            <p class="body-copy text-[13px]!">{{ inst.desc }}</p>
+            <p class="body-copy text-[0.8125rem]!">{{ inst.desc }}</p>
           </article>
         </Reveal>
       </div>
@@ -392,7 +392,7 @@ const references = [
 
     <!-- 展馆结构索引 -->
     <section class="surface-ink">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <Reveal>
           <SectionHead
             index="04 / 04"
@@ -407,7 +407,7 @@ const references = [
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 mt-12">
           <Reveal v-for="(s, i) in structure" :key="s.no" :delay="(i % 2) * 80">
             <RouterLink :to="s.path" class="group grid grid-cols-[56px_1fr_auto] items-center gap-4 py-5 border-b border-[#F7F4EE]/14">
-              <span class="font-mono text-[11px] text-[#8A6324]">{{ s.no }}</span>
+              <span class="font-mono text-[0.6875rem] text-[#8A6324]">{{ s.no }}</span>
               <span>
                 <span class="block font-editorial text-lg font-bold text-[#F7F4EE] group-hover:text-[#C88A32] transition-colors">{{ s.name }}</span>
                 <span class="caption block mt-1 text-[#F7F4EE]/90">{{ s.note }}</span>
@@ -420,7 +420,7 @@ const references = [
         <Reveal :delay="160" class="mt-16 pt-10 border-t border-[#F7F4EE]/14 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
             <div class="eyebrow mb-3">COLOPHON / 署名</div>
-            <p class="text-[13px] leading-[1.9] text-[#F7F4EE]/90 max-w-2xl">
+            <p class="text-[0.8125rem] leading-[1.9] text-[#F7F4EE]/90 max-w-2xl">
               长春市高校大学生网页设计作品。选题类别：乡村振兴 · 讲好中国故事。展陈数据为教学演示用途，参考文献已在各章节末尾列示。
             </p>
           </div>

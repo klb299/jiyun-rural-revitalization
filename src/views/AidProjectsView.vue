@@ -98,13 +98,13 @@ const goArchive = (p) => {
     <!-- 01 首屏：抽象方位索引格，不是行政区划地图 -->
     <section class="relative min-h-[100dvh] bg-[#F7F4EE] flex items-center overflow-hidden">
       <div class="absolute inset-0 coord-rule opacity-70 pointer-events-none"></div>
-      <div data-parallax="-9" class="absolute -right-[12%] -top-[20%] w-[40vw] h-[40vw] min-w-[360px] min-h-[360px] rounded-full border border-[#C88A32]/25 pointer-events-none"></div>
+      <div data-parallax="-9" class="absolute -right-[12%] -top-[20%] w-[40vw] h-[40vw] min-w-[22.5rem] min-h-[22.5rem] rounded-full border border-[#C88A32]/25 pointer-events-none"></div>
 
-      <div class="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
+      <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-8">
-            <span class="px-3 py-1.5 rounded-full bg-[#2E5A44] text-[#F7F4EE] font-mono text-[10px] tracking-[0.2em] font-bold">AID PROJECTS / 助农项目</span>
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">JILIN RURAL REVITALIZATION · 六类带农路径</span>
+            <span class="px-3 py-1.5 rounded-full bg-[#2E5A44] text-[#F7F4EE] font-mono text-[0.625rem] tracking-[0.2em] font-bold">AID PROJECTS / 助农项目</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">JILIN RURAL REVITALIZATION · 六类带农路径</span>
           </div>
         </Reveal>
 
@@ -139,8 +139,8 @@ const goArchive = (p) => {
                   { k: 'REGIONS', v: '3 类产区' },
                   { k: 'LINKS', v: '7 个产业环节' }
                 ]" :key="s.k" class="border-t border-[#1C1B18]/25 pt-3">
-                  <div class="font-mono text-[9px] tracking-[0.18em] text-[#2E5A44]">{{ s.k }}</div>
-                  <div class="text-[11px] mt-1.5 text-[#3A3630]">{{ s.v }}</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#2E5A44]">{{ s.k }}</div>
+                  <div class="text-[0.6875rem] mt-1.5 text-[#3A3630]">{{ s.v }}</div>
                 </div>
               </div>
             </Reveal>
@@ -151,8 +151,8 @@ const goArchive = (p) => {
             <div class="bezel">
               <div class="bezel-core p-5 sm:p-7">
                 <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
-                  <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">ZONE INDEX / 方位索引</span>
-                  <span class="font-mono text-[9px] tracking-[0.14em] text-[#8A6324]">方位示意，非行政区划地图</span>
+                  <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">ZONE INDEX / 方位索引</span>
+                  <span class="font-mono text-[0.5625rem] tracking-[0.14em] text-[#8A6324]">方位示意，非行政区划地图</span>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   <button v-for="(p, i) in projects" :key="p.no" @click="activeProject = i"
@@ -161,13 +161,13 @@ const goArchive = (p) => {
                     <span class="absolute -right-3 -bottom-4 font-editorial font-bold text-[#1C1B18]/6 select-none" style="font-size: 5rem; line-height: 1">{{ p.no.slice(-2) }}</span>
                     <div class="relative flex items-center gap-2 mb-4">
                       <span class="w-3 h-3 rounded-sm border border-[#1C1B18]/15 shrink-0" :style="{ background: p.color }"></span>
-                      <span class="font-mono text-[9px] tracking-[0.16em] text-[#6E6960]">{{ p.no }}</span>
+                      <span class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#6E6960]">{{ p.no }}</span>
                     </div>
-                    <div class="relative text-[10px] text-[#5A564E] mb-1.5">{{ p.zone }}</div>
-                    <div class="relative font-editorial text-[13px] sm:text-[15px] font-bold leading-snug text-balance group-hover:text-[#8A6324] transition-colors">{{ p.type }}</div>
+                    <div class="relative text-[0.625rem] text-[#5A564E] mb-1.5">{{ p.zone }}</div>
+                    <div class="relative font-editorial text-[0.8125rem] sm:text-[0.9375rem] font-bold leading-snug text-balance group-hover:text-[#8A6324] transition-colors">{{ p.type }}</div>
                   </button>
                 </div>
-                <div class="mt-5 pt-4 border-t border-[#1C1B18]/10 font-mono text-[9px] tracking-[0.14em] text-[#6E6960]">
+                <div class="mt-5 pt-4 border-t border-[#1C1B18]/10 font-mono text-[0.5625rem] tracking-[0.14em] text-[#6E6960]">
                   点击任一格读取项目档案 · 六类路径均为公开项目类型整理
                 </div>
               </div>
@@ -178,7 +178,7 @@ const goArchive = (p) => {
 
       <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#1C1B18]/10 bg-[#1C1B18] py-2.5" aria-hidden="true">
         <div class="marquee-track">
-          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.625rem] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
             <span>黑土保育 / 智慧装备</span><span class="text-[#C88A32]">✳</span>
             <span>品质溯源 / 林特山货</span><span class="text-[#C88A32]">✳</span>
             <span>冰雪文旅 / 电商直采</span><span class="text-[#C88A32]">✳</span>
@@ -189,14 +189,14 @@ const goArchive = (p) => {
     </section>
 
     <!-- 田野实景：首屏与内容之间的一处真实影像，避免全页程序化图形 -->
-    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20">
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20">
       <Reveal>
         <PhotoNote src="/photos/green-field.jpg" alt="六类带农路径所在的田野实景" label="FIELD NOTE / 六类带农路径" note="照片用于对照真实田野与作业环境，页面里的项目编号、机制与成效仍为教学演示整理，不对应具体地块或经营主体。" />
       </Reveal>
     </section>
 
     <!-- 02 项目档案 -->
-    <section id="archive" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section id="archive" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal>
         <SectionHead index="01 / 03" eyebrow="PROJECT DOSSIER / 项目档案" title="问题、做法、带农成效"
           description="每类路径按三段写清楚，不写示范工程专名，不写未经核实的户数金额。" />
@@ -207,23 +207,23 @@ const goArchive = (p) => {
           <div class="absolute right-6 top-6 font-editorial font-bold text-[#F7F4EE]/8 select-none" style="font-size: 8rem; line-height: 1">{{ current.no }}</div>
           <div class="relative flex flex-wrap items-center gap-3 mb-6">
             <span class="w-3 h-3 rounded-sm" :style="{ background: current.color }"></span>
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324]">{{ current.no }} / {{ current.zoneKey }}</span>
-            <span class="font-mono text-[10px] tracking-[0.16em] text-[#F7F4EE]/80">{{ current.zone }}</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324]">{{ current.no }} / {{ current.zoneKey }}</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.16em] text-[#F7F4EE]/80">{{ current.zone }}</span>
           </div>
           <h3 class="relative font-editorial text-2xl sm:text-4xl font-bold text-[#F7F4EE] mb-3">{{ current.type }}</h3>
-          <div class="relative font-mono text-[10px] tracking-[0.14em] text-[#F7F4EE]/80 mb-9">公开依据 / {{ current.basis }}</div>
+          <div class="relative font-mono text-[0.625rem] tracking-[0.14em] text-[#F7F4EE]/80 mb-9">公开依据 / {{ current.basis }}</div>
           <div class="relative grid grid-cols-1 md:grid-cols-3 gap-7">
             <div v-for="(b, i) in [
               { k: '01 / 遇到的问题', v: current.problem },
               { k: '02 / 采取的做法', v: current.action },
               { k: '03 / 带农成效', v: current.effect }
             ]" :key="b.k" class="border-t border-[#F7F4EE]/20 pt-5">
-              <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324] mb-3">{{ b.k }}</div>
-              <p class="text-[13px] leading-[1.95] text-[#F7F4EE]/92">{{ b.v }}</p>
+              <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8A6324] mb-3">{{ b.k }}</div>
+              <p class="text-[0.8125rem] leading-[1.95] text-[#F7F4EE]/92">{{ b.v }}</p>
             </div>
           </div>
           <div class="relative mt-9 pt-6 border-t border-[#F7F4EE]/16 flex flex-wrap items-center justify-between gap-4">
-            <span class="font-mono text-[9px] tracking-[0.14em] text-[#F7F4EE]/80">教学演示整理 · 项目类型与机制可公开查证</span>
+            <span class="font-mono text-[0.5625rem] tracking-[0.14em] text-[#F7F4EE]/80">教学演示整理 · 项目类型与机制可公开查证</span>
             <RouterLink :to="current.link" class="inline-flex items-center gap-2 text-xs font-bold text-[#8A6324] group">
               去看对应展陈 · {{ current.linkLabel }} <ArrowUpRight :size="15" class="arrow-shift" />
             </RouterLink>
@@ -234,7 +234,7 @@ const goArchive = (p) => {
 
     <!-- 03 产业环节链条 + 分类筛选 -->
     <section class="surface-linen border-y border-[#1C1B18]/10">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <Reveal>
           <SectionHead index="02 / 03" eyebrow="FROM FIELD TO TABLE / 产业环节" title="七个环节，串起六类路径"
             description="助农不是只在销售端帮忙。从耕、种、管、收到加工、流通与文旅，每个环节都有对应的组织方式。" />
@@ -242,7 +242,7 @@ const goArchive = (p) => {
 
         <div class="mt-12 flex flex-wrap gap-2" data-stagger>
           <button v-for="z in zones" :key="z" @click="activeZone = z"
-            class="px-4 py-2.5 min-h-[40px] rounded-full text-xs font-semibold border transition-all duration-400 cursor-pointer"
+            class="px-4 py-2.5 min-h-[2.5rem] rounded-full text-xs font-semibold border transition-all duration-400 cursor-pointer"
             :class="activeZone === z ? 'bg-[#1C1B18] text-[#F7F4EE] border-[#1C1B18]' : 'bg-[#FFFDF9]/60 text-[#5A564E] border-[#1C1B18]/12 hover:border-[#C88A32]'">
             {{ z }}
           </button>
@@ -252,8 +252,8 @@ const goArchive = (p) => {
           <Reveal v-for="(c, i) in chain" :key="c.k" :delay="i * 60">
             <div class="h-full bg-[#FFFDF9]/75 border border-[#1C1B18]/10 p-4 lift">
               <div class="font-editorial text-3xl font-bold text-[#C88A32] mb-3">{{ c.k }}</div>
-              <div class="text-[12px] font-semibold mb-2">{{ c.t }}</div>
-              <div class="font-mono text-[9px] text-[#6E6960]">{{ c.p }}</div>
+              <div class="text-[0.75rem] font-semibold mb-2">{{ c.t }}</div>
+              <div class="font-mono text-[0.5625rem] text-[#6E6960]">{{ c.p }}</div>
             </div>
           </Reveal>
         </div>
@@ -264,12 +264,12 @@ const goArchive = (p) => {
             <button @click="goArchive(p)"
               class="group w-full h-full text-left bg-[#FFFDF9] border border-[#1C1B18]/10 p-6 lift cursor-pointer">
               <div class="flex items-center justify-between gap-2 mb-5">
-                <span class="font-mono text-[10px] tracking-[0.18em] text-[#8A6324]">{{ p.no }} / {{ p.zoneKey }}</span>
+                <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#8A6324]">{{ p.no }} / {{ p.zoneKey }}</span>
                 <ArrowUpRight :size="15" class="text-[#C88A32] arrow-shift" />
               </div>
               <div class="font-editorial text-lg font-bold mb-2 group-hover:text-[#8A6324] transition-colors">{{ p.type }}</div>
-              <div class="text-[11px] text-[#5A564E] mb-4">{{ p.zone }}</div>
-              <p class="text-[12px] leading-[1.85] text-[#3A3630]">{{ p.effect }}</p>
+              <div class="text-[0.6875rem] text-[#5A564E] mb-4">{{ p.zone }}</div>
+              <p class="text-[0.75rem] leading-[1.85] text-[#3A3630]">{{ p.effect }}</p>
             </button>
           </Reveal>
         </div>
@@ -277,7 +277,7 @@ const goArchive = (p) => {
     </section>
 
     <!-- 04 口径与下游入口 -->
-    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal>
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div class="lg:col-span-5">
@@ -297,9 +297,9 @@ const goArchive = (p) => {
               { to: '/products', k: 'RELATED / 产出', t: '吉林风物集市', d: '产地、认证与流通方式' },
               { to: '/about', k: 'RELATED / 依据', t: '长春智库与答辩说明', d: '科教支撑与资料性质' }
             ]" :key="n.to" :to="n.to" class="group bg-[#FFFDF9] border border-[#1C1B18]/10 p-6 lift">
-              <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324] mb-4">{{ n.k }}</div>
+              <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8A6324] mb-4">{{ n.k }}</div>
               <div class="font-editorial text-xl font-bold mb-2 group-hover:text-[#8A6324] transition-colors">{{ n.t }}</div>
-              <div class="text-[11px] leading-relaxed text-[#5A564E]">{{ n.d }}</div>
+              <div class="text-[0.6875rem] leading-relaxed text-[#5A564E]">{{ n.d }}</div>
             </RouterLink>
           </div>
         </div>
@@ -308,15 +308,15 @@ const goArchive = (p) => {
 
     <!-- 05 收束 -->
     <section class="bg-[#C88A32]">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 flex flex-wrap items-end justify-between gap-8">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 flex flex-wrap items-end justify-between gap-8">
         <Reveal>
-          <div class="font-mono text-[10px] tracking-[0.22em] text-[#1C1B18]/70 mb-4">03 / 03 · SUMMARY</div>
+          <div class="font-mono text-[0.625rem] tracking-[0.22em] text-[#1C1B18]/70 mb-4">03 / 03 · SUMMARY</div>
           <p class="font-editorial text-2xl sm:text-3xl font-bold text-[#1C1B18] max-w-2xl leading-snug">
             技术落在哪片地上，农户的账本就多出哪几笔。
           </p>
         </Reveal>
         <Reveal :delay="120">
-          <RouterLink to="/farm-income" class="inline-flex items-baseline gap-3 min-h-[40px] group">
+          <RouterLink to="/farm-income" class="inline-flex items-baseline gap-3 min-h-[2.5rem] group">
             <span class="font-editorial text-2xl sm:text-3xl font-bold text-[#1C1B18] group-hover:text-[#FFFDF9] transition-colors">看五笔收入怎么来</span>
             <ArrowUpRight :size="22" class="text-[#1C1B18] arrow-shift" />
           </RouterLink>

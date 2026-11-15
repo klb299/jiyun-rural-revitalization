@@ -147,9 +147,9 @@ onUnmounted(() => {
           <h3 class="font-editorial font-bold text-base text-[#1C1B18]">黑土生境健康雷达</h3>
           <p class="caption mt-1">长春九台 / 榆树试验田遥测</p>
         </div>
-        <span class="font-mono text-[10px] px-2 py-1 bg-[#2E5A44]/10 text-[#2E5A44]">IoT ONLINE</span>
+        <span class="font-mono text-[0.625rem] px-2 py-1 bg-[#2E5A44]/10 text-[#2E5A44]">IoT ONLINE</span>
       </div>
-      <div ref="soilRef" class="w-full h-[230px]"></div>
+      <div ref="soilRef" class="w-full h-[14.375rem]"></div>
       <p class="caption mt-2 pt-3 border-t border-[#1C1B18]/8">监测显示有机质维持 4.82% 高位，免耕深松有效阻滞水土流失。</p>
     </div>
 
@@ -159,9 +159,9 @@ onUnmounted(() => {
           <h3 class="font-editorial font-bold text-base text-[#1C1B18]">粮食总产与现代化趋势</h3>
           <p class="caption mt-1">大国粮仓稳产数据 / 2020–2026</p>
         </div>
-        <span class="font-mono text-[10px] px-2 py-1 bg-[#C88A32]/12 text-[#8A6324]">880 亿斤</span>
+        <span class="font-mono text-[0.625rem] px-2 py-1 bg-[#C88A32]/12 text-[#8A6324]">880 亿斤</span>
       </div>
-      <div ref="yieldRef" class="w-full h-[230px]"></div>
+      <div ref="yieldRef" class="w-full h-[14.375rem]"></div>
       <p class="caption mt-2 pt-3 border-t border-[#1C1B18]/8">连续超额完成国家粮食生产目标，单产与机械化率稳居第一方阵。</p>
     </div>
 
@@ -171,9 +171,9 @@ onUnmounted(() => {
           <h3 class="font-editorial font-bold text-base text-[#1C1B18]">乡村产业多元结构</h3>
           <p class="caption mt-1">一二三产融合发展格局</p>
         </div>
-        <span class="font-mono text-[10px] px-2 py-1 bg-[#EFECE6] text-[#5A564E]">100%</span>
+        <span class="font-mono text-[0.625rem] px-2 py-1 bg-[#EFECE6] text-[#5A564E]">100%</span>
       </div>
-      <div ref="mixRef" class="w-full h-[230px]"></div>
+      <div ref="mixRef" class="w-full h-[14.375rem]"></div>
       <p class="caption mt-2 pt-3 border-t border-[#1C1B18]/8">由单一传统种植，向农旅结合、特色深加工与林下经济多元蝶变。</p>
     </div>
   </div>

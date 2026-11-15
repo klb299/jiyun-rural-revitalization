@@ -64,11 +64,11 @@ const solarTermsData = {
       <div class="absolute inset-0 coord-rule opacity-70 pointer-events-none"></div>
       <div class="absolute right-[4%] top-[14%] watermark text-[14vw] leading-none select-none pointer-events-none opacity-60">时</div>
 
-      <div class="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
+      <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-8">
-            <span class="px-3 py-1.5 rounded-full bg-[#B83828] text-[#FFFDF9] font-mono text-[10px] tracking-[0.2em] font-bold">CHAPTER 07</span>
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">SOLAR TERMS / 二十四节气农耕物候谱</span>
+            <span class="px-3 py-1.5 rounded-full bg-[#B83828] text-[#FFFDF9] font-mono text-[0.625rem] tracking-[0.2em] font-bold">CHAPTER 07</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">SOLAR TERMS / 二十四节气农耕物候谱</span>
           </div>
         </Reveal>
 
@@ -103,7 +103,7 @@ const solarTermsData = {
                     <span class="w-2.5 h-2.5 rounded-full" :style="{ background: s.color }"></span>
                     <span class="font-editorial text-lg font-bold">{{ s.name }}</span>
                   </div>
-                  <div class="text-[11px] text-[#5A564E]">{{ s.sub }}</div>
+                  <div class="text-[0.6875rem] text-[#5A564E]">{{ s.sub }}</div>
                 </button>
               </div>
             </Reveal>
@@ -111,7 +111,7 @@ const solarTermsData = {
 
           <!-- 四季色环 -->
           <Reveal :delay="240" variant="scale" class="lg:col-span-5" data-parallax="-7">
-            <div class="relative w-full max-w-[400px] mx-auto aspect-square">
+            <div class="relative w-full max-w-[25rem] mx-auto aspect-square">
               <div class="absolute inset-0 rounded-full"
                 style="background: conic-gradient(from -45deg, #2E5A44 0deg 90deg, #C88A32 90deg 180deg, #B83828 180deg 270deg, #8C583A 270deg 360deg); mask: radial-gradient(circle, transparent 57%, #000 58%); -webkit-mask: radial-gradient(circle, transparent 57%, #000 58%)"></div>
               <div class="absolute inset-[6%] rounded-full"
@@ -119,15 +119,15 @@ const solarTermsData = {
               <div class="absolute inset-[16%] rounded-full border border-[#1C1B18]/12"></div>
               <div class="absolute inset-[28%] rounded-full bg-[#FFFDF9] shadow-[0_24px_60px_-30px_rgba(28,27,24,.45)] grid place-items-center text-center p-5">
                 <div>
-                  <div class="font-mono text-[9px] tracking-[0.22em] text-[#6E6960] mb-3">CURRENT SEASON</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.22em] text-[#6E6960] mb-3">CURRENT SEASON</div>
                   <div class="font-editorial text-4xl font-bold" :style="{ color: seasons.find(s => s.id === activeSeason)?.color }">
                     {{ seasons.find(s => s.id === activeSeason)?.name }}
                   </div>
                   <div class="text-xs mt-2 text-[#5A564E]">{{ seasons.find(s => s.id === activeSeason)?.sub }}</div>
-                  <div class="text-[11px] leading-relaxed text-[#3A3630] mt-4">{{ seasonNotes[activeSeason] }}</div>
+                  <div class="text-[0.6875rem] leading-relaxed text-[#3A3630] mt-4">{{ seasonNotes[activeSeason] }}</div>
                 </div>
               </div>
-              <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 font-mono text-[9px] tracking-[0.18em] text-[#6E6960] whitespace-nowrap">24 SOLAR TERMS / 全年农事刻度</div>
+              <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 font-mono text-[0.5625rem] tracking-[0.18em] text-[#6E6960] whitespace-nowrap">24 SOLAR TERMS / 全年农事刻度</div>
             </div>
           </Reveal>
         </div>
@@ -135,7 +135,7 @@ const solarTermsData = {
 
       <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#1C1B18]/10 bg-[#1C1B18] py-2.5" aria-hidden="true">
         <div class="marquee-track">
-          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.625rem] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
             <span>立春 · 雨水 · 惊蛰 · 春分 · 清明 · 谷雨</span><span class="text-[#C88A32]">✳</span>
             <span>立夏 · 小满 · 芒种 · 夏至 · 小暑 · 大暑</span><span class="text-[#C88A32]">✳</span>
             <span>立秋 · 处暑 · 白露 · 秋分 · 寒露 · 霜降</span><span class="text-[#C88A32]">✳</span>
@@ -146,7 +146,7 @@ const solarTermsData = {
     </section>
 
     <!-- 四季切换 -->
-    <section id="seasons" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
+    <section id="seasons" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
       <Reveal>
         <SectionHead
           index="01 / 04"
@@ -170,7 +170,7 @@ const solarTermsData = {
             <div class="flex items-start justify-between mb-5">
               <span class="font-editorial text-3xl font-bold"
                 :class="activeSeason === s.id ? 'text-[#C88A32]' : 'text-[#1C1B18]'">{{ s.icon }}</span>
-              <span class="font-mono text-[10px] tracking-[0.18em]"
+              <span class="font-mono text-[0.625rem] tracking-[0.18em]"
                 :class="activeSeason === s.id ? 'text-[#F7F4EE]/80' : 'text-[#6E6960]'">0{{ i + 1 }}</span>
             </div>
             <div class="font-editorial text-xl font-bold"
@@ -187,11 +187,11 @@ const solarTermsData = {
         <Reveal v-for="(t, i) in solarTermsData[activeSeason]" :key="t.term" :delay="(i % 3) * 80" class="h-full">
           <article class="h-full border border-[#1C1B18]/10 bg-[#FFFDF9]/70 p-6 lift">
             <div class="flex items-center justify-between gap-3 pb-4 mb-4 border-b border-[#1C1B18]/10">
-              <span class="font-mono text-[12px] font-bold text-[#8A6324]">{{ t.term }}</span>
+              <span class="font-mono text-[0.75rem] font-bold text-[#8A6324]">{{ t.term }}</span>
               <span class="caption">{{ seasons.find(s => s.id === activeSeason).name }} / 物候节点</span>
             </div>
             <h3 class="font-editorial text-lg font-bold mb-3">{{ t.title }}</h3>
-            <p class="body-copy text-[13px]!">{{ t.act }}</p>
+            <p class="body-copy text-[0.8125rem]!">{{ t.act }}</p>
           </article>
         </Reveal>
       </div>
@@ -199,7 +199,7 @@ const solarTermsData = {
 
     <!-- 图文与农谚 -->
     <section class="surface-linen border-y border-[#1C1B18]/10">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           <Reveal class="lg:col-span-5">
             <FigurePlate
@@ -236,7 +236,7 @@ const solarTermsData = {
     </section>
 
     <!-- 全年索引 -->
-    <section id="index" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section id="index" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal>
         <SectionHead
           index="03 / 04"
@@ -248,13 +248,13 @@ const solarTermsData = {
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 mt-12">
         <Reveal v-for="(s, i) in seasons" :key="s.id" :delay="i * 80">
           <div class="border-t border-[#1C1B18]/14 pt-6 pb-8">
-            <button @click="activeSeason = s.id" class="group flex items-center gap-3 mb-4 min-h-[40px] cursor-pointer">
+            <button @click="activeSeason = s.id" class="group flex items-center gap-3 mb-4 min-h-[2.5rem] cursor-pointer">
               <span class="font-editorial text-2xl font-bold" :style="{ color: s.color }">{{ s.name }}</span>
               <span class="caption group-hover:text-[#8A6324] transition-colors">{{ s.sub }} / 06 节气</span>
             </button>
             <div class="space-y-2.5">
               <div v-for="t in solarTermsData[s.id]" :key="t.term" class="grid grid-cols-[92px_1fr] gap-3 items-baseline">
-                <span class="font-mono text-[10px] text-[#6E6960]">{{ t.term }}</span>
+                <span class="font-mono text-[0.625rem] text-[#6E6960]">{{ t.term }}</span>
                 <span class="text-xs text-[#5A564E]">{{ t.title }}</span>
               </div>
             </div>
@@ -264,13 +264,13 @@ const solarTermsData = {
     </section>
 
     <section class="surface-ink">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-10">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-10">
         <Reveal>
           <div class="eyebrow mb-4">04 / 04 · NEXT CHAPTER</div>
-          <p class="text-[13px] leading-[2] text-[#F7F4EE]/90 max-w-2xl">农时的终点是产出。下一章走进吉林风物集市，看黑土、长白山与查干湖各自端出了什么。</p>
+          <p class="text-[0.8125rem] leading-[2] text-[#F7F4EE]/90 max-w-2xl">农时的终点是产出。下一章走进吉林风物集市，看黑土、长白山与查干湖各自端出了什么。</p>
         </Reveal>
         <Reveal :delay="120">
-          <RouterLink to="/products" class="inline-flex items-baseline gap-3 min-h-[40px] group">
+          <RouterLink to="/products" class="inline-flex items-baseline gap-3 min-h-[2.5rem] group">
             <span class="font-editorial text-2xl sm:text-3xl font-bold text-[#F7F4EE] group-hover:text-[#C88A32] transition-colors">吉林风物特产集市</span>
             <ArrowUpRight :size="22" class="text-[#C88A32] arrow-shift" />
           </RouterLink>

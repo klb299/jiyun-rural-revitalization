@@ -2288,7 +2288,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="relative w-full h-full min-h-[580px] bg-[#F7F4EE] select-none overflow-hidden rounded-3xl">
+  <div class="relative w-full h-full min-h-[36.25rem] bg-[#F7F4EE] select-none overflow-hidden rounded-3xl">
     <div ref="containerRef" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
 
     <div
@@ -2297,7 +2297,7 @@ onUnmounted(() => {
     >
       <div class="flex flex-col items-center gap-3">
         <div class="w-8 h-8 rounded-full border-2 border-[#2E5A44]/25 border-t-[#2E5A44] animate-spin"></div>
-        <span class="text-[11px] font-mono text-[#6E6960] tracking-widest">BUILDING DIORAMA</span>
+        <span class="text-[0.6875rem] font-mono text-[#6E6960] tracking-widest">BUILDING DIORAMA</span>
       </div>
     </div>
 
@@ -2308,7 +2308,7 @@ onUnmounted(() => {
         <div class="text-xs font-bold text-[#1C1B18] tracking-wider uppercase font-editorial">
           松辽平原 · 现代生态农业微缩沙盘
         </div>
-        <div class="text-[10px] text-[#5A564E] font-mono">
+        <div class="text-[0.625rem] text-[#5A564E] font-mono">
           GOLDEN BELT // ARCHITECTURAL DIORAMA 1:500
         </div>
       </div>
@@ -2328,21 +2328,21 @@ onUnmounted(() => {
           ]"
           :key="v.key"
           @click="appStore.setFocusPoint(v.key)"
-          class="museum-panel px-3 py-2.5 min-h-[40px] rounded-xl text-xs font-semibold text-[#1C1B18] hover:border-[#C88A32] transition-all duration-200 cursor-pointer shadow-sm"
+          class="museum-panel px-3 py-2.5 min-h-[2.5rem] rounded-xl text-xs font-semibold text-[#1C1B18] hover:border-[#C88A32] transition-all duration-200 cursor-pointer shadow-sm"
           :class="[appStore.activeFocusPoint === v.key ? 'border-[#C88A32] bg-[#FFFFFF] text-[#C88A32]' : '']"
         >
           <span>{{ v.label }}</span>
         </button>
         <button
           @click="toggleLightMood"
-          class="museum-panel px-3 py-2.5 min-h-[40px] rounded-xl text-xs font-semibold text-[#1C1B18] hover:border-[#C88A32] transition-all duration-200 cursor-pointer shadow-sm"
+          class="museum-panel px-3 py-2.5 min-h-[2.5rem] rounded-xl text-xs font-semibold text-[#1C1B18] hover:border-[#C88A32] transition-all duration-200 cursor-pointer shadow-sm"
           :class="[lightMood === 'harvest' ? 'border-[#C88A32] bg-[#EFECE6] text-[#C88A32]' : '']"
         >
           <span>{{ lightMood === 'harvest' ? '🌇 金秋暖阳' : '☀️ 展馆天光' }}</span>
         </button>
         <button
           @click="toggleTour"
-          class="museum-panel px-3 py-2.5 min-h-[40px] rounded-xl text-xs font-semibold text-[#1C1B18] hover:border-[#C88A32] transition-all duration-200 cursor-pointer shadow-sm"
+          class="museum-panel px-3 py-2.5 min-h-[2.5rem] rounded-xl text-xs font-semibold text-[#1C1B18] hover:border-[#C88A32] transition-all duration-200 cursor-pointer shadow-sm"
           :class="[isTouring ? 'border-[#2E5A44] bg-[#EFECE6] text-[#2E5A44]' : '']"
         >
           <span>{{ isTouring ? '⏸ 停止环视' : '🎥 自动环视' }}</span>
@@ -2355,23 +2355,23 @@ onUnmounted(() => {
         class="absolute z-20 pointer-events-none museum-card px-3.5 py-2.5 rounded-xl border border-[#C88A32]/45 shadow-lg"
         :style="{ left: `${tooltip.x + 16}px`, top: `${tooltip.y + 16}px`, maxWidth: '268px' }"
       >
-        <div class="text-[11px] font-bold text-[#1C1B18]">{{ tooltip.title }}</div>
-        <div class="text-[10px] text-[#2E5A44] font-mono mt-0.5">{{ tooltip.sub }}</div>
+        <div class="text-[0.6875rem] font-bold text-[#1C1B18]">{{ tooltip.title }}</div>
+        <div class="text-[0.625rem] text-[#2E5A44] font-mono mt-0.5">{{ tooltip.sub }}</div>
       </div>
 
       <!-- 左下角参数与美学图例展板 -->
       <div class="absolute left-6 bottom-6 hidden md:block w-76 museum-card p-4 rounded-2xl border border-[#1C1B18]/10 shadow-lg pointer-events-auto">
         <div class="flex items-center justify-between border-b border-[#1C1B18]/10 pb-2 mb-2">
-          <span class="text-[10px] font-mono uppercase tracking-widest text-[#2E5A44] font-bold">
+          <span class="text-[0.625rem] font-mono uppercase tracking-widest text-[#2E5A44] font-bold">
             3D 孪生沙盘态势 // LIVE ECO-MAP
           </span>
-          <span class="text-[10px] text-[#6E6960] font-mono">{{ qualityLabel }}</span>
+          <span class="text-[0.625rem] text-[#6E6960] font-mono">{{ qualityLabel }}</span>
         </div>
         <p class="text-xs text-[#5A564E] leading-relaxed mb-3">
           融合松辽平原高标准黑土农田、素烧白瓷立筒群仓、连栋光伏温室与清洁风电微网，呈现吉林「绿色粮仓」数字孪生图景。
         </p>
         <!-- 馆藏级色彩图例 -->
-        <div class="grid grid-cols-2 gap-1.5 mb-2.5 text-[10px] font-mono text-[#5A564E]">
+        <div class="grid grid-cols-2 gap-1.5 mb-2.5 text-[0.625rem] font-mono text-[#5A564E]">
           <div class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[#EFECE6]/80">
             <span class="w-2.5 h-2.5 rounded-full bg-[#332920] border border-black/15"></span>
             <span>万年腐殖黑土层</span>
@@ -2389,7 +2389,7 @@ onUnmounted(() => {
             <span>三北防护林与大豆</span>
           </div>
         </div>
-        <div class="mt-2 pt-2 border-t border-[#1C1B18]/8 flex items-center justify-between text-[10px] text-[#6E6960] font-mono">
+        <div class="mt-2 pt-2 border-t border-[#1C1B18]/8 flex items-center justify-between text-[0.625rem] text-[#6E6960] font-mono">
           <span>悬停设施查看档案 · 点击对焦</span>
           <span class="text-[#C88A32] font-semibold">SCALE 1:500</span>
         </div>

@@ -132,13 +132,13 @@ const setView = (id) => appStore.setLens(id)
       <div class="absolute inset-0 coord-rule opacity-60 pointer-events-none"></div>
       <div class="absolute right-[3%] top-[10%] font-editorial font-bold watermark select-none"
         style="font-size: clamp(9rem, 26vw, 22rem)" aria-hidden="true">13</div>
-      <div class="absolute -left-[14%] -bottom-[30%] w-[42vw] h-[42vw] min-w-[320px] min-h-[320px] rounded-full border border-[#C88A32]/20 pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute -left-[14%] -bottom-[30%] w-[42vw] h-[42vw] min-w-[20rem] min-h-[20rem] rounded-full border border-[#C88A32]/20 pointer-events-none" aria-hidden="true"></div>
 
-      <div class="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-28">
+      <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-28">
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-8">
             <span class="eyebrow">EXHIBIT MAP / 展览地图</span>
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">JILIN RURAL REVITALIZATION · 一条策展动线</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">JILIN RURAL REVITALIZATION · 一条策展动线</span>
           </div>
         </Reveal>
 
@@ -153,7 +153,7 @@ const setView = (id) => appStore.setLens(id)
         </Reveal>
 
         <Reveal :delay="160">
-          <p class="inline-flex items-center gap-2 mt-7 px-3 py-2 rounded-md border border-[#1C1B18]/15 bg-[#FFFDF9]/70 font-mono text-[10px] tracking-[0.14em] text-[#6E6960]">
+          <p class="inline-flex items-center gap-2 mt-7 px-3 py-2 rounded-md border border-[#1C1B18]/15 bg-[#FFFDF9]/70 font-mono text-[0.625rem] tracking-[0.14em] text-[#6E6960]">
             <span class="w-2 h-2 rounded-sm bg-[#2E5A44] shrink-0"></span>
             策展动线示意，非行政区划地图
           </p>
@@ -177,28 +177,28 @@ const setView = (id) => appStore.setLens(id)
           <div class="h-3 w-full opacity-70"
             style="background-image: repeating-linear-gradient(to right, rgba(28,27,24,0.28) 0 1px, transparent 1px 18px)" aria-hidden="true"></div>
           <div class="overflow-x-auto pb-3">
-            <div class="flex min-w-[720px] gap-1.5 pt-1.5">
+            <div class="flex min-w-[45rem] gap-1.5 pt-1.5">
               <a v-for="seg in segments" :key="seg.id" :href="'#' + seg.id"
-                class="group relative flex flex-col justify-between min-w-[110px] min-h-[128px] p-3 sm:p-4 rounded-t-md transition-transform duration-500 hover:-translate-y-1"
+                class="group relative flex flex-col justify-between min-w-[6.875rem] min-h-[8rem] p-3 sm:p-4 rounded-t-md transition-transform duration-500 hover:-translate-y-1"
                 :class="seg.deep ? 'text-[#F7F4EE]' : 'text-[#1C1B18]'"
                 :style="{ flex: seg.count + ' 1 0%', background: seg.dot }">
                 <div class="flex items-baseline justify-between gap-2">
-                  <span class="font-mono text-[10px] tracking-[0.18em] opacity-80">{{ seg.no }} / 06</span>
-                  <span class="font-mono text-[9px] tracking-[0.14em] opacity-70">{{ seg.range }}</span>
+                  <span class="font-mono text-[0.625rem] tracking-[0.18em] opacity-80">{{ seg.no }} / 06</span>
+                  <span class="font-mono text-[0.5625rem] tracking-[0.14em] opacity-70">{{ seg.range }}</span>
                 </div>
                 <div class="mt-5">
                   <div class="font-editorial text-lg sm:text-2xl font-bold leading-tight">{{ seg.scale }}</div>
-                  <div class="font-mono text-[9px] tracking-[0.12em] opacity-75 mt-1 truncate">{{ seg.en }}</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.12em] opacity-75 mt-1 truncate">{{ seg.en }}</div>
                 </div>
                 <div class="mt-4 flex items-center gap-1.5">
                   <span v-for="u in seg.units" :key="u.no" class="w-1.5 h-1.5 rounded-full bg-current opacity-55"></span>
-                  <span class="ml-auto font-mono text-[9px] tracking-[0.14em] opacity-80">↗</span>
+                  <span class="ml-auto font-mono text-[0.5625rem] tracking-[0.14em] opacity-80">↗</span>
                 </div>
               </a>
             </div>
           </div>
           <div class="h-[3px] w-full bg-[#1C1B18]/70" aria-hidden="true"></div>
-          <div class="flex flex-wrap items-center justify-between gap-2 mt-2 font-mono text-[9px] tracking-[0.16em] text-[#6E6960]">
+          <div class="flex flex-wrap items-center justify-between gap-2 mt-2 font-mono text-[0.5625rem] tracking-[0.16em] text-[#6E6960]">
             <RouterLink to="/" class="link-line">00 / 序厅 · 建立整片黑土的坐标</RouterLink>
             <span>13 / 十三个展陈单元 · 动线终点</span>
           </div>
@@ -209,7 +209,7 @@ const setView = (id) => appStore.setLens(id)
             <a v-for="seg in segments" :key="'lg-' + seg.id" :href="'#' + seg.id"
               class="inline-flex items-center gap-2 group">
               <span class="w-2.5 h-2.5 rounded-sm shrink-0" :style="{ background: seg.dot }"></span>
-              <span class="font-mono text-[9px] tracking-[0.14em] text-[#6E6960] group-hover:text-[#8A6324] transition-colors">{{ seg.no }} {{ seg.scale }} · {{ seg.count }} 个单元</span>
+              <span class="font-mono text-[0.5625rem] tracking-[0.14em] text-[#6E6960] group-hover:text-[#8A6324] transition-colors">{{ seg.no }} {{ seg.scale }} · {{ seg.count }} 个单元</span>
             </a>
           </div>
         </Reveal>
@@ -217,7 +217,7 @@ const setView = (id) => appStore.setLens(id)
 
       <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#1C1B18]/10 bg-[#1C1B18] py-2.5" aria-hidden="true">
         <div class="marquee-track">
-          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[10px] tracking-[0.22em] text-[#FFFDF9]/95 whitespace-nowrap">
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.625rem] tracking-[0.22em] text-[#FFFDF9]/95 whitespace-nowrap">
             <span>微观 / 工业 / 宏观</span><span class="text-[#C88A32]">✳</span>
             <span>人文 / 助农 / 痛点</span><span class="text-[#C88A32]">✳</span>
             <span>十三个展陈单元，一条策展动线</span><span class="text-[#C88A32]">✳</span>
@@ -231,7 +231,7 @@ const setView = (id) => appStore.setLens(id)
     <section class="relative surface-linen border-y border-[#1C1B18]/10 overflow-hidden">
       <div class="absolute top-0 left-0 right-0 h-px pointer-events-none"
         style="background: linear-gradient(90deg, transparent, rgba(200,138,50,.55), transparent)"></div>
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-24">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
           <div class="lg:col-span-7">
             <div class="eyebrow mb-4">POLICY LENS / 换一把尺子</div>
@@ -246,7 +246,7 @@ const setView = (id) => appStore.setLens(id)
                 { id: 'scale', label: '按尺度看' },
                 { id: 'revital', label: '按五大振兴看' }
               ]" :key="opt.id" @click="setView(opt.id)"
-                class="w-[124px] sm:w-[152px] py-2.5 rounded-full text-[11px] sm:text-xs font-bold tracking-[0.08em] transition-all duration-500 cursor-pointer"
+                class="w-[7.75rem] sm:w-[9.5rem] py-2.5 rounded-full text-[0.6875rem] sm:text-xs font-bold tracking-[0.08em] transition-all duration-500 cursor-pointer"
                 :class="viewMode === opt.id
                   ? 'bg-[#C88A32] text-[#1C1B18] shadow-[inset_0_1px_0_rgba(255,255,255,.38)]'
                   : 'bg-[#1C1B18] text-[#F7F4EE]/78 hover:text-[#F7F4EE]'">
@@ -256,7 +256,7 @@ const setView = (id) => appStore.setLens(id)
           </div>
         </div>
 
-        <div class="mt-10 sm:mt-12 min-h-[360px] sm:min-h-[420px]">
+        <div class="mt-10 sm:mt-12 min-h-[22.5rem] sm:min-h-[26.25rem]">
           <Transition name="lens" mode="out-in">
             <!-- 视角 A：六段尺度 -->
             <div v-if="viewMode === 'scale'" key="scale" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -264,16 +264,16 @@ const setView = (id) => appStore.setLens(id)
                 :style="{ '--lens-i': i }">
                 <div class="absolute top-0 left-0 right-0 h-1" :style="{ background: seg.dot }"></div>
                 <div class="flex items-baseline justify-between gap-2 mb-4">
-                  <span class="font-mono text-[9px] tracking-[0.18em] text-[#6E6960]">{{ seg.no }} / 06 · {{ seg.range }}</span>
-                  <span class="font-mono text-[10px] tracking-[0.14em] text-[#6E6960]">{{ seg.count }} 个单元</span>
+                  <span class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#6E6960]">{{ seg.no }} / 06 · {{ seg.range }}</span>
+                  <span class="font-mono text-[0.625rem] tracking-[0.14em] text-[#6E6960]">{{ seg.count }} 个单元</span>
                 </div>
                 <div class="font-editorial text-xl font-bold text-[#1C1B18]">{{ seg.scale }} · {{ seg.title }}</div>
-                <div class="font-mono text-[10px] tracking-[0.12em] text-[#6E6960] mt-1">{{ seg.en }}</div>
-                <p class="text-[11px] leading-[1.85] text-[#5A564E] mt-3">{{ seg.lead }}</p>
+                <div class="font-mono text-[0.625rem] tracking-[0.12em] text-[#6E6960] mt-1">{{ seg.en }}</div>
+                <p class="text-[0.6875rem] leading-[1.85] text-[#5A564E] mt-3">{{ seg.lead }}</p>
                 <div class="mt-4 pt-3 border-t border-[#1C1B18]/10 space-y-1.5">
                   <RouterLink v-for="u in seg.units" :key="u.no" :to="u.to" class="flex items-center gap-2 group/link">
-                    <span class="font-mono text-[9px] text-[#8A6324] w-5 shrink-0">{{ u.no }}</span>
-                    <span class="text-[12px] text-[#3A3630] group-hover/link:text-[#8A6324] transition-colors truncate">{{ u.name }}</span>
+                    <span class="font-mono text-[0.5625rem] text-[#8A6324] w-5 shrink-0">{{ u.no }}</span>
+                    <span class="text-[0.75rem] text-[#3A3630] group-hover/link:text-[#8A6324] transition-colors truncate">{{ u.name }}</span>
                     <ArrowUpRight :size="12" class="ml-auto shrink-0 text-[#8A6324]" />
                   </RouterLink>
                 </div>
@@ -286,31 +286,31 @@ const setView = (id) => appStore.setLens(id)
                 class="lens-item relative bg-[#FFFDF9] border border-[#1C1B18]/10 rounded-2xl p-4 sm:p-5 flex flex-col"
                 :style="{ '--lens-i': i }">
                 <div class="h-[3px] w-10 rounded-full mb-4" :style="{ background: pillar.color }"></div>
-                <div class="font-mono text-[9px] tracking-[0.18em] text-[#6E6960]">{{ pillar.no }} / 05</div>
+                <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#6E6960]">{{ pillar.no }} / 05</div>
                 <div class="font-editorial text-lg font-bold text-[#1C1B18] mt-1">{{ pillar.name }}</div>
-                <div class="font-mono text-[9px] tracking-[0.14em] text-[#6E6960] mt-0.5">{{ pillar.en }}</div>
-                <div class="text-[11px] leading-[1.6] text-[#8A6324] mt-2">{{ pillar.goal }}</div>
+                <div class="font-mono text-[0.5625rem] tracking-[0.14em] text-[#6E6960] mt-0.5">{{ pillar.en }}</div>
+                <div class="text-[0.6875rem] leading-[1.6] text-[#8A6324] mt-2">{{ pillar.goal }}</div>
 
                 <div class="mt-4 pt-3 border-t border-[#1C1B18]/10 flex-1 space-y-1.5">
                   <RouterLink v-for="u in unitsOf(pillar)" :key="u.no" :to="u.to"
                     class="flex items-center gap-2 rounded-lg bg-[#EFECE6]/70 px-2.5 py-2 hover:bg-[#C88A32]/15 transition-colors duration-300">
-                    <span class="font-mono text-[9px] text-[#8A6324] w-5 shrink-0">{{ u.no }}</span>
-                    <span class="text-[11px] leading-snug text-[#3A3630]">{{ u.name }}</span>
+                    <span class="font-mono text-[0.5625rem] text-[#8A6324] w-5 shrink-0">{{ u.no }}</span>
+                    <span class="text-[0.6875rem] leading-snug text-[#3A3630]">{{ u.name }}</span>
                   </RouterLink>
                   <div v-if="!pillar.nos.length" class="rounded-lg border border-dashed border-[#1C1B18]/25 bg-[#EFECE6]/60 px-2.5 py-3">
-                    <div class="font-mono text-[9px] tracking-[0.16em] text-[#8A6324] mb-1">本展馆未展开</div>
-                    <p class="text-[10px] leading-[1.7] text-[#5A564E]">{{ pillar.note }}</p>
+                    <div class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#8A6324] mb-1">本展馆未展开</div>
+                    <p class="text-[0.625rem] leading-[1.7] text-[#5A564E]">{{ pillar.note }}</p>
                   </div>
                   <div v-for="g in pillar.gaps" :key="g" class="flex items-start gap-2 rounded-lg border border-dashed border-[#1C1B18]/18 px-2.5 py-2">
                     <span class="w-1 h-1 rounded-full bg-[#8C867B] mt-1.5 shrink-0"></span>
-                    <span class="text-[11px] leading-[1.6] text-[#6E6960]">{{ g }}</span>
+                    <span class="text-[0.6875rem] leading-[1.6] text-[#6E6960]">{{ g }}</span>
                   </div>
                 </div>
 
-                <div class="mt-3 text-[10px] leading-[1.65] text-[#6E6960]" v-if="pillar.nos.length">{{ pillar.note }}</div>
+                <div class="mt-3 text-[0.625rem] leading-[1.65] text-[#6E6960]" v-if="pillar.nos.length">{{ pillar.note }}</div>
                 <div class="mt-3 pt-3 border-t border-[#1C1B18]/10 flex items-center justify-between gap-2">
-                  <span class="font-mono text-[10px] tracking-[0.14em] text-[#6E6960]">{{ pillar.nos.length }} 个展陈单元</span>
-                  <span v-if="pillar.gaps.length" class="font-mono text-[10px] text-[#8A6324]">待展开 {{ pillar.gaps.length }}</span>
+                  <span class="font-mono text-[0.625rem] tracking-[0.14em] text-[#6E6960]">{{ pillar.nos.length }} 个展陈单元</span>
+                  <span v-if="pillar.gaps.length" class="font-mono text-[0.625rem] text-[#8A6324]">待展开 {{ pillar.gaps.length }}</span>
                 </div>
               </div>
             </div>
@@ -318,20 +318,20 @@ const setView = (id) => appStore.setLens(id)
         </div>
 
         <div class="mt-9 pt-5 border-t border-[#1C1B18]/10 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
-          <span class="font-mono text-[9px] tracking-[0.16em] text-[#6E6960]">二十字总要求 / 产业兴旺 · 生态宜居 · 乡风文明 · 治理有效 · 生活富裕</span>
-          <span class="text-[10px] text-[#5A564E]">五个振兴共同指向农业全面升级、农村全面进步、农民全面发展</span>
+          <span class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#6E6960]">二十字总要求 / 产业兴旺 · 生态宜居 · 乡风文明 · 治理有效 · 生活富裕</span>
+          <span class="text-[0.625rem] text-[#5A564E]">五个振兴共同指向农业全面升级、农村全面进步、农民全面发展</span>
         </div>
       </div>
     </section>
 
     <!-- 02 微观 · 黑土与实验：浅底，段头与纵排索引卡在左，图版框在右 -->
-    <section :id="micro.id" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section :id="micro.id" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
         <Reveal class="lg:col-span-5">
           <div class="flex items-center gap-3">
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324]">{{ micro.no }} / 06</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324]">{{ micro.no }} / 06</span>
             <span class="w-3 h-3 rounded-sm" :style="{ background: micro.dot }"></span>
-            <span class="font-mono text-[10px] tracking-[0.18em] text-[#6E6960]">{{ micro.en }}</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#6E6960]">{{ micro.en }}</span>
           </div>
           <h2 class="display-2 mt-5 text-[#1C1B18]">{{ micro.scale }} · {{ micro.title }}</h2>
           <p class="lede mt-5 max-w-md">{{ micro.lead }}</p>
@@ -341,7 +341,7 @@ const setView = (id) => appStore.setLens(id)
               <span class="font-editorial text-2xl font-bold text-[#8A6324] w-9 shrink-0">{{ u.no }}</span>
               <span class="flex-1">
                 <span class="block font-editorial text-lg font-bold text-[#1C1B18] group-hover:text-[#8A6324] transition-colors">{{ u.name }}</span>
-                <span class="block text-[12px] leading-[1.8] text-[#5A564E] mt-1">{{ u.line }}</span>
+                <span class="block text-[0.75rem] leading-[1.8] text-[#5A564E] mt-1">{{ u.line }}</span>
               </span>
               <ArrowUpRight :size="16" class="text-[#8A6324] arrow-shift shrink-0 mt-1" />
             </RouterLink>
@@ -358,14 +358,14 @@ const setView = (id) => appStore.setLens(id)
 
     <!-- 03 工业 · 装备与遥测：墨色展墙反白，横排段头，左侧图版框，右侧两列索引卡 -->
     <section :id="industrial.id" class="surface-ink border-y border-[#F7F4EE]/10">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <Reveal>
           <div class="flex flex-wrap items-end justify-between gap-6">
             <div>
               <div class="flex items-center gap-3">
-                <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324]">{{ industrial.no }} / 06</span>
+                <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324]">{{ industrial.no }} / 06</span>
                 <span class="w-3 h-3 rounded-sm" :style="{ background: industrial.dot }"></span>
-                <span class="font-mono text-[10px] tracking-[0.18em] text-[#FFFDF9]/95">{{ industrial.en }}</span>
+                <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#FFFDF9]/95">{{ industrial.en }}</span>
               </div>
               <h2 class="display-2 mt-5 text-[#F7F4EE]">{{ industrial.scale }} · {{ industrial.title }}</h2>
             </div>
@@ -382,14 +382,14 @@ const setView = (id) => appStore.setLens(id)
           <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Reveal v-for="(u, i) in industrial.units" :key="u.no" :delay="180 + i * 80">
               <RouterLink :to="u.to"
-                class="group h-full min-h-[210px] flex flex-col justify-between p-6 border border-[#F7F4EE]/18 bg-[#F7F4EE]/5 hover:bg-[#F7F4EE]/10 transition-colors duration-500">
+                class="group h-full min-h-[13.125rem] flex flex-col justify-between p-6 border border-[#F7F4EE]/18 bg-[#F7F4EE]/5 hover:bg-[#F7F4EE]/10 transition-colors duration-500">
                 <div class="flex items-start justify-between gap-3">
                   <span class="font-editorial text-4xl font-bold text-[#C88A32]">{{ u.no }}</span>
                   <ArrowUpRight :size="16" class="text-[#C88A32] arrow-shift" />
                 </div>
                 <div>
                   <div class="font-editorial text-xl font-bold text-[#F7F4EE] mb-2 group-hover:text-[#C88A32] transition-colors">{{ u.name }}</div>
-                  <div class="text-[12px] leading-[1.85] text-[#FFFDF9]/95">{{ u.line }}</div>
+                  <div class="text-[0.75rem] leading-[1.85] text-[#FFFDF9]/95">{{ u.line }}</div>
                 </div>
               </RouterLink>
             </Reveal>
@@ -400,7 +400,7 @@ const setView = (id) => appStore.setLens(id)
 
     <!-- 04 宏观 · 平原：苔藓青实心段，抽象网格图版在左，单一焦点单元在右 -->
     <section :id="macro.id" class="bg-[#2E5A44]">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           <Reveal :delay="120" variant="scale" class="lg:col-span-7">
             <FigurePlate dark src="/art/diorama.svg" ratio="aspect-[3/2]" index="05"
@@ -412,19 +412,19 @@ const setView = (id) => appStore.setLens(id)
               <span class="absolute -top-16 -left-2 font-editorial font-bold text-[#F7F4EE]/10 select-none pointer-events-none"
                 style="font-size: clamp(7rem, 14vw, 12rem); line-height: 1" aria-hidden="true">05</span>
               <div class="relative flex items-center gap-3">
-                <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324]">{{ macro.no }} / 06</span>
-                <span class="font-mono text-[10px] tracking-[0.18em] text-[#FFFDF9]/95">{{ macro.en }}</span>
+                <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324]">{{ macro.no }} / 06</span>
+                <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#FFFDF9]/95">{{ macro.en }}</span>
               </div>
               <h2 class="display-2 mt-5 text-[#F7F4EE]">{{ macro.scale }} · {{ macro.title }}</h2>
               <p class="lede text-[#FFFDF9]/96 mt-5">{{ macro.lead }}</p>
               <RouterLink v-for="u in macro.units" :key="u.no" :to="u.to"
                 class="group mt-9 block border-t border-[#F7F4EE]/25 pt-6">
                 <div class="flex items-center gap-3">
-                  <span class="font-mono text-[10px] tracking-[0.18em] text-[#8A6324]">{{ u.no }} / 单一焦点</span>
+                  <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#8A6324]">{{ u.no }} / 单一焦点</span>
                   <ArrowUpRight :size="16" class="text-[#C88A32] arrow-shift" />
                 </div>
                 <div class="font-editorial text-2xl sm:text-3xl font-bold text-[#F7F4EE] mt-3 group-hover:text-[#C88A32] transition-colors">{{ u.name }}</div>
-                <div class="text-[13px] leading-[1.9] text-[#FFFDF9]/96 mt-3">{{ u.line }}</div>
+                <div class="text-[0.8125rem] leading-[1.9] text-[#FFFDF9]/96 mt-3">{{ u.line }}</div>
               </RouterLink>
             </div>
           </Reveal>
@@ -434,14 +434,14 @@ const setView = (id) => appStore.setLens(id)
 
     <!-- 05 人文 · 农时与风物：亚麻底，段头在上，四张带缩略图版的索引卡横排 -->
     <section :id="humanities.id" class="surface-linen border-y border-[#1C1B18]/10">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <Reveal>
           <div class="flex flex-wrap items-end justify-between gap-6">
             <div>
               <div class="flex items-center gap-3">
-                <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324]">{{ humanities.no }} / 06</span>
+                <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324]">{{ humanities.no }} / 06</span>
                 <span class="w-3 h-3 rounded-sm" :style="{ background: humanities.dot }"></span>
-                <span class="font-mono text-[10px] tracking-[0.18em] text-[#6E6960]">{{ humanities.en }}</span>
+                <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#6E6960]">{{ humanities.en }}</span>
               </div>
               <h2 class="display-2 mt-5 text-[#1C1B18]">{{ humanities.scale }} · {{ humanities.title }}</h2>
             </div>
@@ -458,11 +458,11 @@ const setView = (id) => appStore.setLens(id)
               </div>
               <div class="p-5">
                 <div class="flex items-center justify-between gap-2">
-                  <span class="font-mono text-[10px] tracking-[0.18em] text-[#8A6324]">{{ u.no }} / 09</span>
+                  <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#8A6324]">{{ u.no }} / 09</span>
                   <ArrowUpRight :size="15" class="text-[#8A6324] arrow-shift" />
                 </div>
                 <div class="font-editorial text-lg font-bold text-[#1C1B18] mt-3 group-hover:text-[#8A6324] transition-colors">{{ u.name }}</div>
-                <div class="text-[12px] leading-[1.8] text-[#5A564E] mt-2">{{ u.line }}</div>
+                <div class="text-[0.75rem] leading-[1.8] text-[#5A564E] mt-2">{{ u.line }}</div>
               </div>
             </RouterLink>
           </Reveal>
@@ -474,14 +474,14 @@ const setView = (id) => appStore.setLens(id)
     </section>
 
     <!-- 06 助农 · 机制：纸白底，三张实心色块卡横排，每卡一个大编号 -->
-    <section :id="aid.id" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section :id="aid.id" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal>
         <div class="flex flex-wrap items-end justify-between gap-6">
           <div>
             <div class="flex items-center gap-3">
-              <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324]">{{ aid.no }} / 06</span>
+              <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324]">{{ aid.no }} / 06</span>
               <span class="w-3 h-3 rounded-sm" :style="{ background: aid.dot }"></span>
-              <span class="font-mono text-[10px] tracking-[0.18em] text-[#6E6960]">{{ aid.en }}</span>
+              <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#6E6960]">{{ aid.en }}</span>
             </div>
             <h2 class="display-2 mt-5 text-[#1C1B18]">{{ aid.scale }} · {{ aid.title }}</h2>
           </div>
@@ -492,19 +492,19 @@ const setView = (id) => appStore.setLens(id)
       <div class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Reveal v-for="(u, i) in aid.units" :key="u.no" :delay="i * 80">
           <RouterLink :to="u.to"
-            class="group relative block h-full min-h-[230px] p-6 card-linen border border-[#1C1B18]/10 lift overflow-hidden">
+            class="group relative block h-full min-h-[14.375rem] p-6 card-linen border border-[#1C1B18]/10 lift overflow-hidden">
             <span class="absolute top-0 left-0 right-0 h-1.5"
               :style="{ background: ['#8EBACB', '#C88A32', '#2E5A44'][i] }" aria-hidden="true"></span>
             <span class="absolute -right-2 -bottom-8 font-editorial font-bold text-[#1C1B18]/6 select-none pointer-events-none"
               style="font-size: 8rem; line-height: 1" aria-hidden="true">{{ u.no }}</span>
             <div class="relative flex flex-col h-full justify-between">
               <div class="flex items-start justify-between gap-3">
-                <span class="font-mono text-[10px] tracking-[0.18em] text-[#8A6324]">{{ u.no }} / 12</span>
+                <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#8A6324]">{{ u.no }} / 12</span>
                 <ArrowUpRight :size="16" class="text-[#8A6324] arrow-shift" />
               </div>
               <div>
                 <div class="font-editorial text-2xl font-bold text-[#1C1B18] mb-2 group-hover:text-[#8A6324] transition-colors">{{ u.name }}</div>
-                <div class="text-[12px] leading-[1.85] text-[#5A564E]">{{ u.line }}</div>
+                <div class="text-[0.75rem] leading-[1.85] text-[#5A564E]">{{ u.line }}</div>
               </div>
             </div>
           </RouterLink>
@@ -514,23 +514,23 @@ const setView = (id) => appStore.setLens(id)
 
     <!-- 07 痛点 · 落地：墨色实心收束段，巨型编号水印 + 单一单元入口 -->
     <section :id="pain.id" class="bg-[#1C1B18]">
-      <div class="relative max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-24 sm:py-32 overflow-hidden">
+      <div class="relative max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-24 sm:py-32 overflow-hidden">
         <span class="absolute right-[2%] -top-6 font-editorial font-bold text-[#F7F4EE]/6 select-none pointer-events-none"
           style="font-size: clamp(9rem, 24vw, 20rem); line-height: 1" aria-hidden="true">13</span>
         <Reveal>
           <div class="relative max-w-2xl">
             <div class="flex items-center gap-3">
-              <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324]">{{ pain.no }} / 06 · 动线终点</span>
-              <span class="font-mono text-[10px] tracking-[0.18em] text-[#FFFDF9]/95">{{ pain.en }}</span>
+              <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324]">{{ pain.no }} / 06 · 动线终点</span>
+              <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#FFFDF9]/95">{{ pain.en }}</span>
             </div>
             <h2 class="display-2 mt-6 text-[#F7F4EE]">{{ pain.scale }} · {{ pain.title }}</h2>
             <p class="lede text-[#FFFDF9]/96 mt-6">{{ pain.lead }}</p>
             <RouterLink v-for="u in pain.units" :key="u.no" :to="u.to"
-              class="group inline-flex items-center gap-4 mt-10 min-h-[44px]">
+              class="group inline-flex items-center gap-4 mt-10 min-h-[2.75rem]">
               <span class="font-editorial text-2xl sm:text-3xl font-bold text-[#F7F4EE] group-hover:text-[#C88A32] transition-colors">{{ u.name }}</span>
               <ArrowUpRight :size="22" class="text-[#C88A32] arrow-shift" />
             </RouterLink>
-            <div class="text-[12px] leading-[1.9] text-[#FFFDF9]/95 mt-4">{{ pain.units[0].line }}</div>
+            <div class="text-[0.75rem] leading-[1.9] text-[#FFFDF9]/95 mt-4">{{ pain.units[0].line }}</div>
           </div>
         </Reveal>
       </div>
@@ -538,7 +538,7 @@ const setView = (id) => appStore.setLens(id)
 
     <!-- 08 收束：诚实的参观说明 + 白皮书 / 数据口径 / 痛点 / 返回序厅 -->
     <section class="surface-linen border-t border-[#1C1B18]/10">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <Reveal>
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
             <div class="lg:col-span-5">
@@ -547,7 +547,7 @@ const setView = (id) => appStore.setLens(id)
               <p class="lede mt-6">
                 本站不依赖后端服务，页面、图版与三个展厅都在本地打包，断网也能完整参观；展陈里的读数、编号与流程均为教学演示，不代表真实产量、真实交易或统计结论。本页的六段尺度与先后顺序是策展编排，不是地理方位，刻度与色块只用来数清单元。
               </p>
-              <p class="font-mono text-[10px] tracking-[0.14em] text-[#6E6960] mt-6">策展动线示意，非行政区划地图</p>
+              <p class="font-mono text-[0.625rem] tracking-[0.14em] text-[#6E6960] mt-6">策展动线示意，非行政区划地图</p>
             </div>
             <div class="lg:col-span-7">
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -556,9 +556,9 @@ const setView = (id) => appStore.setLens(id)
                   { k: 'NOTE 02', t: '断网可参观', d: '资源随页面一起加载，离线也能走完这条动线。' },
                   { k: 'NOTE 03', t: '数据为教学演示', d: '读数只表达趋势与关系，不写覆盖户数与增收金额。' }
                 ]" :key="n.k" class="bg-[#FFFDF9] border border-[#1C1B18]/10 p-5">
-                  <div class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324] mb-4">{{ n.k }}</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8A6324] mb-4">{{ n.k }}</div>
                   <div class="font-editorial text-lg font-bold text-[#1C1B18] mb-2">{{ n.t }}</div>
-                  <div class="text-[11px] leading-[1.85] text-[#5A564E]">{{ n.d }}</div>
+                  <div class="text-[0.6875rem] leading-[1.85] text-[#5A564E]">{{ n.d }}</div>
                 </div>
               </div>
 
@@ -571,11 +571,11 @@ const setView = (id) => appStore.setLens(id)
                 ]" :key="n.to" :to="n.to"
                   class="group bg-[#FFFDF9]/70 border border-[#1C1B18]/10 p-5 lift">
                   <div class="flex items-center justify-between gap-2">
-                    <span class="font-mono text-[9px] tracking-[0.18em] text-[#8A6324]">{{ n.k }}</span>
+                    <span class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8A6324]">{{ n.k }}</span>
                     <ArrowUpRight :size="15" class="text-[#8A6324] arrow-shift" />
                   </div>
                   <div class="font-editorial text-lg font-bold text-[#1C1B18] mt-3 group-hover:text-[#8A6324] transition-colors">{{ n.t }}</div>
-                  <div class="text-[11px] leading-[1.8] text-[#5A564E] mt-1">{{ n.d }}</div>
+                  <div class="text-[0.6875rem] leading-[1.8] text-[#5A564E] mt-1">{{ n.d }}</div>
                 </RouterLink>
               </div>
             </div>

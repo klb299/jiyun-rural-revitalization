@@ -52,13 +52,13 @@ const decisions = [
     <section class="relative overflow-hidden" style="background: linear-gradient(145deg, #E7BC6C 0%, #C88A32 48%, #A9701F 100%)">
       <div class="absolute inset-0 coord-rule opacity-25 pointer-events-none"></div>
       <div class="absolute -left-16 -bottom-28 font-editorial font-bold text-[#1C1B18]/[0.07] select-none" style="font-size: 30rem; line-height: 1">04</div>
-      <div data-parallax="-12" class="absolute -right-[8%] -top-[20%] w-[34vw] h-[34vw] min-w-[340px] min-h-[340px] rounded-full bg-[#FFFDF9]/12 blur-2xl pointer-events-none"></div>
+      <div data-parallax="-12" class="absolute -right-[8%] -top-[20%] w-[34vw] h-[34vw] min-w-[21.25rem] min-h-[21.25rem] rounded-full bg-[#FFFDF9]/12 blur-2xl pointer-events-none"></div>
 
-      <div class="relative max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 sm:pt-32 pb-16 sm:pb-20">
+      <div class="relative max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 sm:pt-32 pb-16 sm:pb-20">
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-9">
-            <span class="px-3 py-1.5 rounded-full bg-[#1C1B18] text-[#F7F4EE] font-mono text-[10px] tracking-[0.2em] font-bold">CHAPTER 04</span>
-            <span class="font-mono text-[10px] tracking-[0.2em] text-[#1C1B18]/65">SMART RURAL TELEMETRY / 数智驾驶舱</span>
+            <span class="px-3 py-1.5 rounded-full bg-[#1C1B18] text-[#F7F4EE] font-mono text-[0.625rem] tracking-[0.2em] font-bold">CHAPTER 04</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#1C1B18]/65">SMART RURAL TELEMETRY / 数智驾驶舱</span>
           </div>
         </Reveal>
 
@@ -88,7 +88,7 @@ const decisions = [
 
           <!-- 墨色数据环 -->
           <Reveal :delay="200" variant="scale" class="lg:col-span-4 hidden lg:block" data-parallax="-9">
-            <div class="relative mx-auto w-[300px] h-[300px]">
+            <div class="relative mx-auto w-[18.75rem] h-[18.75rem]">
               <div class="absolute inset-0 rounded-full bg-[#1C1B18] shadow-[0_40px_90px_-40px_rgba(28,27,24,0.8)]"></div>
               <div class="absolute inset-5 rounded-full border border-[#C88A32]/45"></div>
               <div class="absolute inset-10 rounded-full border border-[#F7F4EE]/12"></div>
@@ -100,9 +100,9 @@ const decisions = [
               </svg>
               <div class="absolute inset-0 grid place-items-center text-center">
                 <div>
-                  <div class="font-mono text-[9px] tracking-[0.22em] text-[#8A6324] mb-2">ORGANIC MATTER</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.22em] text-[#8A6324] mb-2">ORGANIC MATTER</div>
                   <div class="font-editorial text-6xl font-bold text-[#F7F4EE] leading-none">4.82<span class="text-2xl">%</span></div>
-                  <div class="font-mono text-[9px] tracking-[0.18em] text-[#F7F4EE]/80 mt-3">特级肥力黑土</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#F7F4EE]/80 mt-3">特级肥力黑土</div>
                 </div>
               </div>
             </div>
@@ -116,7 +116,7 @@ const decisions = [
               { k: 'LINK', v: '5G 专网双向回传' },
               { k: 'UPDATE', v: '教学演示数据' }
             ]" :key="m.k" class="px-6 py-5">
-              <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-1.5">{{ m.k }}</div>
+              <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324] mb-1.5">{{ m.k }}</div>
               <div class="text-sm font-semibold text-[#F7F4EE]">{{ m.v }}</div>
             </div>
           </div>
@@ -125,7 +125,7 @@ const decisions = [
 
       <div class="marquee border-t border-[#1C1B18]/15 py-2.5" aria-hidden="true">
         <div class="marquee-track">
-          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[11px] tracking-[0.2em] text-[#1C1B18]/70 whitespace-nowrap">
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.6875rem] tracking-[0.2em] text-[#1C1B18]/70 whitespace-nowrap">
             <span>REAL-TIME TELEMETRY</span><span>✳</span><span>黑土地生境健康</span><span>✳</span><span>880 亿斤 / 年</span><span>✳</span><span>GRAIN LOGISTICS</span><span>✳</span>
           </span>
         </div>
@@ -133,17 +133,17 @@ const decisions = [
     </section>
 
     <!-- 02 非对称 KPI -->
-    <section id="telemetry" class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section id="telemetry" class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <Reveal><SectionHead index="01 / 04" eyebrow="LIVE TELEMETRY / 实时遥测" title="四项指标，判断一季收成" description="数据链路以 5G 专网回传，数值为教学演示用的典型区间，用于说明指标体系而非实时生产报表。" /></Reveal>
       <div class="grid grid-cols-1 md:grid-cols-12 gap-5 mt-14" data-stagger>
         <Reveal v-for="(t, i) in telemetry" :key="t.label" :delay="i * 80"
           :class="i === 0 ? 'md:col-span-7' : i === 1 ? 'md:col-span-5' : i === 2 ? 'md:col-span-5' : 'md:col-span-7'">
           <div class="h-full p-7 sm:p-8 relative overflow-hidden z-card lift" :class="toneClass[t.tone]">
             <span class="absolute -right-3 -bottom-12 font-editorial font-bold opacity-[0.08] select-none" style="font-size: 11rem; line-height: 1">0{{ i + 1 }}</span>
-            <div class="relative font-mono text-[10px] tracking-[0.2em] opacity-65 mb-9">{{ t.tag }}</div>
+            <div class="relative font-mono text-[0.625rem] tracking-[0.2em] opacity-65 mb-9">{{ t.tag }}</div>
             <div class="relative font-editorial font-bold leading-none" :style="{ fontSize: i === 0 ? 'clamp(3.4rem, 6vw, 5.6rem)' : 'clamp(2.5rem, 4vw, 3.8rem)' }">{{ t.value }}</div>
             <div class="relative mt-5 text-base font-bold">{{ t.label }}</div>
-            <p class="relative text-[12px] leading-relaxed mt-2" :class="toneNote[t.tone]">{{ t.note }}</p>
+            <p class="relative text-[0.75rem] leading-relaxed mt-2" :class="toneNote[t.tone]">{{ t.note }}</p>
           </div>
         </Reveal>
       </div>
@@ -154,7 +154,7 @@ const decisions = [
           <div class="bezel-core">
             <div class="bg-[#1C1B18] px-6 py-4 flex flex-wrap items-center justify-between gap-3">
               <div class="font-editorial text-lg font-bold text-[#F7F4EE]">黑土生境可视化分析</div>
-              <div class="font-mono text-[10px] tracking-[0.18em] text-[#8A6324]">ECHARTS / 3 VIEWS</div>
+              <div class="font-mono text-[0.625rem] tracking-[0.18em] text-[#8A6324]">ECHARTS / 3 VIEWS</div>
             </div>
             <div class="p-4 sm:p-7 bg-[#FFFDF9]">
               <RuralDashboardCharts />
@@ -167,25 +167,25 @@ const decisions = [
     <!-- 03 保供调度：墨色区块 -->
     <section id="logistics" class="surface-ink relative overflow-hidden">
       <div class="absolute inset-0 coord-rule opacity-20 pointer-events-none"></div>
-      <div class="relative max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+      <div class="relative max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <Reveal><SectionHead index="02 / 04" eyebrow="GRAIN LOGISTICS / 保供调度" title="一粒米离田之后的路" description="从烘干塔、数字粮仓到全国干线冷链，每一批次都带着地块编号与检测报告进入流通。" dark /></Reveal>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-14">
           <Reveal class="lg:col-span-8">
             <div class="bezel bezel--ink h-full">
               <div class="bezel-core bg-[#F7F4EE] overflow-x-auto">
-                <table class="w-full text-left min-w-[560px]">
+                <table class="w-full text-left min-w-[35rem]">
                   <thead>
                     <tr class="bg-[#EFECE6]">
-                      <th v-for="h in ['保供流向目的地', '本批次外运量', '物流形式', '时效状态']" :key="h" class="py-4 px-5 font-mono text-[10px] tracking-[0.16em] text-[#6E6960] font-medium">{{ h }}</th>
+                      <th v-for="h in ['保供流向目的地', '本批次外运量', '物流形式', '时效状态']" :key="h" class="py-4 px-5 font-mono text-[0.625rem] tracking-[0.16em] text-[#6E6960] font-medium">{{ h }}</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(f, i) in grainFlows" :key="f.dest" class="border-b border-[#1C1B18]/8 last:border-0 hover:bg-[#EFECE6]/60 transition-colors">
-                      <td class="py-4 px-5 text-sm font-semibold text-[#1C1B18]"><span class="font-mono text-[10px] text-[#8A6324] mr-3">0{{ i + 1 }}</span>{{ f.dest }}</td>
+                      <td class="py-4 px-5 text-sm font-semibold text-[#1C1B18]"><span class="font-mono text-[0.625rem] text-[#8A6324] mr-3">0{{ i + 1 }}</span>{{ f.dest }}</td>
                       <td class="py-4 px-5 font-mono text-sm font-bold text-[#8A6324]">{{ f.amount }}</td>
-                      <td class="py-4 px-5"><span class="px-2.5 py-1 rounded-full bg-[#EFECE6] text-[11px] text-[#5A564E]">{{ f.mode }}</span></td>
-                      <td class="py-4 px-5 font-mono text-[11px] text-[#6E6960]">{{ f.time }}</td>
+                      <td class="py-4 px-5"><span class="px-2.5 py-1 rounded-full bg-[#EFECE6] text-[0.6875rem] text-[#5A564E]">{{ f.mode }}</span></td>
+                      <td class="py-4 px-5 font-mono text-[0.6875rem] text-[#6E6960]">{{ f.time }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -195,9 +195,9 @@ const decisions = [
           <Reveal :delay="120" class="lg:col-span-4">
             <div class="card-gold h-full p-7 sm:p-8 relative overflow-hidden">
               <span class="absolute -right-6 -top-8 font-editorial font-bold text-[#1C1B18]/8 select-none" style="font-size: 10rem; line-height: 1">R</span>
-              <div class="relative font-mono text-[10px] tracking-[0.2em] text-[#1C1B18]/70 mb-4">SCIENCE / 科技会战</div>
+              <div class="relative font-mono text-[0.625rem] tracking-[0.2em] text-[#1C1B18]/70 mb-4">SCIENCE / 科技会战</div>
               <h3 class="display-3 relative mb-4">中科院「黑土粮仓」攻关</h3>
-              <p class="relative text-[13px] leading-[1.85] text-[#1C1B18]/75 mb-8">
+              <p class="relative text-[0.8125rem] leading-[1.85] text-[#1C1B18]/75 mb-8">
                 以国家战略科技力量破解黑土「变薄、变瘦、变硬」难题，把免耕阻蚀、秸秆腐解与变量施肥做成可量化的工程指标。
               </p>
               <div class="relative space-y-3">
@@ -213,7 +213,7 @@ const decisions = [
     </section>
 
     <!-- 04 决策链 -->
-    <section class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
+    <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         <Reveal class="lg:col-span-5 relative" data-parallax="-8">
           <div class="bezel z-card" style="transform: rotate(-3deg)">
@@ -222,7 +222,7 @@ const decisions = [
             </div>
           </div>
           <div class="absolute -bottom-7 -right-6 card-moss z-card px-6 py-4 rounded-2xl" style="transform: rotate(4deg)">
-            <div class="font-mono text-[10px] tracking-[0.18em] text-[#F7F4EE]/80 mb-1">PLATE 01</div>
+            <div class="font-mono text-[0.625rem] tracking-[0.18em] text-[#F7F4EE]/80 mb-1">PLATE 01</div>
             <div class="font-editorial text-lg font-bold">剖面监测层位</div>
           </div>
         </Reveal>
@@ -234,7 +234,7 @@ const decisions = [
           <Reveal :delay="180">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10" data-stagger>
               <div v-for="n in decisions" :key="n.k" class="card-linen p-5">
-                <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A6324] mb-2">{{ n.k }}</div>
+                <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324] mb-2">{{ n.k }}</div>
                 <div class="font-editorial text-lg font-bold mb-1.5">{{ n.v }}</div>
                 <div class="caption">{{ n.d }}</div>
               </div>
@@ -246,10 +246,10 @@ const decisions = [
 
     <!-- 05 收束 -->
     <section class="relative overflow-hidden" style="background: linear-gradient(145deg, #E7BC6C, #C88A32 55%, #A9701F 100%)">
-      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+      <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
         <Reveal class="lg:col-span-8">
-          <div class="font-mono text-[10px] tracking-[0.22em] text-[#1C1B18]/65 mb-4">04 / 04 · DATA NOTE</div>
-          <p class="text-[13px] leading-[2] text-[#1C1B18]/78 max-w-2xl">
+          <div class="font-mono text-[0.625rem] tracking-[0.22em] text-[#1C1B18]/65 mb-4">04 / 04 · DATA NOTE</div>
+          <p class="text-[0.8125rem] leading-[2] text-[#1C1B18]/78 max-w-2xl">
             本章图表与遥测数值为教学演示用的示意数据，结构与量级参考吉林省农业农村厅公开年报及中科院东北地理所「黑土粮仓」科技会战公开成果，不用于生产决策。
           </p>
         </Reveal>
