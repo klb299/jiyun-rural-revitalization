@@ -80,6 +80,19 @@ const endPrelude = () => {
 }
 
 onMounted(() => {
+  // 借鉴 GoogleChromeLabs/quicklink：首页稳定后错峰预取三座 3D 展厅的路由 chunk，
+  // 评委点 CTA 时不必再等 693KB 的 Three.js 异步包。放在动效降级判断之前，保证一定执行。
+  window.__prefetchLog = []
+  ;[
+    () => import('./SoilStrataView.vue'),
+    () => import('./MachineryView.vue'),
+    () => import('./SandboxView.vue')
+  ].forEach((job, i) => {
+    window.setTimeout(() => {
+      job().then(() => window.__prefetchLog.push('ok')).catch(() => window.__prefetchLog.push('fail'))
+    }, 1200 + i * 1500)
+  })
+
   if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
   preludeOn.value = true
   skipHandler = () => endPrelude()

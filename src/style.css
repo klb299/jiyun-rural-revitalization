@@ -706,3 +706,35 @@ html.vt-active .reveal {
   .lab-sweep, .lab-cell, .lab-badge { transition: none !important; animation: none !important; }
 }
 
+
+/* ------------------------------------------------------------------ *
+ * 3D 展厅通用交互工具条：顺序导览 / 视角书签 / 快照 / 复位
+ * 只挂在每个 WebGLStage 容器底部，不改动各展厅原有控件。
+ * ------------------------------------------------------------------ */
+.stage-extras {
+  position: absolute; left: 50%; bottom: 0.75rem; transform: translateX(-50%);
+  z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+  padding: 0.45rem 0.6rem; border-radius: 1rem; max-width: calc(100% - 1.5rem);
+  background: rgba(255, 253, 249, 0.93); border: 1px solid rgba(28, 27, 24, 0.1);
+  box-shadow: 0 14px 34px -20px rgba(28, 27, 24, 0.55);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; color: #1C1B18;
+}
+.stage-extras__row { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.35rem; }
+.stage-extras button {
+  min-height: 2.75rem; padding: 0 0.7rem; border-radius: 0.7rem;
+  border: 1px solid rgba(28, 27, 24, 0.12); background: #FFFDF9;
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.02em; color: #3A3630;
+  cursor: pointer; transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+}
+.stage-extras button:hover { border-color: #C88A32; color: #8A6324; background: rgba(200, 138, 50, 0.1); }
+.stage-extras__marks { display: flex; gap: 0.3rem; align-items: center; }
+.stage-extras__marks button { min-height: 2rem; min-width: 2rem; padding: 0; font-size: 0.625rem; }
+.stage-extras__empty { font-size: 0.5625rem; color: #6E6960; letter-spacing: 0.08em; }
+.stage-extras__hint { font-size: 0.5625rem; color: #6E6960; letter-spacing: 0.1em; }
+@media (max-width: 640px) {
+  .stage-extras__hint { display: none; }
+  .stage-extras button { min-height: 2.75rem; font-size: 0.625rem; padding: 0 0.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage-extras button { transition: none; }
+}

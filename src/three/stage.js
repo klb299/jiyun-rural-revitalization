@@ -528,6 +528,128 @@ export function createStage(container, options = {}) {
     if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement)
   }
 
+
+  /* ---------------- 通用 3D 交互延伸 ----------------
+   * 借鉴 google/model-viewer 的视点 / 自动巡览 / 快照交互。
+   * 不改动三个展厅组件：这里基于初始机位自动生成四个环绕视点，
+   * 并提供顺序导览、视角书签、画面快照、复位与键盘快捷键。
+   * 现有拖拽、爆炸分解、层位切换、六视点飞行全部保留。 */
+  const extrasMarks = []
+  const extrasReduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches || false
+  const extrasHome = { position: camera.position.toArray(), target: controls.target.toArray() }
+  const extrasRadius = Math.hypot(
+    extrasHome.position[0] - extrasHome.target[0],
+    extrasHome.position[2] - extrasHome.target[2]
+  ) || 6
+  const extrasBase = Math.atan2(
+    extrasHome.position[2] - extrasHome.target[2],
+    extrasHome.position[0] - extrasHome.target[0]
+  )
+  const extrasViews = [0, 1, 2, 3].map((i) => {
+    const a = extrasBase + i * Math.PI / 2
+    return {
+      position: [
+        extrasHome.target[0] + Math.cos(a) * extrasRadius,
+        extrasHome.position[1],
+        extrasHome.target[2] + Math.sin(a) * extrasRadius
+      ],
+      target: [...extrasHome.target]
+    }
+  })
+  const extrasGo = (v, duration = 1.3) => flyTo({ ...v, duration: extrasReduce ? 0 : duration })
+
+  function extrasSnapshot() {
+    try {
+      if (postOK && composer) composer.render(0)
+      else renderer.render(scene, camera)
+      const url = renderer.domElement.toDataURL('image/png')
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `吉韵新程-${cfg.scene || '展馆'}-${Date.now()}.png`
+      a.click()
+    } catch (e) { /* 浏览器禁止取图时静默 */ }
+  }
+
+  const extrasBar = document.createElement('div')
+  extrasBar.className = 'stage-extras'
+  extrasBar.innerHTML = `
+    <div class="stage-extras__row">
+      <button type="button" data-act="tour">▶ 四视点巡览</button>
+      <button type="button" data-act="mark">＋ 记下视角</button>
+      <button type="button" data-act="snap">↓ 存画面</button>
+      <button type="button" data-act="reset">↺ 复位</button>
+    </div>
+    <div class="stage-extras__marks"></div>
+    <div class="stage-extras__hint">1–3 回看视角 · S 存画面 · R 复位</div>`
+
+  let extrasTouring = false
+  let extrasTimer = 0
+  let extrasIndex = 0
+  const extrasTourBtn = extrasBar.querySelector('[data-act="tour"]')
+  const extrasMarksEl = extrasBar.querySelector('.stage-extras__marks')
+
+  const renderExtrasMarks = () => {
+    extrasMarksEl.innerHTML = extrasMarks.length
+      ? extrasMarks.map((_, i) => `<button type="button" data-mark="${i}" aria-label="回看视角 ${i + 1}">${i + 1}</button>`).join('')
+      : '<span class="stage-extras__empty">还没有记下的视角</span>'
+  }
+  const stopExtrasTour = () => {
+    extrasTouring = false
+    window.clearTimeout(extrasTimer)
+    extrasTourBtn.textContent = '▶ 四视点巡览'
+  }
+  const stepExtrasTour = () => {
+    if (!extrasTouring) return
+    extrasGo(extrasViews[extrasIndex % extrasViews.length], 1.2)
+    extrasIndex++
+    extrasTimer = window.setTimeout(stepExtrasTour, extrasReduce ? 900 : 2600)
+  }
+  const toggleExtrasTour = () => {
+    if (extrasTouring) { stopExtrasTour(); return }
+    extrasTouring = true
+    extrasIndex = 0
+    extrasTourBtn.textContent = '⏸ 停止巡览'
+    stepExtrasTour()
+  }
+  const onExtrasClick = (e) => {
+    const b = e.target?.closest?.('button')
+    if (!b) return
+    if (b.dataset.mark !== undefined) {
+      const v = extrasMarks[Number(b.dataset.mark)]
+      if (v) { stopExtrasTour(); extrasGo(v, 1.1) }
+      return
+    }
+    switch (b.dataset.act) {
+      case 'tour': toggleExtrasTour(); break
+      case 'mark':
+        if (extrasMarks.length >= 3) extrasMarks.shift()
+        extrasMarks.push({ position: camera.position.toArray(), target: controls.target.toArray() })
+        renderExtrasMarks()
+        break
+      case 'snap': extrasSnapshot(); break
+      case 'reset': stopExtrasTour(); extrasGo(extrasHome, 1.2); break
+    }
+  }
+  const onExtrasKey = (e) => {
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
+    const k = e.key.toLowerCase()
+    if (k === 'r') { stopExtrasTour(); extrasGo(extrasHome, 1.2) }
+    else if (k === 's') extrasSnapshot()
+    else if (['1', '2', '3'].includes(k)) {
+      const v = extrasMarks[Number(k) - 1]
+      if (v) { stopExtrasTour(); extrasGo(v, 1.1) }
+    }
+  }
+  extrasBar.addEventListener('click', onExtrasClick)
+  window.addEventListener('keydown', onExtrasKey)
+  renderExtrasMarks()
+  container.appendChild(extrasBar)
+  cleanups.push(() => {
+    stopExtrasTour()
+    window.removeEventListener('keydown', onExtrasKey)
+    extrasBar.remove()
+  })
+
   return stage
 }
 
