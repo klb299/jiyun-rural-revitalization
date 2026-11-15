@@ -668,3 +668,20 @@ html.vt-active .reveal {
 /* 性能：大量 .reveal 常驻 will-change 会创建过多合成层，交给浏览器按需提升 */
 .reveal { will-change: auto; }
 .kinetic-char { will-change: transform, opacity; }
+
+/* ------------------------------------------------------------------ *
+ * GitHub 案例融合（2026-11-15）：逐字遮罩上推 + clipPath 图片揭示
+ * 来源见 PROJECT_HANDOVER.md 第三十一节。只改节奏，不换色板与字体。
+ * ------------------------------------------------------------------ */
+[data-reveal-img] { overflow: hidden; }
+.cinema-line { display: block; overflow: hidden; padding-bottom: 0.08em; }
+.cinema-line .kin-char { animation-name: charRise; }
+@keyframes charRise {
+  from { opacity: 0; transform: translateY(105%); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cinema-line .kin-char { animation: none !important; opacity: 1 !important; transform: none !important; }
+  [data-cinema-progress] { transform: scaleX(1) !important; }
+}
+

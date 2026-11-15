@@ -659,3 +659,11 @@ playwright-cli console 2>&1 | grep -E "Total messages|\[ERROR\]|\[WARNING\]"
 * **不要把所有程序化图版都换掉**：`hero-field.svg`（纯光影定稿）、`atlas.svg`、`panorama.svg` 与各展厅图版是既有设计语言，全换会散掉整体感。真实照片只补在「原本全是色块与文字」的页面。
 * 取图流程：Unsplash 搜索页需鉴权，用 `images.unsplash.com/photo-{id}?w=1000&q=72&fm=jpg` 直链批量拉候选 → 浏览器拼联系表 → 一次看清再挑 → 复拍验证内容。**ID 与内容必须看图确认**，凭编号猜会配错图（本轮下错过两次）。
 * 部署前置已就绪：`VITE_BASE` 可配 `base`，README 第八节有完整步骤；但推送与建仓库属于需要用户授权的外部动作，不要自行执行。
+
+## 18. 去冗杂与 GitHub 动效配方（2026-11-15）
+
+* **首页只保留 6 段**：首屏 / 墨色策展导语 / 三大 3D 展厅 / 金色平原影像 / 参观动线 / 绿底科普入口。再往下加整段之前先看全页长图，重复讲展馆结构的内容一律不补。改首页前先备份，绿底科普段曾因夹在待删区间被误删，靠备份切片插回。
+* **3D 是最大优势**：首页三张展厅卡用 `public/photos/3d-*.jpg` 真实 WebGL 截屏做封面，不用程序化 SVG。重截时先 `scrollIntoView` 让 canvas 进视口，否则 `clip` 截图会失败。
+* **动效配方集中在 `src/App.vue` 的 `initMotion()`**，来源：`kash-123/cinematic-scroll-landing`（clipPath morph / 图片视差 / 进度线）、`ChillMonger04/Axel-Vanhessche-Portfolio`（mask 揭示）、`flash-hero/GOATED-UI-SKILL`（磁吸）。统一用 `gsap.matchMedia('(min-width: 1024px) and (prefers-reduced-motion: no-preference)')`，路由切换要 `motionMedia?.revert()`。
+* **`[data-reveal-img]` 起始只裁 22%**，不要改回 100%：全页截图与打印会整块空白。首屏滚动镜头**不要 pin**，锁滚动会放大冗长感。
+* 精简后首页滚动 14.7 ms/帧，比精简前更快。加动效前先想「这段能不能删」，比加特效有效。

@@ -42,6 +42,7 @@ const motionMode = computed(() => {
 const scrollPct = ref(0)
 const showTop = ref(false)
 let motionContext = null
+let motionMedia = null
 let motionTimer = 0
 
 // 滚动事件可能高达每秒上百次，用 rAF 合并成一帧一次，
@@ -81,8 +82,10 @@ const onRouteEntered = () => {
 /** 滚动编排：视差、遮罩揭示、错峰入场、层叠卡深度 */
 function initMotion() {
   motionContext?.revert()
+  motionMedia?.revert()
   ScrollTrigger.getAll().forEach((t) => t.kill())
   motionContext = null
+  motionMedia = null
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
   const root = document.querySelector('main')
   if (!root) return
@@ -111,6 +114,70 @@ function initMotion() {
       gsap.set(el, { scale: 1 - Math.min(i, 3) * 0.018, y: -i * 5 })
     })
   }, root)
+
+  // ------------------------------------------------------------------
+  // GitHub 案例配方（来源见 PROJECT_HANDOVER 第三十一节）
+  // kash-123/cinematic-scroll-landing → references/motion-recipes.md：
+  //   clipPath inset() 图片 morph + 图片内 yPercent 视差 + 进度线 scaleX
+  // Axel Vanhessche Awwwards 作品 → SVG / clip mask 揭示
+  // GOATED-UI-SKILL → 磁吸微交互
+  // 只作用于桌面且未开启「减少动态效果」；移动端与降级模式看静态内容。
+  // ------------------------------------------------------------------
+  motionMedia = gsap.matchMedia()
+  motionMedia.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
+    const cleanups = []
+
+    // A. 实景照片：从遮罩里向上展开，图片本身做轻微视差
+    root.querySelectorAll('[data-reveal-img]').forEach((wrap) => {
+      const img = wrap.querySelector('img')
+      if (!img) return
+      // 只从底部 22% 起裁：全页截图 / 打印 / JS 未触发时图片仍完整可见，
+      // 滚动时保留最后一段向上展开的揭示感，不会出现整块空白。
+      gsap.fromTo(wrap, { clipPath: 'inset(0 0 22% 0)' }, {
+        clipPath: 'inset(0 0 0% 0)', ease: 'none',
+        scrollTrigger: { trigger: wrap, start: 'top 92%', end: 'top 42%', scrub: true }
+      })
+      gsap.fromTo(img, { yPercent: -5, scale: 1.1 }, {
+        yPercent: 5, scale: 1.1, ease: 'none',
+        scrollTrigger: { trigger: wrap, start: 'top bottom', end: 'bottom top', scrub: true }
+      })
+    })
+
+    // B. 首屏滚动镜头：金色圆远景化、标题上推淡出、进度线走满（不 pin，不锁滚动）
+    const cinema = root.querySelector('[data-cinema]')
+    if (cinema) {
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: cinema, start: 'top top', end: 'bottom 42%', scrub: 0.6 }
+      })
+      const seed = cinema.querySelector('[data-cinema-seed]')
+      const copy = cinema.querySelector('[data-cinema-copy]')
+      const line = cinema.querySelector('[data-cinema-progress]')
+      if (seed) tl.to(seed, { scale: 1.2, xPercent: 9, opacity: 0.42, ease: 'none' }, 0)
+      if (copy) tl.to(copy, { yPercent: -12, opacity: 0.18, ease: 'none' }, 0)
+      if (line) tl.fromTo(line, { scaleX: 0 }, { scaleX: 1, ease: 'none' }, 0)
+    }
+
+    // C. 磁吸按钮：主 CTA 轻微跟随光标，离开归位
+    root.querySelectorAll('[data-magnetic]').forEach((btn) => {
+      const xTo = gsap.quickTo(btn, 'x', { duration: 0.5, ease: 'power3.out' })
+      const yTo = gsap.quickTo(btn, 'y', { duration: 0.5, ease: 'power3.out' })
+      const onMove = (e) => {
+        const r = btn.getBoundingClientRect()
+        xTo((e.clientX - r.left - r.width / 2) * 0.16)
+        yTo((e.clientY - r.top - r.height / 2) * 0.18)
+      }
+      const onLeave = () => { xTo(0); yTo(0) }
+      btn.addEventListener('mousemove', onMove)
+      btn.addEventListener('mouseleave', onLeave)
+      cleanups.push(() => {
+        btn.removeEventListener('mousemove', onMove)
+        btn.removeEventListener('mouseleave', onLeave)
+        gsap.set(btn, { x: 0, y: 0 })
+      })
+    })
+
+    return () => cleanups.forEach((fn) => fn())
+  })
 
   ScrollTrigger.refresh()
 }

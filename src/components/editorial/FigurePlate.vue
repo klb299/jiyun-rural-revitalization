@@ -15,7 +15,7 @@ defineProps({
   <figure class="group">
     <div class="bezel" :class="dark ? 'bezel--ink' : ''">
       <div class="bezel-core">
-        <div class="relative" :class="ratio">
+        <div data-reveal-img class="relative overflow-hidden" :class="ratio">
           <img :src="src" :alt="alt" loading="lazy"
             class="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-[1.05]"
             :class="contain ? 'object-contain!' : ''" />

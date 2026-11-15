@@ -15,7 +15,7 @@ defineProps({
 
 <template>
   <figure class="relative overflow-hidden rounded-[26px] border border-[#1C1B18]/10 bg-[#FFFDF9]">
-    <div class="aspect-[16/6] sm:aspect-[16/5] overflow-hidden">
+    <div data-reveal-img class="aspect-[16/6] sm:aspect-[16/5] overflow-hidden">
       <img :src="src" :alt="alt" class="w-full h-full object-cover" loading="lazy" />
     </div>
     <figcaption class="flex flex-wrap items-center justify-between gap-x-8 gap-y-2 px-5 sm:px-6 py-4">

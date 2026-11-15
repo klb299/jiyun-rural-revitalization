@@ -17,7 +17,7 @@ defineProps({
 <template>
   <RouterLink :to="to" class="group block h-full rounded-[30px] overflow-hidden z-card lift"
     :class="dark ? 'card-ink' : 'card-linen'">
-    <div v-if="image" class="relative m-2.5 rounded-[22px] overflow-hidden bg-[#EFECE6]">
+    <div v-if="image" data-reveal-img class="relative m-2.5 rounded-[22px] overflow-hidden bg-[#EFECE6]">
       <img :src="image" :alt="title" loading="lazy" class="w-full aspect-[16/10] object-cover transition-transform duration-[1.4s] group-hover:scale-[1.07]" />
       <span class="absolute bottom-3 right-4 font-mono text-[10px] tracking-[0.2em] px-2 py-1 rounded-full bg-[#1C1B18]/80 text-[#F7F4EE]">{{ index }}</span>
     </div>

@@ -1171,3 +1171,52 @@ Awwwards 2026 与 GSAP 案例的共同手法：单一被坚持的编辑方向、
 * 六页真实照片实测：助农三页横幅 `naturalWidth` 正常，三处 FigurePlate 为 `loading="lazy"`，滚动到图版后 `naturalWidth=1000` 全部加载成功。VT `preludeAtVT:false` 未回退。
 * 截图 `.workbuddy/shots/photo-aid-note.png`、`verify-photos.png`。
 * 数量口径、色板、动效降级、WebGL 兜底、每页首屏不同、不换风格均未违反。
+
+## 🎬 三十一、2026-11-15 去冗杂 + GitHub 案例融合 + 3D 优势前置
+
+用户反馈「太冗杂、画面一般、没有新意创新、动效一般不高级」，要求去 GitHub 找案例融合进来，并强调无限 token。执行中追加提醒：**最大优势是 3D 模型演示和好看的前端页面**。
+
+### 0. 先说清判断（避免重蹈 11-08）
+
+11-08 已经去过 GitHub 出过两批共 6 张风格样张，全部被否，用户结论是「保持原样」。所以本轮**不换风格、不出样张批次**，只找可直接落地的**动效与交互手法**，而且优先服务 3D 展厅与首屏。
+
+### 1. GitHub 案例与融合方式（api.github.com 检索，均记录来源）
+
+| 来源 | 借鉴的具体手法 | 落地位置 |
+| --- | --- | --- |
+| `kash-123/cinematic-scroll-landing` → `references/motion-recipes.md` | `clipPath: inset()` 图片 morph、图片内 `yPercent` 视差、进度线 `scaleX`、`gsap.matchMedia` 降级 | `App.vue` 的 `[data-reveal-img]` 与 `[data-cinema-progress]` |
+| `ChillMonger04/Axel-Vanhessche-Portfolio`（Awwwards 获奖作品克隆） | SVG / clip mask 揭示而非整块淡入 | 真实照片与图版的遮罩展开 |
+| `flash-hero/GOATED-UI-SKILL`（474 条 Awwwards 配方） | 磁吸微交互 `gsap.quickTo` | `[data-magnetic]` 两个首屏 CTA |
+| `JeevaVenkidu/awwwards-style-portfolio-2026` | scrollytelling 序列帧 | **评估后未采用**：序列帧会明显加重首页，与「太卡」的反馈冲突 |
+
+配方实现全部集中在 `src/App.vue` 的 `initMotion()`，`motionMedia = gsap.matchMedia()` 只在 `(min-width: 1024px) and (prefers-reduced-motion: no-preference)` 下启用，路由切换时 `motionMedia?.revert()` 清理；磁吸事件监听在 cleanup 里移除。移动端与降级模式看静态内容，实测 `clipPath: none`。
+
+### 2. 删冗杂（首页 9 段 → 6 段）
+
+拍了 10281px 的全页长图做判断，删掉四处重复信息：
+
+* `02 非对称 Bento 数据带`（四个数字与策展导语的三张数据卡重复讲尺度）
+* `06 四大支柱实心色块 Bento`（与三大展厅主题重叠，且是信息密度最高的一段）
+* `06b 助农专题横带`（与 `07 参观动线` 重复，入口在导航里已有）
+* `08 收束`（「从一厘米开始」重复首屏主题）
+
+同时清理只服务已删区块的 `pillars / toneClass / toneCaption`，并把 `SectionHead` 编号改成 `01 / 03`。**中途误删了夹在 06b 与 07 之间的绿底科普入口段，从备份切片原样插回**（那段视觉与文字对比度都刚修过，不能丢）。最终 `HomeView.vue` 565 → **407 行**，首页 10281 → **7297px**，节奏变成 浅 → 墨 → 浅 → 金 → 浅 → 绿。
+
+### 3. 3D 优势前置（回应追加提醒）
+
+用浏览器直接截三个 WebGL 展厅的 canvas 渲染画面，存 `public/photos/3d-strata.jpg`、`3d-machinery.jpg`、`3d-sandbox.jpg`（合计约 315 KB），**替换首页三张展厅卡原本的程序化 SVG 封面**。评委在首页就能看到黑土剖面、红色拖拉机与彩色微缩沙盘的真实渲染结果，而不是抽象图版。三大 3D 展厅段完整保留并成为精简后的视觉主角。
+
+### 4. 动效落地细节
+
+* **逐字遮罩上推**：首屏 h1 两行包 `.cinema-line`（overflow hidden），`.kin-char` 改 `charRise`，从 `translateY(105%)` 推入，替换原来的逐字淡入。
+* **首屏滚动镜头**：`[data-cinema]` 上一条 scrub 时间线，金色圆 `scale 1.2 / xPercent 9 / opacity .42`、标题上推淡出、底部进度线 `scaleX 0→1`。**刻意不 pin**，不锁滚动、不增加页面高度。实测滚动后金圆 transform 与进度线都按预期变化。
+* **图片揭示**：`[data-reveal-img]` 覆盖首屏图版卡、三张展厅卡、平原影像、`FigurePlate`、`PhotoNote`。起始值从 `inset(0 0 100% 0)` 改为 **`inset(0 0 22% 0)`**：全页截图 / 打印 / JS 未触发时图片仍完整可见，不会出现整块空白，滚动时保留最后一段向上展开的揭示感。
+* **磁吸**：两个首屏 CTA 轻微跟随光标，实测 `matrix(1,0,0,1,8.33,-0.09)`。
+
+### 5. 验证
+
+* `npm run build` 零 Error 零 Warning；`npm run audit` **12/12 全绿**；对比度仍只剩 `/machinery-3d` 4 项已登记假阳性；320 / 390 / 430 × 4 页零横向溢出；控制台 0 Error 0 Warning。
+* 性能不降反升：首页滚动 **14.7 ms/帧、最大 67 ms、零卡顿帧**（上一轮 17.8 ms / 120 ms），因为删掉的四段同时减少了 DOM 与 ScrollTrigger。
+* reduced-motion 下 `[data-reveal-img]` 的 `clipPath` 为 `none`，图片完整显示。VT `preludeAtVT: false` 未回退。
+* 截图 `.workbuddy/shots/final-slim-hero.png`、`final-slim-galleries.png`、`final-slim-full2.png`、`3d-covers.png`、`slim-plain-photo2.png`。
+* 数量口径、色板、纯光影定稿、动效降级、WebGL 兜底、每页首屏不同、不换风格均未违反。
