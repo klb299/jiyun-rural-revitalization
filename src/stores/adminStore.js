@@ -92,7 +92,7 @@ const defaultVisits = [
 ]
 
 const defaultSettings = {
-  galleryTitle: '吉韵新程 · 黑土粮仓',
+  galleryTitle: '一厘米，四十公里',
   notice: '三大 3D 展厅已完成展览级视觉升级，黑土地表按东北真实农田地貌重做。',
   defaultQuality: 'high',
   autoTour: true,

@@ -691,3 +691,9 @@ playwright-cli console 2>&1 | grep -E "Total messages|\[ERROR\]|\[WARNING\]"
 * 3D 路由预取放在 `HomeView.onMounted` 且必须在 reduced-motion 的 `return` 之前。**不要用 `requestIdleCallback`**：本项目持续 rAF 时该回调可能一直不触发，实测定时触发才可靠。
 * 图片别盲目换 WebP：Unsplash 这批图 WebP 比 JPG 大，已回退到 JPG q62。加 `index.html` 全局 preload 会在其它路由报「preloaded but not used」警告。
 * 性能红线沿用：不给 `.reveal` 常驻 will-change、不加逐帧 scale scrub、不把 3D 沙盘放回首页。
+
+## 22. 命名口径（2026-11-16）
+
+* 作品主名 **一厘米，四十公里**，副名 **吉韵新程 · 黑土粮仓**。首屏大字按「一厘米，」/「四十公里」两行排，第一行墨色、第二行品牌金，逐字遮罩上推保持不变。
+* 页面标题由 `src/router/index.js` 的 `SITE` 统一拼后缀，`meta.title` 不要再写站名，否则会重复两遍。
+* 「黑土粮仓」有两层含义：**专有名词**（中科院科技会战、长春科研坐标、资料来源）必须原样保留；**旧品牌名**只在背景说明与分享卡 site_name 里作为副品牌出现。替换时逐处区分，不要全局查找替换。

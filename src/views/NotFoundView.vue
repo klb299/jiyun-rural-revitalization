@@ -93,7 +93,7 @@ const routes = [
     <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#F7F4EE]/12 bg-[#1C1B18]/70 py-2.5" aria-hidden="true">
       <div class="marquee-track">
         <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.625rem] tracking-[0.22em] text-[#F7F4EE]/80 whitespace-nowrap">
-          <span>黑土粮仓 · 吉韵新程</span><span class="text-[#C88A32]">✳</span>
+          <span>一厘米，四十公里</span><span class="text-[#C88A32]">✳</span>
           <span>黑土保育 / 智慧装备 / 稻作农时</span><span class="text-[#C88A32]">✳</span>
           <span>生态文旅 / 物产流通</span><span class="text-[#C88A32]">✳</span>
         </span>

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
-const SITE = '吉韵新程'
+const SITE = '一厘米，四十公里'
 const DEFAULT_DESC = '以 Vue 3 与 Three.js 构建的乡村振兴数字展馆，包含黑土地质标本、北斗智慧农机、松辽平原生态沙盘三座实时 3D 展厅与互动科普实验室。'
 
 const routes = [
@@ -10,7 +10,7 @@ const routes = [
     name: 'Home',
     component: HomeView,
     meta: {
-      title: '序厅 · 吉韵新程 3D 数字化展馆',
+      title: '序厅 · 总览',
       description: '吉林现代数字乡村振兴与生态农业 3D 展馆序厅，从黑土粮仓出发，进入微观土壤、工业装备与宏观平原三条参观动线。'
     }
   },

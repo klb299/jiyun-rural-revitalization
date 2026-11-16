@@ -48,7 +48,7 @@ const columns = [
     <div class="marquee border-b border-[#F7F4EE]/14 py-3.5" aria-hidden="true">
       <div class="marquee-track">
         <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-7 pr-7 font-editorial text-lg sm:text-2xl text-[#F7F4EE]/80 whitespace-nowrap">
-          <span>黑土粮仓 · 吉韵新程</span><span class="text-[#C88A32]">✳</span>
+          <span>一厘米，四十公里</span><span class="text-[#C88A32]">✳</span>
           <span>BLACK SOIL ATLAS</span><span class="text-[#C88A32]">✳</span>
           <span>松辽平原 · 数字展陈</span><span class="text-[#C88A32]">✳</span>
           <span>JILIN DIGITAL RURAL MUSEUM</span><span class="text-[#C88A32]">✳</span>
@@ -80,7 +80,7 @@ const columns = [
         <div class="col-span-2 md:col-span-1">
           <div class="flex items-center gap-3 mb-5">
             <div class="w-9 h-9 bg-[#C88A32] text-[#1C1B18] flex items-center justify-center font-editorial font-bold">吉</div>
-            <div class="font-editorial font-bold text-[#F7F4EE]">吉韵新程 · 黑土粮仓</div>
+            <div class="font-editorial font-bold text-[#F7F4EE]">一厘米，四十公里</div>
           </div>
           <p class="text-[0.75rem] leading-[1.9] text-[#F7F4EE]/90 max-w-xs">
             长春市高校大学生网页设计作品。以 Vue 3 与 Three.js 构建吉林现代数字乡村振兴展陈，把黑土保育、智慧农机与生态非遗放进同一座可漫游的线上美术馆。

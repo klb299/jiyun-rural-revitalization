@@ -79,7 +79,7 @@ const playNarration = () => {
   window.speechSynthesis.cancel()
   if (appStore.isAudioPlaying) {
     const utter = new SpeechSynthesisUtterance(
-      '欢迎参观吉韵新程，吉林现代数字乡村振兴与生态农业数字展馆。这里是世界三大黑土带之一，中国现代农业的坚实大粮仓。'
+      '欢迎来到《一厘米，四十公里》，吉韵新程黑土数字展馆。这里是世界三大黑土带之一，中国现代农业的坚实大粮仓。'
     )
     utter.lang = 'zh-CN'
     utter.rate = 0.95
@@ -105,7 +105,7 @@ const playNarration = () => {
           吉
         </div>
         <div class="hidden sm:block">
-          <div class="font-editorial font-bold text-[0.9375rem] leading-tight tracking-wide text-[#1C1B18]">吉韵新程 · 黑土粮仓</div>
+          <div class="font-editorial font-bold text-[0.9375rem] leading-tight tracking-wide text-[#1C1B18]">一厘米，四十公里</div>
           <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#6E6960] mt-0.5">JILIN DIGITAL RURAL MUSEUM</div>
         </div>
       </RouterLink>

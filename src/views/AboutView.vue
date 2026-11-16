@@ -191,7 +191,7 @@ const references = [
       <div class="absolute bottom-0 left-0 right-0 marquee border-t border-[#1C1B18]/12 bg-[#1C1B18] py-2.5" aria-hidden="true">
         <div class="marquee-track">
           <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.625rem] tracking-[0.22em] text-[#F7F4EE]/86 whitespace-nowrap">
-            <span>黑土粮仓 · 吉韵新程</span><span class="text-[#C88A32]">✳</span>
+            <span>一厘米，四十公里</span><span class="text-[#C88A32]">✳</span>
             <span>长春市高校大学生网页设计作品</span><span class="text-[#C88A32]">✳</span>
             <span>科教支撑 / 中科院东北地理所 · 吉林农大 · 长春农高区</span><span class="text-[#C88A32]">✳</span>
           </span>

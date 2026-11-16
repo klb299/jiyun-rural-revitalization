@@ -157,13 +157,13 @@ onUnmounted(() => endPrelude())
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           <div class="lg:col-span-7">
-            <h1 data-cinema-copy class="display-1 text-[#1C1B18]" aria-label="黑土粮仓 吉韵新程">
+            <h1 data-cinema-copy class="display-1 text-[#1C1B18]" aria-label="一厘米，四十公里">
               <span class="cinema-line">
-                <span v-for="(ch, i) in Array.from('黑土粮仓')" :key="'a' + i" class="kin-char"
+                <span v-for="(ch, i) in Array.from('一厘米，')" :key="'a' + i" class="kin-char"
                   :style="{ animationDelay: (0.1 + i * 0.07) + 's' }">{{ ch }}</span>
               </span>
               <span class="cinema-line block text-[#C88A32]">
-                <span v-for="(ch, i) in Array.from('吉韵新程')" :key="'b' + i" class="kin-char"
+                <span v-for="(ch, i) in Array.from('四十公里')" :key="'b' + i" class="kin-char"
                   :style="{ animationDelay: (0.42 + i * 0.07) + 's' }">{{ ch }}</span>
               </span>
             </h1>

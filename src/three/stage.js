@@ -1,5 +1,5 @@
 /**
- * 吉韵新程 · 黑土粮仓 — 展览级 3D 舞台
+ * 一厘米，四十公里 — 展览级 3D 舞台
  *
  * 统一提供：暖白画廊 IBL 环境反射、Neutral 色彩映射、柔和三点布光、
  * 半分辨率 GTAO 环境光遮蔽、双层柔和接触阴影、悬停射线拾取、
@@ -565,7 +565,7 @@ export function createStage(container, options = {}) {
       const url = renderer.domElement.toDataURL('image/png')
       const a = document.createElement('a')
       a.href = url
-      a.download = `吉韵新程-${cfg.scene || '展馆'}-${Date.now()}.png`
+      a.download = `一厘米四十公里-${cfg.scene || '展馆'}-${Date.now()}.png`
       a.click()
     } catch (e) { /* 浏览器禁止取图时静默 */ }
   }
