@@ -73,6 +73,8 @@
 
 **11-19 16:35 最新状态（接手以本段为准）**：绿底卡片「看不清」的真正根因确认：`Reveal` 默认淡入的 0.45s 中间态，白字半透明叠深绿被读成黑字，不是配色也不是缓存。`Reveal` 新增 `variant="solid"`（只位移不淡入），首页绿底科普入口 4 个 `Reveal` 全改 solid，滚动后 80ms 实拍 `opacity: 1` 且文字清晰。`npm run audit` 12/12 全绿、build 零警告、控制台 0。详见 `PROJECT_HANDOVER.md` 修复三十七节与 `VISUAL_HANDOFF.md` 第 24 节。
 
+**11-19 21:15 最新状态（接手以本段为准）**：Edge 与 Chrome 同页异色的真正根因是项目没声明 `color-scheme`，Edge 在系统深色主题下自动反转网页文字。已加 HTML meta 与 CSS `:root { color-scheme: light }` 双保险；模拟深浅两种系统主题验证文字始终为近白。`npm run audit` 12/12 全绿、build 零警告。详见 `PROJECT_HANDOVER.md` 修复三十八节与 `VISUAL_HANDOFF.md` 第 25 节。
+
 ### 定稿 A：入场时长与 VT 叠加（2026-11-12 19:50）
 
 **两个决定**

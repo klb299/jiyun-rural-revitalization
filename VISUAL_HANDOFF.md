@@ -710,3 +710,8 @@ playwright-cli console 2>&1 | grep -E "Total messages|\[ERROR\]|\[WARNING\]"
 * 深底（绿色 / 墨色）区块里的文字**不要用 `Reveal` 默认淡入**：半透明白字叠深底会读成黑字，用户滚动经过时尤其明显。用 `variant="solid"`，只做 16px 位移，始终 `opacity: 1`。
 * 验证这类反馈要复现用户动作：滚到目标位置后 80ms 抓拍并检查 `getComputedStyle(el).opacity`，不要等 3 秒动画播完再判断。
 * 上一轮误判成浏览器缓存，是因为验证时多等了 900ms 躲开中间态。记住这个坑。
+
+## 25. 锁定浅色配色（2026-11-19）
+
+* `index.html` 的 `<meta name="color-scheme" content="light" />` 与 `style.css` 的 `:root { color-scheme: light; }` **不要删**。删掉后 Edge 会在系统深色主题下自动反转网页文字，出现「Chrome 白字、Edge 黑字」的同页异色。
+* 排查「文字颜色不对」时，如果跨浏览器表现不同，优先查 `color-scheme` / 强制深色模式，而不是改具体文字类、加版本号或纠结缓存。

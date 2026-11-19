@@ -1420,3 +1420,13 @@ html { font-size: clamp(16px, 0.4vw + 10.2px, 20px); }
 实机在滚动停在绿底区块后 **80ms** 抓拍：4 个 `.reveal` 全部 `opacity: 1`，三张卡标题与正文完全清晰（`.workbuddy/shots/green-instant.png`），与用户截图的暗淡状态完全不同。`npm run build` 零 Error 零 Warning；`npm run audit` **12/12 全绿**；控制台 0 Error 0 Warning。
 
 **教训**：用户说「看不清」时，除了配色和缓存，还必须检查**动画中间态**。验证要复现用户动作（滚到即拍），不能只等动画播完再取计算色。
+
+## 修复 三十八、2026-11-19 Edge 与 Chrome 同页异色
+
+用户反馈同一个网址 Chrome 显示白字、Edge 显示黑字。这解释了前面几轮「改了没变化」的怪象：代码和缓存都没问题，是 **Edge 在系统深色主题下自动反转网页文字颜色**。项目此前完全没有声明 `color-scheme`，Edge 便按系统偏好把页面当深色处理，主动改写浅色文字；Chrome 默认不这么做。
+
+修复：`index.html` 加 `<meta name="color-scheme" content="light" />`，`src/style.css` 顶部加 `:root { color-scheme: light; }`，双保险锁定浅色配色，显式禁止浏览器自动深色化。
+
+验证：playwright 模拟 `colorScheme: 'dark'` 与 `'light'` 两种系统主题，根部 `colorScheme` 均为 `light`，绿底标题计算色两种情况下都是 `rgb(247, 244, 238)`。`npm run build` 零警告，`npm run audit` 12/12 全绿。
+
+注：前面几轮我先后误判为入场中间态和浏览器缓存，都不对；真正的判据是「同一代码跨浏览器表现不同」，应直接查 `color-scheme` 与强制深色设置。
