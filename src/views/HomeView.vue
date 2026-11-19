@@ -386,7 +386,7 @@ onUnmounted(() => endPrelude())
       <div data-parallax="-10" class="absolute -right-[8%] -bottom-[40%] w-[34vw] h-[34vw] min-w-[20rem] min-h-[20rem] rounded-full pointer-events-none"
         style="background: radial-gradient(circle, rgba(200,138,50,.18), transparent 70%)"></div>
       <div class="relative max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        <Reveal class="lg:col-span-5">
+        <Reveal variant="solid" class="lg:col-span-5">
           <div class="eyebrow mb-6">INTERACTIVE SCIENCE LAB / 互动科普实验室</div>
           <h2 class="display-2 text-[#F7F4EE]">看得见，<br /><span class="text-[#E8BC6E]">才谈得上理解</span></h2>
           <p class="lede text-[#FFFDF9]/95 mt-7">
@@ -397,7 +397,7 @@ onUnmounted(() => endPrelude())
           </RouterLink>
         </Reveal>
         <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-4" data-stagger>
-          <Reveal v-for="(lab, i) in [
+          <Reveal variant="solid" v-for="(lab, i) in [
             { no: '01', k: 'SOIL', t: '黑土团粒', d: '团粒、孔隙、菌丝与结核，点击即读档案' },
             { no: '02', k: 'RICE', t: '稻作五阶段', d: '拖动时间轴，看一株稻从育秧到成熟' },
             { no: '03', k: 'BEIDOU', t: '北斗 RTK', d: '改卫星数与遮挡，看厘米级精度怎么来' }

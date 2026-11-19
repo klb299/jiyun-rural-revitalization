@@ -1400,3 +1400,23 @@ html { font-size: clamp(16px, 0.4vw + 10.2px, 20px); }
 `npm run build` 零 Error 零 Warning；`npm run audit` **12/12 全绿**；控制台 0 Error 0 Warning；实机截图 `.workbuddy/shots/check-green-text.png`（绿底白字清晰）、`admin-fixed.png`（后台滚动后标题条不遮挡）。首页、白皮书、认养、痛点、沙盘、展览地图、驾驶舱七页绿底扫描无真实深色字。
 
 **给用户的话**：当前 dist 已经没问题，若仍看到旧画面请硬刷新（Ctrl+F5）或重启预览服务；这两层加固保证以后也不会再出现绿底黑字与后台挡字。
+
+## 修复 三十七、2026-11-19 绿底卡片入场中间态发暗（真正根因）
+
+上一轮我判断用户截图是旧缓存，用户再次发截图并问「为啥没变化」。新截图里导航和页脚都是新名，**证明不是缓存**，而是我自己误判。
+
+### 真正根因
+
+首页绿底科普入口区块的三张卡用了 `Reveal` 默认变体：`opacity: 0 → 1` 淡入 + `delay` 90ms 递增。用户滚动经过时正好落在 0.45s 过渡的中间态，白字半透明叠在深绿底上，看起来就是「黑字 / 看不清」。我之前取 computed color 时等了 3.6 秒又额外滚动等待，把中间态躲过去了，所以误判成缓存。
+
+### 修法
+
+* `src/components/editorial/Reveal.vue` 新增 `variant="solid"`：组件 class 加 `reveal--solid`。
+* `src/style.css` 加 `.reveal--solid { opacity: 1; }`：只保留 16px 位移动效，**不碰透明度**，文字任何时刻都是完全不透明。
+* `src/views/HomeView.vue` 绿底科普入口区块内 4 个 `Reveal`（左侧文案 + 三张卡）全部改 `variant="solid"`。其它页面保持原有淡入，不扩大改动面。
+
+### 验证
+
+实机在滚动停在绿底区块后 **80ms** 抓拍：4 个 `.reveal` 全部 `opacity: 1`，三张卡标题与正文完全清晰（`.workbuddy/shots/green-instant.png`），与用户截图的暗淡状态完全不同。`npm run build` 零 Error 零 Warning；`npm run audit` **12/12 全绿**；控制台 0 Error 0 Warning。
+
+**教训**：用户说「看不清」时，除了配色和缓存，还必须检查**动画中间态**。验证要复现用户动作（滚到即拍），不能只等动画播完再取计算色。

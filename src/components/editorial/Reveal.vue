@@ -54,7 +54,9 @@ onUnmounted(() => {
     class="reveal"
     :class="{
       'reveal--left': variant === 'left',
-      'reveal--scale': variant === 'scale'
+      'reveal--scale': variant === 'scale',
+      'reveal--solid': variant === 'solid',
+      'reveal--solid': variant === 'solid'
     }"
   >
     <slot />

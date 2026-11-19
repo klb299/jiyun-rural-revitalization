@@ -481,6 +481,8 @@ body [data-soil-band] .text-\[\#C88A32\] { color: #F0C275; }
   will-change: opacity, transform;
 }
 .reveal.is-in { opacity: 1; transform: none; }
+/* 深底区块用 solid：只做位移不淡入，滚动经过时文字任何时刻都不透明 */
+.reveal--solid { opacity: 1; }
 .reveal--left { transform: translate3d(-16px, 0, 0) scale(0.995); }
 .reveal--scale { transform: scale(0.97); }
 

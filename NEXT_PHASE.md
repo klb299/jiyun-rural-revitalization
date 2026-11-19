@@ -71,6 +71,8 @@
 
 **11-19 16:10 最新状态（接手以本段为准）**：处理绿底文字与后台遮挡反馈。实机取计算色确认首页绿底卡片已是白字、后台 header 已 sticky 且不遮挡，用户看到的是入场中间态或旧缓存；仍按要求加固：`style.css` 绿底兜底规则补无斜杠 `text-[#1C1B18]` 并排除浅底卡与按钮，`AdminView` header 改 `bg-[#F7F4EE]/98 z-20`。`npm run audit` 12/12 全绿、build 零警告、控制台 0。详见 `PROJECT_HANDOVER.md` 修复三十六节与 `VISUAL_HANDOFF.md` 第 23 节。
 
+**11-19 16:35 最新状态（接手以本段为准）**：绿底卡片「看不清」的真正根因确认：`Reveal` 默认淡入的 0.45s 中间态，白字半透明叠深绿被读成黑字，不是配色也不是缓存。`Reveal` 新增 `variant="solid"`（只位移不淡入），首页绿底科普入口 4 个 `Reveal` 全改 solid，滚动后 80ms 实拍 `opacity: 1` 且文字清晰。`npm run audit` 12/12 全绿、build 零警告、控制台 0。详见 `PROJECT_HANDOVER.md` 修复三十七节与 `VISUAL_HANDOFF.md` 第 24 节。
+
 ### 定稿 A：入场时长与 VT 叠加（2026-11-12 19:50）
 
 **两个决定**
