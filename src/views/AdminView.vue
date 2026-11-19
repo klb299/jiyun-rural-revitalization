@@ -260,7 +260,7 @@ const stats = computed(() => [
     </aside>
 
     <main class="flex-1 min-w-0">
-      <header class="sticky top-[5.5rem] z-10 h-16 border-b border-[#1C1B18]/8 flex items-center justify-between px-5 md:px-8 bg-[#F7F4EE]/90 backdrop-blur">
+      <header class="sticky top-[5.5rem] z-20 h-16 border-b border-[#1C1B18]/8 flex items-center justify-between px-5 md:px-8 bg-[#F7F4EE]/98 backdrop-blur">
         <div class="flex items-center gap-2 text-xs">
           <span class="text-[#6E6960] font-mono">ADMIN</span>
           <span class="text-[#C8C1B4]">/</span>

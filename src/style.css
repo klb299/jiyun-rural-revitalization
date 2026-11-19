@@ -673,6 +673,13 @@ html.vt-active .reveal {
   color: #F0C275;
 }
 
+/* 绿色背景上不再出现深墨字：兜底覆盖纯 text-[#1C1B18]，
+   但排除浅底卡片 / 浅色按钮，避免把浅底上的正确墨字改白。 */
+:is([data-tone="dark"], [class*="bg-[#2E5A44]"])
+  [class*="text-[#1C1B18]"]:not([class*="bg-[#F"]):not(.mag-btn):not(.mag-btn--light):not(.card-linen) {
+  color: rgba(255, 253, 249, 0.96);
+}
+
 /* 性能：大量 .reveal 常驻 will-change 会创建过多合成层，交给浏览器按需提升 */
 .reveal { will-change: auto; }
 .kinetic-char { will-change: transform, opacity; }
@@ -705,7 +712,6 @@ html.vt-active .reveal {
 @media (prefers-reduced-motion: reduce) {
   .lab-sweep, .lab-cell, .lab-badge { transition: none !important; animation: none !important; }
 }
-
 
 /* ------------------------------------------------------------------ *
  * 3D 展厅通用交互工具条：顺序导览 / 视角书签 / 快照 / 复位
