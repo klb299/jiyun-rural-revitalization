@@ -82,6 +82,8 @@ const columns = [
             <div class="w-9 h-9 bg-[#C88A32] text-[#1C1B18] flex items-center justify-center font-editorial font-bold">吉</div>
             <div class="font-editorial font-bold text-[#F7F4EE]">一厘米，四十公里</div>
           </div>
+          <p class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#C88A32]/85 mt-3">BUILD 2026.11.19 · GREEN TEXT FIX</p>
+          <p class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#C88A32]/85 mt-3">BUILD 2026.11.19 · GREEN TEXT FIX</p>
           <p class="text-[0.75rem] leading-[1.9] text-[#F7F4EE]/90 max-w-xs">
             长春市高校大学生网页设计作品。以 Vue 3 与 Three.js 构建吉林现代数字乡村振兴展陈，把黑土保育、智慧农机与生态非遗放进同一座可漫游的线上美术馆。
           </p>
