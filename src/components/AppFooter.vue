@@ -60,17 +60,17 @@ const columns = [
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end pb-16 border-b border-[#F7F4EE]/14">
         <div class="lg:col-span-8">
           <div class="eyebrow mb-6">CURATOR'S NOTE / 策展手记</div>
-          <p class="display-2 text-[#F7F4EE] max-w-3xl">
-            把一米土层，放进一只展柜。<br />
-            把一整片平原，收进一条动线。
+          <p class="display-2 text-[#F7F4EE] max-w-4xl" style="font-size: clamp(2rem, 4vw, 3.6rem)">
+            <span class="whitespace-nowrap">把一米土层，</span><span class="whitespace-nowrap">放进一只展柜。</span><br />
+            <span class="text-[#E8BC6E]"><span class="whitespace-nowrap">把一整片平原，</span><span class="whitespace-nowrap">收进一条动线。</span></span>
           </p>
         </div>
         <div class="lg:col-span-4 lg:text-right">
           <RouterLink
             to="/sandbox-3d"
-            class="btn-on-ink inline-flex px-6 py-3.5 rounded-xl text-xs font-bold"
+            class="mag-btn mag-btn--gold"
           >
-            进入 3D 全景沙盘 <ArrowUpRight :size="14" class="arrow-shift" />
+            <span>进入 3D 全景沙盘</span><span class="mag-btn__island"><ArrowUpRight :size="16" /></span>
           </RouterLink>
         </div>
       </div>
@@ -79,24 +79,22 @@ const columns = [
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 py-14">
         <div class="col-span-2 md:col-span-1">
           <div class="flex items-center gap-3 mb-5">
-            <div class="w-9 h-9 bg-[#C88A32] text-[#1C1B18] flex items-center justify-center font-editorial font-bold">吉</div>
+            <div class="w-9 h-9 rounded-xl bg-[#C88A32] text-[#1C1B18] flex items-center justify-center font-editorial font-bold">吉</div>
             <div class="font-editorial font-bold text-[#F7F4EE]">一厘米，四十公里</div>
           </div>
-          <p class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#C88A32]/85 mt-3">BUILD 2026.11.19 · GREEN TEXT FIX</p>
-          <p class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#C88A32]/85 mt-3">BUILD 2026.11.19 · GREEN TEXT FIX</p>
-          <p class="text-[0.75rem] leading-[1.9] text-[#F7F4EE]/90 max-w-xs">
+          <p class="text-[0.75rem] leading-[1.9] text-[#F7F4EE]/80 max-w-xs mt-4">
             长春市高校大学生网页设计作品。以 Vue 3 与 Three.js 构建吉林现代数字乡村振兴展陈，把黑土保育、智慧农机与生态非遗放进同一座可漫游的线上美术馆。
           </p>
           <div class="flex flex-wrap gap-2 mt-5">
-            <span v-for="t in ['Vue 3.5', 'Three.js', 'ECharts', 'WebGL']" :key="t" class="px-2.5 py-1 border border-[#F7F4EE]/18 text-[0.625rem] font-mono text-[#F7F4EE]/80">{{ t }}</span>
+            <span v-for="t in ['Vue 3.5', 'Three.js', 'ECharts', 'WebGL']" :key="t" class="px-2.5 py-1 rounded-full border border-[#F7F4EE]/16 bg-[#F7F4EE]/5 text-[0.625rem] font-mono text-[#F7F4EE]/80">{{ t }}</span>
           </div>
         </div>
         <div v-for="col in columns" :key="col.title">
           <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324] mb-2">{{ col.caption }}</div>
           <h4 class="text-sm font-bold text-[#F7F4EE] mb-5">{{ col.title }}</h4>
-          <ul class="space-y-2.5">
+          <ul class="space-y-1">
             <li v-for="l in col.links" :key="l.to + l.name">
-              <RouterLink :to="l.to" class="link-line inline-flex items-center min-h-[2.25rem] text-[0.75rem] text-[#F7F4EE]/90 hover:text-[#F7F4EE] transition-colors">
+              <RouterLink :to="l.to" class="footer-link inline-flex items-center min-h-[2rem] text-[0.78rem] text-[#F7F4EE]/75 hover:text-[#F0C275]">
                 {{ l.name }}
               </RouterLink>
             </li>

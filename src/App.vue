@@ -16,8 +16,11 @@ gsap.registerPlugin(ScrollTrigger)
 const route = useRoute()
 const appStore = useAppStore()
 
+// 独立双端壳页面（App 体验舱、全屏 App、双端同屏、独立后台）不使用展馆悬浮导航与页脚
+const isStandaloneShell = computed(() => Boolean(route.meta?.standaloneShell))
+
 // 13 个展陈单元页才出现动线续接带；序厅、地图、白皮书、后台与 404 不显示。
-const isTrailPage = computed(() => !!unitOf(route.path))
+const isTrailPage = computed(() => !isStandaloneShell.value && !!unitOf(route.path))
 
 // 沿动线往回走时，新页从左侧轻微滑入，与「向前推进」的默认转场区分开。
 const enterFromClass = computed(() =>
@@ -73,8 +76,22 @@ const onResize = () => {
 
 const toTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 
+// 旧页面退场完毕、新页面挂载前立刻回到顶部（使用 instant 绕开 html 的 smooth 滚动，
+// 防止 out-in 过渡期间滚动动画被中断导致停留在半腰）
+const onRouteBeforeEnter = () => {
+  if (route.hash) return
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  document.documentElement.scrollTop = 0
+  document.body.scrollTop = 0
+  scrollPct.value = 0
+  showTop.value = false
+}
+
 // 转场结束再清空方向，之后的普通跳转回到默认过渡
 const onRouteEntered = () => {
+  if (!route.hash && window.scrollY > 0) {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }
   scheduleMotion(60)
   appStore.clearTrail()
 }
@@ -211,7 +228,15 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#F7F4EE] text-[#1C1B18] flex flex-col relative paper-grain">
+  <!-- 独立双端壳：移动端 App / 双端同屏 / 后台管理系统（零遮挡、零嵌套 main、零横向溢出） -->
+  <div v-if="isStandaloneShell" class="min-h-[100dvh] w-full max-w-full overflow-x-clip bg-[#F6F5F0] text-[#1C1B18]">
+    <router-view v-slot="{ Component }">
+      <component :is="Component" :key="route.fullPath" />
+    </router-view>
+  </div>
+
+  <!-- 3D 数字展馆壳：保留原有艺术展馆体验 -->
+  <div v-else class="min-h-screen bg-[#F7F4EE] text-[#1C1B18] flex flex-col relative paper-grain">
     <CustomCursor />
     <a class="skip-link" href="#main-content">跳到展陈主内容</a>
 
@@ -229,6 +254,7 @@ onUnmounted(() => {
           leave-active-class="route-leave-active"
           :leave-to-class="leaveToClass"
           mode="out-in"
+          @before-enter="onRouteBeforeEnter"
           @after-enter="onRouteEntered"
         >
           <component :is="Component" :key="route.fullPath" />
@@ -241,9 +267,7 @@ onUnmounted(() => {
       </Transition>
     </main>
 
-    <!-- 后台是独立控制台：AdminView 用低于悬浮导航的层级铺满视口，
-         若同时渲染全站页脚，marquee 与展陈区块会从登录卡下方露出来。 -->
-    <AppFooter v-if="route.name !== 'Admin'" />
+    <AppFooter />
 
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -252,7 +276,7 @@ onUnmounted(() => {
       leave-to-class="opacity-0 translate-y-3"
     >
       <button v-if="showTop" @click="toTop"
-        class="fixed bottom-6 right-5 sm:right-8 z-40 w-11 h-11 rounded-full bg-[#1C1B18] text-[#F7F4EE] flex items-center justify-center shadow-lg hover:bg-[#C88A32] hover:text-[#1C1B18] transition-colors duration-300 cursor-pointer"
+        class="fixed bottom-6 right-5 sm:right-8 z-40 to-top w-11 h-11 rounded-full text-[#F7F4EE] flex items-center justify-center hover:bg-[#C88A32] hover:text-[#1C1B18] transition-colors duration-300 cursor-pointer"
         aria-label="回到顶部">
         <ArrowUp :size="16" />
       </button>

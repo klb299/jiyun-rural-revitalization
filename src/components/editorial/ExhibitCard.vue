@@ -22,13 +22,13 @@ defineProps({
       <span class="absolute bottom-3 right-4 font-mono text-[0.625rem] tracking-[0.2em] px-2 py-1 rounded-full bg-[#1C1B18]/80 text-[#F7F4EE]">{{ index }}</span>
     </div>
     <div class="relative p-6 sm:p-8">
-      <span class="absolute -top-6 right-4 font-editorial font-bold select-none pointer-events-none"
+      <span class="absolute -top-2 right-5 font-editorial font-bold select-none pointer-events-none"
         :class="dark ? 'text-[#F7F4EE]/8' : 'text-[#1C1B18]/7'"
-        style="font-size: 7rem; line-height: 1">{{ index.slice(-2) }}</span>
-      <div class="relative flex items-center justify-between gap-3 mb-5">
+        style="font-size: 5.5rem; line-height: 1">{{ index.slice(-2) }}</span>
+      <div class="relative flex flex-wrap items-center gap-x-3 gap-y-2 mb-5 pr-16">
         <span class="font-mono text-[0.625rem] tracking-[0.2em] px-2.5 py-1 rounded-full"
           :class="dark ? 'bg-[#C88A32]/20 text-[#E1B265]' : 'bg-[#C88A32]/14 text-[#8A6324]'">{{ tag }}</span>
-        <span class="font-mono text-[0.625rem] tracking-[0.12em]" :class="dark ? 'text-[#F7F4EE]/80' : 'text-[#6E6960]'">{{ meta }}</span>
+        <span class="font-mono text-[0.625rem] tracking-[0.12em] whitespace-nowrap" :class="dark ? 'text-[#F7F4EE]/80' : 'text-[#6E6960]'">{{ meta }}</span>
       </div>
       <h3 class="display-3 mb-3 relative transition-colors duration-500"
         :class="dark ? 'text-[#F7F4EE] group-hover:text-[#E1B265]' : 'text-[#1C1B18] group-hover:text-[#8A6324]'">{{ title }}</h3>

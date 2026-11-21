@@ -230,7 +230,7 @@ const partSpan = ['md:col-span-5', 'md:col-span-4', 'md:col-span-3', 'md:col-spa
       <!-- 工业血脉：横向刻度时间轴 -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mt-24 pt-16 border-t border-[#1C1B18]/12">
         <Reveal class="lg:col-span-5">
-          <FigurePlate src="/art/machine.svg" alt="农机轮组与定位天线线稿图版" index="PLATE 02"
+          <FigurePlate src="/art-custom/changchun-tractor.jpg" alt="农机轮组与定位天线线稿图版" index="PLATE 02"
             caption="赤红机罩、金色轮毂与碟形 RTK 天线，构成展馆里最鲜明的一组工业色。" credit="AUTONOMOUS AGRI-ROBOTICS" />
         </Reveal>
         <div class="lg:col-span-7">

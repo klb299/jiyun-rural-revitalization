@@ -195,13 +195,13 @@ const goToAct = (i) => {
 
       <!-- 当前幕详情 -->
       <Reveal :delay="160" class="mt-12">
-        <div class="border border-[#1C1B18]/12 bg-[#FFFDF9]/80 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
+        <div class="rounded-3xl border border-[#1C1B18]/10 bg-[#FFFDF9]/88 shadow-[0_28px_70px_-38px_rgba(28,27,24,0.34)] grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
           <div class="lg:col-span-8 p-7 sm:p-10">
             <div class="flex flex-wrap items-center gap-3 mb-6">
-              <span class="px-3 py-1 bg-[#C88A32]/12 text-[#8A6324] font-mono text-[0.625rem] tracking-[0.18em]">{{ steps[currentStep].badge }}</span>
+              <span class="px-3 py-1 rounded-full bg-[#C88A32]/14 text-[#8A6324] font-mono text-[0.625rem] tracking-[0.18em]">{{ steps[currentStep].badge }}</span>
               <span class="font-mono text-[0.625rem] tracking-[0.16em] text-[#6E6960]">{{ steps[currentStep].stage }}</span>
             </div>
-            <h3 class="display-2 mb-5">{{ steps[currentStep].title }}</h3>
+            <h3 class="font-editorial font-bold text-2xl sm:text-4xl leading-snug text-[#1C1B18] mb-5">{{ steps[currentStep].title }}</h3>
             <p class="lede max-w-2xl">{{ steps[currentStep].desc }}</p>
             <div class="mt-8 p-5 border-l-2 border-[#C88A32] bg-[#EFECE6]/60 flex items-start gap-4">
               <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#6E6960] pt-1">KEY METRIC</span>

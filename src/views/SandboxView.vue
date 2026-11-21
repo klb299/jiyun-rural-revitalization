@@ -101,7 +101,7 @@ const legend = [
             <div class="bezel bezel--ink">
               <div class="bezel-core relative">
                 <div class="relative aspect-[4/3.4] overflow-hidden bg-[#221E19]">
-                  <img src="/art/diorama.svg" alt="松辽平原田块与水系测绘图版" class="w-full h-full object-cover opacity-90" />
+                  <img src="/art-hd/songliao-plain.jpg" alt="松辽平原田块与水系测绘图版" class="w-full h-full object-cover opacity-90" />
                   <div class="absolute inset-0 coord-rule opacity-30 pointer-events-none"></div>
                   <span class="absolute top-3 left-3 font-mono text-[0.5625rem] tracking-[0.16em] text-[#F7F4EE]/86">FIG. 03 / LAND USE</span>
                   <span class="absolute bottom-3 right-3 font-mono text-[0.5625rem] tracking-[0.16em] text-[#F7F4EE]/86">0 ─── 500 M</span>
@@ -240,7 +240,7 @@ const legend = [
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mt-24 pt-16 border-t border-[#1C1B18]/12">
         <Reveal class="lg:col-span-5">
-          <FigurePlate src="/art/diorama.svg" alt="沙盘田块格网俯视图版" index="PLATE 03"
+          <FigurePlate src="/art-hd/songliao-plain.jpg" alt="沙盘田块格网俯视图版" index="PLATE 03"
             caption="深黑土耕地、浅色草甸底、蜿蜒水系与圆仓组群，构成俯视时的四层色彩秩序。" credit="SONGLIAO PLAIN" />
         </Reveal>
         <div class="lg:col-span-7">

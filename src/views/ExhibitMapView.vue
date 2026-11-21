@@ -49,10 +49,10 @@ const humanities = {
   dot: '#C88A32', deep: false, title: '农时与风物',
   lead: '技术之外，是一年二十四节气里人的节奏，和一地长出来的物产。',
   units: [
-    { no: '06', name: '一粒米的旅程', line: '五幕物候串起约一百八十天稻作周期', to: '/journey', fig: { src: '/art/rice.svg', alt: '一粒米的旅程：稻穗与一百八十天物候示意' } },
-    { no: '07', name: '二十四节气吉林农时谱', line: '把节气与吉林农事一一对应', to: '/solar-terms', fig: { src: '/art/seasons.svg', alt: '二十四节气农时谱：四季色环与刻度示意' } },
-    { no: '08', name: '查干湖冬捕生态非遗馆', line: '四段非遗仪轨与一套取之有度的生态智慧', to: '/chagan-lake', fig: { src: '/art/lake.svg', alt: '查干湖冬捕：冰湖同心圆与放射冰裂示意' } },
-    { no: '09', name: '吉林风物特产集市', line: '四类物产标注产地、认证与流通方式', to: '/products', fig: { src: '/art/harvest.svg', alt: '吉林风物特产集市：粮仓与谷仓编号示意' } }
+    { no: '06', name: '一粒米的旅程', line: '五幕物候串起约一百八十天稻作周期', to: '/journey', fig: { src: '/art-hd/golden-rice.jpg', alt: '一粒米的旅程：稻穗与一百八十天物候示意' } },
+    { no: '07', name: '二十四节气吉林农时谱', line: '把节气与吉林农事一一对应', to: '/solar-terms', fig: { src: '/art-hd/four-seasons.jpg', alt: '二十四节气农时谱：四季色环与刻度示意' } },
+    { no: '08', name: '查干湖冬捕生态非遗馆', line: '四段非遗仪轨与一套取之有度的生态智慧', to: '/chagan-lake', fig: { src: '/art-hd/chagan-winter.jpg', alt: '查干湖冬捕：冰湖同心圆与放射冰裂示意' } },
+    { no: '09', name: '吉林风物特产集市', line: '四类物产标注产地、认证与流通方式', to: '/products', fig: { src: '/art-hd/jilin-harvest.jpg', alt: '吉林风物特产集市：粮仓与谷仓编号示意' } }
   ]
 }
 
@@ -349,7 +349,7 @@ const setView = (id) => appStore.setLens(id)
         </Reveal>
 
         <Reveal :delay="140" variant="scale" class="lg:col-span-7">
-          <FigurePlate src="/art/soil-strata.svg" ratio="aspect-[3/2]" index="01–02"
+          <FigurePlate src="/art-hd/soil-specimen.jpg" ratio="aspect-[3/2]" index="01–02"
             alt="黑土地质标本馆：一米黑土剖面的分层与深度标尺示意"
             caption="标本馆按真实层厚堆叠一米剖面，深度标尺为教学演示口径；剖面条带不是地理方位。" />
         </Reveal>
@@ -375,7 +375,7 @@ const setView = (id) => appStore.setLens(id)
 
         <div class="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6">
           <Reveal :delay="120" class="lg:col-span-5">
-            <FigurePlate dark src="/art/machine.svg" ratio="aspect-[3/2]" index="03–04"
+            <FigurePlate dark src="/art-custom/changchun-tractor.jpg" ratio="aspect-[3/2]" index="03–04"
               alt="北斗农机解构馆：整车爆炸分解与 RTK 天线示意"
               caption="工程图纸式图版，标注为装配示意，不是行政区划地图，也不对应真实地理方位。" />
           </Reveal>
@@ -403,7 +403,7 @@ const setView = (id) => appStore.setLens(id)
       <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           <Reveal :delay="120" variant="scale" class="lg:col-span-7">
-            <FigurePlate dark src="/art/diorama.svg" ratio="aspect-[3/2]" index="05"
+            <FigurePlate dark src="/art-hd/songliao-plain.jpg" ratio="aspect-[3/2]" index="05"
               alt="宏观尺度段图版：三乘三抽象色块网格与蜿蜒曲线，表达策展顺序"
               caption="三乘三抽象色块网格只用来表达策展顺序，不是行政区划地图，不画省界县界，也不含经纬度。" />
           </Reveal>

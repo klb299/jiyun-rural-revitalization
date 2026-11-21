@@ -126,28 +126,27 @@ onUnmounted(() => endPrelude())
   <div class="relative">
     <!-- 01 杂志封面式首屏 -->
     <section data-cinema class="relative min-h-[100dvh] flex items-center overflow-hidden bg-[#F7F4EE]">
-      <div class="absolute inset-0 coord-rule opacity-70 pointer-events-none"></div>
+      <div class="absolute inset-0 coord-rule hero-grid-fade pointer-events-none"></div>
+      <div class="hero-glow hero-glow--gold" aria-hidden="true"></div>
+      <div class="hero-glow hero-glow--moss" aria-hidden="true"></div>
 
-      <!-- 大面积琥珀金圆 + 旋转文字环 -->
-      <div data-cinema-seed data-parallax="-16" class="hero-seed absolute -right-[10%] -top-[16%] w-[42vw] h-[42vw] min-w-[25rem] min-h-[25rem] rounded-full pointer-events-none"
-        style="background: radial-gradient(circle at 35% 30%, #E8BC6E 0%, #C88A32 52%, #A46C20 100%); box-shadow: 0 60px 140px -60px rgba(168,111,34,.65)">
-        <svg viewBox="0 0 200 200" class="absolute inset-0 w-full h-full animate-[spin_34s_linear_infinite] opacity-70">
-          <defs><path id="home-ring" d="M100,100 m-84,0 a84,84 0 1,1 168,0 a84,84 0 1,1 -168,0"></path></defs>
-          <text font-family="ui-monospace, monospace" font-size="8.5" letter-spacing="2.6" fill="#1C1B18">
+      <!-- 极简建筑感金环装饰（替代平涂大黄圆，保留 hero-seed 用于 View Transitions） -->
+      <div data-cinema-seed data-parallax="-16" class="hero-seed absolute -right-[6%] top-[12%] w-[32vw] h-[32vw] min-w-[20rem] min-h-[20rem] rounded-full pointer-events-none border border-[#C88A32]/25"
+        style="background: radial-gradient(circle at 40% 35%, rgba(232,188,110,0.2) 0%, rgba(200,138,50,0.06) 55%, transparent 75%)">
+        <svg viewBox="0 0 200 200" class="absolute inset-0 w-full h-full animate-[spin_42s_linear_infinite] opacity-45">
+          <defs><path id="home-ring" d="M100,100 m-86,0 a86,86 0 1,1 172,0 a86,86 0 1,1 -172,0"></path></defs>
+          <text font-family="ui-monospace, monospace" font-size="6.8" letter-spacing="2.8" fill="#8A6324">
             <textPath href="#home-ring">BLACK SOIL ATLAS · JILIN DIGITAL RURAL MUSEUM · 2026 · CHANGCHUN · </textPath>
           </text>
         </svg>
-        <div class="absolute inset-[22%] rounded-full border border-[#1C1B18]/20"></div>
-        <div class="hero-core absolute inset-[38%] rounded-full bg-[#1C1B18]/90 grid place-items-center">
-          <span class="font-editorial text-[#F7F4EE] text-3xl sm:text-5xl font-bold">吉</span>
-        </div>
+        <div class="absolute inset-[18%] rounded-full border border-[#C88A32]/18"></div>
       </div>
 
       <!-- 左下墨色斜切块 -->
-      <div class="absolute -left-24 -bottom-32 w-[38vw] h-[32vw] min-w-[20rem] min-h-[17.5rem] bg-[#1C1B18] rotate-[-14deg] pointer-events-none opacity-[0.94]"></div>
-      <div class="absolute left-8 bottom-10 z-10 hidden lg:block rot-tag text-[#FFFDF9]/95">EST. 2026 / CHANGCHUN</div>
 
-      <div class="relative z-10 max-w-[90rem] mx-auto w-full px-5 sm:px-8 lg:px-12 pt-28 pb-20">
+      <div class="absolute left-5 bottom-24 z-10 hidden xl:block rot-tag text-[#1C1B18]/40">EST. 2026 / CHANGCHUN</div>
+
+      <div class="relative z-10 max-w-[90rem] mx-auto w-full px-5 sm:px-8 lg:px-12 pt-32 pb-24">
         <Reveal :delay="0">
           <div class="flex flex-wrap items-center gap-3 mb-8">
             <span class="eyebrow">2026 / CHANGCHUN / 常设展</span>
@@ -195,7 +194,7 @@ onUnmounted(() => endPrelude())
                 <img src="/photos/field-sunset.jpg" alt="黑土平原上的落日实景" class="w-full aspect-[4/5] object-cover" />
               </div>
             </div>
-            <div class="card-ink z-card absolute -bottom-10 -left-14 w-64 p-6" style="transform: rotate(5deg)">
+            <div class="card-ink z-card absolute -bottom-6 -left-16 w-64 p-6" style="transform: rotate(3deg)">
               <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324] mb-3">FIELD NOTE / 001</div>
               <div class="font-editorial text-4xl font-bold leading-none">200<span class="text-lg ml-1">年</span></div>
               <p class="text-[0.75rem] leading-relaxed text-[#FFFDF9]/96 mt-3">形成一厘米黑土所需的时间。整座展馆，从这一个数字开始。</p>
@@ -205,11 +204,11 @@ onUnmounted(() => endPrelude())
         </div>
 
         <!-- 滚动镜头进度线：桌面随首屏滚动走满，移动端与降级模式保持满格 -->
-        <div class="mt-10 h-[2px] w-full bg-[#1C1B18]/8 overflow-hidden" aria-hidden="true">
-          <div data-cinema-progress class="h-full w-full origin-left bg-[#C88A32]" style="transform: scaleX(1)"></div>
+        <div class="mt-20 h-px w-full bg-[#1C1B18]/8 overflow-hidden" aria-hidden="true">
+          <div data-cinema-progress class="h-full w-full origin-left" style="transform: scaleX(1); background: linear-gradient(90deg, #C88A32, rgba(200,138,50,.55) 55%, rgba(200,138,50,0))"></div>
         </div>
 
-        <Reveal :delay="760" class="mt-16">
+        <Reveal :delay="760" class="mt-8">
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div v-for="(m, i) in heroMeta" :key="m.k"
               class="rounded-2xl px-4 py-3.5 border"
@@ -239,13 +238,13 @@ onUnmounted(() => endPrelude())
       <!-- 一次性入场镜头：剖面推近 → 拉远成平原 → 落到沙盘，随后淡出 -->
       <div v-if="preludeOn" class="hero-prelude absolute inset-0 z-[25] bg-[#1C1B18] overflow-hidden pointer-events-none">
         <div class="prelude-plate absolute inset-0 grid place-items-center">
-          <img src="/art/soil-strata.svg" alt="黑土剖面图版" class="w-[125%] h-[125%] object-cover opacity-60" />
+          <img src="/art-hd/soil-specimen.jpg" alt="黑土剖面图版" class="w-[125%] h-[125%] object-cover opacity-60" />
         </div>
         <div class="prelude-plate absolute inset-0 grid place-items-center">
-          <img src="/art/hero-field.svg" alt="黑土田野等高线图版" class="w-[125%] h-[125%] object-cover opacity-60" />
+          <img src="/art-hd/black-soil-contours.jpg" alt="黑土田野等高线图版" class="w-[125%] h-[125%] object-cover opacity-60" />
         </div>
         <div class="prelude-plate absolute inset-0 grid place-items-center">
-          <img src="/art/diorama.svg" alt="松辽平原沙盘图版" class="w-[125%] h-[125%] object-cover opacity-60" />
+          <img src="/art-hd/songliao-plain.jpg" alt="松辽平原沙盘图版" class="w-[125%] h-[125%] object-cover opacity-60" />
         </div>
         <!-- 纯光影：金圆柔光晕 + 底部暗角 + 统一压暗，不加色块（沿用 11-08 定稿） -->
         <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at 32% 26%, rgba(232,188,110,.20), transparent 58%), linear-gradient(to top, rgba(28,27,24,.94), transparent 48%), rgba(28,27,24,.42)"></div>
@@ -288,16 +287,16 @@ onUnmounted(() => endPrelude())
           </Reveal>
         </div>
         <Reveal :delay="150" variant="scale" class="lg:col-span-5 relative" data-parallax="-10">
-          <div class="bezel bezel--ink z-card" style="transform: rotate(3deg)">
+          <div class="bezel bezel--ink z-card" style="transform: rotate(2deg)">
             <div class="bezel-core">
-              <img src="/art/hero-field.svg" alt="黑土田野等高线图版" loading="lazy" class="w-full aspect-[4/5] object-cover" />
+              <img src="/art-hd/black-soil-contours.jpg" alt="黑土田野等高线图景" loading="lazy" class="w-full aspect-[4/3] object-cover bg-[#1C1B18]" />
             </div>
           </div>
-          <div class="absolute -bottom-8 -left-8 card-gold z-card px-6 py-5 rounded-2xl" style="transform: rotate(-4deg)">
-            <div class="font-mono text-[0.625rem] tracking-[0.18em] mb-1">FIELD CONTOURS / PLATE 02</div>
-            <div class="font-editorial text-xl font-bold">图版 00</div>
+          <div class="absolute -bottom-8 -left-8 w-60 card-gold z-card px-6 py-5 rounded-2xl" style="transform: rotate(-3deg)">
+            <div class="font-mono text-[0.625rem] tracking-[0.18em] mb-1">PLATE 02 / FIELD CONTOURS</div>
+            <div class="font-editorial text-xl font-bold">黑土等高线</div>
           </div>
-          <div class="absolute -top-6 right-0 rot-tag text-[#FFFDF9]/95">PROCEDURAL PLATE</div>
+          <div class="absolute top-6 -right-7 rot-tag text-[#FFFDF9]/60">PROCEDURAL PLATE</div>
         </Reveal>
       </div>
     </section>
@@ -319,7 +318,7 @@ onUnmounted(() => endPrelude())
     </section>
 
     <!-- 04 平原影像：琥珀金区块 -->
-    <section class="relative overflow-hidden" style="background: linear-gradient(150deg, #E4B463 0%, #C88A32 48%, #A9701F 100%)">
+    <section class="relative overflow-hidden" style="background: radial-gradient(75% 90% at 88% 12%, rgba(200,138,50,0.18), transparent 58%), linear-gradient(155deg, #F5F0E6 0%, #EBE3D3 55%, #E3D9C5 100%)">
       <div class="absolute -right-20 -top-40 w-[32.5rem] h-[32.5rem] rounded-full pointer-events-none"
         style="background: radial-gradient(circle, rgba(255,253,249,.16), transparent 70%)"></div>
       <div class="relative max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
@@ -339,7 +338,7 @@ onUnmounted(() => endPrelude())
             <div class="bezel-core relative">
               <div class="h-[27.5rem] sm:h-[36.25rem] relative overflow-hidden">
                 <div data-reveal-img class="absolute inset-0 overflow-hidden">
-                  <img src="/photos/furrows.jpg" alt="黑土田块与规整垄沟的航拍实景" class="w-full h-full object-cover" loading="lazy" />
+                  <img src="/art-hd/songliao-plain.jpg" alt="黑土田块与规整垄沟的航拍实景" class="w-full h-full object-cover" loading="lazy" />
                 </div>
                 <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(28,27,24,.78), transparent 58%)"></div>
                 <div class="absolute bottom-6 left-6 right-6 flex flex-wrap items-end justify-between gap-4 rounded-2xl bg-[#1C1B18]/78 px-4 py-3">
@@ -347,7 +346,7 @@ onUnmounted(() => endPrelude())
                     <div class="font-mono text-[0.625rem] tracking-[0.18em] text-[#F0C275] mb-2">FIELD RECORD / 松辽平原</div>
                     <div class="font-editorial text-xl sm:text-2xl font-bold text-[#FFFDF9]">规整垄沟，是黑土被经营的样子</div>
                   </div>
-                  <span class="font-mono text-[0.625rem] tracking-[0.16em] text-[#FFFDF9]/96">实景示意 · UNSPLASH</span>
+                  <span class="font-mono text-[0.625rem] tracking-[0.16em] text-[#FFFDF9]/90">艺术图景 · 松辽平原</span>
                 </div>
               </div>
             </div>
@@ -364,7 +363,7 @@ onUnmounted(() => endPrelude())
         <h2 class="display-2">一条动线，<br />走完一片黑土</h2>
         <p class="body-copy mt-6 max-w-sm">展馆按尺度递进编排。先建立整体印象，再依次进入微观、工业与宏观三个 3D 场景，最后用图文专题补足数据、农时、助农机制与人的故事。</p>
         <RouterLink to="/exhibit-map" class="link-line mt-6 text-[0.75rem] font-bold text-[#8A6324]">先看展览地图，按兴趣挑动线 <ArrowUpRight :size="14" class="arrow-shift" /></RouterLink>
-        <FigurePlate src="/art/seasons.svg" alt="二十四节气色环图版" index="PLATE 06" caption="春生、夏长、秋收、冬藏。吉林农耕物候是整座展馆的时间轴。" credit="SOLAR TERMS" class="mt-9" />
+        <FigurePlate src="/art-hd/four-seasons.jpg" alt="二十四节气四季物候艺术图版" ratio="aspect-square" index="PLATE 06" caption="春生、夏长、秋收、冬藏。吉林农耕物候是整座展馆的时间轴。" credit="SOLAR TERMS" class="mt-9" />
       </Reveal>
       <div class="lg:col-span-8" data-stagger>
         <Reveal v-for="(s, i) in routeSteps" :key="s.no" :delay="i * 80">

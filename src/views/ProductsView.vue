@@ -20,17 +20,17 @@ const products = [
   {
     id: 1, category: 'grain', name: '吉林秋田小町 / 稻花香粳米', origin: '长春九台 / 饮马河流域',
     tag: '国家地理标志', desc: '有机黑土栽培，松花江水源灌溉。米粒饱满半透明，煮饭油亮微甜，冷饭不回生。',
-    price: '¥ 68.00 / 5kg', sales: '月销 12,000+ 件', image: '/photos/grain-ear.jpg', plate: 'PLATE 04', no: '01'
+    price: '¥ 68.00 / 5kg', sales: '月销 12,000+ 件', image: '/art-hd/golden-rice.jpg', plate: 'PLATE 04', no: '01'
   },
   {
     id: 2, category: 'grain', name: '东北黄金甜糯玉米真空棒', origin: '四平 / 公主岭黄金玉米带',
     tag: '非转基因 · 鲜摘锁鲜', desc: '从采摘到真空高压灭菌不超过五小时，保留天然高膳食纤维与甜脆多汁。',
-    price: '¥ 39.90 / 8 支装', sales: '月销 35,000+ 件', image: '/photos/forest.jpg', plate: 'PLATE 07', no: '02'
+    price: '¥ 39.90 / 8 支装', sales: '月销 35,000+ 件', image: '/art-hd/jilin-harvest.jpg', plate: 'PLATE 07', no: '02'
   },
   {
     id: 3, category: 'mountain', name: '长白山野生椴树雪蜜', origin: '长白山脉深山原始森林',
     tag: '天然成熟原蜜', desc: '每年夏至前后椴树花开，蜜蜂采自深山天然粉源，洁白如雪，带清雅薄荷淡香。',
-    price: '¥ 88.00 / 500g', sales: '月销 8,600+ 件', image: '/photos/seedlings.jpg', plate: 'PLATE 06', no: '03'
+    price: '¥ 88.00 / 500g', sales: '月销 8,600+ 件', image: '/photos/forest.jpg', plate: 'PLATE 06', no: '03'
   },
   {
     id: 4, category: 'mountain', name: '长白山红松子仁 / 破壁人参片', origin: '抚松 / 长白山腹地',
@@ -40,12 +40,12 @@ const products = [
   {
     id: 5, category: 'lake', name: '查干湖生态胖头鱼', origin: '松原 / 查干湖冬捕非遗区',
     tag: '国家非遗传统冬捕', desc: '天然大水面自然生长五年以上，纯野生无投喂，肉质紧密肥嫩，冬捕冷链直达。',
-    price: '¥ 198.00 / 条约 6 斤', sales: '冬捕预订 28,000+ 件', image: '/photos/field-sunset.jpg', plate: 'PLATE 05', no: '05'
+    price: '¥ 198.00 / 条约 6 斤', sales: '冬捕预订 28,000+ 件', image: '/art-hd/chagan-winter.jpg', plate: 'PLATE 05', no: '05'
   },
   {
     id: 6, category: 'grain', name: '延边有机黑豆与杂粮礼盒', origin: '延边朝鲜族自治州',
     tag: '绿色富硒认证', desc: '长白山矿泉水与火山灰土孕育，包含黑米、薏仁、红小豆、燕麦。',
-    price: '¥ 79.00 / 礼盒装', sales: '月销 9,200+ 件', image: '/photos/black-soil.jpg', plate: 'PLATE 01', no: '06'
+    price: '¥ 79.00 / 礼盒装', sales: '月销 9,200+ 件', image: '/art-hd/jilin-harvest.jpg', plate: 'PLATE 01', no: '06'
   }
 ]
 
@@ -70,11 +70,10 @@ onUnmounted(() => clearTimeout(toastTimer))
 
 <template>
   <div>
-    <!-- 01 市集标签墙：Z 轴层叠的四张品类卡，点击即筛选 -->
+    <!-- 01 市集标签墙：暖白宣纸与琥珀光晕 + Z 轴层叠品类卡 -->
     <section class="relative min-h-[100dvh] flex items-center overflow-hidden"
-      style="background: linear-gradient(148deg, #F0DFC0 0%, #E4BE79 48%, #C88A32 100%)">
-      <div class="absolute inset-0 coord-rule opacity-30 pointer-events-none"></div>
-      <div data-parallax="-8" class="absolute -left-[12%] -bottom-[26%] w-[42vw] h-[42vw] min-w-[22.5rem] min-h-[22.5rem] rounded-full bg-[#FFFDF9]/15 blur-2xl pointer-events-none"></div>
+      style="background: radial-gradient(75% 85% at 88% 18%, rgba(200, 138, 50, 0.22), transparent 58%), radial-gradient(70% 80% at 8% 92%, rgba(46, 90, 68, 0.12), transparent 58%), linear-gradient(155deg, #FAF6EE 0%, #F2EBDD 55%, #EBE1CE 100%)">
+      <div class="absolute inset-0 coord-rule hero-grid-fade pointer-events-none"></div>
 
       <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
         <Reveal>
@@ -119,9 +118,9 @@ onUnmounted(() => clearTimeout(toastTimer))
             <div class="grid grid-cols-2 gap-4 sm:gap-5" data-stagger>
               <Reveal v-for="(c, i) in categories" :key="c.id" :delay="180 + i * 90">
                 <button @click="pickCategory(c.id)"
-                  class="z-card group relative w-full text-left bg-[#FFFDF9] border border-[#1C1B18]/14 p-5 sm:p-6 cursor-pointer"
+                  class="z-card group relative w-full text-left rounded-2xl bg-[#FFFDF9] border border-[#1C1B18]/10 shadow-[0_24px_54px_-32px_rgba(28,27,24,0.3)] p-5 sm:p-6 cursor-pointer"
                   :class="activeFilter === c.id ? 'ring-2 ring-[#1C1B18]' : ''"
-                  :style="{ transform: `rotate(${[-3, 2.5, -2, 3][i]}deg)` }">
+                  :style="{ transform: `rotate(${[-2, 1.5, -1.5, 2][i]}deg)` }">
                   <div class="flex items-start justify-between gap-2 mb-5">
                     <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#8A6324]">TAG 0{{ i + 1 }}</span>
                     <span class="w-6 h-6 rounded-full bg-[#1C1B18] text-[#F7F4EE] grid place-items-center">
@@ -185,18 +184,18 @@ onUnmounted(() => clearTimeout(toastTimer))
 
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-8">
         <Reveal v-for="(p, i) in filtered" :key="p.id" :delay="(i % 3) * 90" class="h-full">
-          <article class="h-full border border-[#1C1B18]/10 bg-[#FFFDF9]/70 lift flex flex-col overflow-hidden">
+          <article class="h-full rounded-[1.75rem] border border-[#1C1B18]/10 bg-[#FFFDF9]/82 shadow-[0_24px_60px_-36px_rgba(28,27,24,0.28)] lift flex flex-col overflow-hidden">
             <div class="art-frame aspect-[16/9]">
               <img :src="p.image" :alt="p.name" loading="lazy" />
-              <span class="absolute top-3 left-3 px-2 py-1 font-mono text-[0.625rem] tracking-[0.16em] bg-[#FFFDF9]/88 text-[#1C1B18]">{{ p.plate }}</span>
-              <span class="absolute bottom-3 right-3 font-editorial text-xl font-bold text-[#F7F4EE]/92">{{ p.no }}</span>
+              <span class="absolute top-3.5 left-3.5 px-2.5 py-1 rounded-full font-mono text-[0.625rem] tracking-[0.16em] bg-[#FFFDF9]/92 text-[#1C1B18] shadow-sm">{{ p.plate }}</span>
+              <span class="absolute bottom-3.5 right-4 font-editorial text-xl font-bold text-[#F7F4EE]/95 drop-shadow">{{ p.no }}</span>
             </div>
             <div class="p-6 flex flex-col flex-1">
               <div class="flex items-start justify-between gap-3 mb-4">
-                <span class="px-2.5 py-1 bg-[#C88A32]/12 text-[#8A6324] text-[0.625rem] font-mono">{{ p.tag }}</span>
+                <span class="px-2.5 py-1 rounded-full bg-[#C88A32]/14 text-[#8A6324] text-[0.625rem] font-mono">{{ p.tag }}</span>
                 <span class="caption">{{ p.plate }}</span>
               </div>
-              <h3 class="display-3 mb-2">{{ p.name }}</h3>
+              <h3 class="font-editorial font-bold text-lg sm:text-xl leading-snug text-[#1C1B18] mb-2">{{ p.name }}</h3>
               <div class="font-mono text-[0.625rem] tracking-[0.1em] text-[#6E6960] mb-4">产地 / {{ p.origin }}</div>
               <p class="body-copy text-[0.8125rem]! flex-1">{{ p.desc }}</p>
               <div class="mt-6 pt-5 border-t border-[#1C1B18]/10 flex items-baseline justify-between gap-3">
@@ -205,7 +204,7 @@ onUnmounted(() => clearTimeout(toastTimer))
               </div>
               <button
                 @click="addToList(p.name)"
-                class="mt-5 w-full py-3 rounded-lg bg-[#1C1B18] text-[#F7F4EE] text-xs font-bold hover:bg-[#C88A32] hover:text-[#1C1B18] transition-colors duration-300 cursor-pointer flex items-center justify-center gap-2"
+                class="mt-5 w-full py-3 rounded-full bg-[#1C1B18] text-[#F7F4EE] text-xs font-bold hover:bg-[#C88A32] hover:text-[#1C1B18] transition-colors duration-300 cursor-pointer flex items-center justify-center gap-2"
               >
                 加入助农直采清单 <ArrowUpRight :size="14" />
               </button>
@@ -225,7 +224,7 @@ onUnmounted(() => clearTimeout(toastTimer))
               <div v-for="o in [
                 { k: 'PLAIN', t: '中部平原', d: '粳稻 / 甜糯玉米', img: '/photos/field-sunset.jpg' },
                 { k: 'FOREST', t: '东南山林', d: '椴树雪蜜 / 红松子', img: '/photos/forest.jpg' },
-                { k: 'GRAIN', t: '黑土田块', d: '大豆 / 杂粮', img: '/photos/soybean.jpg' }
+                { k: 'GRAIN', t: '黑土田块', d: '大豆 / 杂粮', img: '/art-hd/soil-specimen.jpg' }
               ]" :key="o.k" class="group rounded-2xl overflow-hidden border border-[#1C1B18]/12 bg-[#FFFDF9]">
                 <div class="aspect-[3/4] overflow-hidden">
                   <img :src="o.img" :alt="o.t + '实景示意'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />

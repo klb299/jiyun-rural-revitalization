@@ -1,16 +1,57 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import AppShowcaseView from '../views/AppShowcaseView.vue'
 import HomeView from '../views/HomeView.vue'
 
-const SITE = '一厘米，四十公里'
-const DEFAULT_DESC = '以 Vue 3 与 Three.js 构建的乡村振兴数字展馆，包含黑土地质标本、北斗智慧农机、松辽平原生态沙盘三座实时 3D 展厅与互动科普实验室。'
+const SITE = '吉韵禾野 · 乡村振兴双端平台'
+const DEFAULT_DESC = '乡村振兴移动端 App 界面与后台管理系统，融合黑土保护、风物助农集市、云认养一亩田、村务直通与 3D 数字孪生展厅。'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
+    component: AppShowcaseView,
+    meta: {
+      title: '移动端 App 体验',
+      standaloneShell: true,
+      description: '吉韵禾野乡村振兴移动端 App 交互体验舱，支持助农下单、云认养、村务直报与后台实时双向联动。'
+    }
+  },
+  {
+    path: '/app',
+    name: 'MobileApp',
+    component: () => import('../views/MobileAppView.vue'),
+    meta: {
+      title: '乡村振兴移动端 App',
+      standaloneShell: true,
+      description: '全屏移动端 App 界面：风物直采、云认养、农情遥测与村务直通。'
+    }
+  },
+  {
+    path: '/split',
+    name: 'SplitSync',
+    component: () => import('../views/SplitSyncView.vue'),
+    meta: {
+      title: '双端同屏实时联动演示',
+      standaloneShell: true,
+      description: '左屏移动端 App + 右屏后台管理系统同屏实时联动演示。'
+    }
+  },
+  {
+    path: '/bigscreen',
+    name: 'BigScreen',
+    component: () => import('../views/BigScreenView.vue'),
+    meta: {
+      title: '乡村振兴数智指挥大屏',
+      standaloneShell: true,
+      description: '松辽黑土产销冷链飞线、四路慢直播监控、ECharts 实时遥测与双端业务事件流指挥大屏。'
+    }
+  },
+  {
+    path: '/museum',
+    name: 'Museum',
     component: HomeView,
     meta: {
-      title: '序厅 · 总览',
+      title: '3D 数字展馆序厅',
       description: '吉林现代数字乡村振兴与生态农业 3D 展馆序厅，从黑土粮仓出发，进入微观土壤、工业装备与宏观平原三条参观动线。'
     }
   },
@@ -154,8 +195,9 @@ const routes = [
     name: 'Admin',
     component: () => import('../views/AdminView.vue'),
     meta: {
-      title: '数字展馆管理后台',
-      description: '策展内容管理：地层档案、农机部件参数、沙盘漫游视点、访客留言与展馆设置。'
+      title: '乡村振兴后台管理系统',
+      standaloneShell: true,
+      description: '乡村振兴数智运营管理后台：农产品集市、助农订单、云认养审核、项目进度、村务公告与 App 实时联动。'
     }
   },
   {
@@ -170,13 +212,13 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, _from, savedPosition) {
     // 带锚点的导航交给 afterEach 在布局稳定后精确对齐
     if (to.hash) return false
-    if (savedPosition) return savedPosition
-    return { top: 0 }
+    if (savedPosition) return { ...savedPosition, behavior: 'instant' }
+    return { top: 0, left: 0, behavior: 'instant' }
   }
 })
 

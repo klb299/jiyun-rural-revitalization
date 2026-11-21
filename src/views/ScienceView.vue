@@ -294,46 +294,40 @@ const resetLab = () => {
   <div>
     <!-- 封面 -->
     <section class="surface-ink relative overflow-hidden">
-      <div class="absolute inset-0 coord-rule opacity-25 pointer-events-none"></div>
-      <div data-parallax="-12" class="absolute -right-[6%] -top-[30%] w-[34vw] h-[34vw] min-w-[21.25rem] min-h-[21.25rem] rounded-full pointer-events-none"
-        style="background: radial-gradient(circle at 35% 30%, #E8BC6E, #C88A32 55%, #A46C20); box-shadow: 0 60px 140px -60px rgba(168,111,34,.6)">
-        <svg viewBox="0 0 200 200" class="absolute inset-0 w-full h-full animate-[spin_32s_linear_infinite] opacity-70">
-          <defs><path id="lab-ring" d="M100,100 m-84,0 a84,84 0 1,1 168,0 a84,84 0 1,1 -168,0"></path></defs>
-          <text font-family="ui-monospace, monospace" font-size="8.5" letter-spacing="2.6" fill="#1C1B18">
-            <textPath href="#lab-ring">INTERACTIVE SCIENCE LAB · SOIL · RICE · BEIDOU · NO-TILL · 2026 · </textPath>
-          </text>
-        </svg>
-        <div class="absolute inset-[36%] rounded-full bg-[#1C1B18] grid place-items-center">
-          <span class="font-editorial text-[#C88A32] text-3xl font-bold">科</span>
-        </div>
-      </div>
+      <div class="absolute inset-0 coord-rule opacity-20 pointer-events-none"></div>
 
       <div class="relative max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 sm:pt-32 pb-16 sm:pb-20">
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-9">
             <span class="eyebrow">INTERACTIVE SCIENCE LAB / 互动科普实验室</span>
-            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#FFFDF9]/95">CHAPTER 10 · FOUR EXPERIMENTS</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#FFFDF9]/80">CHAPTER 10 · FOUR EXPERIMENTS</span>
           </div>
         </Reveal>
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
-          <div class="lg:col-span-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          <div class="lg:col-span-7">
             <h1 class="display-1 text-[#F7F4EE]" aria-label="把原理，变成可以上手的东西">
               <span v-for="(ch, i) in Array.from('把原理，')" :key="'a' + i" class="kin-char" :style="{ animationDelay: (0.1 + i * 0.08) + 's' }">{{ ch }}</span>
-              <span class="block text-[#C88A32]">
+              <span class="block text-[#E8BC6E]">
                 <span v-for="(ch, i) in Array.from('变成可以上手的')" :key="'b' + i" class="kin-char" :style="{ animationDelay: (0.36 + i * 0.05) + 's' }">{{ ch }}</span>
               </span>
             </h1>
-            <Reveal :delay="700"><p class="font-editorial text-xl sm:text-2xl text-[#FFFDF9]/95 mt-7">四个可操作的 3D 原理演示</p></Reveal>
-            <Reveal :delay="780"><p class="lede text-[#FFFDF9]/96 mt-5 max-w-2xl">
+            <Reveal :delay="700"><p class="font-editorial text-xl sm:text-2xl text-[#FFFDF9]/92 mt-7">四个可操作的 3D 原理演示</p></Reveal>
+            <Reveal :delay="780"><p class="lede text-[#FFFDF9]/85 mt-5 max-w-2xl">
               黑土为什么疏松、稻株怎样长成、北斗凭什么定位到厘米、秸秆留在地表会发生什么。文字讲不清的地方，就把它做成可以拖拽、可以切换、可以看见变化的模型。
             </p></Reveal>
           </div>
-          <Reveal :delay="300" class="lg:col-span-4">
-            <div class="card-gold p-7 sm:p-8 relative overflow-hidden">
-              <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#1C1B18]/65 mb-5">HOW TO USE</div>
-              <p class="font-editorial text-xl leading-[1.7] font-bold">选一个实验，<br />然后动手改参数。</p>
-              <p class="text-[0.8125rem] leading-[1.85] text-[#1C1B18]/72 mt-4">拖拽旋转模型，点击高亮结构，拖动时间轴或开关，观察场景与读数的实时变化。</p>
-              <p class="text-[0.6875rem] leading-[1.8] text-[#1C1B18]/62 mt-3 pt-3 border-t border-[#1C1B18]/12">四个实验也可作为职业教育与农技培训的教具原型，用来讲清黑土、稻作与定位的原理。</p>
+          <Reveal :delay="300" class="lg:col-span-5">
+            <div class="rounded-[1.75rem] overflow-hidden border border-[#F7F4EE]/12 bg-[#161512] shadow-[0_36px_90px_-34px_rgba(0,0,0,0.8)]">
+              <div class="relative aspect-[16/10] overflow-hidden">
+                <img src="/art-hd/soil-specimen.jpg" alt="黑土团粒与菌丝微距标本" class="w-full h-full object-cover" />
+                <div class="absolute inset-0" style="background: linear-gradient(180deg, transparent 35%, rgba(22,21,18,0.92) 100%)"></div>
+                <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#1C1B18]/75 backdrop-blur-md border border-[#F0C275]/30 font-mono text-[0.5625rem] tracking-[0.2em] text-[#F0C275]">SPECIMEN / 01</span>
+              </div>
+              <div class="p-6 sm:p-7">
+                <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#E8BC6E] mb-2">HOW TO USE / 操作提示</div>
+                <p class="font-editorial text-xl leading-snug font-bold text-[#F7F4EE]">选一个实验，然后动手改参数。</p>
+                <p class="text-[0.8125rem] leading-[1.8] text-[#F7F4EE]/78 mt-3">拖拽旋转模型，点击高亮结构，拖动时间轴或开关，观察场景与读数的实时变化。</p>
+              </div>
             </div>
           </Reveal>
         </div>
@@ -757,7 +751,7 @@ const resetLab = () => {
     <section class="surface-linen border-y border-[#1C1B18]/10">
       <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         <Reveal class="lg:col-span-5">
-          <FigurePlate src="/art/soil-strata.svg" alt="黑土层位图版" index="PLATE 01" caption="科普实验里出现的结构，都能在真实的一米剖面中找到对应层位。" credit="CHERNOZEM MONOLITH" />
+          <FigurePlate src="/art-hd/soil-specimen.jpg" alt="黑土团粒与层位微距标本" index="PLATE 01" caption="科普实验里出现的结构，都能在真实的一米剖面中找到对应层位。" credit="CHERNOZEM MONOLITH" />
         </Reveal>
         <div class="lg:col-span-7">
           <Reveal><div class="eyebrow mb-5">WHY A LAB / 为什么做实验室</div></Reveal>

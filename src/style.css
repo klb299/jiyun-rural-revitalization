@@ -407,7 +407,7 @@ body [data-soil-band] .text-\[\#C88A32\] { color: #F0C275; }
 .link-line { position: relative; display: inline-flex; align-items: center; gap: 0.5rem; }
 .link-line::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px;
-  background: currentColor; transform: scaleX(0.16); transform-origin: left; opacity: 0.45;
+  background: currentColor; transform: scaleX(0); transform-origin: left; opacity: 0;
   transition: transform 0.6s var(--ease-luxe), opacity 0.4s ease;
 }
 .link-line:hover::after { transform: scaleX(1); opacity: 1; }
@@ -531,7 +531,7 @@ body [data-soil-band] .text-\[\#C88A32\] { color: #F0C275; }
 }
 @keyframes hero-plate {
   from { opacity: 0; transform: translate3d(0, 46px, 0) rotate(-10deg) scale(0.93); }
-  to   { opacity: 1; transform: translate3d(0, 0, 0) rotate(-4deg) scale(1); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) rotate(-2deg) scale(1); }
 }
 .hero-core  { animation: hero-core 0.75s var(--ease-luxe) 0.1s both; }
 .hero-plate { animation: hero-plate 0.95s var(--ease-luxe) 0.18s both; }
@@ -582,7 +582,7 @@ html.vt-active .reveal {
   .mag-btn, .arrow-shift, .link-line::after, .z-card { transition: none !important; }
   .float-slow, .drift-slow, .line-grow, .route-progress, .marquee-track { animation: none !important; }
   .hero-core, .hero-plate { animation: none !important; opacity: 1 !important; }
-  .hero-plate { transform: rotate(-4deg) !important; }
+  .hero-plate { transform: rotate(-2deg) !important; }
 }
 
 ::-webkit-scrollbar { width: 7px; height: 7px; }
@@ -747,4 +747,98 @@ html.vt-active .reveal {
 }
 @media (prefers-reduced-motion: reduce) {
   .stage-extras button { transition: none; }
+}
+
+/* ------------------------------------------------------------------ *
+ * 2026-11-19 美化轮：首屏氛围光、坐标网格淡出、卡片与导航精修
+ * 只追加规则，不改动既有色板；删掉这一段即可回到上一版。
+ * ------------------------------------------------------------------ */
+.hero-grid-fade {
+  opacity: 0.55;
+  -webkit-mask-image: radial-gradient(120% 90% at 30% 40%, #000 35%, transparent 85%);
+  mask-image: radial-gradient(120% 90% at 30% 40%, #000 35%, transparent 85%);
+}
+.hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(60px);
+}
+.hero-glow--gold {
+  width: 46vw; height: 46vw; right: -6vw; top: 4vh;
+  background: radial-gradient(circle, rgba(232, 188, 110, 0.38), transparent 68%);
+}
+.hero-glow--moss {
+  width: 38vw; height: 38vw; left: -12vw; bottom: -14vw;
+  background: radial-gradient(circle, rgba(46, 90, 68, 0.16), transparent 70%);
+}
+
+/* 导航胶囊：更轻的玻璃感 + 金色细描边高光 */
+.pill-nav {
+  background: rgba(250, 247, 241, 0.72);
+  border-color: rgba(28, 27, 24, 0.07);
+  box-shadow: 0 12px 40px -22px rgba(28, 27, 24, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(200, 138, 50, 0.08);
+}
+.pill-nav--solid { background: rgba(250, 247, 241, 0.96); }
+.nav-link { position: relative; border-radius: 999px; transition: color 0.3s ease, background-color 0.3s ease; }
+.nav-link:hover { background: rgba(28, 27, 24, 0.045); }
+.nav-link--active { color: #8A6324; background: rgba(200, 138, 50, 0.12); }
+
+/* 主按钮：渐变高光 + 柔和光晕 */
+.mag-btn { background: linear-gradient(180deg, #2B2822, #1C1B18); }
+.mag-btn--light { background: linear-gradient(180deg, #FFFFFF, #FBF8F2); }
+.mag-btn--gold { background: linear-gradient(180deg, #D79A42, #C88A32); }
+.mag-btn:hover { background: linear-gradient(180deg, #D79A42, #C88A32); }
+.mag-btn--gold:hover { background: #FFFDF9; }
+
+/* 卡片：统一更柔和的阴影与细描边，hover 带金色描边 */
+.card-linen { border: 1px solid rgba(28, 27, 24, 0.06); }
+.card-ink { border: 1px solid rgba(247, 244, 238, 0.06); }
+.lift:hover { border-color: rgba(200, 138, 50, 0.45); }
+
+/* 眉题：更精致的胶囊，左侧加一枚金点 */
+.eyebrow::before {
+  content: "";
+  width: 5px; height: 5px; border-radius: 50%;
+  background: currentColor; opacity: 0.85;
+}
+
+/* 中文大标题稍放松字距，避免宋体笔画粘连 */
+.display-1 { letter-spacing: -0.035em; }
+.display-2 { letter-spacing: -0.03em; }
+
+/* 页脚链接：去掉常驻短横，改为 hover 下划线 + 微位移 */
+.footer-link { transition: color 0.3s ease, transform 0.4s var(--ease-luxe); }
+.footer-link:hover { transform: translateX(3px); }
+
+/* 回到顶部按钮的轻微玻璃感 */
+.to-top {
+  background: rgba(28, 27, 24, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 16px 34px -16px rgba(28, 27, 24, 0.6);
+}
+
+/* 滚动条更细更柔 */
+::-webkit-scrollbar { width: 9px; }
+::-webkit-scrollbar-thumb { background: #D8D1C4; border: 2px solid var(--bg-canvas); border-radius: 999px; }
+
+/* 浅底 / 琥珀金卡片嵌在深色展墙内时（如驾驶舱保供表、科技会战卡、科普首屏提示卡），
+   恢复深墨字色，防止上方深底兜底规则把文字误漂白。
+   注意不匹配 bg-[#F7F4EE]，因为 App.vue 根节点就带 bg-[#F7F4EE]。 */
+:is(.card-gold, .card-linen, .museum-card, .museum-panel, .surface-paper, .bezel-core,
+    [class*="bg-[#FFFDF9]"], [class*="bg-[#EFECE6]"])
+  :is(.lede, .body-copy, [class*="text-[#5A564E]"], [class*="text-[#3A3630]"]) {
+  color: var(--ink-secondary);
+}
+:is(.card-gold, .card-linen, .museum-card, .museum-panel, .surface-paper, .bezel-core,
+    [class*="bg-[#FFFDF9]"], [class*="bg-[#EFECE6]"])
+  :is(.caption, [class*="text-[#6E6960]"], [class*="text-[#8C867B]"]) {
+  color: var(--ink-muted);
+}
+.card-gold :is(.lede, .body-copy, .caption, [class*="text-[#1C1B18]/"]) {
+  color: rgba(28, 27, 24, 0.82);
+}
+.card-gold [class*="text-[#1C1B18]"] {
+  color: #1C1B18;
 }

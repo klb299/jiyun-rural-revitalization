@@ -11,6 +11,10 @@ import {
   sculptedAggregateGeometry
 } from '../three/textures.js'
 
+const props = defineProps({
+  mobile: { type: Boolean, default: false }
+})
+
 const containerRef = ref(null)
 const currentLayer = ref(0)
 const isExpanded = ref(false)
@@ -635,19 +639,21 @@ const initThree = () => {
   if (!containerRef.value) return
   stage = createStage(containerRef.value, {
     background: PALETTE.canvas,
-    fov: 38,
-    camera: [5.5, 3.2, 6.8],
+    fov: props.mobile ? 46 : 38,
+    camera: props.mobile ? [7.6, 3.8, 9.2] : [5.5, 3.2, 6.8],
     target: [0, 0, 0],
     minDistance: 3.4,
-    maxDistance: 13,
+    maxDistance: props.mobile ? 16 : 13,
     maxPolarAngle: Math.PI / 2 + 0.08,
     minPolarAngle: 0.28,
     exposure: 1.08,
     environmentIntensity: 0.76,
     hemiIntensity: 0.7,
     keyIntensity: 1.9,
-    shadowSize: 2048,
+    shadowSize: props.mobile ? 1024 : 2048,
     shadowFrustum: 6,
+    ao: !props.mobile,
+    showExtras: !props.mobile,
     aoRadius: 0.24,
     aoIntensity: 0.4,
     onQualityChange: (q) => { qualityLabel.value = q === 'high' ? '展览级 · IBL + GTAO' : '流畅模式 · 自适应' },
@@ -724,7 +730,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="relative w-full h-full min-h-[36.25rem] bg-[#F7F4EE] select-none overflow-hidden rounded-3xl">
+  <div
+    class="relative w-full h-full bg-[#F7F4EE] select-none overflow-hidden"
+    :class="props.mobile ? '' : 'min-h-[36.25rem] rounded-3xl'"
+  >
     <div ref="containerRef" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
 
     <!-- 载入淡出 -->
@@ -738,6 +747,55 @@ onUnmounted(() => {
       </div>
     </div>
 
+    <!-- ==================== 移动端 App 专属紧凑 HUD ==================== -->
+    <template v-if="props.mobile">
+      <div class="absolute top-3 right-3 flex items-center gap-1.5 z-10">
+        <button
+          type="button"
+          @click="toggleTour"
+          class="px-2.5 py-1.5 rounded-full bg-white/88 backdrop-blur-md border text-[11px] font-semibold shadow-xs cursor-pointer"
+          :class="isTouring ? 'border-[#C88A32] text-[#C88A32]' : 'border-[#1C1B18]/12 text-[#1C1B18]'"
+        >
+          {{ isTouring ? '⏸ 环视中' : '🎥 环视' }}
+        </button>
+        <button
+          type="button"
+          @click="toggleExpand"
+          class="px-2.5 py-1.5 rounded-full bg-white/88 backdrop-blur-md border text-[11px] font-semibold shadow-xs cursor-pointer"
+          :class="isExpanded ? 'border-[#C88A32] bg-[#FDF4E6] text-[#9A6518]' : 'border-[#1C1B18]/12 text-[#1C1B18]'"
+        >
+          {{ isExpanded ? '📦 合拢' : '🔬 分层展开' }}
+        </button>
+      </div>
+
+      <div class="absolute bottom-3 left-3 right-3 z-10 space-y-2 pointer-events-auto">
+        <div class="bg-white/92 backdrop-blur-md rounded-2xl p-3 border border-[#1C1B18]/10 shadow-md">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[12px] font-bold text-[#1C1B18] truncate">{{ strataInfo[currentLayer].name }}</span>
+            <span class="shrink-0 font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#C88A32]/15 text-[#8A6324] font-bold">{{ strataInfo[currentLayer].depth }}</span>
+          </div>
+          <p class="text-[10.5px] text-[#5A564E] mt-1 leading-relaxed line-clamp-2">{{ strataInfo[currentLayer].desc }}</p>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5">
+          <button
+            v-for="(layer, idx) in strataInfo"
+            :key="layer.depth"
+            type="button"
+            @click="switchLayer(idx)"
+            class="px-2 py-2 rounded-xl border text-[10.5px] font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-all"
+            :class="currentLayer === idx
+              ? 'bg-[#16261F] text-[#F0C275] border-[#16261F] shadow-sm'
+              : 'bg-white/88 backdrop-blur-md text-[#1C1B18] border-[#1C1B18]/10'"
+          >
+            <span class="w-2 h-2 rounded-full shrink-0 border border-white/30" :style="{ backgroundColor: layer.colorHex }"></span>
+            <span class="truncate">{{ idx === 0 ? '腐殖表层' : idx === 1 ? '淀积心土' : '黄土母质' }}</span>
+          </button>
+        </div>
+      </div>
+    </template>
+
+    <!-- ==================== 桌面端展览馆完整 HUD ==================== -->
+    <template v-else>
     <!-- 顶部艺术馆标牌 -->
     <div class="absolute top-5 left-6 museum-panel px-4 py-2.5 rounded-2xl flex items-center gap-3 shadow-sm border border-[#1C1B18]/10 pointer-events-auto">
       <div class="w-2.5 h-2.5 rounded-full bg-[#C88A32] animate-pulse"></div>
@@ -830,5 +888,6 @@ onUnmounted(() => {
         <span>{{ qualityLabel }}</span>
       </div>
     </div>
+    </template>
   </div>
 </template>

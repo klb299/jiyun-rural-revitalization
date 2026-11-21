@@ -97,8 +97,8 @@ const solarTermsData = {
             <Reveal :delay="800">
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-12 max-w-2xl">
                 <button v-for="s in seasons" :key="s.id" @click="activeSeason = s.id"
-                  class="group text-left p-4 border transition-all duration-500 cursor-pointer lift"
-                  :class="activeSeason === s.id ? 'border-[#1C1B18] bg-[#FFFDF9]' : 'border-[#1C1B18]/12 bg-[#FFFDF9]/50'">
+                  class="group text-left p-4 rounded-2xl border transition-all duration-500 cursor-pointer lift"
+                  :class="activeSeason === s.id ? 'border-[#1C1B18] bg-[#FFFDF9] shadow-md' : 'border-[#1C1B18]/10 bg-[#FFFDF9]/65'">
                   <div class="flex items-center gap-2 mb-2">
                     <span class="w-2.5 h-2.5 rounded-full" :style="{ background: s.color }"></span>
                     <span class="font-editorial text-lg font-bold">{{ s.name }}</span>
@@ -109,25 +109,29 @@ const solarTermsData = {
             </Reveal>
           </div>
 
-          <!-- 四季色环 -->
+          <!-- 四季物候艺术图版 -->
           <Reveal :delay="240" variant="scale" class="lg:col-span-5" data-parallax="-7">
-            <div class="relative w-full max-w-[25rem] mx-auto aspect-square">
-              <div class="absolute inset-0 rounded-full"
-                style="background: conic-gradient(from -45deg, #2E5A44 0deg 90deg, #C88A32 90deg 180deg, #B83828 180deg 270deg, #8C583A 270deg 360deg); mask: radial-gradient(circle, transparent 57%, #000 58%); -webkit-mask: radial-gradient(circle, transparent 57%, #000 58%)"></div>
-              <div class="absolute inset-[6%] rounded-full"
-                style="background: repeating-conic-gradient(from 0deg, rgba(28,27,24,.55) 0deg 0.7deg, transparent 0.7deg 15deg); mask: radial-gradient(circle, transparent 91%, #000 92%); -webkit-mask: radial-gradient(circle, transparent 91%, #000 92%)"></div>
-              <div class="absolute inset-[16%] rounded-full border border-[#1C1B18]/12"></div>
-              <div class="absolute inset-[28%] rounded-full bg-[#FFFDF9] shadow-[0_24px_60px_-30px_rgba(28,27,24,.45)] grid place-items-center text-center p-5">
-                <div>
-                  <div class="font-mono text-[0.5625rem] tracking-[0.22em] text-[#6E6960] mb-3">CURRENT SEASON</div>
-                  <div class="font-editorial text-4xl font-bold" :style="{ color: seasons.find(s => s.id === activeSeason)?.color }">
-                    {{ seasons.find(s => s.id === activeSeason)?.name }}
+            <div class="bezel">
+              <div class="bezel-core relative bg-[#F7F4EE]">
+                <div class="aspect-square relative overflow-hidden">
+                  <img src="/art-hd/four-seasons.jpg" alt="吉林四季农耕物候艺术图版" class="w-full h-full object-cover" />
+                </div>
+                <div class="p-5 sm:p-6 bg-[#FFFDF9] border-t border-[#1C1B18]/8 flex items-start justify-between gap-4">
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-2 mb-1.5">
+                      <span class="w-2 h-2 rounded-full" :style="{ background: seasons.find(s => s.id === activeSeason)?.color }"></span>
+                      <span class="font-mono text-[0.5625rem] tracking-[0.2em] text-[#6E6960]">CURRENT SEASON / 24 SOLAR TERMS</span>
+                    </div>
+                    <div class="flex items-baseline gap-2.5">
+                      <span class="font-editorial text-2xl font-bold" :style="{ color: seasons.find(s => s.id === activeSeason)?.color }">
+                        {{ seasons.find(s => s.id === activeSeason)?.name }}
+                      </span>
+                      <span class="text-xs text-[#5A564E]">{{ seasons.find(s => s.id === activeSeason)?.sub }}</span>
+                    </div>
+                    <p class="text-[0.72rem] leading-relaxed text-[#5A564E] mt-2">{{ seasonNotes[activeSeason] }}</p>
                   </div>
-                  <div class="text-xs mt-2 text-[#5A564E]">{{ seasons.find(s => s.id === activeSeason)?.sub }}</div>
-                  <div class="text-[0.6875rem] leading-relaxed text-[#3A3630] mt-4">{{ seasonNotes[activeSeason] }}</div>
                 </div>
               </div>
-              <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 font-mono text-[0.5625rem] tracking-[0.18em] text-[#6E6960] whitespace-nowrap">24 SOLAR TERMS / 全年农事刻度</div>
             </div>
           </Reveal>
         </div>
@@ -203,7 +207,7 @@ const solarTermsData = {
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           <Reveal class="lg:col-span-5">
             <FigurePlate
-              src="/art/seasons.svg"
+              src="/art-hd/four-seasons.jpg"
               alt="二十四节气色环图版"
               index="PLATE 06"
               caption="每个扇区六个节气，构成黑土农事的最小时间单位。"

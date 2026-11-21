@@ -101,7 +101,7 @@ const playNarration = () => {
     >
       <!-- 品牌 -->
       <RouterLink to="/" class="flex items-center gap-3 shrink-0 group">
-        <div class="w-10 h-10 bg-[#1C1B18] text-[#F7F4EE] flex items-center justify-center font-editorial font-bold text-lg transition-transform duration-500 group-hover:rotate-6">
+        <div class="w-10 h-10 rounded-xl bg-[#1C1B18] text-[#F0C275] flex items-center justify-center font-editorial font-bold text-lg shadow-[inset_0_0_0_1px_rgba(240,194,117,0.35)] transition-transform duration-500 group-hover:rotate-6">
           吉
         </div>
         <div class="hidden sm:block">
@@ -114,8 +114,12 @@ const playNarration = () => {
       <nav class="hidden lg:flex items-center gap-1 h-full">
         <RouterLink
           to="/"
-          class="inline-flex items-center px-4 py-2 min-h-[2.5rem] text-xs font-semibold transition-colors duration-300"
-          :class="route.path === '/' ? 'text-[#8A6324]' : 'text-[#5A564E] hover:text-[#1C1B18]'"
+          class="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#16261F] text-[#F0C275] text-xs font-bold mr-1 hover:bg-[#1F4E3D] transition-colors"
+        >← 返回 App</RouterLink>
+        <RouterLink
+          to="/museum"
+          class="nav-link inline-flex items-center px-4 py-2 min-h-[2.5rem] text-xs font-semibold"
+          :class="route.path === '/museum' ? 'nav-link--active' : 'text-[#5A564E] hover:text-[#1C1B18]'"
         >序厅</RouterLink>
         <div
           v-for="g in groups"
@@ -125,9 +129,9 @@ const playNarration = () => {
           @focusout="onGroupFocusOut($event, g.id)"
         >
           <button
-            class="flex items-center gap-1.5 px-4 py-2 min-h-[2.5rem] text-xs font-semibold transition-colors duration-300 cursor-pointer"
+            class="nav-link flex items-center gap-1.5 px-4 py-2 min-h-[2.5rem] text-xs font-semibold cursor-pointer"
             :class="activeGroup === g.id || g.items.some(i => i.path === route.path)
-              ? 'text-[#8A6324]' : 'text-[#5A564E] hover:text-[#1C1B18]'"
+              ? 'nav-link--active' : 'text-[#5A564E] hover:text-[#1C1B18]'"
             :aria-expanded="activeGroup === g.id"
             aria-haspopup="true"
             :aria-controls="'nav-panel-' + g.id"
@@ -149,7 +153,7 @@ const playNarration = () => {
             <div
               v-show="activeGroup === g.id"
               :id="'nav-panel-' + g.id"
-              class="absolute top-[3.875rem] left-0 w-[22.5rem] museum-card rounded-2xl border border-[#1C1B18]/10 p-3 shadow-2xl"
+              class="absolute top-[3.875rem] left-1/2 -translate-x-1/2 w-[22.5rem] museum-card rounded-2xl border border-[#1C1B18]/10 p-3 shadow-2xl"
             >
               <div class="px-3 py-2 font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324]">{{ g.caption }}</div>
               <RouterLink
@@ -185,7 +189,7 @@ const playNarration = () => {
         </button>
         <RouterLink
           to="/strata-3d"
-          class="hidden md:inline-flex items-center gap-2 px-4 py-2.5 bg-[#1C1B18] text-[#F7F4EE] text-[0.6875rem] font-bold rounded-lg hover:bg-[#C88A32] transition-colors duration-300"
+          class="hidden md:inline-flex items-center gap-2 px-4 py-2.5 bg-[#1C1B18] text-[#F7F4EE] text-[0.6875rem] font-bold rounded-full hover:bg-[#C88A32] hover:text-[#1C1B18] transition-colors duration-300 shadow-[0_10px_24px_-12px_rgba(28,27,24,0.6)]"
         >
           开始探索 <ArrowUpRight :size="13" />
         </RouterLink>

@@ -170,12 +170,14 @@ const references = [
                     <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#6E6960]">CONTENTS / 展览目录</span>
                     <span class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#8C583A]">{{ structure.length }} 章</span>
                   </div>
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-0.5">
                     <RouterLink v-for="s in structure" :key="s.no" :to="s.path"
-                      class="flex items-baseline gap-3 py-2.5 border-b border-[#1C1B18]/10 group">
-                      <span class="font-mono text-[0.625rem] text-[#8C583A] w-12 shrink-0">{{ s.no }}</span>
-                      <span class="text-[0.75rem] font-semibold group-hover:text-[#8C583A] transition-colors">{{ s.name }}</span>
-                      <span class="ml-auto text-[0.625rem] text-[#6E6960] hidden sm:block truncate max-w-[7.5rem]">{{ s.note }}</span>
+                      class="flex items-start gap-2.5 py-2.5 px-2 -mx-2 rounded-xl border-b border-[#1C1B18]/8 group hover:bg-[#EFECE6]/70 transition-colors">
+                      <span class="font-mono text-[0.625rem] text-[#8C583A] w-10 pt-0.5 shrink-0">{{ s.no }}</span>
+                      <span class="min-w-0 flex-1">
+                        <span class="block text-[0.8125rem] font-semibold text-[#1C1B18] group-hover:text-[#8C583A] transition-colors truncate">{{ s.name }}</span>
+                        <span class="block text-[0.625rem] text-[#6E6960] mt-0.5 truncate">{{ s.note }}</span>
+                      </span>
                     </RouterLink>
                   </div>
                   <div class="mt-5 pt-4 border-t border-[#1C1B18]/10 font-mono text-[0.5625rem] tracking-[0.16em] text-[#6E6960]">
@@ -246,7 +248,7 @@ const references = [
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mt-20 pt-16 border-t border-[#1C1B18]/12">
           <Reveal class="lg:col-span-5">
             <FigurePlate
-              src="/art/hero-field.svg"
+              src="/art-hd/black-soil-contours.jpg"
               alt="黑土田野等高线图版"
               index="PLATE 00"
               caption="全站视觉以暖白宣纸底、亚麻容器与墨黑正文为骨架，琥珀金标记焦点，苔藓青与工匠赤红分别留给生态与工业。"

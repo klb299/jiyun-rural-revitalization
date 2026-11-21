@@ -17,7 +17,8 @@ import {
 } from '../three/textures.js'
 
 const props = defineProps({
-  compact: { type: Boolean, default: false }
+  compact: { type: Boolean, default: false },
+  mobile: { type: Boolean, default: false }
 })
 
 const appStore = useAppStore()
@@ -2168,11 +2169,11 @@ const showTooltip = (key, event) => {
 
 const initThree = () => {
   if (!containerRef.value) return
-  qualityLabel.value = props.compact ? '流畅模式 · 沙盘预览' : '展览级 · IBL + GTAO'
+  qualityLabel.value = (props.compact || props.mobile) ? '流畅模式 · 沙盘预览' : '展览级 · IBL + GTAO'
   stage = createStage(containerRef.value, {
     background: PALETTE.canvas,
-    fov: 38,
-    camera: props.compact ? [29.5, 25, 29.5] : [27.5, 22.5, 27.5],
+    fov: props.mobile ? 46 : 38,
+    camera: props.mobile ? [38, 30, 38] : (props.compact ? [29.5, 25, 29.5] : [27.5, 22.5, 27.5]),
     target: [0, 0.4, 0],
     minDistance: 6,
     maxDistance: 72,
@@ -2181,15 +2182,16 @@ const initThree = () => {
     exposure: 1.06,
     environmentIntensity: 0.72,
     keyIntensity: 2.0,
-    shadowSize: 2048,
+    shadowSize: props.mobile ? 1024 : 2048,
     shadowFrustum: 27,
     shadowRadius: 5,
-    ao: !props.compact,
+    ao: !(props.compact || props.mobile),
+    showExtras: !props.mobile,
     aoScale: 0.55,
     aoRadius: 1.05,
     aoIntensity: 0.35,
     aoSamples: 10,
-    maxPixelRatio: props.compact ? 1.4 : 1.7,
+    maxPixelRatio: (props.compact || props.mobile) ? 1.4 : 1.7,
     onQualityChange: (q) => { qualityLabel.value = q === 'high' ? '展览级 · IBL + GTAO' : '流畅模式 · 自适应' },
     onFrame: (dt, t) => {
       windmills.forEach((r, i) => { r.rotation.z += dt * (0.62 + i * 0.07) })
@@ -2288,7 +2290,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="relative w-full h-full min-h-[36.25rem] bg-[#F7F4EE] select-none overflow-hidden rounded-3xl">
+  <div
+    class="relative w-full h-full bg-[#F7F4EE] select-none overflow-hidden"
+    :class="props.mobile ? '' : 'min-h-[36.25rem] rounded-3xl'"
+  >
     <div ref="containerRef" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
 
     <div
@@ -2301,6 +2306,63 @@ onUnmounted(() => {
       </div>
     </div>
 
+    <!-- ==================== 移动端 App 专属紧凑 HUD ==================== -->
+    <template v-if="props.mobile">
+      <div class="absolute top-3 right-3 flex items-center gap-1.5 z-10">
+        <button
+          type="button"
+          @click="toggleLightMood"
+          class="px-2.5 py-1.5 rounded-full bg-white/88 backdrop-blur-md border text-[11px] font-semibold shadow-xs cursor-pointer"
+          :class="lightMood === 'harvest' ? 'border-[#C88A32] text-[#C88A32]' : 'border-[#1C1B18]/12 text-[#1C1B18]'"
+        >
+          {{ lightMood === 'harvest' ? '🌇 金秋暖阳' : '☀️ 天光' }}
+        </button>
+        <button
+          type="button"
+          @click="toggleTour"
+          class="px-2.5 py-1.5 rounded-full bg-white/88 backdrop-blur-md border text-[11px] font-semibold shadow-xs cursor-pointer"
+          :class="isTouring ? 'border-[#2E5A44] text-[#2E5A44]' : 'border-[#1C1B18]/12 text-[#1C1B18]'"
+        >
+          {{ isTouring ? '⏸ 环视中' : '🎥 环视' }}
+        </button>
+      </div>
+
+      <div class="absolute bottom-3 left-3 right-3 z-10 space-y-2 pointer-events-auto">
+        <div class="bg-white/92 backdrop-blur-md rounded-2xl p-3 border border-[#1C1B18]/10 shadow-md">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[12px] font-bold text-[#1C1B18]">松辽平原 · 1:500 生态沙盘</span>
+            <span class="font-mono text-[9.5px] text-[#2E5A44] font-bold">双指缩放 · 单指旋转</span>
+          </div>
+          <p class="text-[10.5px] text-[#5A564E] mt-1 leading-relaxed">
+            点击下方视点一键飞越黑土稻浪、白瓷粮仓、光伏温室与风电微网。
+          </p>
+        </div>
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5">
+          <button
+            v-for="v in [
+              { key: 'overview', label: '🌐 全景' },
+              { key: 'blacksoil', label: '🌾 稻浪田' },
+              { key: 'silo', label: '🏛️ 粮仓' },
+              { key: 'windpower', label: '💨 风电' },
+              { key: 'greenhouse', label: '🌿 温室' },
+              { key: 'smartdrone', label: '🛸 无人机' }
+            ]"
+            :key="v.key"
+            type="button"
+            @click="appStore.setFocusPoint(v.key)"
+            class="shrink-0 px-3 py-1.5 rounded-xl border text-[10.5px] font-bold cursor-pointer transition-all"
+            :class="appStore.activeFocusPoint === v.key
+              ? 'bg-[#16261F] text-[#F0C275] border-[#16261F] shadow-sm'
+              : 'bg-white/88 backdrop-blur-md text-[#1C1B18] border-[#1C1B18]/10'"
+          >
+            {{ v.label }}
+          </button>
+        </div>
+      </div>
+    </template>
+
+    <!-- ==================== 桌面端展览馆完整 HUD ==================== -->
+    <template v-else>
     <!-- 顶部画廊微缩沙盘铭牌 -->
     <div class="absolute top-5 left-6 museum-panel px-4 py-2.5 rounded-2xl flex items-center gap-3 shadow-sm border border-[#1C1B18]/10 pointer-events-auto">
       <div class="w-2.5 h-2.5 rounded-full bg-[#2E5A44] animate-pulse"></div>
@@ -2394,6 +2456,7 @@ onUnmounted(() => {
           <span class="text-[#C88A32] font-semibold">SCALE 1:500</span>
         </div>
       </div>
+    </template>
     </template>
   </div>
 </template>

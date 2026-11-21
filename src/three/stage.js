@@ -643,7 +643,9 @@ export function createStage(container, options = {}) {
   extrasBar.addEventListener('click', onExtrasClick)
   window.addEventListener('keydown', onExtrasKey)
   renderExtrasMarks()
-  container.appendChild(extrasBar)
+  if (cfg.showExtras !== false) {
+    container.appendChild(extrasBar)
+  }
   cleanups.push(() => {
     stopExtrasTour()
     window.removeEventListener('keydown', onExtrasKey)

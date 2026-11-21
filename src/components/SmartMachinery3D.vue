@@ -10,6 +10,10 @@ import {
   labelTexture, mulberry32
 } from '../three/textures.js'
 
+const props = defineProps({
+  mobile: { type: Boolean, default: false }
+})
+
 const containerRef = ref(null)
 const isExploded = ref(false)
 const selectedPart = ref('all')
@@ -812,18 +816,20 @@ const initThree = () => {
   if (!containerRef.value) return
   stage = createStage(containerRef.value, {
     background: 0xF4F2EC,
-    fov: 38,
-    camera: [6.5, 4.0, 7.5],
+    fov: props.mobile ? 46 : 38,
+    camera: props.mobile ? [9.2, 5.2, 10.6] : [6.5, 4.0, 7.5],
     target: [0, 1.2, 0],
     minDistance: 3.4,
-    maxDistance: 15,
+    maxDistance: props.mobile ? 20 : 15,
     maxPolarAngle: Math.PI / 2 + 0.04,
     minPolarAngle: 0.25,
     exposure: 1.08,
     environmentIntensity: 0.82,
     keyIntensity: 2.1,
-    shadowSize: 2048,
+    shadowSize: props.mobile ? 1024 : 2048,
     shadowFrustum: 8,
+    ao: !props.mobile,
+    showExtras: !props.mobile,
     aoRadius: 0.3,
     aoIntensity: 0.44,
     onQualityChange: (q) => { qualityLabel.value = q === 'high' ? '展览级 · IBL + GTAO' : '流畅模式 · 自适应' },
@@ -886,7 +892,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="relative w-full h-full min-h-[36.25rem] bg-[#F4F2EC] select-none overflow-hidden rounded-3xl">
+  <div
+    class="relative w-full h-full bg-[#F4F2EC] select-none overflow-hidden"
+    :class="props.mobile ? '' : 'min-h-[36.25rem] rounded-3xl'"
+  >
     <div ref="containerRef" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
 
     <div
@@ -899,6 +908,55 @@ onUnmounted(() => {
       </div>
     </div>
 
+    <!-- ==================== 移动端 App 专属紧凑 HUD ==================== -->
+    <template v-if="props.mobile">
+      <div class="absolute top-3 right-3 flex items-center gap-1.5 z-10">
+        <button
+          type="button"
+          @click="toggleTour"
+          class="px-2.5 py-1.5 rounded-full bg-white/88 backdrop-blur-md border text-[11px] font-semibold shadow-xs cursor-pointer"
+          :class="isTouring ? 'border-[#C88A32] text-[#C88A32]' : 'border-[#1C1B18]/12 text-[#1C1B18]'"
+        >
+          {{ isTouring ? '⏸ 环视中' : '🎥 环视' }}
+        </button>
+        <button
+          type="button"
+          @click="toggleExplode"
+          class="px-2.5 py-1.5 rounded-full bg-white/88 backdrop-blur-md border text-[11px] font-semibold shadow-xs cursor-pointer"
+          :class="isExploded ? 'border-[#B83828] bg-[#FBECE9] text-[#B83828]' : 'border-[#1C1B18]/12 text-[#1C1B18]'"
+        >
+          {{ isExploded ? '🔩 合拢总成' : '💥 爆炸分解' }}
+        </button>
+      </div>
+
+      <div class="absolute bottom-3 left-3 right-3 z-10 space-y-2 pointer-events-auto">
+        <div class="bg-white/92 backdrop-blur-md rounded-2xl p-3 border border-[#1C1B18]/10 shadow-md">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[12px] font-bold text-[#1C1B18] truncate">{{ partsData[selectedPart].title }}</span>
+            <span class="shrink-0 font-mono text-[9.5px] px-1.5 py-0.5 rounded bg-[#B83828]/12 text-[#B83828] font-bold">{{ partsData[selectedPart].tag }}</span>
+          </div>
+          <div class="font-mono text-[10px] text-[#8A6324] font-semibold mt-0.5">{{ partsData[selectedPart].specs }}</div>
+          <p class="text-[10.5px] text-[#5A564E] mt-1 leading-relaxed line-clamp-2">{{ partsData[selectedPart].desc }}</p>
+        </div>
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5">
+          <button
+            v-for="(val, key) in partsData"
+            :key="key"
+            type="button"
+            @click="focusPart(key)"
+            class="shrink-0 px-3 py-1.5 rounded-xl border text-[10.5px] font-bold cursor-pointer transition-all"
+            :class="selectedPart === key
+              ? 'bg-[#16261F] text-[#F0C275] border-[#16261F] shadow-sm'
+              : 'bg-white/88 backdrop-blur-md text-[#1C1B18] border-[#1C1B18]/10'"
+          >
+            {{ val.tag }}
+          </button>
+        </div>
+      </div>
+    </template>
+
+    <!-- ==================== 桌面端展览馆完整 HUD ==================== -->
+    <template v-else>
     <!-- 顶栏画廊式标牌 -->
     <div class="absolute top-5 left-6 museum-panel px-4 py-2.5 rounded-2xl flex items-center gap-3 shadow-sm border border-[#1C1B18]/10 pointer-events-auto">
       <div class="w-2.5 h-2.5 rounded-full bg-[#B83828] animate-pulse"></div>
@@ -978,5 +1036,6 @@ onUnmounted(() => {
         <span class="truncate">{{ qualityLabel }}</span>
       </div>
     </div>
+    </template>
   </div>
 </template>

@@ -53,8 +53,8 @@ onUnmounted(() => {
       :class="dark ? 'text-[#F7F4EE]/6' : 'text-[#1C1B18]/5'"
       style="font-size: 7rem; line-height: 1">{{ index.slice(-2) }}</span>
     <div class="relative flex items-start justify-between gap-3">
-      <div class="font-editorial font-bold tabular-nums leading-none"
-        :style="{ color: accent, fontSize: 'clamp(2.2rem, 4vw, 3.8rem)' }">{{ display }}</div>
+      <div class="font-editorial font-bold tabular-nums leading-none whitespace-nowrap"
+        :style="{ color: accent, fontSize: 'clamp(1.9rem, 3.1vw, 3.25rem)' }">{{ display }}</div>
       <span v-if="index" class="font-mono text-[0.625rem] tracking-[0.2em] px-2 py-1 rounded-full"
         :class="dark ? 'bg-[#F7F4EE]/10 text-[#F7F4EE]/80' : 'bg-[#EFECE6] text-[#6E6960]'">{{ index }}</span>
     </div>

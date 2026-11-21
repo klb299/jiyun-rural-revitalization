@@ -51,74 +51,81 @@ const heroMeta = [
 
 <template>
   <div>
-    <!-- 01 冰湖：放射冰裂 + 四段仪轨刻度 -->
+    <!-- 01 冰湖：冰湖冬捕实景视觉 + 四段仪轨刻度 -->
     <section class="relative min-h-[100dvh] overflow-hidden flex items-center"
-      style="background: radial-gradient(85% 110% at 76% 18%, #24505D 0%, #16323C 42%, #0F2028 100%)">
-      <div class="absolute inset-0 coord-rule opacity-30 pointer-events-none"></div>
-
-      <!-- 右侧冰面同心裂 -->
-      <div data-parallax="-10" class="absolute -right-[10%] top-1/2 -translate-y-1/2 w-[52vw] h-[52vw] min-w-[26.25rem] min-h-[26.25rem] pointer-events-none">
-        <div class="absolute inset-0 rounded-full border border-[#CFE3E8]/18"></div>
-        <div class="absolute inset-[9%] rounded-full border border-[#CFE3E8]/14"></div>
-        <div class="absolute inset-[19%] rounded-full border border-[#CFE3E8]/12"></div>
-        <div class="absolute inset-[30%] rounded-full border border-[#C88A32]/35"></div>
-        <svg viewBox="0 0 200 200" class="absolute inset-0 w-full h-full opacity-45">
-          <g stroke="#CFE3E8" stroke-width="0.55" fill="none">
-            <path d="M100 100 L100 6 M100 100 L178 38 M100 100 L194 118 M100 100 L142 190 M100 100 L44 186 M100 100 L4 128 M100 100 L18 44 M100 100 L62 12"></path>
-            <path d="M100 100 L138 22 M100 100 L186 78 M100 100 L172 168 M100 100 L88 196 M100 100 L22 168 M100 100 L2 82 M100 100 L44 20"></path>
-          </g>
-        </svg>
-        <div class="absolute inset-[40%] rounded-full bg-[#C88A32] grid place-items-center shadow-[0_0_70px_rgba(200,138,50,.4)]">
-          <span class="font-editorial text-[#1C1B18] text-3xl sm:text-5xl font-bold">冬捕</span>
-        </div>
-      </div>
+      style="background: radial-gradient(80% 100% at 80% 24%, rgba(200, 138, 50, 0.22) 0%, transparent 55%), radial-gradient(90% 120% at 20% 10%, #173642 0%, #0E222B 52%, #081319 100%)">
+      <div class="absolute inset-0 coord-rule opacity-20 pointer-events-none"></div>
 
       <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-8">
             <span class="px-3 py-1.5 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[0.625rem] tracking-[0.2em] font-bold">CHAPTER 06</span>
-            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#CFE3E8]/65">INTANGIBLE HERITAGE / 查干湖冬捕生态非遗馆</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#CFE3E8]/75">INTANGIBLE HERITAGE / 查干湖冬捕生态非遗馆</span>
           </div>
         </Reveal>
 
-        <div class="max-w-3xl">
-          <h1 class="display-1 text-[#F7F4EE]" aria-label="冰湖腾鱼 千年渔猎焕新生">
-            <span v-for="(ch, i) in Array.from('冰湖腾鱼')" :key="'a' + i" class="kin-char"
-              :style="{ animationDelay: (0.12 + i * 0.07) + 's' }">{{ ch }}</span>
-            <span class="block whitespace-nowrap text-[#C88A32]" :style="{ fontSize: '0.62em' }">
-              <span v-for="(ch, i) in Array.from('千年渔猎焕新生')" :key="'b' + i" class="kin-char"
-                :style="{ animationDelay: (0.46 + i * 0.05) + 's' }">{{ ch }}</span>
-            </span>
-          </h1>
-          <Reveal :delay="560"><p class="font-editorial text-lg sm:text-2xl text-[#CFE3E8]/85 mt-7">圣水湖畔雪映红，一网拉出半个冬天</p></Reveal>
-          <Reveal :delay="640">
-            <p class="lede text-[#CFE3E8]/85 mt-5 max-w-2xl">
-              探寻中国北方现存唯一的古老渔猎部落传奇。祭湖醒网、马拉绞盘、万尾腾跃、抓大放小，四段仪轨串起一套关于「取之有度」的生态智慧。
-            </p>
-          </Reveal>
-          <Reveal :delay="720">
-            <div class="flex flex-wrap gap-3 mt-9">
-              <a href="#rites" class="mag-btn mag-btn--gold"><span>进入四段仪轨</span><span class="mag-btn__island"><ArrowUpRight :size="16" /></span></a>
-              <a href="#ecology" class="mag-btn mag-btn--light"><span>阅读生态解读</span><span class="mag-btn__island"><ArrowUpRight :size="16" /></span></a>
-            </div>
-          </Reveal>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+          <div class="lg:col-span-7">
+            <h1 class="display-1 text-[#F7F4EE]" aria-label="冰湖腾鱼 千年渔猎焕新生">
+              <span v-for="(ch, i) in Array.from('冰湖腾鱼')" :key="'a' + i" class="kin-char"
+                :style="{ animationDelay: (0.12 + i * 0.07) + 's' }">{{ ch }}</span>
+              <span class="block whitespace-nowrap text-[#E8BC6E]" :style="{ fontSize: '0.62em' }">
+                <span v-for="(ch, i) in Array.from('千年渔猎焕新生')" :key="'b' + i" class="kin-char"
+                  :style="{ animationDelay: (0.46 + i * 0.05) + 's' }">{{ ch }}</span>
+              </span>
+            </h1>
+            <Reveal :delay="560"><p class="font-editorial text-lg sm:text-2xl text-[#CFE3E8]/90 mt-7">圣水湖畔雪映红，一网拉出半个冬天</p></Reveal>
+            <Reveal :delay="640">
+              <p class="lede text-[#CFE3E8]/85 mt-5 max-w-2xl">
+                探寻中国北方现存唯一的古老渔猎部落传奇。祭湖醒网、马拉绞盘、万尾腾跃、抓大放小，四段仪轨串起一套关于「取之有度」的生态智慧。
+              </p>
+            </Reveal>
+            <Reveal :delay="720">
+              <div class="flex flex-wrap gap-3 mt-9">
+                <a href="#rites" class="mag-btn mag-btn--gold"><span>进入四段仪轨</span><span class="mag-btn__island"><ArrowUpRight :size="16" /></span></a>
+                <a href="#ecology" class="mag-btn mag-btn--light"><span>阅读生态解读</span><span class="mag-btn__island"><ArrowUpRight :size="16" /></span></a>
+              </div>
+            </Reveal>
 
-          <!-- 四段仪轨刻度，首屏可切换 -->
-          <Reveal :delay="800">
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-12 max-w-2xl">
-              <button v-for="(c, i) in customs" :key="c.no" @click="activeCustom = i"
-                class="text-left pt-3 border-t-2 transition-all duration-500 cursor-pointer group"
-                :class="activeCustom === i ? 'border-[#C88A32]' : 'border-[#CFE3E8]/25 hover:border-[#C88A32]/60'">
-                <div class="font-mono text-[0.5625rem] tracking-[0.18em] mb-1.5" :class="activeCustom === i ? 'text-[#8A6324]' : 'text-[#CFE3E8]/50'">{{ c.no }} / {{ c.tag }}</div>
-                <div class="text-[0.75rem] font-semibold" :class="activeCustom === i ? 'text-[#F7F4EE]' : 'text-[#CFE3E8]/70 group-hover:text-[#F7F4EE]'">{{ c.title.split(' · ')[0] }}</div>
-              </button>
-            </div>
-          </Reveal>
-          <Reveal :delay="880">
-            <div class="grid grid-cols-3 gap-4 mt-10 max-w-lg">
-              <div v-for="m in heroMeta" :key="m.k" class="border-t border-[#CFE3E8]/25 pt-3">
-                <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#8A6324]">{{ m.k }}</div>
-                <div class="text-[0.6875rem] mt-1.5 text-[#CFE3E8]/80">{{ m.v }}</div>
+            <!-- 四段仪轨刻度，首屏可切换 -->
+            <Reveal :delay="800">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-12 max-w-2xl">
+                <button v-for="(c, i) in customs" :key="c.no" @click="activeCustom = i"
+                  class="text-left pt-3 border-t-2 transition-all duration-500 cursor-pointer group"
+                  :class="activeCustom === i ? 'border-[#E8BC6E]' : 'border-[#CFE3E8]/25 hover:border-[#E8BC6E]/60'">
+                  <div class="font-mono text-[0.5625rem] tracking-[0.18em] mb-1.5" :class="activeCustom === i ? 'text-[#E8BC6E]' : 'text-[#CFE3E8]/55'">{{ c.no }} / {{ c.tag }}</div>
+                  <div class="text-[0.75rem] font-semibold" :class="activeCustom === i ? 'text-[#F7F4EE]' : 'text-[#CFE3E8]/75 group-hover:text-[#F7F4EE]'">{{ c.title.split(' · ')[0] }}</div>
+                </button>
+              </div>
+            </Reveal>
+            <Reveal :delay="880">
+              <div class="grid grid-cols-3 gap-4 mt-10 max-w-lg">
+                <div v-for="m in heroMeta" :key="m.k" class="border-t border-[#CFE3E8]/25 pt-3">
+                  <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#E8BC6E]">{{ m.k }}</div>
+                  <div class="text-[0.6875rem] mt-1.5 text-[#CFE3E8]/85">{{ m.v }}</div>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+
+          <!-- 右侧：冰湖冬捕画廊级主视觉 -->
+          <Reveal :delay="220" variant="scale" class="lg:col-span-5 relative" data-parallax="-8">
+            <div class="relative rounded-[2rem] p-2 bg-gradient-to-br from-[#CFE3E8]/25 via-[#C88A32]/25 to-[#081319]/60 shadow-[0_44px_100px_-34px_rgba(0,0,0,0.85)]">
+              <div class="relative rounded-[1.6rem] overflow-hidden aspect-[4/5] bg-[#0B1B24]">
+                <img src="/art-hd/chagan-winter.jpg" alt="查干湖冬捕日出冰湖图景" class="w-full h-full object-cover transition-transform duration-[1.6s] hover:scale-[1.04]" />
+                <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(180deg, rgba(8,19,25,0.08) 0%, transparent 45%, rgba(8,19,25,0.82) 100%)"></div>
+                <div class="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-[#0B1B24]/92 border border-[#CFE3E8]/20 font-mono text-[0.5625rem] tracking-[0.2em] text-[#F0C275]">
+                  45°15'N · SONGLIAO ICE LAKE
+                </div>
+                <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-3">
+                  <div>
+                    <div class="font-mono text-[0.5625rem] tracking-[0.2em] text-[#E8BC6E] mb-1">RITE {{ customs[activeCustom].no }} / {{ customs[activeCustom].tag }}</div>
+                    <div class="font-editorial text-xl font-bold text-[#FFFDF9]">{{ customs[activeCustom].title }}</div>
+                  </div>
+                  <span class="w-10 h-10 shrink-0 rounded-full bg-[#C88A32] text-[#1C1B18] font-editorial font-bold text-base grid place-items-center shadow-lg">
+                    {{ customs[activeCustom].icon }}
+                  </span>
+                </div>
               </div>
             </div>
           </Reveal>
@@ -168,20 +175,23 @@ const heroMeta = [
           <Reveal v-for="(c, i) in customs" :key="c.no" :delay="i * 90">
             <button
               @click="activeCustom = i"
-              class="group w-full h-full text-left border p-6 lift cursor-pointer"
+              class="group w-full h-full text-left rounded-3xl border p-6 lift cursor-pointer"
               :class="activeCustom === i
-                ? 'border-[#C88A32] bg-[#FFFDF9]'
-                : 'border-[#1C1B18]/10 bg-[#FFFDF9]/55'"
+                ? 'border-[#C88A32] bg-[#FFFDF9] shadow-[0_24px_50px_-30px_rgba(200,138,50,0.45)]'
+                : 'border-[#1C1B18]/10 bg-[#FFFDF9]/65'"
             >
-              <div class="flex items-start justify-between mb-8">
+              <div class="flex items-start justify-between mb-7">
                 <span class="w-10 h-10 rounded-full border border-[#1C1B18]/16 flex items-center justify-center font-editorial text-lg"
                   :class="activeCustom === i ? 'bg-[#C88A32] text-[#1C1B18] border-[#C88A32]' : 'text-[#5A564E]'">{{ c.icon }}</span>
                 <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#6E6960]">{{ c.no }}</span>
               </div>
-              <h3 class="display-3 group-hover:text-[#C88A32] transition-colors">{{ c.title }}</h3>
+              <h3 class="font-editorial text-2xl font-bold leading-snug text-[#1C1B18] group-hover:text-[#A9701F] transition-colors">
+                <span class="block">{{ c.title.split(' · ')[0] }}</span>
+                <span class="block text-base font-semibold text-[#8A6324] mt-1">{{ c.title.split(' · ')[1] }}</span>
+              </h3>
               <p class="caption mt-3">{{ c.phase }}</p>
               <div class="mt-6 pt-4 border-t border-[#1C1B18]/10 flex items-center justify-between">
-                <span class="px-2 py-1 bg-[#EFECE6] text-[0.625rem] font-mono text-[#5A564E]">{{ c.tag }}</span>
+                <span class="px-2.5 py-1 rounded-full bg-[#EFECE6] text-[0.625rem] font-mono text-[#5A564E]">{{ c.tag }}</span>
                 <ArrowUpRight :size="15" class="text-[#C88A32] arrow-shift" />
               </div>
             </button>
@@ -189,7 +199,7 @@ const heroMeta = [
         </div>
 
         <Reveal :delay="140" class="mt-8">
-          <div class="border border-[#1C1B18]/12 bg-[#FFFDF9]/85 p-7 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <div class="rounded-3xl border border-[#1C1B18]/10 bg-[#FFFDF9]/90 shadow-[0_24px_60px_-36px_rgba(28,27,24,0.3)] p-7 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div class="lg:col-span-8">
               <div class="flex items-center gap-3 mb-5">
                 <span class="font-mono text-[0.6875rem] tracking-[0.18em] text-[#8A6324]">RITE {{ customs[activeCustom].no }}</span>

@@ -48,61 +48,64 @@ const decisions = [
 
 <template>
   <div>
-    <!-- 01 琥珀金封面 -->
-    <section class="relative overflow-hidden" style="background: linear-gradient(145deg, #E7BC6C 0%, #C88A32 48%, #A9701F 100%)">
-      <div class="absolute inset-0 coord-rule opacity-25 pointer-events-none"></div>
-      <div class="absolute -left-16 -bottom-28 font-editorial font-bold text-[#1C1B18]/[0.07] select-none" style="font-size: 30rem; line-height: 1">04</div>
-      <div data-parallax="-12" class="absolute -right-[8%] -top-[20%] w-[34vw] h-[34vw] min-w-[21.25rem] min-h-[21.25rem] rounded-full bg-[#FFFDF9]/12 blur-2xl pointer-events-none"></div>
+    <!-- 01 曜黑遥测封面 -->
+    <section class="surface-ink relative overflow-hidden">
+      <div class="absolute inset-0 coord-rule opacity-20 pointer-events-none"></div>
+      <div class="absolute -left-16 -bottom-28 font-editorial font-bold text-[#F7F4EE]/[0.03] select-none pointer-events-none" style="font-size: 30rem; line-height: 1">04</div>
 
       <div class="relative max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 sm:pt-32 pb-16 sm:pb-20">
         <Reveal>
           <div class="flex flex-wrap items-center gap-3 mb-9">
-            <span class="px-3 py-1.5 rounded-full bg-[#1C1B18] text-[#F7F4EE] font-mono text-[0.625rem] tracking-[0.2em] font-bold">CHAPTER 04</span>
-            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#1C1B18]/65">SMART RURAL TELEMETRY / 数智驾驶舱</span>
+            <span class="px-3 py-1.5 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[0.625rem] tracking-[0.2em] font-bold">CHAPTER 04</span>
+            <span class="font-mono text-[0.625rem] tracking-[0.2em] text-[#F7F4EE]/70">SMART RURAL TELEMETRY / 数智驾驶舱</span>
           </div>
         </Reveal>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           <div class="lg:col-span-8">
-            <h1 class="display-1 text-[#1C1B18]" aria-label="把黑土的脉搏，画成图表">
-              <span v-for="(ch, i) in Array.from('把黑土的脉搏')" :key="'a' + i" class="kin-char"
-                :style="{ animationDelay: (0.1 + i * 0.055) + 's' }">{{ ch }}</span>
-              <span v-for="(ch, i) in Array.from('画成图表')" :key="'b' + i" class="kin-char"
-                :style="{ animationDelay: (0.5 + i * 0.075) + 's' }">{{ ch }}</span>
+            <h1 class="display-1 text-[#F7F4EE]" aria-label="把黑土的脉搏，画成图表">
+              <span class="block">
+                <span v-for="(ch, i) in Array.from('把黑土的脉搏')" :key="'a' + i" class="kin-char"
+                  :style="{ animationDelay: (0.1 + i * 0.055) + 's' }">{{ ch }}</span>
+              </span>
+              <span class="block text-[#E8BC6E]">
+                <span v-for="(ch, i) in Array.from('画成图表')" :key="'b' + i" class="kin-char"
+                  :style="{ animationDelay: (0.5 + i * 0.075) + 's' }">{{ ch }}</span>
+              </span>
             </h1>
             <Reveal :delay="620">
-              <p class="font-editorial text-xl sm:text-2xl text-[#1C1B18]/80 mt-7">吉林黑土粮仓 · 数字乡村驾驶舱</p>
+              <p class="font-editorial text-xl sm:text-2xl text-[#F7F4EE]/90 mt-7">吉林黑土粮仓 · 数字乡村驾驶舱</p>
             </Reveal>
             <Reveal :delay="700">
-              <p class="lede text-[#1C1B18]/75 mt-5 max-w-2xl">
+              <p class="lede text-[#F7F4EE]/80 mt-5 max-w-2xl">
                 依托长春科研枢纽的空天地一体化监测，把土壤墒情、有机质、积温与农机作业状态汇总到同一张展台。这里既是数据看板，也是理解黑土保护成效的一把尺子。
               </p>
             </Reveal>
             <Reveal :delay="780">
               <div class="flex flex-wrap gap-3 mt-9">
-                <a href="#telemetry" class="mag-btn"><span>查看实时监测</span><span class="mag-btn__island"><ArrowUpRight :size="16" /></span></a>
+                <a href="#telemetry" class="mag-btn mag-btn--gold"><span>查看实时监测</span><span class="mag-btn__island"><ArrowUpRight :size="16" /></span></a>
                 <a href="#logistics" class="mag-btn mag-btn--light"><span>阅读保供调度</span><span class="mag-btn__island"><ArrowUpRight :size="16" /></span></a>
               </div>
             </Reveal>
           </div>
 
-          <!-- 墨色数据环 -->
+          <!-- 精密玻璃遥测仪 -->
           <Reveal :delay="200" variant="scale" class="lg:col-span-4 hidden lg:block" data-parallax="-9">
-            <div class="relative mx-auto w-[18.75rem] h-[18.75rem]">
-              <div class="absolute inset-0 rounded-full bg-[#1C1B18] shadow-[0_40px_90px_-40px_rgba(28,27,24,0.8)]"></div>
-              <div class="absolute inset-5 rounded-full border border-[#C88A32]/45"></div>
-              <div class="absolute inset-10 rounded-full border border-[#F7F4EE]/12"></div>
-              <svg viewBox="0 0 200 200" class="absolute inset-0 w-full h-full animate-[spin_30s_linear_infinite]">
+            <div class="relative mx-auto w-[19.5rem] h-[19.5rem]">
+              <div class="absolute inset-0 rounded-full border border-[#F0C275]/25 bg-[#F7F4EE]/[0.04] backdrop-blur-md shadow-[0_36px_90px_-30px_rgba(0,0,0,0.85)]"></div>
+              <div class="absolute inset-4 rounded-full border border-dashed border-[#C88A32]/40"></div>
+              <div class="absolute inset-9 rounded-full border border-[#F7F4EE]/12"></div>
+              <svg viewBox="0 0 200 200" class="absolute inset-0 w-full h-full animate-[spin_36s_linear_infinite]">
                 <defs><path id="dash-ring" d="M100,100 m-88,0 a88,88 0 1,1 176,0 a88,88 0 1,1 -176,0"></path></defs>
-                <text font-family="ui-monospace, monospace" font-size="8" letter-spacing="2.4" fill="#C88A32">
+                <text font-family="ui-monospace, monospace" font-size="7.5" letter-spacing="2.4" fill="#E8BC6E">
                   <textPath href="#dash-ring">SOIL HEALTH INDEX · JILIN · 5G IOT · 2026 · </textPath>
                 </text>
               </svg>
               <div class="absolute inset-0 grid place-items-center text-center">
                 <div>
-                  <div class="font-mono text-[0.5625rem] tracking-[0.22em] text-[#8A6324] mb-2">ORGANIC MATTER</div>
-                  <div class="font-editorial text-6xl font-bold text-[#F7F4EE] leading-none">4.82<span class="text-2xl">%</span></div>
-                  <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#F7F4EE]/80 mt-3">特级肥力黑土</div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.22em] text-[#E8BC6E] mb-2">ORGANIC MATTER</div>
+                  <div class="font-editorial text-6xl font-bold text-[#F7F4EE] leading-none">4.82<span class="text-2xl text-[#E8BC6E]">%</span></div>
+                  <div class="font-mono text-[0.5625rem] tracking-[0.18em] text-[#F7F4EE]/75 mt-3">特级肥力黑土</div>
                 </div>
               </div>
             </div>
@@ -110,23 +113,23 @@ const decisions = [
         </div>
 
         <Reveal :delay="860" class="mt-16">
-          <div class="rounded-2xl bg-[#1C1B18] grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[#F7F4EE]/12 overflow-hidden">
+          <div class="rounded-2xl bg-[#F7F4EE]/[0.06] border border-[#F7F4EE]/12 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[#F7F4EE]/12 overflow-hidden">
             <div v-for="m in [
               { k: 'SOURCE', v: '中科院东北地理所 / 农高区' },
               { k: 'LINK', v: '5G 专网双向回传' },
               { k: 'UPDATE', v: '教学演示数据' }
             ]" :key="m.k" class="px-6 py-5">
-              <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#8A6324] mb-1.5">{{ m.k }}</div>
+              <div class="font-mono text-[0.625rem] tracking-[0.2em] text-[#E8BC6E] mb-1.5">{{ m.k }}</div>
               <div class="text-sm font-semibold text-[#F7F4EE]">{{ m.v }}</div>
             </div>
           </div>
         </Reveal>
       </div>
 
-      <div class="marquee border-t border-[#1C1B18]/15 py-2.5" aria-hidden="true">
+      <div class="marquee border-t border-[#F7F4EE]/12 bg-[#141310]/80 py-2.5" aria-hidden="true">
         <div class="marquee-track">
-          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.6875rem] tracking-[0.2em] text-[#1C1B18]/70 whitespace-nowrap">
-            <span>REAL-TIME TELEMETRY</span><span>✳</span><span>黑土地生境健康</span><span>✳</span><span>880 亿斤 / 年</span><span>✳</span><span>GRAIN LOGISTICS</span><span>✳</span>
+          <span v-for="n in 2" :key="n" class="flex shrink-0 items-center gap-6 pr-6 font-mono text-[0.6875rem] tracking-[0.2em] text-[#F7F4EE]/75 whitespace-nowrap">
+            <span>REAL-TIME TELEMETRY</span><span class="text-[#C88A32]">✳</span><span>黑土地生境健康</span><span class="text-[#C88A32]">✳</span><span>880 亿斤 / 年</span><span class="text-[#C88A32]">✳</span><span>GRAIN LOGISTICS</span><span class="text-[#C88A32]">✳</span>
           </span>
         </div>
       </div>
@@ -173,7 +176,7 @@ const decisions = [
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-14">
           <Reveal class="lg:col-span-8">
             <div class="bezel bezel--ink h-full">
-              <div class="bezel-core bg-[#F7F4EE] overflow-x-auto">
+              <div class="bezel-core h-full bg-[#F7F4EE] overflow-x-auto flex flex-col justify-between">
                 <table class="w-full text-left min-w-[35rem]">
                   <thead>
                     <tr class="bg-[#EFECE6]">
@@ -218,7 +221,7 @@ const decisions = [
         <Reveal class="lg:col-span-5 relative" data-parallax="-8">
           <div class="bezel z-card" style="transform: rotate(-3deg)">
             <div class="bezel-core">
-              <img src="/art/soil-strata.svg" alt="黑土剖面与监测层位图版" loading="lazy" class="w-full aspect-[4/5] object-cover" />
+              <img src="/art-hd/soil-specimen.jpg" alt="黑土剖面与监测层位微距标本" loading="lazy" class="w-full aspect-[4/3] object-cover" />
             </div>
           </div>
           <div class="absolute -bottom-7 -right-6 card-moss z-card px-6 py-4 rounded-2xl" style="transform: rotate(4deg)">

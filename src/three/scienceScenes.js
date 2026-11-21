@@ -1340,13 +1340,21 @@ export function buildNoTillScene(scene, stage) {
   openerGroup.userData.key = 'opener'
   const openerParts = []
   const partByKey = {}
+  // 装配坐标重映射：原零件散落在 x 1.0–1.9 / y 0.1–1.0，相对 3.6 宽的土块太小。
+  // 统一放大并移到土块上方居中，使收拢状态就能读出「一台播种机」。
+  const fitPart = (base) => [
+    (base[0] - 1.36) * 1.35,
+    (base[1] - 0.45) * 1.35 + 0.62,
+    (base[2] - 0.55) * 1.35
+  ]
   const addPart = (mesh, base, dir, key) => {
-    mesh.position.set(base[0], base[1], base[2])
+    const fitted = fitPart(base)
+    mesh.position.set(fitted[0], fitted[1], fitted[2])
     openerGroup.add(mesh)
     const v = new THREE.Vector3(base[0] - 1.38, base[1] - 0.45, base[2] - 0.55)
     if (v.lengthSq() < 0.001) v.set(dir[0], dir[1], dir[2])
     else v.normalize().add(new THREE.Vector3(dir[0], dir[1], dir[2]).multiplyScalar(0.35)).normalize()
-    const entry = { mesh, base: new THREE.Vector3(base[0], base[1], base[2]), dir: v }
+    const entry = { mesh, base: new THREE.Vector3(fitted[0], fitted[1], fitted[2]), dir: v }
     openerParts.push(entry)
     if (key) {
       mesh.userData.key = key
@@ -1357,6 +1365,22 @@ export function buildNoTillScene(scene, stage) {
     }
   }
 
+  // 播种机机身框架：给散件一个可读的整体轮廓（纵梁 + 横梁 + 种箱托架）
+  const frameMat = metalMaterial(0x3A3630, { roughness: 0.56, metalness: 0.55 }).clone()
+  const chassis = new THREE.Group()
+  chassis.userData.key = 'chassisFrame'
+  const beam = new THREE.Mesh(roundedBox(1.9, 0.11, 0.16, 0.03, 4), frameMat)
+  beam.position.set(0, 0.58, 0)
+  chassis.add(beam)
+  const cross = new THREE.Mesh(roundedBox(0.14, 0.09, 1.0, 0.03, 4), frameMat)
+  cross.position.set(0.55, 0.58, 0)
+  chassis.add(cross)
+  const tongue = new THREE.Mesh(roundedBox(0.72, 0.08, 0.1, 0.025, 3), frameMat)
+  tongue.position.set(1.15, 0.58, 0)
+  tongue.rotation.z = -0.12
+  chassis.add(tongue)
+  openerGroup.add(chassis)
+
   const steel = metalMaterial(PALETTE.gold, { roughness: 0.32, metalness: 0.82 }).clone()
   const darkSteel = metalMaterial(0x6E6960, { roughness: 0.42 }).clone()
 
@@ -1365,24 +1389,24 @@ export function buildNoTillScene(scene, stage) {
   const teeth = 14
   for (let i = 0; i <= teeth * 2; i++) {
     const a = (i / (teeth * 2)) * Math.PI * 2
-    const rr = i % 2 ? 0.285 : 0.335
+    const rr = i % 2 ? 0.52 : 0.60
     if (i === 0) toothShape.moveTo(Math.cos(a) * rr, Math.sin(a) * rr)
     else toothShape.lineTo(Math.cos(a) * rr, Math.sin(a) * rr)
   }
   const notchedDiscGeo = new THREE.ExtrudeGeometry(toothShape, {
-    depth: 0.024, bevelEnabled: true, bevelSize: 0.006,
-    bevelThickness: 0.005, bevelSegments: 2, curveSegments: 1
+    depth: 0.04, bevelEnabled: true, bevelSize: 0.008,
+    bevelThickness: 0.008, bevelSegments: 2, curveSegments: 1
   })
   const disc = new THREE.Mesh(notchedDiscGeo, steel)
   disc.rotation.y = Math.PI / 2
-  addPart(disc, [0.98, 0.20, 0.64], [-1, 0, 0], 'disc')
+  addPart(disc, [0.75, 0.10, 0.62], [-1, 0, 0], 'disc')
   const disc2 = new THREE.Mesh(notchedDiscGeo.clone().scale(0.82, 0.82, 1), darkSteel)
   disc2.rotation.y = Math.PI / 2
-  addPart(disc2, [0.98, 0.20, 0.42], [-1, 0, -1], 'disc2')
+  addPart(disc2, [0.75, 0.10, 0.18], [-1, 0, -1], 'disc2')
 
   const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 0.09, 24), lacquerMaterial(0x1C1B18).clone())
   hub.rotation.z = Math.PI / 2
-  addPart(hub, [0.98, 0.20, 0.64], [-1, 1, 0], 'hub')
+  addPart(hub, [0.75, 0.10, 0.62], [-1, 1, 0], 'hub')
   const boltGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.1, 8)
   for (let i = 0; i < 6; i++) {
     const a = (i / 6) * Math.PI * 2
@@ -1428,6 +1452,12 @@ export function buildNoTillScene(scene, stage) {
   addPart(boot, [1.06, 0.13, 0.55], [-0.5, -1, 0], 'boot')
   const hitch = new THREE.Mesh(roundedBox(0.5, 0.06, 0.07, 0.02, 3), darkSteel)
   addPart(hitch, [1.72, 0.72, 0.55], [1, 0.5, 0], 'hitch')
+  // 整机抬到剖面上方：让播种总成成为独立可读的机器，而不是贴在土块上的散件
+  openerGroup.position.set(-0.35, 0.78, 0)
+  openerGroup.scale.setScalar(1.28)
+  // 整机抬到剖面上方：让播种总成成为独立可读的机器，而不是贴在土块上的散件
+  openerGroup.position.set(-0.35, 0.78, 0)
+  openerGroup.scale.setScalar(1.28)
   groups.opener = openerGroup
 
   keys.forEach((k) => root.add(groups[k]))
