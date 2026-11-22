@@ -16,7 +16,8 @@ const normalizedBase = rawBase.endsWith('/') ? rawBase : `${rawBase}/`
  */
 function githubPagesBasePlugin(base) {
   const isSubpath = base !== '/'
-  const publicPrefixRe = /(['"(])\/(art-custom|art-hd|art|photos)\//g
+  // Vite 8 / Rolldown 压缩会把 JS 字符串转为反引号模板字面量（`/art-hd/...`），因此必须同时匹配 ' " ` (
+  const publicPrefixRe = /(['"`(])\/(art-custom|art-hd|art|photos)\//g
 
   return {
     name: 'github-pages-base-rewrite',

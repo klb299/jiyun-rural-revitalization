@@ -754,13 +754,21 @@ const defaultAppConfig = {
   }
 }
 
+function normalizePublicPaths(raw) {
+  let out = raw.replaceAll('/art-hd/smart-machinery.jpg', '/art-custom/changchun-tractor.jpg')
+  const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/')
+  if (base !== '/') {
+    out = out.replace(/"\/(art-custom|art-hd|art|photos)\//g, `"${base}$1/`)
+  }
+  return out
+}
+
 function loadState() {
   if (typeof window === 'undefined') return null
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY)
     if (!raw) return null
-    const migrated = raw.replaceAll('/art-hd/smart-machinery.jpg', '/art-custom/changchun-tractor.jpg')
-    return JSON.parse(migrated)
+    return JSON.parse(normalizePublicPaths(raw))
   } catch {
     return null
   }
