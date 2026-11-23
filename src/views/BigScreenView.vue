@@ -7,6 +7,7 @@ import {
 } from 'lucide-vue-next'
 import echarts from '../lib/echarts.js'
 import { useRuralPlatformStore } from '../stores/ruralPlatformStore'
+import BrandLogo from '../components/BrandLogo.vue'
 
 const store = useRuralPlatformStore()
 
@@ -217,14 +218,29 @@ function renderCharts() {
 
   if (donutChart) {
     const colors = ['#4ADE80', '#F0C275', '#38BDF8', '#FB7185', '#A78BFA', '#34D399', '#F59E0B', '#60A5FA']
+    const shareMap = new Map(store.categoryShare.map((c) => [c.name, c.value]))
     donutChart.setOption({
       tooltip: { trigger: 'item', formatter: '{b}：{c}%', backgroundColor: '#12231C', borderColor: '#C88A32', textStyle: { color: '#F7F4EE', fontSize: 11 } },
+      legend: {
+        orient: 'vertical',
+        right: 2,
+        top: 'middle',
+        itemWidth: 8,
+        itemHeight: 8,
+        itemGap: 5,
+        textStyle: { color: '#D7E4DD', fontSize: 10.5, fontFamily: 'ui-monospace, "PingFang SC", sans-serif' },
+        formatter: (name) => `${name} ${shareMap.get(name) ?? 0}%`
+      },
       series: [{
         type: 'pie',
-        radius: ['52%', '76%'],
-        center: ['50%', '50%'],
-        itemStyle: { borderColor: '#0E1C16', borderWidth: 2, borderRadius: 6 },
-        label: { color: '#E5E7EB', fontSize: 10.5, formatter: '{b}\n{c}%' },
+        radius: ['46%', '72%'],
+        center: ['31%', '50%'],
+        itemStyle: { borderColor: '#0E1C16', borderWidth: 2, borderRadius: 5 },
+        label: { show: false },
+        labelLine: { show: false },
+        emphasis: {
+          label: { show: true, formatter: '{b}\n{c}%', color: '#F5D393', fontSize: 11, fontWeight: 'bold' }
+        },
         data: store.categoryShare.map((c, idx) => ({
           name: c.name,
           value: c.value,
@@ -264,9 +280,7 @@ onUnmounted(() => {
     <!-- 顶部鎏金指挥标题栏 -->
     <header class="shrink-0 h-14 px-5 bg-gradient-to-r from-[#0F2019] via-[#152D23] to-[#0F2019] border-b border-[#F0C275]/22 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-[#F0C275] to-[#C88A32] text-[#0B1511] font-editorial font-bold flex items-center justify-center text-base">
-          禾
-        </div>
+        <BrandLogo :size="34" variant="gold" />
         <div>
           <h1 class="font-editorial text-[17px] font-bold tracking-wider text-[#F5D393]">吉韵禾野 · 吉林黑土乡村振兴数智指挥大屏</h1>
           <div class="font-mono text-[9.5px] tracking-[0.22em] text-[#86EFAC]/75">RURAL REVITALIZATION DIGITAL TWIN COMMAND CENTER</div>

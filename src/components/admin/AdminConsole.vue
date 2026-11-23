@@ -11,6 +11,7 @@ import {
 import { useRuralPlatformStore } from '../../stores/ruralPlatformStore'
 import RuralAdminCharts from './RuralAdminCharts.vue'
 import AdminTelemetryMap from './AdminTelemetryMap.vue'
+import BrandLogo from '../BrandLogo.vue'
 
 const props = defineProps({
   embedded: { type: Boolean, default: false }
@@ -385,9 +386,7 @@ watch(() => props.embedded, () => {
 
     <div class="w-full max-w-[430px] bg-white rounded-[1.85rem] border border-[#1C1B18]/10 shadow-[0_28px_70px_-28px_rgba(22,38,31,0.28)] p-8 relative z-10">
       <div class="flex items-center gap-3 mb-6">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#1F4E3D] to-[#12241C] text-[#F5D393] flex items-center justify-center font-editorial font-bold text-xl shadow-sm">
-          禾
-        </div>
+        <BrandLogo :size="48" />
         <div>
           <div class="font-mono text-[10px] tracking-[0.2em] text-[#6E6960]">RURAL REVITALIZATION ADMIN</div>
           <h1 class="font-editorial text-xl font-bold text-[#16261F]">吉韵禾野 · 后台管理系统</h1>
@@ -455,9 +454,7 @@ watch(() => props.embedded, () => {
     >
       <div class="p-4 overflow-y-auto">
         <div class="flex items-center gap-2.5 px-2 py-2 mb-5">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#F0C275] to-[#C88A32] text-[#16261F] flex items-center justify-center font-editorial font-bold text-lg shrink-0 shadow-xs">
-            禾
-          </div>
+          <BrandLogo :size="36" variant="gold" />
           <div class="min-w-0">
             <div class="font-editorial font-bold text-[14.5px] leading-tight truncate">吉韵禾野中枢</div>
             <div class="font-mono text-[9px] tracking-[0.16em] text-[#F7F4EE]/55 mt-0.5">ADMIN CONSOLE v2.0</div>

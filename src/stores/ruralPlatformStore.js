@@ -792,6 +792,7 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
   const favorites = ref(saved?.favorites || ['prod-1', 'prod-2'])
   const activityLogs = ref(saved?.activityLogs || structuredClone(defaultActivityLogs))
   const appConfig = ref(saved?.appConfig || structuredClone(defaultAppConfig))
+  const gameStats = ref(saved?.gameStats || { bestScore: 0, plays: 0, lastRank: '', totalCarbon: 0 })
   const cart = ref([])
   const lastSyncEvent = ref('双端数据已就绪 · 毫秒级双向联动')
 
@@ -849,7 +850,8 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
         coupons: coupons.value,
         favorites: favorites.value,
         activityLogs: activityLogs.value,
-        appConfig: appConfig.value
+        appConfig: appConfig.value,
+        gameStats: gameStats.value
       }))
     } catch {
       // 忽略配额异常
@@ -857,7 +859,7 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
   }
 
   watch(
-    [products, liveCams, orders, plots, adoptions, projects, notices, feedbacks, machinery, revenueTrend, coupons, favorites, activityLogs, appConfig],
+    [products, liveCams, orders, plots, adoptions, projects, notices, feedbacks, machinery, revenueTrend, coupons, favorites, activityLogs, appConfig, gameStats],
     persist,
     { deep: true }
   )
@@ -881,6 +883,7 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
         if (next.favorites) favorites.value = next.favorites
         if (next.activityLogs) activityLogs.value = next.activityLogs
         if (next.appConfig) appConfig.value = next.appConfig
+        if (next.gameStats) gameStats.value = next.gameStats
         lastSyncEvent.value = `跨端同步更新 · ${formatTimeNow().slice(11)}`
       } finally {
         window.setTimeout(() => { isApplyingExternal = false }, 50)
@@ -1225,6 +1228,33 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
     feedbacks.value = feedbacks.value.filter((x) => x.id !== id)
   }
 
+  function recordGameReward({ score = 0, rank = '', carbonEarned = 0, harvestYuan = 0, soilHealth = 100 }) {
+    const cleanScore = Math.max(0, Math.round(Number(score) || 0))
+    const cleanCarbon = Math.max(0, Math.round(Number(carbonEarned) || 0))
+    const cleanYuan = Math.max(0, Math.round(Number(harvestYuan) || 0))
+    const cleanSoil = Math.max(0, Math.min(100, Math.round(Number(soilHealth) || 0)))
+
+    gameStats.value = {
+      bestScore: Math.max(gameStats.value?.bestScore || 0, cleanScore),
+      plays: (gameStats.value?.plays || 0) + 1,
+      lastRank: rank || gameStats.value?.lastRank || '',
+      totalCarbon: (gameStats.value?.totalCarbon || 0) + cleanCarbon
+    }
+
+    if (appConfig.value?.userProfile) {
+      appConfig.value.userProfile.points = (appConfig.value.userProfile.points || 0) + cleanCarbon
+      const addedKg = Number(Math.max(0.4, cleanCarbon / 95).toFixed(1))
+      appConfig.value.userProfile.carbonSavedKg = Number(((appConfig.value.userProfile.carbonSavedKg || 0) + addedKg).toFixed(1))
+    }
+
+    pushLog(
+      '互动游戏',
+      `黑土守护者结算 (${rank || '完赛'})`,
+      `得分 ${cleanScore} · 助农产值 ¥${cleanYuan} · 黑土健康 ${cleanSoil}% · +${cleanCarbon} 积分直达 App 碳账本`
+    )
+    return gameStats.value
+  }
+
   function resetAllDemoData() {
     products.value = structuredClone(defaultProducts)
     liveCams.value = structuredClone(defaultLiveCams)
@@ -1240,6 +1270,7 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
     favorites.value = ['prod-1', 'prod-2']
     activityLogs.value = structuredClone(defaultActivityLogs)
     appConfig.value = structuredClone(defaultAppConfig)
+    gameStats.value = { bestScore: 0, plays: 0, lastRank: '', totalCarbon: 0 }
     cart.value = []
     lastSyncEvent.value = '已恢复出厂答辩演示数据'
   }
@@ -1262,6 +1293,7 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
     favorites,
     activityLogs,
     appConfig,
+    gameStats,
     cart,
     cartCount,
     cartTotal,
@@ -1300,6 +1332,7 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
     deleteNotice,
     replyFeedback,
     deleteFeedback,
+    recordGameReward,
     resetAllDemoData
   }
 })

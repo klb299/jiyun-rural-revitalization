@@ -1,7 +1,8 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { Volume2, VolumeX, Menu, X, ArrowUpRight, ChevronDown, Smartphone, Columns2, Monitor } from 'lucide-vue-next'
+import { Volume2, VolumeX, Menu, X, ArrowUpRight, ChevronDown, Smartphone, Columns2, Monitor, Gamepad2 } from 'lucide-vue-next'
+import BrandLogo from './BrandLogo.vue'
 import { useAppStore } from '../stores/appStore'
 
 const route = useRoute()
@@ -194,28 +195,26 @@ const playNarration = () => {
 
 <template>
   <header class="portal-header" :class="{ 'is-scrolled': isScrolled }">
-    <div class="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-10 h-[4.25rem] flex items-center justify-between gap-4">
+    <div class="max-w-[90rem] mx-auto px-3.5 sm:px-5 xl:px-10 h-[4.25rem] flex items-center justify-between gap-2 xl:gap-4">
       <!-- 品牌标识：与吉韵禾野全平台视觉统一 -->
-      <RouterLink to="/museum" class="flex items-center gap-3 shrink-0 group">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1B4A38] to-[#0E261D] text-[#E5C175] flex items-center justify-center font-editorial font-bold text-base shadow-[0_6px_16px_-6px_rgba(14,38,29,0.55),inset_0_0_0_1px_rgba(229,193,117,0.38)] transition-transform duration-300 group-hover:scale-105">
-          禾
-        </div>
+      <RouterLink to="/museum" class="flex items-center gap-2.5 xl:gap-3 shrink-0 group">
+        <BrandLogo :size="36" class="transition-transform duration-300 group-hover:scale-105" />
         <div class="hidden sm:block leading-tight">
           <div class="flex items-center gap-2">
-            <span class="font-editorial font-bold text-[0.95rem] tracking-wide text-[#10241C]">吉韵禾野</span>
-            <span class="px-1.5 py-0.5 rounded-md bg-[#1F5440]/10 text-[#1A4333] text-[0.625rem] font-semibold">数字展馆</span>
+            <span class="font-editorial font-bold text-[0.95rem] tracking-wide text-[#10241C] whitespace-nowrap">吉韵禾野</span>
+            <span class="hidden xl:inline-flex px-1.5 py-0.5 rounded-md bg-[#1F5440]/10 text-[#1A4333] text-[0.625rem] font-semibold">数字展馆</span>
           </div>
-          <div class="font-mono text-[0.5625rem] tracking-[0.16em] text-[#566E64] mt-0.5">JIYUN HEYE · DIGITAL RURAL ATLAS</div>
+          <div class="hidden xl:block font-mono text-[0.5625rem] tracking-[0.16em] text-[#566E64] mt-0.5">JIYUN HEYE · DIGITAL RURAL ATLAS</div>
         </div>
       </RouterLink>
 
       <!-- 单一语义化主导航（宽屏内联 + 原生 Popover 子菜单） -->
-      <nav aria-label="展馆主导航" class="hidden lg:flex items-center gap-1">
-        <ul class="flex items-center gap-1 list-none m-0 p-0">
+      <nav aria-label="展馆主导航" class="hidden lg:flex items-center gap-0.5 xl:gap-1 min-w-0">
+        <ul class="flex items-center gap-0.5 xl:gap-1 list-none m-0 p-0">
           <li>
             <RouterLink
               to="/museum"
-              class="portal-nav-link"
+              class="portal-nav-link !px-2.5 xl:!px-3.5 whitespace-nowrap"
               :aria-current="route.path === '/museum' ? 'page' : undefined"
             >
               展馆序厅
@@ -233,7 +232,7 @@ const playNarration = () => {
             <button
               :ref="(el) => setTriggerRef(g.id, el)"
               type="button"
-              class="portal-nav-link cursor-pointer"
+              class="portal-nav-link !px-2.5 xl:!px-3.5 whitespace-nowrap cursor-pointer"
               :class="{ 'is-section-active': isGroupActive(g) }"
               :style="{ anchorName: `--nav-anchor-${g.id}` }"
               :popovertarget="'portal-pop-' + g.id"
@@ -288,6 +287,20 @@ const playNarration = () => {
                 </li>
               </ul>
             </div>
+          </li>
+
+          <li>
+            <RouterLink
+              to="/game"
+              class="portal-nav-link !px-2.5 xl:!px-3.5 whitespace-nowrap"
+              :class="route.path === '/game'
+                ? 'is-section-active'
+                : 'text-[#8A6118] bg-[#C89B45]/12 hover:bg-[#C89B45]/20'"
+              :aria-current="route.path === '/game' ? 'page' : undefined"
+            >
+              <Gamepad2 :size="14" aria-hidden="true" class="text-[#B88424]" />
+              <span>互动游戏</span>
+            </RouterLink>
           </li>
         </ul>
       </nav>
@@ -371,14 +384,27 @@ const playNarration = () => {
           </RouterLink>
         </div>
 
-        <RouterLink
-          to="/museum"
-          :aria-current="route.path === '/museum' ? 'page' : undefined"
-          class="flex items-center justify-between py-3.5 px-4 rounded-xl bg-white border border-[#0E261D]/10 font-editorial text-lg font-bold text-[#10241C] mb-4"
-        >
-          <span>展馆序厅 · 总览</span>
-          <ArrowUpRight :size="16" aria-hidden="true" class="text-[#C89B45]" />
-        </RouterLink>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-4">
+          <RouterLink
+            to="/museum"
+            :aria-current="route.path === '/museum' ? 'page' : undefined"
+            class="flex items-center justify-between py-3.5 px-4 rounded-xl bg-white border border-[#0E261D]/10 font-editorial text-base font-bold text-[#10241C]"
+          >
+            <span>展馆序厅 · 总览</span>
+            <ArrowUpRight :size="16" aria-hidden="true" class="text-[#C89B45]" />
+          </RouterLink>
+          <RouterLink
+            to="/game"
+            :aria-current="route.path === '/game' ? 'page' : undefined"
+            class="flex items-center justify-between py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#0E261D] to-[#1A4333] border border-[#E5C175]/35 font-editorial text-base font-bold text-[#E5C175]"
+          >
+            <span class="inline-flex items-center gap-2">
+              <Gamepad2 :size="16" aria-hidden="true" />
+              <span>黑土守护者 · 互动游戏</span>
+            </span>
+            <ArrowUpRight :size="16" aria-hidden="true" />
+          </RouterLink>
+        </div>
 
         <div v-for="g in groups" :key="g.id" class="mb-3 rounded-2xl bg-white border border-[#0E261D]/8 overflow-hidden">
           <button

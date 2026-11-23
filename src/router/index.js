@@ -191,6 +191,15 @@ const routes = [
     }
   },
   {
+    path: '/game',
+    name: 'BlackSoilGame',
+    component: () => import('../views/GameView.vue'),
+    meta: {
+      title: '黑土守护者 · 四季丰收保卫战',
+      description: '60fps 新中式青绿山水交互游戏：运用梨树秸秆覆盖、稻蟹生态水闸与 260 马力北斗无人农机守护松辽黑土，赢取绿色碳积分同步至 App 碳账本。'
+    }
+  },
+  {
     path: '/admin',
     name: 'Admin',
     component: () => import('../views/AdminView.vue'),

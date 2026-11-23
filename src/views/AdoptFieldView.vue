@@ -88,7 +88,7 @@ const makeCertificate = () => { certificate.value = true }
   <div class="relative">
     <!-- 01 首屏：演示声明 + 地块俯视示意 -->
     <section class="relative min-h-[100dvh] overflow-hidden flex items-center"
-      style="background: radial-gradient(72% 85% at 84% 20%, rgba(200, 155, 69, 0.14), transparent 58%), radial-gradient(65% 75% at 10% 88%, rgba(31, 84, 64, 0.14), transparent 58%), linear-gradient(155deg, #F6FAF7 0%, #ECF3EE 55%, #E3EEE8 100%)">
+      style="background-image: linear-gradient(108deg, rgba(246,250,247,0.84) 0%, rgba(244,248,245,0.54) 54%, rgba(244,248,245,0.20) 100%), url('/art-custom/portal-hero-qinglv.jpg'); background-size: cover; background-position: right bottom;">
       <div class="absolute inset-0 coord-rule hero-grid-fade pointer-events-none"></div>
 
       <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">

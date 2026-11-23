@@ -1,5 +1,6 @@
 <script setup>
-import { ArrowUpRight, Smartphone, Columns2, Monitor, ShieldCheck } from 'lucide-vue-next'
+import { ArrowUpRight, Smartphone, Columns2, Monitor, ShieldCheck, Gamepad2 } from 'lucide-vue-next'
+import BrandLogo from './BrandLogo.vue'
 
 const columns = [
   {
@@ -8,7 +9,8 @@ const columns = [
       { name: '黑土地质标本馆', to: '/strata-3d' },
       { name: '北斗智慧农机馆', to: '/machinery-3d' },
       { name: '松辽生态微缩沙盘', to: '/sandbox-3d' },
-      { name: '互动科普实验室', to: '/science' }
+      { name: '互动科普实验室', to: '/science' },
+      { name: '黑土守护者互动游戏', to: '/game' }
     ]
   },
   {
@@ -43,11 +45,16 @@ const columns = [
 </script>
 
 <template>
-  <footer class="relative overflow-hidden bg-gradient-to-b from-[#112F24] via-[#0E261D] to-[#091A13] text-[#F2F7F4] border-t border-[#E5C175]/18">
-    <!-- 柔和青绿山岚背景肌理 -->
+  <footer class="relative overflow-hidden bg-[#0A1D16] text-[#F2F7F4] border-t border-[#E5C175]/22">
+    <!-- 定制夜松鎏金山水背景画 -->
     <div
-      class="pointer-events-none absolute inset-0 opacity-15 bg-cover bg-center mix-blend-soft-light"
-      style="background-image: url('/art-custom/showcase-bg-pattern.jpg')"
+      class="pointer-events-none absolute inset-0 bg-cover bg-right-bottom opacity-80"
+      style="background-image: url('/art-custom/portal-dark-shanshui.jpg')"
+      aria-hidden="true"
+    ></div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(180deg, rgba(11,31,23,0.72) 0%, rgba(10,27,20,0.62) 55%, rgba(8,21,16,0.88) 100%)"
       aria-hidden="true"
     ></div>
 
@@ -67,8 +74,14 @@ const columns = [
 
         <div class="lg:col-span-5 flex flex-wrap lg:justify-end gap-2.5">
           <RouterLink
+            to="/game"
+            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r from-[#E5C175] to-[#F1D596] text-[#0E261D] text-xs font-bold hover:brightness-105 transition-all shadow-sm"
+          >
+            <Gamepad2 :size="14" aria-hidden="true" /> 黑土守护者游戏
+          </RouterLink>
+          <RouterLink
             to="/"
-            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#E5C175] text-[#0E261D] text-xs font-bold hover:bg-[#F0D390] transition-colors"
+            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/10 border border-[#E5C175]/35 text-[#F2F7F4] text-xs font-semibold hover:bg-white/18 transition-colors"
           >
             <Smartphone :size="14" aria-hidden="true" /> 体验移动端 App
           </RouterLink>
@@ -91,7 +104,7 @@ const columns = [
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 py-12">
         <div class="col-span-2">
           <div class="flex items-center gap-3 mb-4">
-            <div class="w-9 h-9 rounded-xl bg-[#E5C175] text-[#0E261D] flex items-center justify-center font-editorial font-bold text-base">禾</div>
+            <BrandLogo :size="40" variant="gold" />
             <div>
               <div class="font-editorial font-bold text-base text-[#F7FAF8]">吉韵禾野 · 数字展馆</div>
               <div class="font-mono text-[0.6rem] tracking-[0.16em] text-[#E5C175]/80">JIYUN HEYE DIGITAL MUSEUM</div>
@@ -126,7 +139,7 @@ const columns = [
       </div>
 
       <!-- 版权与数据口径 -->
-      <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div class="border-t border-white/10 pt-6 md:pr-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <p class="text-[0.72rem] leading-relaxed text-[#C4D6CD]/80 max-w-3xl flex items-start gap-2">
           <ShieldCheck :size="15" aria-hidden="true" class="text-[#E5C175] shrink-0 mt-0.5" />
           <span>文献与数据参考：中国科学院东北地理与农业生态研究所（长春）、吉林省农业农村厅公开年报、长春国家农业高新技术产业示范区。展陈与互动交易均为教学演示用途。</span>

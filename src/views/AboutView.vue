@@ -2,6 +2,7 @@
 import SectionHead from '../components/editorial/SectionHead.vue'
 import FigurePlate from '../components/editorial/FigurePlate.vue'
 import Reveal from '../components/editorial/Reveal.vue'
+import BrandLogo from '../components/BrandLogo.vue'
 import { ArrowUpRight } from 'lucide-vue-next'
 import { ref } from 'vue'
 
@@ -102,15 +103,16 @@ const references = [
 
 <template>
   <div>
-    <!-- 01 白皮书封面：书脊 + 目录页，不是通用扉页 -->
-    <section class="relative min-h-[100dvh] bg-[#EFECE6] flex items-stretch overflow-hidden">
-      <div class="absolute inset-0 coord-rule opacity-50 pointer-events-none"></div>
+    <!-- 01 白皮书封面：鎏金松纹书脊 + 青绿山水工笔底景 -->
+    <section class="relative min-h-[100dvh] flex items-stretch overflow-hidden border-b border-[#0E261D]/10">
+      <div class="pointer-events-none absolute inset-0 bg-cover bg-right-bottom opacity-90" style="background-image: url('/art-custom/portal-hero-qinglv.jpg')" aria-hidden="true"></div>
+      <div class="pointer-events-none absolute inset-0" style="background: linear-gradient(108deg, rgba(244,248,245,0.88) 0%, rgba(244,248,245,0.68) 52%, rgba(244,248,245,0.20) 100%)" aria-hidden="true"></div>
 
-      <!-- 左侧墨色书脊 -->
-      <div class="hidden lg:flex relative z-10 w-[5.375rem] shrink-0 bg-[#1C1B18] text-[#F7F4EE] flex-col items-center justify-between py-12">
-        <span class="font-editorial text-3xl font-bold">吉</span>
-        <span class="rot-tag text-[#F7F4EE]/92">COLOPHON 09 / CHANGCHUN ACADEMY / 2026</span>
-        <span class="font-mono text-[0.5625rem] tracking-[0.2em] text-[#8A6324]">09</span>
+      <!-- 左侧深松鎏金山水书脊 -->
+      <div class="hidden lg:flex relative z-10 w-[5.5rem] shrink-0 bg-[#0D241B] text-[#F2F7F4] flex-col items-center justify-between pt-24 pb-12 border-r border-[#E5C175]/22 bg-cover bg-bottom" style="background-image: linear-gradient(180deg, rgba(13,36,27,0.86), rgba(10,28,21,0.72)), url('/art-custom/portal-dark-shanshui.jpg')">
+        <BrandLogo :size="44" variant="gold" />
+        <span class="font-mono text-[0.625rem] tracking-[0.26em] text-[#E5C175]/85 [writing-mode:vertical-rl]">JIYUN HEYE · COLOPHON 2026</span>
+        <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#E5C175]">09</span>
       </div>
 
       <div class="relative z-10 flex-1 min-w-0 flex items-center">
@@ -127,7 +129,7 @@ const references = [
               <h1 class="display-1 text-[#1C1B18]" aria-label="把一片黑土 做成一座展馆">
                 <span v-for="(ch, i) in Array.from('把一片黑土')" :key="'a' + i" class="kin-char"
                   :style="{ animationDelay: (0.12 + i * 0.065) + 's' }">{{ ch }}</span>
-                <span class="block whitespace-nowrap text-[#8C583A]" :style="{ fontSize: '0.76em' }">
+                <span class="block whitespace-nowrap text-[#1F5440]" :style="{ fontSize: '0.76em' }">
                   <span v-for="(ch, i) in Array.from('做成一座展馆')" :key="'b' + i" class="kin-char"
                     :style="{ animationDelay: (0.46 + i * 0.055) + 's' }">{{ ch }}</span>
                 </span>

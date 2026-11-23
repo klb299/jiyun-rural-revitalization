@@ -5,9 +5,10 @@ import { navigateWithViewTransition } from '../lib/viewTransition.js'
 import Reveal from '../components/editorial/Reveal.vue'
 import SectionHead from '../components/editorial/SectionHead.vue'
 import ExhibitCard from '../components/editorial/ExhibitCard.vue'
+import NeoDivider from '../components/editorial/NeoDivider.vue'
 import {
   ArrowUpRight, Compass, Layers, FlaskConical, Sprout,
-  Smartphone, Columns2, Monitor, ShieldCheck, BookOpen
+  Smartphone, Columns2, Monitor, ShieldCheck, BookOpen, Gamepad2
 } from 'lucide-vue-next'
 
 const router = useRouter()
@@ -105,17 +106,17 @@ onMounted(() => {
 
 <template>
   <div class="relative">
-    <!-- 01 新中式青绿山水首屏（零遮罩、瞬时首屏呈现） -->
-    <section class="relative overflow-hidden pt-28 pb-16 sm:pt-32 sm:pb-24">
-      <!-- 柔雾青绿山水画底纹 -->
+    <!-- 01 新中式青绿山水首屏（定制千里江山风格全景画底衬，零遮罩瞬时首屏呈现） -->
+    <section class="relative overflow-hidden pt-28 pb-16 sm:pt-32 sm:pb-24 border-b border-[#0E261D]/8">
+      <!-- 定制青绿山水梯田与金稻穗全景艺术画 -->
       <div
-        class="pointer-events-none absolute inset-0 bg-cover bg-center opacity-35"
-        style="background-image: url('/art-custom/showcase-bg-pattern.jpg')"
+        class="pointer-events-none absolute inset-0 bg-cover bg-right-bottom opacity-95"
+        style="background-image: url('/art-custom/portal-hero-qinglv.jpg')"
         aria-hidden="true"
       ></div>
       <div
         class="pointer-events-none absolute inset-0"
-        style="background: radial-gradient(60% 70% at 80% 16%, rgba(200,155,69,0.14), transparent 62%), linear-gradient(180deg, rgba(243,246,243,0.45) 0%, rgba(243,246,243,0.82) 72%, #F3F6F3 100%)"
+        style="background: linear-gradient(105deg, rgba(244,248,245,0.88) 0%, rgba(244,248,245,0.68) 46%, rgba(244,248,245,0.18) 100%), linear-gradient(180deg, rgba(244,248,245,0.3) 0%, transparent 72%, rgba(243,246,243,0.92) 100%)"
         aria-hidden="true"
       ></div>
 
@@ -158,6 +159,13 @@ onMounted(() => {
               <RouterLink to="/science" class="mag-btn mag-btn--light">
                 <span>开启互动科普实验室</span>
                 <span class="mag-btn__island"><FlaskConical :size="15" aria-hidden="true" /></span>
+              </RouterLink>
+              <RouterLink
+                to="/game"
+                class="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-gradient-to-r from-[#C89B45] to-[#DFB968] text-[#0E261D] text-sm font-bold shadow-[0_12px_28px_-14px_rgba(184,132,36,0.75)] hover:brightness-105 transition-all"
+              >
+                <Gamepad2 :size="16" aria-hidden="true" />
+                <span>玩一局 · 黑土守护者</span>
               </RouterLink>
               <RouterLink
                 to="/exhibit-map"
@@ -270,6 +278,8 @@ onMounted(() => {
           <ExhibitCard v-bind="galleries3D[2]" />
         </Reveal>
       </div>
+
+      <NeoDivider label="THEMATIC GALLERY · 吉林农耕专题" class="mt-16" />
     </section>
 
     <!-- 03 吉林农耕与非遗专题科普矩阵（6 宫格可视化入口） -->

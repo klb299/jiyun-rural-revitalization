@@ -10,6 +10,7 @@ import {
   QrCode, Heart, Radio, CalendarDays, Ticket, Truck, Volume2
 } from 'lucide-vue-next'
 import { useRuralPlatformStore } from '../../stores/ruralPlatformStore'
+import BrandLogo from '../BrandLogo.vue'
 import AppLiveCamOverlay from './AppLiveCamOverlay.vue'
 import AppTraceabilityPage from './AppTraceabilityPage.vue'
 import AppCertificateModal from './AppCertificateModal.vue'
@@ -359,9 +360,7 @@ const statusBadgeClass = (status) => {
           <!-- 顶部定位 + 节气胶囊 + 扫码 + 通知（通透暖白微胶囊保证青绿水墨底上的高对比度） -->
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0 px-2 py-1 rounded-2xl bg-white/72 backdrop-blur-md border border-white/60 shadow-2xs">
-              <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-[#1F4E3D] to-[#122D23] text-[#F5D393] flex items-center justify-center font-editorial font-bold text-sm shrink-0 shadow-xs">
-                禾
-              </div>
+              <BrandLogo :size="32" />
               <div class="min-w-0 pr-1">
                 <div class="flex items-center gap-1.5">
                   <span class="font-editorial text-[14px] font-bold text-[#16261F] whitespace-nowrap shrink-0">{{ store.appConfig.brandName }}</span>

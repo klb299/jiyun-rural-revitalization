@@ -35,12 +35,19 @@ const incomeBreakdown = computed(() => {
   }
 })
 
-const badges = [
+const badges = computed(() => [
   { id: 'b1', name: '黑土初芽', desc: '首次参与助农直采', unlocked: true, tone: 'from-[#2E5A44] to-[#16261F]' },
   { id: 'b2', name: '稻蟹守护者', desc: '累计固碳超过 30kg', unlocked: true, tone: 'from-[#C88A32] to-[#8A5810]' },
   { id: 'b3', name: '查干湖冰湖之友', desc: '支持非遗生态渔业', unlocked: true, tone: 'from-[#3B6E82] to-[#1E3F4D]' },
-  { id: 'b4', name: '零碳领航员', desc: '累计固碳达 100kg', unlocked: false, tone: 'from-[#6E6960] to-[#3E3B35]' }
-]
+  {
+    id: 'b4',
+    name: '零碳领航员',
+    desc: '累计固碳达 100kg 或完成守护战',
+    unlocked: (store.appConfig.userProfile.carbonSavedKg || 0) >= 100 || (store.gameStats?.plays || 0) > 0,
+    tone: 'from-[#1F5440] to-[#0E261D]'
+  }
+])
+const unlockedBadgeCount = computed(() => badges.value.filter((b) => b.unlocked).length)
 </script>
 
 <template>
@@ -75,7 +82,10 @@ const badges = [
               <span class="font-mono text-[30px] font-bold text-[#F5D393] leading-none">{{ store.appConfig.userProfile.carbonSavedKg }}</span>
               <span class="text-xs text-white/80">kg CO₂e</span>
             </div>
-            <p class="text-[10.5px] text-white/75 mt-1.5">相当于守护 2.4 ㎡ 万年黑土耕作层 · 种植 3 棵防护林樟子松</p>
+            <p class="text-[10.5px] text-white/75 mt-1.5">相当于守护 {{ Math.max(2.4, Number((store.appConfig.userProfile.carbonSavedKg * 0.06).toFixed(1))) }} ㎡ 万年黑土耕作层 · 绿色积分 {{ store.appConfig.userProfile.points }}</p>
+            <div v-if="store.gameStats?.plays > 0" class="inline-flex items-center gap-1.5 mt-2 px-2.5 py-0.5 rounded-full bg-[#E5C175]/18 border border-[#E5C175]/35 text-[9.5px] text-[#F5D393] font-semibold">
+              <span>🎮 黑土守护者最高 {{ store.gameStats.bestScore }} 分 · 已同步 +{{ store.gameStats.totalCarbon }} 积分</span>
+            </div>
           </div>
           <div class="w-14 h-14 rounded-full border-4 border-[#4ADE80]/30 border-t-[#4ADE80] border-r-[#F0C275] flex items-center justify-center shrink-0">
             <Leaf :size="22" class="text-[#86EFAC]" />
@@ -90,7 +100,7 @@ const badges = [
             <Award :size="14" class="text-[#C88A32]" />
             <span>黑土守护电子勋章墙</span>
           </h3>
-          <span class="font-mono text-[10px] text-[#1F4E3D] font-bold">已点亮 3/4</span>
+          <span class="font-mono text-[10px] text-[#1F4E3D] font-bold">已点亮 {{ unlockedBadgeCount }}/{{ badges.length }}</span>
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div

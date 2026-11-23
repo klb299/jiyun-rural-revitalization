@@ -7,6 +7,7 @@ import {
   Award, CalendarDays, Activity
 } from 'lucide-vue-next'
 import RuralAppShell from '../components/mobile/RuralAppShell.vue'
+import BrandLogo from '../components/BrandLogo.vue'
 import { useRuralPlatformStore } from '../stores/ruralPlatformStore'
 
 const store = useRuralPlatformStore()
@@ -81,9 +82,7 @@ const showcaseTriggers = [
     <!-- 顶部极简模式切换栏 -->
     <header class="relative z-20 w-full max-w-[1380px] mx-auto px-6 lg:px-10 pt-5 pb-2 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1F4E3D] to-[#12261E] text-[#F5D393] flex items-center justify-center font-editorial font-bold text-lg shadow-sm">
-          禾
-        </div>
+        <BrandLogo :size="40" />
         <div>
           <div class="font-editorial font-bold text-[15.5px] leading-tight text-[#16261F]">吉韵禾野 · 乡村振兴数字平台</div>
           <div class="font-mono text-[10px] tracking-[0.16em] text-[#6E6960]">MOBILE APP &amp; ADMIN MANAGEMENT SYSTEM</div>

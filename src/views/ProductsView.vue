@@ -72,7 +72,7 @@ onUnmounted(() => clearTimeout(toastTimer))
   <div>
     <!-- 01 市集标签墙：暖白宣纸与琥珀光晕 + Z 轴层叠品类卡 -->
     <section class="relative min-h-[100dvh] flex items-center overflow-hidden"
-      style="background: radial-gradient(70% 85% at 86% 18%, rgba(200, 155, 69, 0.15), transparent 58%), radial-gradient(65% 80% at 8% 92%, rgba(31, 84, 64, 0.14), transparent 58%), linear-gradient(155deg, #F6FAF7 0%, #ECF3EE 55%, #E4EFE9 100%)">
+      style="background-image: linear-gradient(108deg, rgba(246,250,247,0.82) 0%, rgba(244,248,245,0.48) 55%, rgba(244,248,245,0.18) 100%), url('/art-custom/portal-gold-grain-band.jpg'); background-size: cover; background-position: center bottom;">
       <div class="absolute inset-0 coord-rule hero-grid-fade pointer-events-none"></div>
 
       <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">

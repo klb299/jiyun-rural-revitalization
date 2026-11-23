@@ -3,6 +3,7 @@ import { RouterLink } from 'vue-router'
 import { Smartphone, LayoutDashboard, Compass, Sparkles, Activity } from 'lucide-vue-next'
 import RuralAppShell from '../components/mobile/RuralAppShell.vue'
 import AdminConsole from '../components/admin/AdminConsole.vue'
+import BrandLogo from '../components/BrandLogo.vue'
 import { useRuralPlatformStore } from '../stores/ruralPlatformStore'
 
 const store = useRuralPlatformStore()
@@ -16,9 +17,7 @@ const store = useRuralPlatformStore()
     <!-- 顶部答辩联动演示栏 -->
     <header class="shrink-0 h-13 px-5 bg-[#16261F] text-[#F7F4EE] flex items-center justify-between gap-4 border-b border-white/10">
       <div class="flex items-center gap-3 min-w-0">
-        <div class="w-7 h-7 rounded-lg bg-[#C88A32] text-[#16261F] font-editorial font-bold flex items-center justify-center text-sm shrink-0">
-          禾
-        </div>
+        <BrandLogo :size="30" variant="gold" />
         <span class="font-editorial font-bold text-sm truncate">吉韵禾野 · 双端同屏实时联动演示</span>
         <span class="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 text-[#86EFAC] text-[11px] font-medium">
           <span class="w-1.5 h-1.5 rounded-full bg-[#4ADE80] animate-pulse"></span>
