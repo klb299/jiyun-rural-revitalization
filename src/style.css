@@ -4,24 +4,30 @@
 
 @layer base {
   :root {
-    /* 浅色艺术馆色板，保持不变；新增用于材质与层次的派生变量 */
-    --bg-canvas: #F7F4EE;
-    --bg-elevated: #EFECE6;
-    --bg-paper: #FFFDF9;
-    --ink-primary: #1C1B18;
-    --ink-secondary: #5A564E;
-    --ink-muted: #6E6960; /* 暖白底上实测 4.97:1；原先的 #787265 只有 4.35，卡在 WCAG AA 4.5 之下 */
-    --accent-gold: #C88A32;
-    --accent-moss: #2E5A44;
-    --accent-red: #B83828;
-    --accent-clay: #8C583A;
-    --accent-water: #8EBACB;
-    --accent-water-ink: #3B6E82; /* 水色在浅底上做文字时的深版；#8EBACB 只有 2.02:1，仅适合填充与描边 */
-    --border-hairline: rgba(28, 27, 24, 0.1);
-    --rule: rgba(28, 27, 24, 0.13);
-    --ease-luxe: cubic-bezier(0.32, 0.72, 0, 1);
+    /* 《吉韵禾野》统一设计系统：新中式青绿山水 · 深松墨玉 · 稻穗鎏金 */
+    --bg-canvas: #F3F6F3;
+    --bg-elevated: #E8F0EC;
+    --bg-paper: #FCFEFC;
+    --ink-primary: #10241C;
+    --ink-secondary: #3E554B;
+    --ink-muted: #566E64;
+    --pine-deep: #0E261D;
+    --pine-mid: #1A4333;
+    --pine-soft: #265945;
+    --accent-gold: #C89B45;
+    --accent-gold-bright: #E5C175;
+    --accent-gold-ink: #7F5B17;
+    --accent-moss: #1F5440;
+    --accent-red: #B84232;
+    --accent-clay: #865A3D;
+    --accent-water: #7BAEC0;
+    --accent-water-ink: #2D6175;
+    --border-hairline: color-mix(in oklab, var(--pine-deep) 10%, transparent);
+    --rule: color-mix(in oklab, var(--pine-deep) 12%, transparent);
+    --surface-tint: color-mix(in oklab, var(--pine-mid) 5%, var(--bg-paper));
+    --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
     --ease-out: cubic-bezier(0.22, 0.8, 0.25, 1);
-    --shadow-luxe: 0 34px 80px -38px rgba(28, 27, 24, 0.42), 0 3px 14px -8px rgba(28, 27, 24, 0.16);
+    --shadow-luxe: 0 24px 56px -32px color-mix(in oklab, var(--pine-deep) 24%, transparent), 0 2px 10px -4px color-mix(in oklab, var(--pine-deep) 10%, transparent);
   }
 
   html { scroll-behavior: smooth; background: var(--bg-canvas); overflow-x: clip; }
@@ -837,8 +843,540 @@ html.vt-active .reveal {
   color: var(--ink-muted);
 }
 .card-gold :is(.lede, .body-copy, .caption, [class*="text-[#1C1B18]/"]) {
-  color: rgba(28, 27, 24, 0.82);
+  color: rgba(16, 36, 28, 0.84);
 }
 .card-gold [class*="text-[#1C1B18]"] {
-  color: #1C1B18;
+  color: #10241C;
+}
+
+/* ================================================================== *
+ * 2026-11-23 专题科普网 & 3D 展馆全站视觉焕新（限定 .museum-portal）
+ * 与《吉韵禾野》移动端 App / 后台 / 数智大屏统一为新中式青绿山水 · 深松鎏金风格
+ * 不影响独立壳页面（/、/app、/split、/admin、/bigscreen）
+ * ================================================================== */
+.museum-portal {
+  background-color: var(--bg-canvas);
+  background-image:
+    radial-gradient(62% 48% at 92% 4%, color-mix(in oklab, var(--accent-gold) 12%, transparent), transparent 65%),
+    radial-gradient(58% 45% at 6% 18%, color-mix(in oklab, var(--pine-soft) 10%, transparent), transparent 64%),
+    linear-gradient(180deg, #F7FAF8 0%, #F1F6F3 45%, #F4F7F4 100%);
+  color: var(--ink-primary);
+}
+
+/* 渐进增强：更柔润的超椭圆圆角 */
+@supports (corner-shape: squircle) {
+  .museum-portal :is(.museum-card, .museum-panel, .card-linen, .card-ink, .card-moss, .card-gold, .exhibit-card, .portal-card) {
+    corner-shape: squircle;
+  }
+}
+
+@scope (.museum-portal) {
+  /* 1. 隐藏过时视觉噪点：滚动黑条、巨大遮字水印、斜贴卡片 */
+  .marquee,
+  .watermark,
+  .rot-tag {
+    display: none;
+  }
+
+  /* 网格底纹改得极清淡，只留纸感气息 */
+  .coord-rule {
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--pine-deep) 4.5%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--pine-deep) 4.5%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+    opacity: 0.55;
+  }
+
+  /* 2. 全站旧棕灰/暖米色表面统一焕新（精确匹配基类，绝不误伤 hover:text-[#1C1B18] 等状态类） */
+  .bg-\[\#F7F4EE\],
+  .bg-\[\#FAF6EE\] {
+    background-color: #F3F6F3;
+  }
+
+  .bg-\[\#EFECE6\],
+  .bg-\[\#F0E9DA\],
+  .bg-\[\#F2EBDD\] {
+    background-color: #E8F0EC;
+  }
+
+  .bg-\[\#FFFDF9\] {
+    background-color: #FCFEFC;
+  }
+
+  .bg-\[\#1C1B18\],
+  .bg-\[\#221E19\] {
+    background-color: var(--pine-deep);
+  }
+
+  .text-\[\#1C1B18\] {
+    color: var(--ink-primary);
+  }
+
+  .text-\[\#5A564E\],
+  .text-\[\#3A3630\] {
+    color: var(--ink-secondary);
+  }
+
+  .text-\[\#6E6960\],
+  .text-\[\#8C867B\] {
+    color: var(--ink-muted);
+  }
+
+  /* 3. 深色区块统一升级为深松墨玉青绿渐变 */
+  .surface-ink {
+    color: #F2F7F4;
+    background:
+      radial-gradient(75% 110% at 88% -8%, color-mix(in oklab, var(--accent-gold) 22%, transparent), transparent 56%),
+      radial-gradient(70% 95% at 6% 110%, color-mix(in oklab, var(--pine-soft) 45%, transparent), transparent 60%),
+      linear-gradient(148deg, #133529 0%, #0E261D 56%, #091B14 100%);
+  }
+
+  .surface-ink::before {
+    background-image: radial-gradient(rgba(229, 193, 117, 0.09) 1px, transparent 0);
+    background-size: 28px 28px;
+  }
+
+  .surface-linen {
+    background:
+      radial-gradient(72% 88% at 96% 4%, color-mix(in oklab, var(--accent-gold) 12%, transparent), transparent 58%),
+      radial-gradient(60% 80% at 4% 96%, color-mix(in oklab, var(--pine-soft) 10%, transparent), transparent 60%),
+      linear-gradient(160deg, #F1F6F3 0%, #E7EFEA 100%);
+  }
+
+  /* 4. 现代化玻璃卡片系统：去掉笨重双层灰框与沉闷重阴影 */
+  .bezel {
+    padding: 0;
+    border-radius: 24px;
+    background: transparent;
+    border: 1px solid color-mix(in oklab, var(--pine-deep) 10%, transparent);
+    box-shadow: 0 22px 48px -32px color-mix(in oklab, var(--pine-deep) 28%, transparent);
+    overflow: hidden;
+  }
+
+  .bezel-core {
+    border-radius: 23px;
+    background: var(--bg-paper);
+    box-shadow: none;
+  }
+
+  .bezel--ink {
+    border-color: rgba(229, 193, 117, 0.22);
+    box-shadow: 0 24px 56px -28px rgba(4, 14, 10, 0.6);
+  }
+
+  .museum-panel {
+    background: color-mix(in oklab, var(--bg-paper) 88%, var(--bg-elevated));
+    border: 1px solid color-mix(in oklab, var(--pine-deep) 9%, transparent);
+    border-radius: 20px;
+    box-shadow: 0 16px 38px -28px color-mix(in oklab, var(--pine-deep) 24%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+
+  .museum-card {
+    background: color-mix(in oklab, var(--bg-paper) 94%, var(--bg-elevated));
+    border: 1px solid color-mix(in oklab, var(--pine-deep) 9%, transparent);
+    border-radius: 22px;
+    box-shadow: var(--shadow-luxe), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  }
+
+  .card-linen {
+    background: linear-gradient(158deg, #FFFFFF 0%, #F4F8F5 100%);
+    color: var(--ink-primary);
+    border: 1px solid color-mix(in oklab, var(--pine-deep) 9%, transparent);
+    border-radius: 24px;
+    box-shadow: var(--shadow-luxe);
+  }
+
+  .card-ink {
+    background: linear-gradient(152deg, #183E30 0%, #102B21 58%, #0B1E17 100%);
+    color: #F3F7F4;
+    border: 1px solid rgba(229, 193, 117, 0.18);
+    border-radius: 24px;
+    box-shadow: 0 26px 56px -30px rgba(7, 22, 16, 0.65);
+  }
+
+  .card-moss {
+    background: linear-gradient(150deg, #245B45 0%, #1A4635 60%, #123326 100%);
+    color: #F3F7F4;
+    border: 1px solid rgba(229, 193, 117, 0.2);
+    border-radius: 24px;
+    box-shadow: 0 24px 52px -30px rgba(14, 38, 29, 0.52);
+  }
+
+  .card-gold {
+    background: linear-gradient(145deg, #F5E6C4 0%, #E7CB8B 55%, #D7B060 100%);
+    color: #10241C;
+    border: 1px solid rgba(130, 94, 24, 0.22);
+    border-radius: 24px;
+    box-shadow: 0 22px 48px -30px rgba(130, 94, 24, 0.38);
+  }
+
+  .art-frame {
+    padding: 0;
+    border-radius: 22px;
+    border: 1px solid color-mix(in oklab, var(--pine-deep) 10%, transparent);
+    background: var(--bg-paper);
+    box-shadow: var(--shadow-luxe);
+  }
+
+  .art-frame img,
+  .art-frame svg {
+    border-radius: 21px;
+  }
+
+  /* 眉题胶囊：清雅翡翠青底 + 鎏金圆点 */
+  .eyebrow {
+    color: var(--pine-mid);
+    background: color-mix(in oklab, var(--pine-soft) 10%, var(--bg-paper));
+    border: 1px solid color-mix(in oklab, var(--pine-soft) 24%, transparent);
+    letter-spacing: 0.16em;
+  }
+
+  .eyebrow::before {
+    background: var(--accent-gold);
+    opacity: 1;
+  }
+
+  :is(.surface-ink, .card-ink, .card-moss, [data-tone="dark"]) .eyebrow {
+    color: var(--accent-gold-bright);
+    background: rgba(229, 193, 117, 0.12);
+    border-color: rgba(229, 193, 117, 0.28);
+  }
+
+  /* 5. 主按钮升级：深松绿渐变 + 稻穗鎏金交互 */
+  .mag-btn {
+    background: linear-gradient(135deg, #163E2F 0%, #0E261D 100%);
+    color: #F7FAF8;
+    border: 1px solid rgba(229, 193, 117, 0.22);
+    box-shadow: 0 14px 30px -16px rgba(14, 38, 29, 0.65);
+  }
+
+  .mag-btn:hover {
+    background: linear-gradient(135deg, #215742 0%, #163B2D 100%);
+    color: #F7FAF8;
+    border-color: rgba(229, 193, 117, 0.55);
+    box-shadow: 0 20px 38px -18px rgba(14, 38, 29, 0.72);
+    transform: translateY(-2px);
+  }
+
+  .mag-btn__island {
+    background: rgba(229, 193, 117, 0.18);
+    color: var(--accent-gold-bright);
+  }
+
+  .mag-btn:hover .mag-btn__island {
+    background: var(--accent-gold);
+    color: #0E261D;
+  }
+
+  .mag-btn--light {
+    background: #FFFFFF;
+    color: var(--ink-primary);
+    border: 1px solid color-mix(in oklab, var(--pine-deep) 14%, transparent);
+    box-shadow: 0 10px 26px -18px color-mix(in oklab, var(--pine-deep) 30%, transparent);
+  }
+
+  .mag-btn--light:hover {
+    background: #F4F8F5;
+    color: var(--pine-mid);
+    border-color: var(--pine-soft);
+  }
+
+  .mag-btn--light .mag-btn__island {
+    background: color-mix(in oklab, var(--pine-soft) 10%, transparent);
+    color: var(--pine-mid);
+  }
+
+  .mag-btn--gold {
+    background: linear-gradient(135deg, #E2BC6D 0%, #C89B45 100%);
+    color: #0E261D;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow: 0 14px 32px -16px rgba(200, 155, 69, 0.75);
+  }
+
+  .mag-btn--gold:hover {
+    background: linear-gradient(135deg, #EED08C 0%, #D8AD56 100%);
+    color: #0E261D;
+  }
+
+  .mag-btn--gold .mag-btn__island {
+    background: rgba(14, 38, 29, 0.12);
+    color: #0E261D;
+  }
+
+  .btn-solid {
+    background: var(--pine-deep);
+    color: #F3F7F4;
+  }
+  .btn-solid:hover {
+    background: var(--pine-mid);
+    color: #F3F7F4;
+  }
+
+  /* 6. 消除歪斜卡片，保持端庄博物馆策展网格 */
+  .z-card {
+    transform: none !important;
+    transition: transform 0.55s var(--ease-luxe), box-shadow 0.55s var(--ease-luxe), border-color 0.4s ease;
+  }
+  .z-card:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 28px 60px -32px color-mix(in oklab, var(--pine-deep) 35%, transparent);
+    border-color: color-mix(in oklab, var(--accent-gold) 45%, transparent);
+  }
+
+  .lift {
+    transition: transform 0.5s var(--ease-luxe), box-shadow 0.5s var(--ease-luxe), border-color 0.35s ease;
+  }
+  .lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 28px 58px -32px color-mix(in oklab, var(--pine-deep) 32%, transparent);
+    border-color: color-mix(in oklab, var(--accent-gold) 48%, transparent);
+  }
+
+  /* 7. 3D 舞台装裱与工具栏统一为青绿玉质感 */
+  .stage-frame {
+    background: #EEF4F0;
+    box-shadow:
+      inset 0 16px 40px -24px color-mix(in oklab, var(--pine-deep) 24%, transparent),
+      inset 0 0 0 1px color-mix(in oklab, var(--pine-deep) 8%, transparent);
+  }
+  .stage-corner {
+    border-color: color-mix(in oklab, var(--accent-gold) 65%, transparent);
+  }
+  .stage-extras {
+    background: rgba(252, 254, 252, 0.94);
+    border-color: color-mix(in oklab, var(--pine-deep) 12%, transparent);
+    color: var(--ink-primary);
+  }
+  .stage-extras button {
+    border-color: color-mix(in oklab, var(--pine-deep) 12%, transparent);
+    background: #FFFFFF;
+    color: var(--ink-secondary);
+  }
+  .stage-extras button:hover {
+    border-color: var(--accent-gold);
+    color: var(--pine-deep);
+    background: color-mix(in oklab, var(--accent-gold) 12%, #FFFFFF);
+  }
+
+  /* 8. 回到顶部按钮改深松绿玻璃 */
+  .to-top {
+    background: rgba(14, 38, 29, 0.9);
+    border: 1px solid rgba(229, 193, 117, 0.28);
+    box-shadow: 0 16px 34px -16px rgba(14, 38, 29, 0.65);
+  }
+
+  /* 9. 排版收敛：标题清晰锐利、段落留白舒朗 */
+  .display-1 {
+    font-size: clamp(2.6rem, 5.4vw, 5.2rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+  }
+  .display-2 {
+    font-size: clamp(1.95rem, 3.6vw, 3.25rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .display-3 {
+    font-size: clamp(1.25rem, 1.9vw, 1.75rem);
+    line-height: 1.32;
+    letter-spacing: -0.015em;
+  }
+
+  /* 10. 主题深底文字对比度强制保障（匹配新的深松绿与既有背景） */
+  :is(.surface-ink, .card-ink, .card-moss, [class*="bg-[#1C1B18]"], [class*="bg-[#2E5A44]"], [data-tone="dark"])
+    :is(.lede, .body-copy, .caption) {
+    color: rgba(242, 247, 244, 0.88);
+  }
+  :is(.surface-ink, .card-ink, .card-moss, [class*="bg-[#1C1B18]"], [class*="bg-[#2E5A44]"], [data-tone="dark"])
+    [class*="text-[#C88A32]"] {
+    color: var(--accent-gold-bright);
+  }
+  :is(.card-linen, .museum-card, .museum-panel, .bezel-core, [class*="bg-[#FFFDF9]"])
+    [class*="text-[#C88A32]"] {
+    color: var(--accent-gold-ink);
+  }
+}
+
+/* ================================================================== *
+ * 现代化原生组件样式（遵循 modern-web-guidance: navbar / card / motion / color）
+ * 置顶层（unscoped），确保 @starting-style 与原生 [popover] 正常生效
+ * ================================================================== */
+
+/* A. 响应式容器卡片（card 指南：container-type: inline-size 挂在外层 article，@container 驱动内层布局） */
+.exhibit-card {
+  container-type: inline-size;
+}
+.exhibit-card__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: start;
+}
+
+@container (min-width: 44rem) {
+  .exhibit-card__layout:has(> .exhibit-card__media) {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+  .exhibit-card__layout:has(> .exhibit-card__media) > .exhibit-card__media {
+    min-height: 22rem;
+    max-height: 25rem;
+    height: 100%;
+  }
+  .exhibit-card__layout:has(> .exhibit-card__media) > .exhibit-card__media img {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+}
+
+/* B. 顶部玻璃导航栏 & 原生 Popover 下拉（navbar 指南：单棵 <nav> 树 + 原生 popover + Anchor Positioning） */
+.portal-header {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 50;
+  background: rgba(246, 250, 247, 0.78);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border-block-end: 1px solid color-mix(in oklab, var(--pine-deep) 8%, transparent);
+  transition: background-color 0.35s var(--ease-luxe), box-shadow 0.35s var(--ease-luxe), border-color 0.35s var(--ease-luxe);
+}
+
+.portal-header.is-scrolled {
+  background: rgba(250, 253, 251, 0.94);
+  border-block-end-color: color-mix(in oklab, var(--pine-deep) 12%, transparent);
+  box-shadow: 0 12px 36px -24px color-mix(in oklab, var(--pine-deep) 28%, transparent);
+}
+
+.portal-nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding-inline: 0.85rem;
+  padding-block: 0.48rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  transition: color 0.25s ease, background-color 0.25s ease;
+}
+
+.portal-nav-link:hover {
+  color: var(--ink-primary);
+  background: color-mix(in oklab, var(--pine-soft) 9%, transparent);
+}
+
+.portal-nav-link[aria-current="page"],
+.portal-nav-link[aria-expanded="true"],
+.portal-nav-link.is-section-active {
+  color: var(--pine-deep);
+  background: color-mix(in oklab, var(--pine-soft) 13%, transparent);
+}
+
+/* 非纯色彩的当前页视觉标识（WCAG 1.4.1：圆角胶囊背景 + 底部翡翠鎏金指示线） */
+.portal-nav-link[aria-current="page"]::after,
+.portal-nav-link.is-section-active::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0.9rem;
+  inset-block-end: 0.15rem;
+  block-size: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--pine-mid), var(--accent-gold));
+}
+
+/* 原生 Popover 子菜单（兼容原生 :popover-open 与 polyfill .\:popover-open） */
+.portal-popover[popover] {
+  margin: 0;
+  padding: 0.6rem;
+  border-radius: 18px;
+  border: 1px solid color-mix(in oklab, var(--pine-deep) 12%, transparent);
+  background: rgba(252, 254, 252, 0.97);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  box-shadow: 0 26px 60px -24px color-mix(in oklab, var(--pine-deep) 35%, transparent), 0 2px 8px -2px color-mix(in oklab, var(--pine-deep) 10%, transparent);
+  color: var(--ink-primary);
+  inline-size: min(22rem, calc(100dvw - 2rem));
+  block-size: auto;
+  overflow: visible;
+  inset: auto;
+  position: fixed;
+  position-area: block-end span-inline-end;
+  position-try-fallbacks: flip-block, flip-inline;
+  margin-block-start: 0.5rem;
+}
+
+/* 鼠标从触发器滑入下拉菜单的防断开悬停桥 */
+.portal-popover[popover]::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 100%;
+  block-size: 0.55rem;
+}
+
+@supports not (position-area: block-end) {
+  .portal-popover[popover] {
+    position: fixed;
+    margin: 0;
+  }
+}
+
+.portal-popover[popover]:where(:popover-open, .\:popover-open) {
+  display: block;
+}
+
+/* 渐进增强离散入场/退场过渡：transition-behavior 独立声明于 transition 之后 */
+@media (prefers-reduced-motion: no-preference) {
+  .portal-popover[popover] {
+    opacity: 0;
+    translate: 0 -6px;
+    transition: opacity 0.22s var(--ease-luxe), translate 0.22s var(--ease-luxe), display 0.22s, overlay 0.22s;
+    transition-behavior: allow-discrete;
+  }
+  .portal-popover[popover]:where(:popover-open, .\:popover-open) {
+    opacity: 1;
+    translate: 0 0;
+  }
+  @starting-style {
+    .portal-popover[popover]:where(:popover-open, .\:popover-open) {
+      opacity: 0;
+      translate: 0 -6px;
+    }
+  }
+}
+
+/* C. 高对比度 / Windows Forced Colors Mode 系统色兜底（color 指南） */
+@media (forced-colors: active) {
+  .portal-header,
+  .portal-popover[popover],
+  .museum-card,
+  .museum-panel,
+  .card-linen,
+  .card-ink,
+  .card-moss,
+  .card-gold,
+  .eyebrow {
+    border: 1px solid CanvasText !important;
+    background: Canvas !important;
+    color: CanvasText !important;
+  }
+  .portal-nav-link[aria-current="page"],
+  .portal-nav-link.is-section-active {
+    outline: 2px solid Highlight;
+    color: LinkText;
+  }
+  .portal-nav-link[aria-current="page"]::after,
+  .portal-nav-link.is-section-active::after {
+    background: Highlight;
+  }
+}
+
+/* 动效收敛：装饰性漂浮仅在 no-preference 时启用，保持最终静止态可见（motion 指南） */
+@media (prefers-reduced-motion: reduce) {
+  .portal-popover[popover] {
+    transition: none;
+    translate: none;
+  }
 }

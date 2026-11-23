@@ -25,7 +25,7 @@ export const trail = [
 ]
 
 const FOYER = {
-  no: '00', path: '/', name: '序厅 · 总览', scale: '起点', pillar: '策展起点',
+  no: '00', path: '/museum', name: '展馆序厅 · 总览', scale: '起点', pillar: '策展起点',
   tagline: '从整片黑土的坐标重新出发', isBoundary: true
 }
 const MAP = {

@@ -6,7 +6,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ArrowUp } from 'lucide-vue-next'
 import AppNavbar from './components/AppNavbar.vue'
 import AppFooter from './components/AppFooter.vue'
-import CustomCursor from './components/CustomCursor.vue'
 import TrailNav from './components/TrailNav.vue'
 import { useAppStore } from './stores/appStore'
 import { unitOf } from './data/exhibitTrail'
@@ -235,14 +234,13 @@ onUnmounted(() => {
     </router-view>
   </div>
 
-  <!-- 3D 数字展馆壳：保留原有艺术展馆体验 -->
-  <div v-else class="min-h-screen bg-[#F7F4EE] text-[#1C1B18] flex flex-col relative paper-grain">
-    <CustomCursor />
+  <!-- 3D 数字展馆 & 专题科普网壳：与吉韵禾野统一的新中式青绿山水 · 深松鎏金风格 -->
+  <div v-else class="museum-portal min-h-screen bg-[#F3F6F3] text-[#10241C] flex flex-col relative">
     <a class="skip-link" href="#main-content">跳到展陈主内容</a>
 
-    <div class="fixed top-0 left-0 h-[2px] bg-[#C88A32] z-[70] pointer-events-none"
+    <div class="fixed top-0 left-0 h-[2px] bg-gradient-to-r from-[#1F5440] via-[#C89B45] to-[#E5C175] z-[70] pointer-events-none"
       :style="{ width: `${scrollPct * 100}%` }"></div>
-    <div :key="route.fullPath" class="route-progress fixed top-0 left-0 h-[2px] w-full bg-[#C88A32]/45 z-[69] pointer-events-none"></div>
+    <div :key="route.fullPath" class="route-progress fixed top-0 left-0 h-[2px] w-full bg-[#C89B45]/45 z-[69] pointer-events-none"></div>
 
     <AppNavbar />
 
@@ -276,7 +274,7 @@ onUnmounted(() => {
       leave-to-class="opacity-0 translate-y-3"
     >
       <button v-if="showTop" @click="toTop"
-        class="fixed bottom-6 right-5 sm:right-8 z-40 to-top w-11 h-11 rounded-full text-[#F7F4EE] flex items-center justify-center hover:bg-[#C88A32] hover:text-[#1C1B18] transition-colors duration-300 cursor-pointer"
+        class="fixed bottom-6 right-5 sm:right-8 z-40 to-top w-11 h-11 rounded-full text-[#F3F7F4] flex items-center justify-center hover:bg-[#C89B45] hover:text-[#0E261D] transition-colors duration-300 cursor-pointer"
         aria-label="回到顶部">
         <ArrowUp :size="16" />
       </button>

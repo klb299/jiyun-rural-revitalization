@@ -25,17 +25,17 @@ const products = [
   {
     id: 2, category: 'grain', name: '东北黄金甜糯玉米真空棒', origin: '四平 / 公主岭黄金玉米带',
     tag: '非转基因 · 鲜摘锁鲜', desc: '从采摘到真空高压灭菌不超过五小时，保留天然高膳食纤维与甜脆多汁。',
-    price: '¥ 39.90 / 8 支装', sales: '月销 35,000+ 件', image: '/art-hd/jilin-harvest.jpg', plate: 'PLATE 07', no: '02'
+    price: '¥ 39.90 / 8 支装', sales: '月销 35,000+ 件', image: '/art-custom/waxy-corn.jpg', plate: 'PLATE 02', no: '02'
   },
   {
     id: 3, category: 'mountain', name: '长白山野生椴树雪蜜', origin: '长白山脉深山原始森林',
     tag: '天然成熟原蜜', desc: '每年夏至前后椴树花开，蜜蜂采自深山天然粉源，洁白如雪，带清雅薄荷淡香。',
-    price: '¥ 88.00 / 500g', sales: '月销 8,600+ 件', image: '/photos/forest.jpg', plate: 'PLATE 06', no: '03'
+    price: '¥ 88.00 / 500g', sales: '月销 8,600+ 件', image: '/art-custom/honey.jpg', plate: 'PLATE 03', no: '03'
   },
   {
     id: 4, category: 'mountain', name: '长白山红松子仁 / 破壁人参片', origin: '抚松 / 长白山腹地',
     tag: '药食同源', desc: '手工精选野生红松大籽，仁香醇厚；林下野山参低温超微打粉破壁。',
-    price: '¥ 128.00 / 盒', sales: '月销 5,400+ 件', image: '/photos/seedling-hand.jpg', plate: 'PLATE 08', no: '04'
+    price: '¥ 128.00 / 盒', sales: '月销 5,400+ 件', image: '/art-custom/pine-nuts.jpg', plate: 'PLATE 04', no: '04'
   },
   {
     id: 5, category: 'lake', name: '查干湖生态胖头鱼', origin: '松原 / 查干湖冬捕非遗区',
@@ -45,7 +45,7 @@ const products = [
   {
     id: 6, category: 'grain', name: '延边有机黑豆与杂粮礼盒', origin: '延边朝鲜族自治州',
     tag: '绿色富硒认证', desc: '长白山矿泉水与火山灰土孕育，包含黑米、薏仁、红小豆、燕麦。',
-    price: '¥ 79.00 / 礼盒装', sales: '月销 9,200+ 件', image: '/art-hd/jilin-harvest.jpg', plate: 'PLATE 01', no: '06'
+    price: '¥ 79.00 / 礼盒装', sales: '月销 9,200+ 件', image: '/art-custom/soybeans-real.jpg', plate: 'PLATE 06', no: '06'
   }
 ]
 
@@ -72,7 +72,7 @@ onUnmounted(() => clearTimeout(toastTimer))
   <div>
     <!-- 01 市集标签墙：暖白宣纸与琥珀光晕 + Z 轴层叠品类卡 -->
     <section class="relative min-h-[100dvh] flex items-center overflow-hidden"
-      style="background: radial-gradient(75% 85% at 88% 18%, rgba(200, 138, 50, 0.22), transparent 58%), radial-gradient(70% 80% at 8% 92%, rgba(46, 90, 68, 0.12), transparent 58%), linear-gradient(155deg, #FAF6EE 0%, #F2EBDD 55%, #EBE1CE 100%)">
+      style="background: radial-gradient(70% 85% at 86% 18%, rgba(200, 155, 69, 0.15), transparent 58%), radial-gradient(65% 80% at 8% 92%, rgba(31, 84, 64, 0.14), transparent 58%), linear-gradient(155deg, #F6FAF7 0%, #ECF3EE 55%, #E4EFE9 100%)">
       <div class="absolute inset-0 coord-rule hero-grid-fade pointer-events-none"></div>
 
       <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
@@ -120,7 +120,7 @@ onUnmounted(() => clearTimeout(toastTimer))
                 <button @click="pickCategory(c.id)"
                   class="z-card group relative w-full text-left rounded-2xl bg-[#FFFDF9] border border-[#1C1B18]/10 shadow-[0_24px_54px_-32px_rgba(28,27,24,0.3)] p-5 sm:p-6 cursor-pointer"
                   :class="activeFilter === c.id ? 'ring-2 ring-[#1C1B18]' : ''"
-                  :style="{ transform: `rotate(${[-2, 1.5, -1.5, 2][i]}deg)` }">
+                  >
                   <div class="flex items-start justify-between gap-2 mb-5">
                     <span class="font-mono text-[0.625rem] tracking-[0.18em] text-[#8A6324]">TAG 0{{ i + 1 }}</span>
                     <span class="w-6 h-6 rounded-full bg-[#1C1B18] text-[#F7F4EE] grid place-items-center">

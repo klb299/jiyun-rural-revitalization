@@ -13,23 +13,27 @@ defineProps({
 
 <template>
   <figure class="group">
-    <div class="bezel" :class="dark ? 'bezel--ink' : ''">
-      <div class="bezel-core">
-        <div data-reveal-img class="relative overflow-hidden" :class="ratio">
-          <img :src="src" :alt="alt" loading="lazy"
-            class="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-[1.05]"
-            :class="contain ? 'object-contain!' : ''" />
-          <span v-if="index"
-            class="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-[#C88A32] text-[#1C1B18] font-mono text-[0.625rem] font-bold tracking-[0.16em] shadow-lg">
-            {{ index }}
-          </span>
-          <div class="absolute inset-4 border border-[#1C1B18]/10 rounded-2xl pointer-events-none"></div>
-        </div>
-      </div>
+    <div
+      class="relative overflow-hidden rounded-[1.35rem] border shadow-[0_22px_50px_-30px_rgba(14,38,29,0.32)]"
+      :class="[ratio, dark ? 'border-white/14 bg-[#0E261D]' : 'border-[#0E261D]/10 bg-[#EAF1EC]']"
+    >
+      <img
+        :src="src"
+        :alt="alt"
+        loading="lazy"
+        class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+        :class="contain ? 'object-contain!' : ''"
+      />
+      <span
+        v-if="index"
+        class="absolute top-3.5 left-3.5 px-3 py-1 rounded-full bg-[#0E261D]/82 text-[#E5C175] backdrop-blur-sm border border-[#E5C175]/28 font-mono text-[0.625rem] font-semibold tracking-[0.14em]"
+      >
+        {{ index }}
+      </span>
     </div>
-    <figcaption class="mt-4 flex flex-wrap items-start justify-between gap-3">
-      <p class="caption max-w-md" :class="dark ? 'text-[#F7F4EE]/80' : ''">{{ caption }}</p>
-      <span v-if="credit" class="caption" :class="dark ? 'text-[#F7F4EE]/80' : ''">{{ credit }}</span>
+    <figcaption v-if="caption || credit" class="mt-3.5 flex flex-wrap items-start justify-between gap-3 px-0.5">
+      <p class="text-xs leading-relaxed max-w-md" :class="dark ? 'text-[#D7E4DD]/85' : 'text-[#566E64]'">{{ caption }}</p>
+      <span v-if="credit" class="font-mono text-[0.65rem] tracking-[0.12em]" :class="dark ? 'text-[#E5C175]/80' : 'text-[#7F5B17]'">{{ credit }}</span>
     </figcaption>
   </figure>
 </template>

@@ -219,12 +219,12 @@ const decisions = [
     <section class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         <Reveal class="lg:col-span-5 relative" data-parallax="-8">
-          <div class="bezel z-card" style="transform: rotate(-3deg)">
+          <div class="bezel z-card">
             <div class="bezel-core">
               <img src="/art-hd/soil-specimen.jpg" alt="黑土剖面与监测层位微距标本" loading="lazy" class="w-full aspect-[4/3] object-cover" />
             </div>
           </div>
-          <div class="absolute -bottom-7 -right-6 card-moss z-card px-6 py-4 rounded-2xl" style="transform: rotate(4deg)">
+          <div class="absolute -bottom-5 right-4 card-moss z-card px-5 py-3.5 rounded-2xl">
             <div class="font-mono text-[0.625rem] tracking-[0.18em] text-[#F7F4EE]/80 mb-1">PLATE 01</div>
             <div class="font-editorial text-lg font-bold">剖面监测层位</div>
           </div>
@@ -248,7 +248,7 @@ const decisions = [
     </section>
 
     <!-- 05 收束 -->
-    <section class="relative overflow-hidden" style="background: linear-gradient(145deg, #E7BC6C, #C88A32 55%, #A9701F 100%)">
+    <section class="relative overflow-hidden" style="background: radial-gradient(68% 90% at 86% 18%, rgba(200,155,69,0.2), transparent 58%), linear-gradient(148deg, #EAF2ED 0%, #DFECE4 58%, #D7E7DE 100%)">
       <div class="max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
         <Reveal class="lg:col-span-8">
           <div class="font-mono text-[0.625rem] tracking-[0.22em] text-[#1C1B18]/65 mb-4">04 / 04 · DATA NOTE</div>

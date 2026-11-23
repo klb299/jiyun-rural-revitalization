@@ -7,7 +7,7 @@ const props = defineProps({
   note: { type: String, default: '' },
   index: { type: String, default: '' },
   dark: { type: Boolean, default: false },
-  accent: { type: String, default: '#C88A32' }
+  accent: { type: String, default: '#C89B45' }
 })
 
 const el = ref(null)
@@ -27,7 +27,7 @@ onMounted(() => {
     started = true
     observer.disconnect()
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
-    const duration = 1250
+    const duration = 950
     const t0 = performance.now()
     const tick = (now) => {
       const p = Math.min(1, (now - t0) / duration)
@@ -36,7 +36,7 @@ onMounted(() => {
       if (p < 1) frame = requestAnimationFrame(tick)
     }
     frame = requestAnimationFrame(tick)
-  }, { threshold: 0.4 })
+  }, { threshold: 0.35 })
   observer.observe(el.value)
 })
 
@@ -47,18 +47,29 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="el" class="relative rounded-3xl px-5 py-6 border overflow-hidden"
-    :class="dark ? 'bg-[#F7F4EE]/6 border-[#F7F4EE]/14' : 'bg-[#FFFDF9]/75 border-[#1C1B18]/8'">
-    <span class="absolute -right-2 -bottom-8 font-editorial font-bold select-none pointer-events-none"
-      :class="dark ? 'text-[#F7F4EE]/6' : 'text-[#1C1B18]/5'"
-      style="font-size: 7rem; line-height: 1">{{ index.slice(-2) }}</span>
-    <div class="relative flex items-start justify-between gap-3">
-      <div class="font-editorial font-bold tabular-nums leading-none whitespace-nowrap"
-        :style="{ color: accent, fontSize: 'clamp(1.9rem, 3.1vw, 3.25rem)' }">{{ display }}</div>
-      <span v-if="index" class="font-mono text-[0.625rem] tracking-[0.2em] px-2 py-1 rounded-full"
-        :class="dark ? 'bg-[#F7F4EE]/10 text-[#F7F4EE]/80' : 'bg-[#EFECE6] text-[#6E6960]'">{{ index }}</span>
+  <div
+    ref="el"
+    class="relative rounded-2xl px-5 py-5 border overflow-hidden transition-colors duration-300"
+    :class="dark
+      ? 'bg-white/[0.06] border-white/14 hover:border-[#E5C175]/40'
+      : 'bg-[#FCFEFC] border-[#0E261D]/10 shadow-[0_14px_32px_-24px_rgba(14,38,29,0.28)] hover:border-[#1F5440]/30'"
+  >
+    <div class="flex items-start justify-between gap-3">
+      <div
+        class="font-editorial font-bold tabular-nums leading-none whitespace-nowrap"
+        :style="{ color: dark ? '#E5C175' : (accent === '#C88A32' ? '#1A4333' : accent), fontSize: 'clamp(1.75rem, 2.7vw, 2.75rem)' }"
+      >
+        {{ display }}
+      </div>
+      <span
+        v-if="index"
+        class="font-mono text-[0.625rem] font-semibold tracking-[0.14em] px-2 py-0.5 rounded-full"
+        :class="dark ? 'bg-[#E5C175]/14 text-[#E5C175]' : 'bg-[#EAF1EC] text-[#3E554B]'"
+      >
+        {{ index }}
+      </span>
     </div>
-    <div class="relative mt-4 text-sm font-bold" :class="dark ? 'text-[#F7F4EE]' : 'text-[#1C1B18]'">{{ label }}</div>
-    <div v-if="note" class="caption relative mt-1.5" :class="dark ? 'text-[#F7F4EE]/80' : ''">{{ note }}</div>
+    <div class="mt-3.5 text-sm font-bold" :class="dark ? 'text-[#F7FAF8]' : 'text-[#10241C]'">{{ label }}</div>
+    <div v-if="note" class="text-xs leading-relaxed mt-1" :class="dark ? 'text-[#D7E4DD]/80' : 'text-[#566E64]'">{{ note }}</div>
   </div>
 </template>

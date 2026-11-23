@@ -305,10 +305,10 @@ const resetLab = () => {
         </Reveal>
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           <div class="lg:col-span-7">
-            <h1 class="display-1 text-[#F7F4EE]" aria-label="把原理，变成可以上手的东西">
+            <h1 class="display-1 text-[#F7F4EE]" aria-label="把原理，变成可以上手的实验">
               <span v-for="(ch, i) in Array.from('把原理，')" :key="'a' + i" class="kin-char" :style="{ animationDelay: (0.1 + i * 0.08) + 's' }">{{ ch }}</span>
               <span class="block text-[#E8BC6E]">
-                <span v-for="(ch, i) in Array.from('变成可以上手的')" :key="'b' + i" class="kin-char" :style="{ animationDelay: (0.36 + i * 0.05) + 's' }">{{ ch }}</span>
+                <span v-for="(ch, i) in Array.from('变成可以上手的实验')" :key="'b' + i" class="kin-char" :style="{ animationDelay: (0.36 + i * 0.05) + 's' }">{{ ch }}</span>
               </span>
             </h1>
             <Reveal :delay="700"><p class="font-editorial text-xl sm:text-2xl text-[#FFFDF9]/92 mt-7">四个可操作的 3D 原理演示</p></Reveal>

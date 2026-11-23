@@ -88,7 +88,7 @@ const makeCertificate = () => { certificate.value = true }
   <div class="relative">
     <!-- 01 首屏：演示声明 + 地块俯视示意 -->
     <section class="relative min-h-[100dvh] overflow-hidden flex items-center"
-      style="background: radial-gradient(78% 85% at 84% 20%, rgba(200, 138, 50, 0.18), transparent 58%), radial-gradient(65% 75% at 10% 88%, rgba(46, 90, 68, 0.14), transparent 58%), linear-gradient(155deg, #F9F5EC 0%, #F0E9DA 55%, #E7DFCE 100%)">
+      style="background: radial-gradient(72% 85% at 84% 20%, rgba(200, 155, 69, 0.14), transparent 58%), radial-gradient(65% 75% at 10% 88%, rgba(31, 84, 64, 0.14), transparent 58%), linear-gradient(155deg, #F6FAF7 0%, #ECF3EE 55%, #E3EEE8 100%)">
       <div class="absolute inset-0 coord-rule hero-grid-fade pointer-events-none"></div>
 
       <div class="relative z-10 w-full max-w-[90rem] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-24">
