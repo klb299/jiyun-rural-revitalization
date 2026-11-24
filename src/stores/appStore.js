@@ -108,6 +108,29 @@ export const useAppStore = defineStore('app', () => {
     persistLabs()
   }
 
+  // 电影级四幕开场动画状态：整站首访（/ 或 /museum）自动播放一次，随时支持跳过与点击重播
+  const INTRO_KEY = 'jiyun-cine-intro-seen-v1'
+  const showCineIntro = ref(false)
+  const maybeAutoPlayIntro = (path) => {
+    if (showCineIntro.value) return
+    if (path !== '/' && path !== '/museum') return
+    if (typeof window === 'undefined') return
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    try {
+      if (sessionStorage.getItem(INTRO_KEY) === '1') return
+    } catch (e) { /* ignore */ }
+    showCineIntro.value = true
+  }
+  const replayCineIntro = () => {
+    showCineIntro.value = true
+  }
+  const finishCineIntro = () => {
+    showCineIntro.value = false
+    try {
+      if (typeof sessionStorage !== 'undefined') sessionStorage.setItem(INTRO_KEY, '1')
+    } catch (e) { /* ignore */ }
+  }
+
   return {
     activeFocusPoint,
     isAudioPlaying,
@@ -118,6 +141,7 @@ export const useAppStore = defineStore('app', () => {
     trailDirection,
     labVisited,
     labBadges,
+    showCineIntro,
     setFocusPoint,
     toggleNightMode,
     toggleAudio,
@@ -125,6 +149,9 @@ export const useAppStore = defineStore('app', () => {
     markTrail,
     clearTrail,
     visitLab,
-    awardLab
+    awardLab,
+    maybeAutoPlayIntro,
+    replayCineIntro,
+    finishCineIntro
   }
 })

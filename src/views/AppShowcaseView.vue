@@ -4,13 +4,15 @@ import { RouterLink } from 'vue-router'
 import {
   Smartphone, Columns2, LayoutDashboard, Compass,
   Sparkles, ArrowRight, Tractor, Radio, QrCode,
-  Award, CalendarDays, Activity
+  Award, CalendarDays, Activity, Clapperboard
 } from 'lucide-vue-next'
 import RuralAppShell from '../components/mobile/RuralAppShell.vue'
 import BrandLogo from '../components/BrandLogo.vue'
 import { useRuralPlatformStore } from '../stores/ruralPlatformStore'
+import { useAppStore } from '../stores/appStore'
 
 const store = useRuralPlatformStore()
+const appStore = useAppStore()
 const appRef = ref(null)
 
 const showcaseTriggers = [
@@ -132,9 +134,20 @@ const showcaseTriggers = [
     <main class="relative z-10 flex-1 w-full max-w-[1380px] mx-auto px-6 lg:px-10 py-5 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
       <!-- 左侧：品牌叙事 + 6大旗舰功能遥控面板 + 双端同步流 -->
       <div class="lg:col-span-7 space-y-5">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#EAF3EE] border border-[#2E5A44]/20 text-[#1F4E3D] text-xs font-bold">
-          <span class="w-2 h-2 rounded-full bg-[#22C55E] animate-pulse"></span>
-          <span>{{ store.lastSyncEvent }}</span>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#EAF3EE] border border-[#2E5A44]/20 text-[#1F4E3D] text-xs font-bold">
+            <span class="w-2 h-2 rounded-full bg-[#22C55E] animate-pulse"></span>
+            <span>{{ store.lastSyncEvent }}</span>
+          </div>
+          <button
+            type="button"
+            @click="appStore.replayCineIntro"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#16261F]/90 hover:bg-[#1F4E3D] text-[#F5D393] text-xs font-semibold transition-colors cursor-pointer shadow-xs"
+            title="重播《吉韵禾野》四幕电影级开场动画"
+          >
+            <Clapperboard :size="13" aria-hidden="true" />
+            <span>重播片头</span>
+          </button>
         </div>
 
         <div class="space-y-2.5">

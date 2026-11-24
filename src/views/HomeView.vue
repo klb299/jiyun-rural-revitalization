@@ -8,10 +8,12 @@ import ExhibitCard from '../components/editorial/ExhibitCard.vue'
 import NeoDivider from '../components/editorial/NeoDivider.vue'
 import {
   ArrowUpRight, Compass, Layers, FlaskConical, Sprout,
-  Smartphone, Columns2, Monitor, ShieldCheck, BookOpen, Gamepad2
+  Smartphone, Columns2, Monitor, ShieldCheck, BookOpen, Gamepad2, Clapperboard
 } from 'lucide-vue-next'
+import { useAppStore } from '../stores/appStore'
 
 const router = useRouter()
+const appStore = useAppStore()
 
 const enterGallery = (to) => {
   navigateWithViewTransition(router, to)
@@ -174,6 +176,15 @@ onMounted(() => {
                 <Compass :size="15" aria-hidden="true" class="text-[#C89B45]" />
                 <span>浏览全展策展地图</span>
               </RouterLink>
+              <button
+                type="button"
+                @click="appStore.replayCineIntro"
+                class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-bold text-[#1A4333] border border-[#1F5440]/20 bg-white/70 hover:bg-[#1F5440] hover:text-[#F5D393] transition-colors cursor-pointer"
+                title="重播《吉韵禾野》四幕电影级开场动画"
+              >
+                <Clapperboard :size="14" aria-hidden="true" />
+                <span>重播片头</span>
+              </button>
             </div>
           </div>
 

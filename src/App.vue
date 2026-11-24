@@ -7,6 +7,7 @@ import { ArrowUp } from 'lucide-vue-next'
 import AppNavbar from './components/AppNavbar.vue'
 import AppFooter from './components/AppFooter.vue'
 import TrailNav from './components/TrailNav.vue'
+import CinematicIntro from './components/CinematicIntro.vue'
 import { useAppStore } from './stores/appStore'
 import { unitOf } from './data/exhibitTrail'
 
@@ -208,12 +209,14 @@ onMounted(() => {
   window.addEventListener('resize', onResize, { passive: true })
   onScroll()
   scheduleMotion(300)
+  appStore.maybeAutoPlayIntro(route.path)
 })
 
 watch(() => route.fullPath, () => {
   docHeight = 0 // 新页面高度不同，下一帧重新测量
   scheduleMotion(420)
   onScroll()
+  appStore.maybeAutoPlayIntro(route.path)
 })
 
 onUnmounted(() => {
@@ -227,6 +230,9 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <!-- 电影级四幕开场动画：首访 / 或 /museum 自动播放一次，支持跳过与随时重播 -->
+  <CinematicIntro v-if="appStore.showCineIntro" @done="appStore.finishCineIntro" />
+
   <!-- 独立双端壳：移动端 App / 双端同屏 / 后台管理系统（零遮挡、零嵌套 main、零横向溢出） -->
   <div v-if="isStandaloneShell" class="min-h-[100dvh] w-full max-w-full overflow-x-clip bg-[#F6F5F0] text-[#1C1B18]">
     <router-view v-slot="{ Component }">
