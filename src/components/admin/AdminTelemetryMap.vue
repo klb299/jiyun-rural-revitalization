@@ -201,7 +201,7 @@ onUnmounted(() => {
             <span class="w-2 h-2 rounded-full bg-[#4ADE80] animate-pulse"></span>
             <span>BEIDOU-3 RTK DIGITAL TWIN RADAR · 60FPS</span>
           </div>
-          <span class="font-mono text-[10px] text-white/60 bg-black/45 px-2.5 py-1 rounded-full">43.88°N 125.32°E</span>
+          <span class="font-mono text-[10px] text-white/70 bg-black/45 px-2.5 py-1 rounded-full">BEIDOU-3 RTK · 示范田格网示意</span>
         </div>
         <canvas ref="canvasRef" class="w-full h-[380px] block"></canvas>
       </div>

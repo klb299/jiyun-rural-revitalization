@@ -1,13 +1,26 @@
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import SectionHead from '../components/editorial/SectionHead.vue'
 import FigurePlate from '../components/editorial/FigurePlate.vue'
 import Reveal from '../components/editorial/Reveal.vue'
-import { ArrowUpRight, Check } from 'lucide-vue-next'
+import { ArrowUpRight, Check, ShoppingBag } from 'lucide-vue-next'
+import { useRuralPlatformStore } from '../stores/ruralPlatformStore'
 
+const router = useRouter()
+const store = useRuralPlatformStore()
 const activeFilter = ref('all')
 const toast = ref('')
 let toastTimer = null
+
+const storeIdMap = {
+  1: 'prod-1',
+  2: 'prod-3',
+  3: 'prod-7',
+  4: 'prod-11',
+  5: 'prod-2',
+  6: 'prod-5'
+}
 
 const categories = [
   { id: 'all', name: '全部吉林风物' },
@@ -58,10 +71,20 @@ const filtered = computed(() => activeFilter.value === 'all'
   ? products
   : products.filter((p) => p.category === activeFilter.value))
 
-const addToList = (name) => {
-  toast.value = `已把「${name}」加入助农直采清单`
+const addToList = (item) => {
+  const mappedId = storeIdMap[item.id]
+  const realProd = store.products.find((p) => p.id === mappedId) || store.activeProducts[0]
+  if (realProd) {
+    store.addToCart(realProd, 1)
+  }
+  toast.value = `已将「${item.name}」同步加入助农购物袋（当前 ${store.cartCount} 件）`
   clearTimeout(toastTimer)
   toastTimer = setTimeout(() => { toast.value = '' }, 2800)
+}
+
+const goCheckoutInApp = () => {
+  store.setAppPersona('consumer')
+  router.push('/app?tab=market')
 }
 
 onUnmounted(() => clearTimeout(toastTimer))
@@ -203,10 +226,11 @@ onUnmounted(() => clearTimeout(toastTimer))
                 <span class="caption">{{ p.sales }}</span>
               </div>
               <button
-                @click="addToList(p.name)"
-                class="mt-5 w-full py-3 rounded-full bg-[#1C1B18] text-[#F7F4EE] text-xs font-bold hover:bg-[#C88A32] hover:text-[#1C1B18] transition-colors duration-300 cursor-pointer flex items-center justify-center gap-2"
+                type="button"
+                @click="addToList(p)"
+                class="btn-solid mt-5 w-full py-3 rounded-full text-xs font-bold transition-colors duration-300 cursor-pointer flex items-center justify-center gap-2"
               >
-                加入助农直采清单 <ArrowUpRight :size="14" />
+                加入助农购物袋（双端互通） <ArrowUpRight :size="14" aria-hidden="true" />
               </button>
             </div>
           </article>
@@ -309,6 +333,41 @@ onUnmounted(() => clearTimeout(toastTimer))
       </div>
     </section>
 
+    <!-- 展馆与移动端集市互通悬浮购物袋条 -->
+    <Transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="opacity-0 translate-y-4"
+      leave-active-class="transition duration-200 ease-in"
+      leave-to-class="opacity-0 translate-y-4"
+    >
+      <div
+        v-if="store.cartCount > 0"
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[75] w-[min(540px,calc(100vw-2.5rem))] rounded-2xl bg-[#10241C]/96 backdrop-blur-md text-[#F7FAF8] px-4 py-3 border border-[#E5C175]/40 shadow-2xl flex items-center justify-between gap-3"
+      >
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span class="w-9 h-9 rounded-xl bg-[#E5C175] text-[#10241C] flex items-center justify-center shrink-0">
+            <ShoppingBag :size="16" aria-hidden="true" />
+          </span>
+          <div class="min-w-0">
+            <div class="text-xs font-bold truncate">
+              助农购物袋已选 {{ store.cartCount }} 件 · 合计 ¥{{ store.cartTotal }}
+            </div>
+            <div class="text-[11px] text-[#86EFAC] truncate">
+              预计直达合作社农户 ¥{{ store.cartFarmerShareSummary.farmerGain }}（{{ store.cartFarmerShareSummary.sharePct }}%）
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          @click="goCheckoutInApp"
+          class="shrink-0 min-h-[38px] px-3.5 py-2 rounded-xl bg-[#E5C175] text-[#10241C] text-xs font-bold hover:brightness-105 transition-all cursor-pointer flex items-center gap-1"
+        >
+          <span>去结算/核验</span>
+          <ArrowUpRight :size="13" aria-hidden="true" />
+        </button>
+      </div>
+    </Transition>
+
     <!-- 轻量提示 -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -316,7 +375,7 @@ onUnmounted(() => clearTimeout(toastTimer))
       leave-active-class="transition duration-200 ease-in"
       leave-to-class="opacity-0 translate-y-4"
     >
-      <div v-if="toast" class="fixed bottom-7 left-1/2 -translate-x-1/2 z-[80] museum-card px-5 py-3 rounded-xl border border-[#C88A32]/40 flex items-center gap-2.5 shadow-xl">
+      <div v-if="toast" class="fixed top-22 left-1/2 -translate-x-1/2 z-[80] museum-card px-5 py-3 rounded-xl border border-[#C88A32]/40 flex items-center gap-2.5 shadow-xl">
         <Check :size="15" class="text-[#2E5A44]" />
         <span class="text-xs font-semibold text-[#1C1B18]">{{ toast }}</span>
       </div>

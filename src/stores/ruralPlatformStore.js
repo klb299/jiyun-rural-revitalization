@@ -681,7 +681,8 @@ const defaultFeedbacks = [
     user: '赵建国（合作社社员）',
     type: '农机预约',
     village: '九台区土们岭村',
-    content: '东片 120 亩稻田已完成收割，申请预约 2 台北斗深松机进行秋季秸秆还田作业。',
+    content: '东片 36 亩稻田已完成收割，申请预约北斗深松机进行秋季秸秆归行与深松护土作业。',
+    meta: { plotMu: 36, serviceType: '秋季深松整地', dateWindow: '明日上午 08:00-12:00', assignedMachineCode: '' },
     time: '2026-11-21 11:08',
     status: '待处理',
     reply: ''
@@ -711,6 +712,7 @@ const defaultFeedbacks = [
 const defaultMachinery = [
   { id: 'mac-1', code: 'BD-260-01', name: '长春造 260HP 北斗无人拖拉机 #01', area: '九台核心示范区', task: '秋季深松整地', batteryOrFuel: 84, status: '作业中' },
   { id: 'mac-2', code: 'BD-260-04', name: '长春造 260HP 北斗无人拖拉机 #04', area: '梨树免耕试验田', task: '秸秆条带归行', batteryOrFuel: 67, status: '作业中' },
+  { id: 'mac-5', code: 'BD-260-06', name: '长春造 260HP 北斗无人拖拉机 #06', area: '九台农机共享站', task: '整备待命可派单', batteryOrFuel: 96, status: '待命' },
   { id: 'mac-3', code: 'DR-MS-08', name: '多光谱巡检植保无人机 #08', area: '查干湖生态稻区', task: '墒情遥感巡航', batteryOrFuel: 92, status: '待命' },
   { id: 'mac-4', code: 'HV-400-02', name: '智能联合收割机 #02', area: '农安青禾合作社', task: '维保检修中', batteryOrFuel: 100, status: '维护中' }
 ]
@@ -747,10 +749,22 @@ const defaultAppConfig = {
   userProfile: {
     name: '林晓禾',
     role: '黑土守护者 · LV.4',
+    personaTag: '城市品质消费与云认养端',
     memberNo: 'JY-2026-0482',
     points: 2680,
     helpedHouseholds: 14,
     carbonSavedKg: 46.8
+  },
+  farmerProfile: {
+    name: '赵建国',
+    role: '核心示范社员 · 种粮大户',
+    coop: '九台黑土稻作专业合作社',
+    village: '九台区土们岭村',
+    memberNo: 'NH-JT-0108',
+    managedMu: 36,
+    subsidyPerMu: 72,
+    trustBaseIncome: 22320,
+    noTillSubsidyConfirmed: false
   }
 }
 
@@ -777,7 +791,24 @@ function loadState() {
 export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
   const saved = loadState()
 
+  const mergedAppConfig = {
+    ...structuredClone(defaultAppConfig),
+    ...(saved?.appConfig || {}),
+    userProfile: {
+      ...structuredClone(defaultAppConfig.userProfile),
+      ...(saved?.appConfig?.userProfile || {})
+    },
+    farmerProfile: {
+      ...structuredClone(defaultAppConfig.farmerProfile),
+      ...(saved?.appConfig?.farmerProfile || {})
+    }
+  }
+
   const authed = ref(typeof window !== 'undefined' && window.sessionStorage.getItem(SESSION_KEY) === '1')
+  // 双端精准受众身份：移动端 ('consumer' 城市助农消费者 ⇄ 'farmer' 本地新农人社员) & 后台岗位 ('all' | 'coop' | 'agri' | 'village')
+  const appPersona = ref(saved?.appPersona === 'farmer' ? 'farmer' : 'consumer')
+  const adminRole = ref(['all', 'coop', 'agri', 'village'].includes(saved?.adminRole) ? saved.adminRole : 'all')
+
   const products = ref(saved?.products || structuredClone(defaultProducts))
   const liveCams = ref(saved?.liveCams || structuredClone(defaultLiveCams))
   const orders = ref(saved?.orders || structuredClone(defaultOrders))
@@ -786,12 +817,16 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
   const projects = ref(saved?.projects || structuredClone(defaultProjects))
   const notices = ref(saved?.notices || structuredClone(defaultNotices))
   const feedbacks = ref(saved?.feedbacks || structuredClone(defaultFeedbacks))
-  const machinery = ref(saved?.machinery || structuredClone(defaultMachinery))
+  const savedMachinery = Array.isArray(saved?.machinery) ? [...saved.machinery] : structuredClone(defaultMachinery)
+  if (!savedMachinery.some((m) => m.code === 'BD-260-06')) {
+    savedMachinery.splice(2, 0, structuredClone(defaultMachinery[2]))
+  }
+  const machinery = ref(savedMachinery)
   const revenueTrend = ref(saved?.revenueTrend || structuredClone(defaultRevenueTrend))
   const coupons = ref(saved?.coupons || structuredClone(defaultCoupons))
   const favorites = ref(saved?.favorites || ['prod-1', 'prod-2'])
   const activityLogs = ref(saved?.activityLogs || structuredClone(defaultActivityLogs))
-  const appConfig = ref(saved?.appConfig || structuredClone(defaultAppConfig))
+  const appConfig = ref(mergedAppConfig)
   const gameStats = ref(saved?.gameStats || { bestScore: 0, plays: 0, lastRank: '', totalCarbon: 0 })
   const cart = ref([])
   const lastSyncEvent = ref('双端数据已就绪 · 毫秒级双向联动')
@@ -806,6 +841,26 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
   const totalPendingCount = computed(() => pendingOrdersCount.value + pendingAdoptionsCount.value + pendingFeedbacksCount.value)
   const totalHelpedHouseholds = computed(() => projects.value.reduce((sum, p) => sum + Number(p.households || 0), 0))
   const pinnedNotice = computed(() => notices.value.find((n) => n.pinned) || notices.value[0] || null)
+
+  // 合作社社员实时收益账本：订单直采分红池随全平台 GMV 实时增长
+  const farmerIncomeLedger = computed(() => {
+    const fp = appConfig.value.farmerProfile || defaultAppConfig.farmerProfile
+    const mu = Number(fp.managedMu || 36)
+    const trustBase = Number(fp.trustBaseIncome || mu * 620)
+    const orderDividend = Math.round(totalGMV.value * 0.028)
+    const noTillSubsidy = Math.round(mu * Number(fp.subsidyPerMu || 72))
+    const adoptShare = adoptions.value.filter((a) => a.status === '已生效').length * 680
+    const total = trustBase + orderDividend + noTillSubsidy + adoptShare
+    return {
+      mu,
+      trustBase,
+      orderDividend,
+      noTillSubsidy,
+      adoptShare,
+      total,
+      confirmed: Boolean(fp.noTillSubsidyConfirmed)
+    }
+  })
 
   // 严格归一化为 100% 的品类占比
   const categoryShare = computed(() => {
@@ -830,6 +885,30 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
   const cartCount = computed(() => cart.value.reduce((s, i) => s + i.qty, 0))
   const cartTotal = computed(() => Number(cart.value.reduce((s, i) => s + i.price * i.qty, 0).toFixed(2)))
 
+  // 按商品真实分成比例加权计算农户直达收益（平台补贴券不扣减农户分成）
+  const cartFarmerShareSummary = computed(() => {
+    if (!cart.value.length) return { farmerGain: 0, sharePct: 78, coopName: '吉林黑土助农合作社' }
+    let gain = 0
+    let raw = 0
+    const coops = new Set()
+    for (const c of cart.value) {
+      const prod = products.value.find((p) => p.id === c.productId)
+      const pct = Number(prod?.farmerSharePct || 78)
+      const sub = c.price * c.qty
+      raw += sub
+      gain += sub * (pct / 100)
+      if (prod?.coop) coops.add(prod.coop)
+    }
+    const sharePct = raw > 0 ? Math.round((gain / raw) * 100) : 78
+    const coopList = [...coops]
+    const coopName = coopList.length > 1 ? `${coopList[0]}等 ${coopList.length} 家合作社` : (coopList[0] || '吉林黑土助农合作社')
+    return {
+      farmerGain: Number(gain.toFixed(1)),
+      sharePct,
+      coopName
+    }
+  })
+
   // ---------------- 持久化与跨标签页同步 ----------------
   let isApplyingExternal = false
 
@@ -837,6 +916,8 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
     if (typeof window === 'undefined' || isApplyingExternal) return
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        appPersona: appPersona.value,
+        adminRole: adminRole.value,
         products: products.value,
         liveCams: liveCams.value,
         orders: orders.value,
@@ -859,7 +940,7 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
   }
 
   watch(
-    [products, liveCams, orders, plots, adoptions, projects, notices, feedbacks, machinery, revenueTrend, coupons, favorites, activityLogs, appConfig, gameStats],
+    [appPersona, adminRole, products, liveCams, orders, plots, adoptions, projects, notices, feedbacks, machinery, revenueTrend, coupons, favorites, activityLogs, appConfig, gameStats],
     persist,
     { deep: true }
   )
@@ -870,6 +951,8 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
       try {
         isApplyingExternal = true
         const next = JSON.parse(e.newValue)
+        if (next.appPersona) appPersona.value = next.appPersona
+        if (next.adminRole) adminRole.value = next.adminRole
         if (next.products) products.value = next.products
         if (next.liveCams) liveCams.value = next.liveCams
         if (next.orders) orders.value = next.orders
@@ -880,6 +963,7 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
         if (next.feedbacks) feedbacks.value = next.feedbacks
         if (next.machinery) machinery.value = next.machinery
         if (next.revenueTrend) revenueTrend.value = next.revenueTrend
+        if (next.coupons) coupons.value = next.coupons
         if (next.favorites) favorites.value = next.favorites
         if (next.activityLogs) activityLogs.value = next.activityLogs
         if (next.appConfig) appConfig.value = next.appConfig
@@ -960,7 +1044,20 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
     if (cart.value[idx].qty <= 0) cart.value.splice(idx, 1)
   }
 
-  function placeOrder({ customer, phone, address, discount = 0 }) {
+  function setAppPersona(persona) {
+    const next = persona === 'farmer' ? 'farmer' : 'consumer'
+    if (appPersona.value === next) return
+    appPersona.value = next
+    const label = next === 'farmer' ? '本地新农人·社员工作台' : '城市助农消费与认养端'
+    lastSyncEvent.value = `App 切换至「${label}」`
+  }
+
+  function setAdminRole(role) {
+    if (!['all', 'coop', 'agri', 'village'].includes(role)) return
+    adminRole.value = role
+  }
+
+  function placeOrder({ customer, phone, address, discount = 0, couponId = '' }) {
     if (!cart.value.length) return null
     const items = cart.value.map((c) => ({
       productId: c.productId,
@@ -968,6 +1065,7 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
       qty: c.qty,
       price: c.price
     }))
+    const shareSummary = cartFarmerShareSummary.value
     const rawTotal = cartTotal.value
     const finalTotal = Number(Math.max(0.1, rawTotal - Number(discount || 0)).toFixed(2))
     const firstProd = products.value.find((p) => p.id === items[0].productId)
@@ -977,13 +1075,21 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
       phone: phone || '138****4021',
       address: address || '吉林省长春市南关区人民大街 108 号',
       items,
+      rawTotal,
       total: finalTotal,
       discount: Number(discount || 0),
+      farmerGain: shareSummary.farmerGain,
+      sharePct: shareSummary.sharePct,
+      coopName: shareSummary.coopName,
       status: '待发货',
       traceCode: firstProd?.traceCode || 'JL-2026-LIVE',
       createdAt: formatTimeNow()
     }
     orders.value.unshift(order)
+
+    if (couponId && couponId.startsWith('rcpn-')) {
+      coupons.value = coupons.value.filter((c) => c.id !== couponId)
+    }
 
     for (const item of items) {
       const p = products.value.find((x) => x.id === item.productId)
@@ -1000,8 +1106,63 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
     appConfig.value.userProfile.points += Math.round(finalTotal)
     appConfig.value.userProfile.helpedHouseholds += 1
     cart.value = []
-    pushLog('App 端', `新订单 ${order.id}`, `${order.customer} 下单 ${items[0].name} 等 (实付 ¥${finalTotal})`)
+    pushLog('App 端', `新订单 ${order.id}`, `${order.customer} 下单 ${items[0].name} 等 (实付 ¥${finalTotal} · 助农直达 ¥${shareSummary.farmerGain})`)
     return order
+  }
+
+  function redeemPointsCoupon({ title, amount, minSpend, costPoints }) {
+    const cost = Number(costPoints || 500)
+    if ((appConfig.value.userProfile.points || 0) < cost) return null
+    appConfig.value.userProfile.points -= cost
+    const created = {
+      id: `rcpn-${Date.now().toString(36)}`,
+      title: title || '黑土积分兑换补贴券',
+      amount: Number(amount || 15),
+      minSpend: Number(minSpend || 89),
+      tag: '积分兑换',
+      claimed: true
+    }
+    coupons.value.unshift(created)
+    pushLog('App 端', '公益积分兑券', `消耗 ${cost} 积分兑换「满 ${created.minSpend} 减 ${created.amount}」助农券`)
+    return created
+  }
+
+  function submitMachineryBooking({ plotMu = 36, serviceType = '秋季深松整地', village = '', dateWindow = '明日上午 08:00-12:00', note = '' }) {
+    const fp = appConfig.value.farmerProfile || defaultAppConfig.farmerProfile
+    const targetVillage = (village || fp.village || '九台区土们岭村').trim()
+    const cleanMu = Math.max(1, Number(plotMu) || 36)
+    const summaryText = `${targetVillage} ${cleanMu} 亩地块申请【${serviceType}】（期望时段：${dateWindow}）。${note ? `备注：${note.trim()}` : '请农机站协调北斗 260HP 机组进场。'}`
+    const item = {
+      id: `fb-${Date.now().toString(36)}`,
+      user: `${fp.name}（合作社社员）`,
+      type: '农机预约',
+      village: targetVillage,
+      content: summaryText,
+      meta: {
+        plotMu: cleanMu,
+        serviceType,
+        dateWindow,
+        assignedMachineCode: ''
+      },
+      time: formatTimeNow(),
+      status: '待处理',
+      reply: ''
+    }
+    feedbacks.value.unshift(item)
+    pushLog('新农人端', `北斗农机预约 (${cleanMu}亩)`, `${fp.name} 预约 ${serviceType} · 待农机站派单`)
+    return item
+  }
+
+  function confirmNoTillSubsidy() {
+    if (!appConfig.value.farmerProfile) {
+      appConfig.value.farmerProfile = structuredClone(defaultAppConfig.farmerProfile)
+    }
+    if (appConfig.value.farmerProfile.noTillSubsidyConfirmed) return false
+    appConfig.value.farmerProfile.noTillSubsidyConfirmed = true
+    const fp = appConfig.value.farmerProfile
+    const subTotal = Math.round(Number(fp.managedMu || 36) * Number(fp.subsidyPerMu || 72))
+    pushLog('新农人端', '保护性耕作补贴确认', `${fp.name} 核验确认 ${fp.managedMu} 亩免耕作业面积（预计发放补贴 ¥${subTotal}）`)
+    return true
   }
 
   function simulateOrderFromAdmin() {
@@ -1224,6 +1385,31 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
     pushLog('管理后台', `回复村民直报`, `已答复「${f.user}」`)
   }
 
+  function dispatchMachineryForFeedback(feedbackId, machineId = '') {
+    const f = feedbacks.value.find((x) => x.id === feedbackId)
+    if (!f) return null
+    const taskName = f.meta?.serviceType || (f.content.includes('无人机') ? '多光谱无人机巡田' : '秋季深松整地')
+    const needDrone = /无人机|巡田|巡航|飞防/.test(taskName)
+
+    const targetMachine =
+      machinery.value.find((m) => m.id === machineId) ||
+      machinery.value.find((m) => m.status === '待命' && (needDrone ? m.code.startsWith('DR-') : m.code.startsWith('BD-'))) ||
+      machinery.value.find((m) => (needDrone ? m.code.startsWith('DR-') : m.code.startsWith('BD-'))) ||
+      machinery.value.find((m) => m.status === '待命') ||
+      machinery.value[0]
+    if (!targetMachine) return null
+
+    targetMachine.status = '作业中'
+    targetMachine.area = f.village || targetMachine.area
+    targetMachine.task = taskName
+    if (!f.meta) f.meta = {}
+    f.meta.assignedMachineCode = targetMachine.code
+    f.status = '已回复'
+    f.reply = `【农机站已派单】已指派 ${targetMachine.name}（编号 ${targetMachine.code}）前往 ${f.village} 执行「${taskName}」，RTK 航线已下发，请保持田间通道畅通。`
+    pushLog('农机调度站', `派单 ${targetMachine.code}`, `指派至 ${f.village} 执行${taskName}，社员端已同步`)
+    return targetMachine
+  }
+
   function deleteFeedback(id) {
     feedbacks.value = feedbacks.value.filter((x) => x.id !== id)
   }
@@ -1256,6 +1442,8 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
   }
 
   function resetAllDemoData() {
+    appPersona.value = 'consumer'
+    adminRole.value = 'all'
     products.value = structuredClone(defaultProducts)
     liveCams.value = structuredClone(defaultLiveCams)
     orders.value = structuredClone(defaultOrders)
@@ -1277,6 +1465,8 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
 
   return {
     authed,
+    appPersona,
+    adminRole,
     products,
     activeProducts,
     liveCams,
@@ -1297,6 +1487,8 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
     cart,
     cartCount,
     cartTotal,
+    cartFarmerShareSummary,
+    farmerIncomeLedger,
     lastSyncEvent,
     totalGMV,
     pendingOrdersCount,
@@ -1306,6 +1498,8 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
     totalHelpedHouseholds,
     pinnedNotice,
     categoryShare,
+    setAppPersona,
+    setAdminRole,
     login,
     quickDemoLogin,
     logout,
@@ -1313,11 +1507,14 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
     addToCart,
     updateCartQty,
     placeOrder,
+    redeemPointsCoupon,
     simulateOrderFromAdmin,
     submitAdoption,
     logFarmCareAction,
     addLiveComment,
     submitFeedback,
+    submitMachineryBooking,
+    confirmNoTillSubsidy,
     upsertProduct,
     toggleProductStatus,
     deleteProduct,
@@ -1331,6 +1528,7 @@ export const useRuralPlatformStore = defineStore('ruralPlatform', () => {
     publishNotice,
     deleteNotice,
     replyFeedback,
+    dispatchMachineryForFeedback,
     deleteFeedback,
     recordGameReward,
     resetAllDemoData

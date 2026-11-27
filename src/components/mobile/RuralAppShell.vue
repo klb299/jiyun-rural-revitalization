@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, defineAsyncComponent, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, defineAsyncComponent, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   Home, ShoppingBag, Sprout, Megaphone, User,
@@ -7,7 +7,7 @@ import {
   CheckCircle2, Sparkles, ShieldCheck, Tractor, Layers,
   Compass, X, Send, PackageCheck, Clock, ArrowUpRight,
   Leaf, Droplets, Cpu, Award, ChevronLeft, Maximize2,
-  QrCode, Heart, Radio, CalendarDays, Ticket, Truck, Volume2
+  QrCode, Heart, Radio, CalendarDays, Ticket, Truck, Volume2, ScanLine
 } from 'lucide-vue-next'
 import { useRuralPlatformStore } from '../../stores/ruralPlatformStore'
 import BrandLogo from '../BrandLogo.vue'
@@ -36,7 +36,7 @@ const store = useRuralPlatformStore()
 const activeTab = ref(props.initialTab)
 const scrollArea = ref(null)
 
-/* ---------------- 全屏子页面状态 ---------------- */
+/* ---------------- 全屏子页面与弹层状态 ---------------- */
 const active3D = ref(null) // 'strata' | 'machinery' | 'sandbox' | null
 const activeLiveCamId = ref(null)
 const showTracePage = ref(false)
@@ -45,6 +45,8 @@ const activeAdoptionId = ref(null)
 const showSolarPage = ref(false)
 const showAiPage = ref(false)
 const showCarbonPage = ref(false)
+const showBookingSheet = ref(false)
+const showFavSheet = ref(false)
 const isSpeakingBrief = ref(false)
 const selectedOrder = ref(null)
 
@@ -62,12 +64,23 @@ function closeOverlays() {
   showSolarPage.value = false
   showAiPage.value = false
   showCarbonPage.value = false
+  showBookingSheet.value = false
+  showFavSheet.value = false
 }
 
 function setTab(tab) {
   closeOverlays()
   activeTab.value = tab
   if (scrollArea.value) scrollArea.value.scrollTop = 0
+}
+
+function switchPersona(persona) {
+  store.setAppPersona(persona)
+  fbType.value = persona === 'farmer' ? '农机预约' : '助农反馈'
+  fbVillage.value = persona === 'farmer' ? (store.appConfig.farmerProfile?.village || '九台区土们岭村') : '长春市南关区（认养用户）'
+  showToast(persona === 'farmer'
+    ? '已切换至【本地新农人 · 赵建国】农事与社员分红工作台'
+    : '已切换至【城市消费者 · 林晓禾】地标严选与云认养端')
 }
 
 function open3DHall(key = 'machinery') {
@@ -106,6 +119,11 @@ function openCarbon() {
   showCarbonPage.value = true
 }
 
+function openBookingSheet() {
+  closeOverlays()
+  showBookingSheet.value = true
+}
+
 function speakDailyBrief() {
   if (!('speechSynthesis' in window)) {
     showToast('当前浏览器不支持语音合成播报')
@@ -116,7 +134,9 @@ function speakDailyBrief() {
     isSpeakingBrief.value = false
     return
   }
-  const text = `欢迎来到吉韵禾野。今日节气${store.appConfig.solarTerm}，吉林黑土有机质实测4.82%，表层墒情68%，当前有${onlineMachineryCount.value}台北斗无人农机在线作业。最新置顶村务公告：${store.pinnedNotice?.title || '一切平稳有序'}。`
+  const text = store.appPersona === 'farmer'
+    ? `社员赵建国您好。今日节气${store.appConfig.solarTerm}，本村耕层有机质实测4.82%，表层墒情68%。合作社当前有${onlineMachineryCount.value}台北斗无人农机在线作业。重点提醒：${store.pinnedNotice?.title || '请做好越冬蓄墒准备'}。`
+    : `欢迎来到吉韵禾野。今日节气${store.appConfig.solarTerm}，吉林黑土示范带14款地理标志农产新鲜直供，4路产地慢直播在线验真，每一单平均78%收益直达合作社农户。`
   const utter = new SpeechSynthesisUtterance(text)
   utter.lang = 'zh-CN'
   utter.rate = 1.02
@@ -124,12 +144,23 @@ function speakDailyBrief() {
   utter.onerror = () => { isSpeakingBrief.value = false }
   isSpeakingBrief.value = true
   window.speechSynthesis.speak(utter)
-  showToast('正在语音播报今日黑土农情…')
+  showToast('正在语音播报今日专属简报…')
 }
 
-defineExpose({ setTab, activeTab, open3DHall, openLiveCam, openTrace, openSolar, openCert, openAi, openCarbon })
+defineExpose({
+  setTab,
+  activeTab,
+  open3DHall,
+  openLiveCam,
+  openTrace,
+  openSolar,
+  openCert,
+  openAi,
+  openCarbon,
+  openBookingSheet
+})
 
-/* ---------------- 首页主视觉轮播 ---------------- */
+/* ---------------- 消费者首页轮播与场景选品向导 ---------------- */
 const heroSlide = ref(0)
 const heroSlides = computed(() => [
   {
@@ -157,6 +188,32 @@ const heroSlides = computed(() => [
     action: () => open3DHall('machinery')
   }
 ])
+
+function nextHeroSlide() {
+  heroSlide.value = (heroSlide.value + 1) % heroSlides.value.length
+}
+
+const buyerGuides = [
+  { id: 'daily', label: '三餐口粮', reason: '180天漫长积温新米配高蛋白大豆，满足全家日常健康主食', ids: ['prod-1', 'prod-5'] },
+  { id: 'elder', label: '长辈康养', reason: '长白山12年林下参配原始椴树雪蜜，产地红章溯源体面安心', ids: ['prod-4', 'prod-7'] },
+  { id: 'fresh', label: '当季锁鲜', reason: '查干湖冰下胖头鱼配光伏温室奶油草莓，48h顺丰冷链直发', ids: ['prod-2', 'prod-14'] },
+  { id: 'gift', label: '团购伴手', reason: '牛皮纸环保礼箱稻花香配手剥开口红松子，附助农公益回执', ids: ['prod-6', 'prod-11'] }
+]
+const activeGuideId = ref('daily')
+const activeGuideObj = computed(() => buyerGuides.find((g) => g.id === activeGuideId.value) || buyerGuides[0])
+const guideProducts = computed(() =>
+  activeGuideObj.value.ids
+    .map((id) => store.activeProducts.find((p) => p.id === id))
+    .filter(Boolean)
+)
+
+function addBundleToCart() {
+  if (!guideProducts.value.length) return
+  guideProducts.value.forEach((p) => store.addToCart(p, 1))
+  showToast(`已将「${activeGuideObj.value.label}」严选组合加入购物袋`)
+  setTab('market')
+  showCartSheet.value = true
+}
 
 let slideTimer = 0
 onMounted(() => {
@@ -226,20 +283,24 @@ function quickAdd(product) {
 }
 
 function submitCartOrder() {
-  const firstProd = store.products.find((p) => p.id === store.cart[0]?.productId)
-  const sharePct = firstProd?.farmerSharePct || 78
-  const coopName = firstProd?.coop || '吉林黑土助农合作社'
-  const order = store.placeOrder({ ...checkoutForm.value, discount: appliedDiscount.value })
+  const usedDiscount = appliedDiscount.value
+  const order = store.placeOrder({
+    ...checkoutForm.value,
+    discount: usedDiscount,
+    couponId: selectedCouponId.value
+  })
   if (!order) return
   showCartSheet.value = false
   selectedCouponId.value = ''
   orderSuccessReceipt.value = {
     orderId: order.id,
     traceCode: order.traceCode,
+    rawTotal: order.rawTotal || order.total,
+    discount: usedDiscount,
     total: order.total,
-    farmerGain: Number((order.total * sharePct / 100).toFixed(1)),
-    sharePct,
-    coopName,
+    farmerGain: order.farmerGain,
+    sharePct: order.sharePct,
+    coopName: order.coopName,
     points: Math.round(order.total)
   }
   showToast(`下单成功 (${order.id})！已实时同步至管理后台`)
@@ -279,28 +340,66 @@ function confirmAdopt() {
   }
 }
 
+/* ---------------- 北斗农机标准化预约单（新农人端） ---------------- */
+const bookingForm = ref({
+  serviceType: '秋季深松整地',
+  plotMu: 36,
+  dateWindow: '明日上午 08:00-12:00',
+  village: store.appConfig.farmerProfile?.village || '九台区土们岭村',
+  note: ''
+})
+const bookingServiceOptions = ['秋季深松整地', '条带免耕精播', '秸秆归行还田', '多光谱无人机巡田']
+const bookingTimeOptions = ['明日上午 08:00-12:00', '明日下午 13:00-17:00', '未来三日晴好窗口']
+
+function submitMachineOrder() {
+  const created = store.submitMachineryBooking(bookingForm.value)
+  if (created) {
+    showBookingSheet.value = false
+    bookingForm.value.note = ''
+    showToast(`农机预约已派发至农机站（${created.meta.plotMu}亩 · ${created.meta.serviceType}）`)
+  }
+}
+
+function handleFarmerConfirmSubsidy() {
+  if (store.confirmNoTillSubsidy()) {
+    showToast('36 亩秸秆覆盖免耕补贴核验完成，已同步至乡村治理后台！')
+  }
+}
+
 /* ---------------- 项目详情弹窗 ---------------- */
 const selectedProject = ref(null)
 
-/* ---------------- 村务反馈表单 ---------------- */
-const fbType = ref('农机预约')
-const fbVillage = ref('九台区土们岭村')
+/* ---------------- 村务/乡情反馈表单（随角色自适应类型） ---------------- */
+const fbType = ref(store.appPersona === 'farmer' ? '农机预约' : '助农反馈')
+const fbVillage = ref(store.appPersona === 'farmer' ? '九台区土们岭村' : '长春市南关区（认养用户）')
 const fbContent = ref('')
-const fbTypes = ['农机预约', '农技咨询', '村务建议', '助农反馈']
+const fbTypes = computed(() =>
+  store.appPersona === 'farmer'
+    ? ['农机预约', '农技咨询', '补贴核对', '村务建议']
+    : ['助农反馈', '研学报名', '品质建议', '认养咨询']
+)
+
+watch(() => store.appPersona, (p) => {
+  fbType.value = p === 'farmer' ? '农机预约' : '助农反馈'
+  fbVillage.value = p === 'farmer' ? (store.appConfig.farmerProfile?.village || '九台区土们岭村') : '长春市南关区（认养用户）'
+})
 
 function submitVillageFeedback() {
   if (!fbContent.value.trim()) {
-    showToast('请先填写需要反馈或预约的具体内容')
+    showToast('请先填写需要提交的具体内容')
     return
   }
+  const authorLabel = store.appPersona === 'farmer'
+    ? `${store.appConfig.farmerProfile?.name || '赵建国'}（合作社社员）`
+    : `${store.appConfig.userProfile.name}（城市助农用户）`
   store.submitFeedback({
-    user: `${store.appConfig.userProfile.name}（App用户）`,
+    user: authorLabel,
     type: fbType.value,
     village: fbVillage.value,
     content: fbContent.value
   })
   fbContent.value = ''
-  showToast('已提交至乡村治理后台，请留意官方回复')
+  showToast('已实时同步至后台队列，请留意官方回执')
 }
 
 /* ---------------- 统计与样式辅助 ---------------- */
@@ -308,14 +407,25 @@ const onlineMachineryCount = computed(() => store.machinery.filter((m) => m.stat
 const myOrders = computed(() => store.orders.slice(0, 6))
 const myAdoptions = computed(() => store.adoptions)
 const favProducts = computed(() => store.products.filter((p) => store.favorites.includes(p.id)))
+const farmerBookings = computed(() => store.feedbacks.filter((f) => f.type === '农机预约' || f.type === '农技咨询'))
 
-const navItems = [
-  { id: 'home', label: '首页', icon: Home },
-  { id: 'market', label: '集市', icon: ShoppingBag },
-  { id: 'adopt', label: '认养', icon: Sprout },
-  { id: 'village', label: '村务', icon: Megaphone },
-  { id: 'profile', label: '我的', icon: User }
-]
+const navItems = computed(() =>
+  store.appPersona === 'farmer'
+    ? [
+        { id: 'home', label: '农事台', icon: Tractor },
+        { id: 'market', label: '产销集市', icon: ShoppingBag },
+        { id: 'adopt', label: '托管田', icon: Sprout },
+        { id: 'village', label: '农机村务', icon: Megaphone },
+        { id: 'profile', label: '社员', icon: User }
+      ]
+    : [
+        { id: 'home', label: '首页', icon: Home },
+        { id: 'market', label: '严选集市', icon: ShoppingBag },
+        { id: 'adopt', label: '云认养', icon: Sprout },
+        { id: 'village', label: '乡情公示', icon: Megaphone },
+        { id: 'profile', label: '我的', icon: User }
+      ]
+)
 
 const statusBadgeClass = (status) => {
   if (status === '已发货' || status === '已生效' || status === '已回复' || status === '已验收') {
@@ -324,20 +434,22 @@ const statusBadgeClass = (status) => {
   if (status === '已完成') {
     return 'bg-[#1C1B18]/8 text-[#5A564E] border-[#1C1B18]/12'
   }
-  return 'bg-[#C88A32]/15 text-[#9A6518] border-[#C88A32]/30'
+  return 'bg-[#C88A32]/15 text-[#8A5810] border-[#C88A32]/30'
 }
 </script>
 
 <template>
   <div
-    class="rural-app relative flex flex-col bg-[#F7F3EA] text-[#1C1B18] overflow-hidden select-none"
-    :class="framed ? 'w-full h-full rounded-[2.6rem]' : 'h-[100dvh] w-full md:max-w-[430px] md:mx-auto md:shadow-2xl'"
-    style="background-image: linear-gradient(180deg, rgba(247,243,234,0.14) 0%, rgba(247,243,234,0.34) 48%, rgba(247,243,234,0.10) 100%), url('/art-custom/mobile-app-bg.jpg'); background-size: cover; background-position: center;"
+    class="rural-app relative flex flex-col bg-[#F7F3EA] text-[#1C1B18] overflow-hidden"
+    :class="[
+      framed ? 'w-full h-full rounded-[2.6rem]' : 'rural-app--standalone h-[100dvh] w-full md:max-w-[430px] md:mx-auto md:shadow-2xl'
+    ]"
+    style="background-image: linear-gradient(180deg, rgba(247,243,234,0.16) 0%, rgba(247,243,234,0.38) 48%, rgba(247,243,234,0.14) 100%), url('/art-custom/mobile-app-bg.jpg'); background-size: cover; background-position: center;"
   >
-    <!-- 顶部状态栏（透出青绿鎏金水墨云雾底纹） -->
+    <!-- 顶部状态栏（仅真机画框模式显示） -->
     <div
       v-if="framed"
-      class="shrink-0 h-11 px-7 pt-2.5 flex items-center justify-between bg-transparent z-20 relative"
+      class="shrink-0 h-11 px-7 pt-2.5 flex items-center justify-between bg-transparent z-20 relative select-none"
     >
       <span class="text-[12px] font-semibold tracking-tight text-[#1C1B18]">17:20</span>
       <div class="w-[104px] h-[26px] rounded-full bg-[#111110] flex items-center justify-end px-2.5 shadow-inner">
@@ -354,422 +466,394 @@ const statusBadgeClass = (status) => {
     <!-- 主内容滚动区 -->
     <div ref="scrollArea" class="flex-1 overflow-y-auto overscroll-contain pb-24 app-scroll">
 
-      <!-- ==================== TAB 1: 首页 ==================== -->
-      <div v-if="activeTab === 'home'" class="relative">
-        <div class="relative px-4 pt-2 pb-4 space-y-4">
-          <!-- 顶部定位 + 节气胶囊 + 扫码 + 通知（通透暖白微胶囊保证青绿水墨底上的高对比度） -->
-          <div class="flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2 min-w-0 px-2 py-1 rounded-2xl bg-white/72 backdrop-blur-md border border-white/60 shadow-2xs">
-              <BrandLogo :size="32" />
-              <div class="min-w-0 pr-1">
-                <div class="flex items-center gap-1.5">
-                  <span class="font-editorial text-[14px] font-bold text-[#16261F] whitespace-nowrap shrink-0">{{ store.appConfig.brandName }}</span>
-                  <button
-                    type="button"
-                    @click="openSolar"
-                    class="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#1F4E3D] text-[#F5D393] hover:bg-[#16261F] transition-colors cursor-pointer shrink-0 whitespace-nowrap"
-                  >
-                    {{ store.appConfig.solarTerm.split(' · ')[0] }}
-                  </button>
-                </div>
-                <div class="flex items-center gap-1 text-[9.5px] text-[#3E3B35] font-medium truncate">
-                  <MapPin :size="9.5" class="text-[#B8761A] shrink-0" />
-                  <span class="truncate">{{ store.appConfig.regionLabel }}</span>
-                </div>
-              </div>
+      <!-- ==================== 顶栏：品牌 + 双身份精准切换器 ==================== -->
+      <div class="px-4 pt-2.5 pb-1 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 min-w-0 px-2 py-1 rounded-2xl bg-white/82 backdrop-blur-md border border-white/70 shadow-2xs">
+          <BrandLogo :size="30" />
+          <div class="min-w-0 pr-0.5">
+            <div class="font-editorial text-[13.5px] font-bold text-[#16261F] leading-tight truncate">
+              {{ store.appConfig.brandName }}
             </div>
+            <div class="flex items-center gap-1 text-[9.5px] text-[#4A463F] font-medium truncate">
+              <MapPin :size="9.5" class="text-[#9A6518] shrink-0" aria-hidden="true" />
+              <span class="truncate">{{ store.appPersona === 'farmer' ? '九台稻作合作社' : '吉林黑土直供' }}</span>
+            </div>
+          </div>
+        </div>
 
-            <div class="flex items-center gap-1.5 shrink-0">
+        <!-- 精准面向用户双切胶囊：助农买方 ⇄ 新农人端 -->
+        <div role="group" aria-label="切换App用户角色" class="flex items-center p-0.5 rounded-full bg-[#16261F]/92 border border-[#C88A32]/35 shadow-xs shrink-0">
+          <button
+            type="button"
+            @click="switchPersona('consumer')"
+            :aria-pressed="store.appPersona === 'consumer' ? 'true' : 'false'"
+            class="px-2.5 py-1 rounded-full text-[10px] font-bold transition-all cursor-pointer whitespace-nowrap"
+            :class="store.appPersona === 'consumer' ? 'bg-[#F0C275] text-[#16261F]' : 'text-[#F7F4EE]/80'"
+          >
+            城市买家
+          </button>
+          <button
+            type="button"
+            @click="switchPersona('farmer')"
+            :aria-pressed="store.appPersona === 'farmer' ? 'true' : 'false'"
+            class="px-2.5 py-1 rounded-full text-[10px] font-bold transition-all cursor-pointer whitespace-nowrap"
+            :class="store.appPersona === 'farmer' ? 'bg-[#F0C275] text-[#16261F]' : 'text-[#F7F4EE]/80'"
+          >
+            新农人端
+          </button>
+        </div>
+
+        <div class="flex items-center gap-1 shrink-0">
+          <button
+            type="button"
+            @click="store.appPersona === 'farmer' ? openAi() : openTrace()"
+            class="w-9 h-9 rounded-full bg-white/92 border border-[#1C1B18]/10 flex items-center justify-center text-[#1F4E3D] shadow-2xs cursor-pointer"
+            :aria-label="store.appPersona === 'farmer' ? 'AI看苗诊断' : '一袋一码溯源'"
+          >
+            <ScanLine v-if="store.appPersona === 'farmer'" :size="15" aria-hidden="true" />
+            <QrCode v-else :size="15" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            @click="setTab('village')"
+            class="relative w-9 h-9 rounded-full bg-white/92 border border-[#1C1B18]/10 flex items-center justify-center text-[#1C1B18] shadow-2xs cursor-pointer"
+            aria-label="查看通知与村务"
+          >
+            <Bell :size="15" aria-hidden="true" />
+            <span v-if="store.notices.length" class="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-[#B83828]"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ==================== TAB 1A: 首页（城市品质消费者视角） ==================== -->
+      <div v-if="activeTab === 'home' && store.appPersona === 'consumer'" class="px-4 pt-2 pb-4 space-y-3.5">
+        <!-- 搜索与节气直达条 -->
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            @click="setTab('market')"
+            class="flex-1 min-h-[38px] px-3 rounded-2xl bg-white/95 border border-[#1C1B18]/8 flex items-center justify-between text-[11.5px] text-[#6E6960] shadow-2xs cursor-pointer text-left min-w-0"
+          >
+            <span class="flex items-center gap-1.5 truncate">
+              <Search :size="13.5" class="text-[#1F4E3D] shrink-0" aria-hidden="true" />
+              <span class="truncate">搜九台贡米、查干湖胖头鱼…</span>
+            </span>
+            <span class="shrink-0 px-1.5 py-0.5 rounded-full bg-[#FDF4E6] text-[#8A5810] text-[9.5px] font-bold">地标直发</span>
+          </button>
+          <button
+            type="button"
+            @click="openSolar"
+            class="shrink-0 min-h-[38px] px-2.5 rounded-2xl bg-[#1F4E3D] text-[#F5D393] text-[10.5px] font-bold flex items-center gap-1 cursor-pointer shadow-2xs"
+          >
+            <CalendarDays :size="12.5" aria-hidden="true" />
+            <span>{{ store.appConfig.solarTerm.split(' · ')[0] }}</span>
+          </button>
+        </div>
+
+        <!-- 画报级多幕主视觉轮播 -->
+        <div class="relative rounded-[1.45rem] overflow-hidden h-[198px] shadow-[0_18px_36px_-16px_rgba(22,38,31,0.42)]">
+          <img
+            :src="heroSlides[heroSlide].image"
+            :alt="heroSlides[heroSlide].title"
+            class="w-full h-full object-cover transition-all duration-700"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#12211B]/95 via-[#12211B]/38 to-black/12"></div>
+
+          <div class="absolute top-2.5 left-3 right-3 flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-full bg-white/92 text-[#16261F] text-[10px] font-bold tracking-wide shadow-xs">
+              {{ heroSlides[heroSlide].tag }}
+            </span>
+            <button
+              type="button"
+              @click="nextHeroSlide"
+              class="min-h-[36px] px-2.5 rounded-full bg-black/45 backdrop-blur-md text-[#F7F4EE] text-[10px] font-mono flex items-center gap-1.5 cursor-pointer border border-white/15"
+              aria-label="切换下一张轮播画报"
+            >
+              <span class="flex items-center gap-1" aria-hidden="true">
+                <i
+                  v-for="(_, idx) in heroSlides"
+                  :key="idx"
+                  class="block h-1.5 rounded-full transition-all"
+                  :class="heroSlide === idx ? 'w-3.5 bg-[#F0C275]' : 'w-1.5 bg-white/45'"
+                ></i>
+              </span>
+              <span>{{ heroSlide + 1 }}/3</span>
+            </button>
+          </div>
+
+          <div class="absolute bottom-3 left-3.5 right-3.5 text-[#F7F4EE]">
+            <h2 class="font-editorial text-[18px] leading-snug font-bold tracking-tight">
+              {{ heroSlides[heroSlide].title }}
+            </h2>
+            <p class="text-[11px] text-[#F7F4EE]/85 mt-0.5 line-clamp-1">
+              {{ heroSlides[heroSlide].sub }}
+            </p>
+            <div class="flex items-center gap-2 mt-2">
               <button
                 type="button"
-                @click="openAi()"
-                class="h-8 px-2.5 rounded-full bg-gradient-to-r from-[#16261F] to-[#1F4E3D] text-[#F5D393] border border-[#F0C275]/35 flex items-center gap-1 text-[10px] font-bold shadow-xs cursor-pointer active:scale-95 transition-transform"
-                title="AI 智慧农艺师"
+                @click="heroSlides[heroSlide].action()"
+                class="min-h-[36px] px-3.5 rounded-full bg-gradient-to-r from-[#DFAA4F] to-[#C88A32] text-[#16261F] text-[11px] font-bold flex items-center gap-1 cursor-pointer active:scale-95 transition-transform shadow-sm"
               >
-                <Sparkles :size="12" />
-                <span>AI农艺</span>
+                <span>{{ heroSlides[heroSlide].cta }}</span>
+                <ChevronRight :size="12" aria-hidden="true" />
               </button>
               <button
                 type="button"
                 @click="openTrace()"
-                class="w-8 h-8 rounded-full bg-white/90 border border-[#1C1B18]/8 flex items-center justify-center text-[#1F4E3D] shadow-2xs cursor-pointer"
-                aria-label="扫码溯源"
-                title="一袋一码溯源"
+                class="min-h-[36px] px-3 rounded-full bg-white/16 backdrop-blur-md text-white text-[11px] font-medium border border-white/28 cursor-pointer"
               >
-                <QrCode :size="15" />
-              </button>
-              <button
-                type="button"
-                @click="setTab('village')"
-                class="relative w-8 h-8 rounded-full bg-white/90 border border-[#1C1B18]/8 flex items-center justify-center text-[#1C1B18] shadow-2xs cursor-pointer"
-                aria-label="查看村务通知"
-              >
-                <Bell :size="15" />
-                <span v-if="store.notices.length" class="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#B83828]"></span>
+                扫码查防伪
               </button>
             </div>
           </div>
+        </div>
 
-          <!-- 搜索条 -->
+        <!-- 5 宫格消费者专属金刚区 -->
+        <div class="grid grid-cols-5 gap-1.5">
           <button
             type="button"
             @click="setTab('market')"
-            class="w-full h-10 px-3.5 rounded-2xl bg-white/95 border border-[#1C1B18]/8 flex items-center justify-between text-[12px] text-[#7A746A] shadow-[0_6px_20px_-10px_rgba(22,38,31,0.16)] cursor-pointer text-left"
+            class="flex flex-col items-center gap-1 py-2 rounded-2xl bg-white border border-[#1C1B18]/7 shadow-2xs cursor-pointer active:scale-95 transition-transform"
           >
-            <span class="flex items-center gap-2 truncate">
-              <Search :size="14" class="text-[#1F4E3D] shrink-0" />
-              <span class="truncate">搜九台贡米、查干湖胖头鱼、云认养…</span>
-            </span>
-            <span class="shrink-0 px-2 py-0.5 rounded-full bg-[#FDF4E6] text-[#9A6518] text-[9.5px] font-bold">地理标志</span>
+            <div class="w-8.5 h-8.5 rounded-xl bg-gradient-to-br from-[#FDF4E6] to-[#F7E3C0] text-[#9A6518] flex items-center justify-center">
+              <ShoppingBag :size="15" aria-hidden="true" />
+            </div>
+            <span class="text-[10px] font-bold text-[#1C1B18]">风物直采</span>
           </button>
-
-          <!-- 画报级多幕主视觉轮播 -->
-          <div class="relative rounded-[1.5rem] overflow-hidden h-[204px] shadow-[0_18px_36px_-16px_rgba(22,38,31,0.42)]">
-            <img
-              :src="heroSlides[heroSlide].image"
-              :alt="heroSlides[heroSlide].title"
-              class="w-full h-full object-cover transition-all duration-700"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-[#12211B]/95 via-[#12211B]/35 to-black/10"></div>
-
-            <div class="absolute top-3 left-3 right-3 flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded-full bg-white/90 text-[#16261F] text-[10px] font-bold tracking-wide shadow-xs">
-                {{ heroSlides[heroSlide].tag }}
-              </span>
-              <!-- 指示点 -->
-              <div class="flex items-center gap-1 bg-black/30 backdrop-blur-md px-2 py-1 rounded-full">
-                <button
-                  v-for="(_, idx) in heroSlides"
-                  :key="idx"
-                  type="button"
-                  @click="heroSlide = idx"
-                  class="h-1.5 rounded-full transition-all cursor-pointer"
-                  :class="heroSlide === idx ? 'w-4 bg-[#F0C275]' : 'w-1.5 bg-white/45'"
-                  :aria-label="`切换第 ${idx + 1} 张轮播`"
-                ></button>
-              </div>
+          <button
+            type="button"
+            @click="setTab('adopt')"
+            class="flex flex-col items-center gap-1 py-2 rounded-2xl bg-white border border-[#1C1B18]/7 shadow-2xs cursor-pointer active:scale-95 transition-transform"
+          >
+            <div class="w-8.5 h-8.5 rounded-xl bg-gradient-to-br from-[#EAF3EE] to-[#D1E7DB] text-[#1F4E3D] flex items-center justify-center">
+              <Sprout :size="15" aria-hidden="true" />
             </div>
-
-            <div class="absolute bottom-3.5 left-3.5 right-3.5 text-[#F7F4EE]">
-              <h2 class="font-editorial text-[19px] leading-snug font-bold tracking-tight">
-                {{ heroSlides[heroSlide].title }}
-              </h2>
-              <p class="text-[11px] text-[#F7F4EE]/82 mt-1 line-clamp-1">
-                {{ heroSlides[heroSlide].sub }}
-              </p>
-              <div class="flex items-center gap-2 mt-2.5">
-                <button
-                  type="button"
-                  @click="heroSlides[heroSlide].action()"
-                  class="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#D49A42] to-[#C88A32] text-[#16261F] text-[11px] font-bold flex items-center gap-1 cursor-pointer active:scale-95 transition-transform shadow-sm"
-                >
-                  <span>{{ heroSlides[heroSlide].cta }}</span>
-                  <ChevronRight :size="12" />
-                </button>
-                <button
-                  type="button"
-                  @click="openTrace()"
-                  class="px-3 py-1.5 rounded-full bg-white/16 backdrop-blur-md text-white text-[11px] font-medium border border-white/25 cursor-pointer"
-                >
-                  一袋一码溯源
-                </button>
-              </div>
+            <span class="text-[10px] font-bold text-[#1C1B18]">云认养</span>
+          </button>
+          <button
+            type="button"
+            @click="openTrace()"
+            class="flex flex-col items-center gap-1 py-2 rounded-2xl bg-white border border-[#1C1B18]/7 shadow-2xs cursor-pointer active:scale-95 transition-transform"
+          >
+            <div class="w-8.5 h-8.5 rounded-xl bg-gradient-to-br from-[#FBECE9] to-[#F5D0C9] text-[#B83828] flex items-center justify-center">
+              <QrCode :size="15" aria-hidden="true" />
             </div>
+            <span class="text-[10px] font-bold text-[#1C1B18]">一袋一码</span>
+          </button>
+          <button
+            type="button"
+            @click="openCarbon()"
+            class="flex flex-col items-center gap-1 py-2 rounded-2xl bg-white border border-[#1C1B18]/7 shadow-2xs cursor-pointer active:scale-95 transition-transform"
+          >
+            <div class="w-8.5 h-8.5 rounded-xl bg-gradient-to-br from-[#EEF2FA] to-[#D9E4F5] text-[#2F5380] flex items-center justify-center">
+              <Ticket :size="15" aria-hidden="true" />
+            </div>
+            <span class="text-[10px] font-bold text-[#1C1B18]">积分兑券</span>
+          </button>
+          <button
+            type="button"
+            @click="open3DHall('sandbox')"
+            class="flex flex-col items-center gap-1 py-2 rounded-2xl bg-white border border-[#1C1B18]/7 shadow-2xs cursor-pointer active:scale-95 transition-transform"
+          >
+            <div class="w-8.5 h-8.5 rounded-xl bg-gradient-to-br from-[#1F4E3D] to-[#16261F] text-[#F0C275] flex items-center justify-center">
+              <Compass :size="15" aria-hidden="true" />
+            </div>
+            <span class="text-[10px] font-bold text-[#1C1B18]">3D 探源</span>
+          </button>
+        </div>
+
+        <!-- 实用增值模块：消费者场景化智能选品向导 -->
+        <div class="bg-white/95 rounded-[1.35rem] p-3.5 border border-[#C88A32]/25 shadow-2xs space-y-2.5">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <h3 class="font-editorial text-[14px] font-bold text-[#16261F] flex items-center gap-1">
+                <Sparkles :size="13" class="text-[#C88A32]" aria-hidden="true" />
+                <span>按需挑选黑土好物 · 助农选品向导</span>
+              </h3>
+              <p class="text-[10px] text-[#5E5950]">按家庭场景严选搭配，每单 78%+ 收益直达合作社</p>
+            </div>
+            <button
+              type="button"
+              @click="addBundleToCart"
+              class="shrink-0 min-h-[36px] px-2.5 rounded-xl bg-[#16261F] text-[#F5D393] text-[10px] font-bold cursor-pointer hover:bg-[#1F4E3D] transition-colors"
+            >
+              组合加购
+            </button>
           </div>
 
-          <!-- 「黑土慢直播 · 产地直击」横滑 Story 圈 -->
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-[#EF4444] animate-pulse"></span>
-                <h3 class="font-editorial text-[14px] font-bold text-[#16261F]">黑土慢直播 · 产地实景</h3>
-              </div>
-              <span class="font-mono text-[10px] text-[#1F4E3D] font-semibold">{{ store.liveCamOnlineCount }} 路机位在线</span>
-            </div>
-            <div class="flex items-center gap-3 overflow-x-auto pb-1 no-scrollbar">
-              <button
-                v-for="cam in store.liveCams"
-                :key="cam.id"
-                type="button"
-                @click="openLiveCam(cam.id)"
-                class="shrink-0 flex flex-col items-center gap-1.5 w-[72px] cursor-pointer group"
-              >
-                <div
-                  class="relative p-[2.5px] rounded-full transition-transform group-active:scale-95"
-                  :class="cam.status === '直播中'
-                    ? 'bg-gradient-to-tr from-[#B83828] via-[#C88A32] to-[#2E5A44]'
-                    : 'bg-[#1C1B18]/18'"
-                >
-                  <div class="p-[2px] rounded-full bg-[#F7F4EE]">
-                    <img :src="cam.image" :alt="cam.shortTitle" class="w-13 h-13 rounded-full object-cover" />
-                  </div>
-                  <span
-                    class="absolute -bottom-1 left-1/2 -translate-x-1/2 px-1.5 py-[1px] rounded-full text-[8px] font-bold tracking-wider text-white shadow-xs whitespace-nowrap"
-                    :class="cam.status === '直播中' ? 'bg-[#B83828]' : 'bg-[#6E6960]'"
+          <div class="grid grid-cols-4 gap-1 bg-[#F5F2EA] p-1 rounded-xl">
+            <button
+              v-for="g in buyerGuides"
+              :key="g.id"
+              type="button"
+              @click="activeGuideId = g.id"
+              class="min-h-[36px] rounded-lg text-[10.5px] font-bold cursor-pointer transition-all"
+              :class="activeGuideId === g.id ? 'bg-[#1F4E3D] text-white shadow-2xs' : 'text-[#4A463F]'"
+            >
+              {{ g.label }}
+            </button>
+          </div>
+
+          <p class="text-[10.5px] text-[#3E554B] bg-[#EAF3EE]/70 px-2.5 py-1.5 rounded-lg leading-snug">
+            {{ activeGuideObj.reason }}
+          </p>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div
+              v-for="item in guideProducts"
+              :key="item.id"
+              class="rounded-xl bg-[#FAF8F4] border border-[#1C1B18]/8 p-2 flex items-center gap-2"
+            >
+              <img :src="item.image" :alt="item.name" class="w-11 h-11 rounded-lg object-cover shrink-0 cursor-pointer" @click="selectedProduct = item" />
+              <div class="min-w-0 flex-1">
+                <div class="text-[11px] font-bold text-[#1C1B18] truncate cursor-pointer" @click="selectedProduct = item">{{ item.name }}</div>
+                <div class="flex items-center justify-between mt-1">
+                  <span class="font-mono text-[12px] font-bold text-[#B83828]">¥{{ item.price }}</span>
+                  <button
+                    type="button"
+                    @click="quickAdd(item)"
+                    class="w-7 h-7 rounded-full bg-[#1F4E3D] text-white flex items-center justify-center cursor-pointer"
+                    :aria-label="`将${item.name}加入购物袋`"
                   >
-                    {{ cam.status === '直播中' ? 'LIVE' : '回放' }}
-                  </span>
+                    <Plus :size="12" aria-hidden="true" />
+                  </button>
                 </div>
-                <span class="text-[10.5px] font-semibold text-[#1C1B18] truncate w-full text-center">{{ cam.shortTitle }}</span>
-              </button>
+              </div>
             </div>
           </div>
+        </div>
 
-          <!-- 5 宫格高定金刚区 -->
-          <div class="grid grid-cols-5 gap-1.5">
+        <!-- 「黑土慢直播 · 产地直击」横滑 Story 圈 -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#B83828] animate-pulse"></span>
+              <h3 class="font-editorial text-[14px] font-bold text-[#16261F]">黑土慢直播 · 产地实景验真</h3>
+            </div>
+            <span class="font-mono text-[10px] text-[#1F4E3D] font-semibold">{{ store.liveCamOnlineCount }} 路机位在线</span>
+          </div>
+          <div class="flex items-center gap-3 overflow-x-auto pb-1 no-scrollbar snap-x snap-proximity">
+            <button
+              v-for="cam in store.liveCams"
+              :key="cam.id"
+              type="button"
+              @click="openLiveCam(cam.id)"
+              class="snap-start shrink-0 flex flex-col items-center gap-1.5 w-[74px] cursor-pointer group"
+            >
+              <div
+                class="relative p-[2.5px] rounded-full transition-transform group-active:scale-95"
+                :class="cam.status === '直播中'
+                  ? 'bg-gradient-to-tr from-[#B83828] via-[#C88A32] to-[#2E5A44]'
+                  : 'bg-[#1C1B18]/18'"
+              >
+                <div class="p-[2px] rounded-full bg-[#F7F4EE]">
+                  <img :src="cam.image" :alt="cam.shortTitle" class="w-13 h-13 rounded-full object-cover" />
+                </div>
+                <span
+                  class="absolute -bottom-1 left-1/2 -translate-x-1/2 px-1.5 py-[1px] rounded-full text-[8px] font-bold tracking-wider text-white shadow-xs whitespace-nowrap"
+                  :class="cam.status === '直播中' ? 'bg-[#B83828]' : 'bg-[#6E6960]'"
+                >
+                  {{ cam.status === '直播中' ? 'LIVE' : '回放' }}
+                </span>
+              </div>
+              <span class="text-[10.5px] font-semibold text-[#1C1B18] truncate w-full text-center">{{ cam.shortTitle }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 吉林四大风物产区交互图鉴 -->
+        <AppOriginMapCard
+          @open-product="(p) => { selectedProduct = p }"
+          @open-cam="(id) => openLiveCam(id)"
+        />
+
+        <!-- 3D 沉浸展厅三联卡 -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-editorial text-[14.5px] font-bold text-[#16261F]">3D 黑土科普沉浸展厅</h3>
+            <button type="button" @click="open3DHall('strata')" class="min-h-[36px] px-2 text-[11px] text-[#1F4E3D] font-bold flex items-center gap-0.5 cursor-pointer">
+              <span>竖屏直览</span>
+              <ChevronRight :size="12" aria-hidden="true" />
+            </button>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
             <button
               type="button"
-              @click="setTab('market')"
-              class="flex flex-col items-center gap-1.5 py-2.5 rounded-2xl bg-white border border-[#1C1B18]/6 shadow-2xs cursor-pointer active:scale-95 transition-transform"
+              @click="open3DHall('strata')"
+              class="group relative h-26 rounded-2xl overflow-hidden text-left cursor-pointer shadow-xs"
             >
-              <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FDF4E6] to-[#F7E3C0] text-[#B8761A] flex items-center justify-center">
-                <ShoppingBag :size="16" />
+              <img src="/art-hd/soil-specimen.jpg" alt="3D黑土剖面" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/82 via-black/20 to-transparent"></div>
+              <span class="absolute top-1.5 right-1.5 px-1.5 py-0.2 rounded bg-black/55 text-[#F0C275] font-mono text-[8.5px] font-bold">3D</span>
+              <div class="absolute bottom-2 left-2 right-2 text-white">
+                <Layers :size="12" class="text-[#F0C275] mb-0.5" aria-hidden="true" />
+                <div class="text-[11px] font-bold leading-tight">黑土标本</div>
+                <div class="text-[8.5px] text-white/80">分层剖析</div>
               </div>
-              <span class="text-[10px] font-bold text-[#1C1B18]">风物直采</span>
             </button>
             <button
               type="button"
-              @click="setTab('adopt')"
-              class="flex flex-col items-center gap-1.5 py-2.5 rounded-2xl bg-white border border-[#1C1B18]/6 shadow-2xs cursor-pointer active:scale-95 transition-transform"
+              @click="open3DHall('machinery')"
+              class="group relative h-26 rounded-2xl overflow-hidden text-left cursor-pointer shadow-xs"
             >
-              <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#EAF3EE] to-[#D1E7DB] text-[#1F4E3D] flex items-center justify-center">
-                <Sprout :size="16" />
+              <img src="/art-custom/changchun-tractor.jpg" alt="3D北斗农机" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/82 via-black/20 to-transparent"></div>
+              <span class="absolute top-1.5 right-1.5 px-1.5 py-0.2 rounded bg-black/55 text-[#F0C275] font-mono text-[8.5px] font-bold">3D</span>
+              <div class="absolute bottom-2 left-2 right-2 text-white">
+                <Tractor :size="12" class="text-[#F0C275] mb-0.5" aria-hidden="true" />
+                <div class="text-[11px] font-bold leading-tight">北斗农机</div>
+                <div class="text-[8.5px] text-white/80">爆炸解构</div>
               </div>
-              <span class="text-[10px] font-bold text-[#1C1B18]">云认养</span>
-            </button>
-            <button
-              type="button"
-              @click="openTrace()"
-              class="flex flex-col items-center gap-1.5 py-2.5 rounded-2xl bg-white border border-[#1C1B18]/6 shadow-2xs cursor-pointer active:scale-95 transition-transform"
-            >
-              <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FBECE9] to-[#F5D0C9] text-[#B83828] flex items-center justify-center">
-                <QrCode :size="16" />
-              </div>
-              <span class="text-[10px] font-bold text-[#1C1B18]">一袋一码</span>
-            </button>
-            <button
-              type="button"
-              @click="openSolar()"
-              class="flex flex-col items-center gap-1.5 py-2.5 rounded-2xl bg-white border border-[#1C1B18]/6 shadow-2xs cursor-pointer active:scale-95 transition-transform"
-            >
-              <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#EEF2FA] to-[#D9E4F5] text-[#2F5380] flex items-center justify-center">
-                <CalendarDays :size="16" />
-              </div>
-              <span class="text-[10px] font-bold text-[#1C1B18]">农时节气</span>
             </button>
             <button
               type="button"
               @click="open3DHall('sandbox')"
-              class="flex flex-col items-center gap-1.5 py-2.5 rounded-2xl bg-white border border-[#1C1B18]/6 shadow-2xs cursor-pointer active:scale-95 transition-transform"
+              class="group relative h-26 rounded-2xl overflow-hidden text-left cursor-pointer shadow-xs"
             >
-              <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1F4E3D] to-[#16261F] text-[#F0C275] flex items-center justify-center">
-                <Compass :size="16" />
+              <img src="/art-hd/songliao-plain.jpg" alt="3D生态沙盘" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/82 via-black/20 to-transparent"></div>
+              <span class="absolute top-1.5 right-1.5 px-1.5 py-0.2 rounded bg-black/55 text-[#F0C275] font-mono text-[8.5px] font-bold">3D</span>
+              <div class="absolute bottom-2 left-2 right-2 text-white">
+                <Compass :size="12" class="text-[#F0C275] mb-0.5" aria-hidden="true" />
+                <div class="text-[11px] font-bold leading-tight">生态沙盘</div>
+                <div class="text-[8.5px] text-white/80">六视点漫游</div>
               </div>
-              <span class="text-[10px] font-bold text-[#1C1B18]">3D 沙盘</span>
             </button>
           </div>
+        </div>
 
-          <!-- 实时村务公告条（后台实时置顶推送） -->
-          <button
-            v-if="store.pinnedNotice"
-            type="button"
-            @click="setTab('village')"
-            class="w-full px-3 py-2.5 rounded-2xl bg-gradient-to-r from-[#FFFDF7] to-[#FDF6E8] border border-[#C88A32]/30 flex items-center gap-2 text-left cursor-pointer shadow-2xs"
-          >
-            <span class="shrink-0 px-1.5 py-0.5 rounded-md bg-[#C88A32] text-[#16261F] text-[9.5px] font-bold">
-              {{ store.pinnedNotice.tag }}
-            </span>
-            <span class="text-[11.5px] font-semibold text-[#1C1B18] truncate flex-1">
-              {{ store.pinnedNotice.title }}
-            </span>
-            <ChevronRight :size="13" class="text-[#8E887E] shrink-0" />
-          </button>
-
-          <!-- 黑土农情实时遥测卡（融入青绿鎏金插画底纹） -->
-          <div
-            class="rounded-[1.4rem] text-[#F7F4EE] p-4 shadow-lg relative overflow-hidden border border-[#F0C275]/25"
-            style="background-image: linear-gradient(135deg, rgba(16,32,25,0.86) 0%, rgba(22,42,33,0.72) 100%), url('/art-custom/app-header-banner.jpg'); background-size: cover; background-position: center;"
-          >
-            <div class="flex items-center justify-between mb-3 relative z-10">
-              <div class="flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-[#4ADE80] animate-pulse"></span>
-                <span class="text-[12.5px] font-bold tracking-wide">黑土农情实时遥测</span>
-              </div>
-              <button
-                type="button"
-                @click="speakDailyBrief"
-                class="px-2 py-0.5 rounded-full text-[9.5px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
-                :class="isSpeakingBrief ? 'bg-[#C88A32] text-[#16261F]' : 'bg-white/12 text-[#F0C275] hover:bg-white/20'"
-              >
-                <Volume2 :size="10.5" />
-                <span>{{ isSpeakingBrief ? '播报中…' : '语音播报' }}</span>
-              </button>
-            </div>
-            <div class="grid grid-cols-3 gap-2 relative z-10">
-              <div class="rounded-xl bg-white/7 p-2.5 border border-white/10 space-y-1">
-                <div class="flex items-center gap-1 text-[10px] text-[#F7F4EE]/70">
-                  <Leaf :size="11" class="text-[#F0C275]" />
-                  <span>有机质</span>
-                </div>
-                <div class="font-mono text-[16px] font-bold text-[#F0C275] leading-none">4.82%</div>
-                <div class="h-1 rounded-full bg-white/12 overflow-hidden">
-                  <div class="h-full w-[86%] rounded-full bg-[#F0C275]"></div>
-                </div>
-                <div class="text-[9px] text-[#86EFAC]">优 · 护土达标</div>
-              </div>
-              <div class="rounded-xl bg-white/7 p-2.5 border border-white/10 space-y-1">
-                <div class="flex items-center gap-1 text-[10px] text-[#F7F4EE]/70">
-                  <Droplets :size="11" class="text-[#7DD3FC]" />
-                  <span>表层墒情</span>
-                </div>
-                <div class="font-mono text-[16px] font-bold text-white leading-none">68%</div>
-                <div class="h-1 rounded-full bg-white/12 overflow-hidden">
-                  <div class="h-full w-[68%] rounded-full bg-[#7DD3FC]"></div>
-                </div>
-                <div class="text-[9px] text-[#F7F4EE]/65">适宜越冬蓄墒</div>
-              </div>
-              <div class="rounded-xl bg-white/7 p-2.5 border border-white/10 space-y-1">
-                <div class="flex items-center gap-1 text-[10px] text-[#F7F4EE]/70">
-                  <Cpu :size="11" class="text-[#A7F3D0]" />
-                  <span>在线农机</span>
-                </div>
-                <div class="font-mono text-[16px] font-bold text-white leading-none">{{ onlineMachineryCount }}/{{ store.machinery.length }}</div>
-                <div class="h-1 rounded-full bg-white/12 overflow-hidden">
-                  <div class="h-full rounded-full bg-[#4ADE80]" :style="{ width: `${(onlineMachineryCount / Math.max(1, store.machinery.length)) * 100}%` }"></div>
-                </div>
-                <div class="text-[9px] text-[#F7F4EE]/65">北斗 ±2.5cm</div>
-              </div>
-            </div>
+        <!-- 产地直采热卖横滑橱窗 -->
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <h3 class="font-editorial text-[14.5px] font-bold text-[#16261F]">当季助农风物热卖</h3>
+            <button type="button" @click="setTab('market')" class="min-h-[36px] px-2 text-[11px] text-[#1F4E3D] font-bold flex items-center gap-0.5 cursor-pointer">
+              <span>逛全集</span>
+              <ChevronRight :size="12" aria-hidden="true" />
+            </button>
           </div>
-
-          <!-- 吉林四大风物产区交互图鉴 -->
-          <AppOriginMapCard
-            @open-product="(p) => { selectedProduct = p }"
-            @open-cam="(id) => openLiveCam(id)"
-          />
-
-          <!-- 3D 沉浸展厅三联卡（App 竖屏原生直览） -->
-          <div>
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="font-editorial text-[14.5px] font-bold text-[#16261F]">3D 乡村振兴沉浸展厅</h3>
-              <button type="button" @click="open3DHall('strata')" class="text-[11px] text-[#1F4E3D] font-bold flex items-center gap-0.5 cursor-pointer">
-                <span>手机屏直览</span>
-                <ChevronRight :size="12" />
-              </button>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <button
-                type="button"
-                @click="open3DHall('strata')"
-                class="group relative h-26 rounded-2xl overflow-hidden text-left cursor-pointer shadow-xs"
-              >
-                <img src="/art-hd/soil-specimen.jpg" alt="3D黑土剖面" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/82 via-black/20 to-transparent"></div>
-                <span class="absolute top-1.5 right-1.5 px-1.5 py-0.2 rounded bg-black/50 text-[#F0C275] font-mono text-[8.5px] font-bold">3D</span>
-                <div class="absolute bottom-2 left-2 right-2 text-white">
-                  <Layers :size="12" class="text-[#F0C275] mb-0.5" />
-                  <div class="text-[11px] font-bold leading-tight">黑土标本</div>
-                  <div class="text-[8.5px] text-white/70">分层剖析</div>
-                </div>
-              </button>
-              <button
-                type="button"
-                @click="open3DHall('machinery')"
-                class="group relative h-26 rounded-2xl overflow-hidden text-left cursor-pointer shadow-xs"
-              >
-                <img src="/art-custom/changchun-tractor.jpg" alt="3D北斗农机" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/82 via-black/20 to-transparent"></div>
-                <span class="absolute top-1.5 right-1.5 px-1.5 py-0.2 rounded bg-black/50 text-[#F0C275] font-mono text-[8.5px] font-bold">3D</span>
-                <div class="absolute bottom-2 left-2 right-2 text-white">
-                  <Tractor :size="12" class="text-[#F0C275] mb-0.5" />
-                  <div class="text-[11px] font-bold leading-tight">北斗农机</div>
-                  <div class="text-[8.5px] text-white/70">爆炸解构</div>
-                </div>
-              </button>
-              <button
-                type="button"
-                @click="open3DHall('sandbox')"
-                class="group relative h-26 rounded-2xl overflow-hidden text-left cursor-pointer shadow-xs"
-              >
-                <img src="/art-hd/songliao-plain.jpg" alt="3D生态沙盘" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/82 via-black/20 to-transparent"></div>
-                <span class="absolute top-1.5 right-1.5 px-1.5 py-0.2 rounded bg-black/50 text-[#F0C275] font-mono text-[8.5px] font-bold">3D</span>
-                <div class="absolute bottom-2 left-2 right-2 text-white">
-                  <Compass :size="12" class="text-[#F0C275] mb-0.5" />
-                  <div class="text-[11px] font-bold leading-tight">生态沙盘</div>
-                  <div class="text-[8.5px] text-white/70">六视点漫游</div>
-                </div>
-              </button>
-            </div>
-          </div>
-
-          <!-- 产地直采热卖横滑橱窗 -->
-          <div>
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="font-editorial text-[14.5px] font-bold text-[#16261F]">当季助农风物热卖</h3>
-              <button type="button" @click="setTab('market')" class="text-[11px] text-[#1F4E3D] font-bold flex items-center gap-0.5 cursor-pointer">
-                <span>逛集市</span>
-                <ChevronRight :size="12" />
-              </button>
-            </div>
-            <div class="flex gap-2.5 overflow-x-auto pb-1 no-scrollbar">
-              <div
-                v-for="item in store.activeProducts.slice(0, 8)"
-                :key="item.id"
-                class="shrink-0 w-[148px] bg-white rounded-2xl overflow-hidden border border-[#1C1B18]/7 shadow-2xs"
-              >
-                <div class="relative h-24 cursor-pointer" @click="selectedProduct = item">
-                  <img :src="item.image" :alt="item.name" class="w-full h-full object-cover" />
-                  <span class="absolute top-1.5 left-1.5 px-1.5 py-0.2 rounded bg-[#16261F]/85 text-[#F0C275] text-[8.5px] font-bold">{{ item.badge }}</span>
-                </div>
-                <div class="p-2.5">
-                  <div class="text-[11.5px] font-bold text-[#1C1B18] truncate cursor-pointer" @click="selectedProduct = item">{{ item.name }}</div>
-                  <div class="text-[9.5px] text-[#6E6960] truncate">{{ item.origin }}</div>
-                  <div class="flex items-center justify-between mt-2">
-                    <span class="font-mono text-[13.5px] font-bold text-[#B83828]">¥{{ item.price }}</span>
-                    <button
-                      type="button"
-                      @click="quickAdd(item)"
-                      class="w-6 h-6 rounded-full bg-[#1F4E3D] text-white flex items-center justify-center cursor-pointer active:scale-90 transition-transform"
-                      aria-label="加入购物袋"
-                    >
-                      <Plus :size="12" />
-                    </button>
-                  </div>
-                </div>
+          <div class="flex gap-2.5 overflow-x-auto pb-1 no-scrollbar snap-x snap-proximity">
+            <div
+              v-for="item in store.activeProducts.slice(0, 8)"
+              :key="item.id"
+              class="snap-start shrink-0 w-[150px] bg-white rounded-2xl overflow-hidden border border-[#1C1B18]/7 shadow-2xs"
+            >
+              <div class="relative h-24 cursor-pointer" @click="selectedProduct = item">
+                <img :src="item.image" :alt="item.name" class="w-full h-full object-cover" />
+                <span class="absolute top-1.5 left-1.5 px-1.5 py-0.2 rounded bg-[#16261F]/85 text-[#F0C275] text-[8.5px] font-bold">{{ item.badge }}</span>
               </div>
-            </div>
-          </div>
-
-          <!-- 重点助农项目档案 -->
-          <div>
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="font-editorial text-[14.5px] font-bold text-[#16261F]">振兴重点项目档案</h3>
-              <span class="text-[10.5px] text-[#1F4E3D] font-semibold">带动 {{ store.totalHelpedHouseholds }} 户增收</span>
-            </div>
-            <div class="space-y-2.5">
-              <div
-                v-for="prj in store.projects"
-                :key="prj.id"
-                @click="selectedProject = prj"
-                class="bg-white rounded-2xl p-2.5 border border-[#1C1B18]/6 shadow-2xs flex gap-3 cursor-pointer active:scale-[0.99] transition-transform"
-              >
-                <img :src="prj.cover" :alt="prj.name" class="w-20 h-20 rounded-xl object-cover shrink-0" />
-                <div class="flex-1 min-w-0 flex flex-col justify-between py-0.5">
-                  <div>
-                    <div class="flex items-center justify-between gap-1">
-                      <span class="text-[9.5px] font-bold text-[#1F4E3D] bg-[#EAF3EE] px-1.5 py-0.5 rounded">{{ prj.category }}</span>
-                      <span class="text-[9.5px] font-semibold px-1.5 py-0.5 rounded-full border" :class="statusBadgeClass(prj.status)">{{ prj.status }}</span>
-                    </div>
-                    <h4 class="text-[12.5px] font-bold text-[#1C1B18] mt-1 line-clamp-1">{{ prj.name }}</h4>
-                    <p class="text-[10.5px] text-[#6E6960] truncate">{{ prj.village }} · 带动 {{ prj.households }} 户</p>
-                  </div>
-                  <div class="flex items-center gap-2 mt-1.5">
-                    <div class="flex-1 h-1.5 rounded-full bg-[#1C1B18]/8 overflow-hidden">
-                      <div class="h-full rounded-full bg-gradient-to-r from-[#1F4E3D] to-[#C88A32] transition-all duration-500" :style="{ width: `${prj.progress}%` }"></div>
-                    </div>
-                    <span class="font-mono text-[10px] font-bold text-[#1F4E3D]">{{ prj.progress }}%</span>
-                  </div>
+              <div class="p-2.5">
+                <div class="text-[11.5px] font-bold text-[#1C1B18] truncate cursor-pointer" @click="selectedProduct = item">{{ item.name }}</div>
+                <div class="text-[9.5px] text-[#6E6960] truncate">{{ item.origin }}</div>
+                <div class="flex items-center justify-between mt-2">
+                  <span class="font-mono text-[13.5px] font-bold text-[#B83828]">¥{{ item.price }}</span>
+                  <button
+                    type="button"
+                    @click="quickAdd(item)"
+                    class="w-7 h-7 rounded-full bg-[#1F4E3D] text-white flex items-center justify-center cursor-pointer active:scale-90 transition-transform"
+                    :aria-label="`将${item.name}加入购物袋`"
+                  >
+                    <Plus :size="13" aria-hidden="true" />
+                  </button>
                 </div>
               </div>
             </div>
@@ -777,44 +861,255 @@ const statusBadgeClass = (status) => {
         </div>
       </div>
 
-      <!-- ==================== TAB 2: 助农集市 ==================== -->
-      <div v-else-if="activeTab === 'market'" class="px-4 pt-3 pb-6 space-y-3.5">
+      <!-- ==================== TAB 1B: 农事台（本地新农人 / 合作社社员专属工作台） ==================== -->
+      <div v-else-if="activeTab === 'home' && store.appPersona === 'farmer'" class="px-4 pt-2 pb-5 space-y-3.5">
+        <!-- 01 社员身份与田间气象寒潮遥测总卡 -->
+        <div
+          class="rounded-[1.45rem] text-[#F7F4EE] p-4 shadow-lg relative overflow-hidden border border-[#F0C275]/30 space-y-3"
+          style="background-image: linear-gradient(135deg, rgba(14,32,24,0.92) 0%, rgba(22,46,35,0.80) 100%), url('/art-custom/app-header-banner.jpg'); background-size: cover; background-position: center;"
+        >
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <span class="px-2 py-0.5 rounded-full bg-[#F0C275]/20 border border-[#F0C275]/35 text-[#F5D393] font-mono text-[9.5px] font-bold">
+                {{ store.appConfig.farmerProfile?.coop || '九台黑土稻作专业合作社' }}
+              </span>
+              <h2 class="font-editorial text-[18px] font-bold mt-1.5">
+                {{ store.appConfig.farmerProfile?.name || '赵建国' }} · 36 亩数字农事台
+              </h2>
+              <p class="text-[10.5px] text-white/75 mt-0.5">{{ store.appConfig.solarTerm }} · 九台区土们岭村东片示范田</p>
+            </div>
+            <button
+              type="button"
+              @click="speakDailyBrief"
+              class="min-h-[36px] px-2.5 rounded-full text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors shrink-0"
+              :class="isSpeakingBrief ? 'bg-[#C88A32] text-[#16261F]' : 'bg-white/14 text-[#F0C275] hover:bg-white/22'"
+            >
+              <Volume2 :size="12" aria-hidden="true" />
+              <span>{{ isSpeakingBrief ? '播报中…' : '农气播报' }}</span>
+            </button>
+          </div>
+
+          <!-- 置顶农时寒潮预警直推 -->
+          <div v-if="store.pinnedNotice" class="rounded-xl bg-[#B83828]/28 border border-[#F5D393]/30 px-3 py-2 flex items-center justify-between gap-2">
+            <div class="min-w-0">
+              <div class="text-[10px] font-bold text-[#F5D393]">【{{ store.pinnedNotice.tag }}】{{ store.pinnedNotice.title }}</div>
+            </div>
+            <button type="button" @click="setTab('village')" class="shrink-0 text-[10px] font-bold text-white underline cursor-pointer">详情</button>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2">
+            <div class="rounded-xl bg-white/8 p-2.5 border border-white/10">
+              <div class="flex items-center gap-1 text-[9.5px] text-white/70"><Leaf :size="10.5" class="text-[#F0C275]" aria-hidden="true" /><span>本村有机质</span></div>
+              <div class="font-mono text-[15.5px] font-bold text-[#F0C275] mt-1">4.82%</div>
+              <div class="text-[9px] text-[#86EFAC]">一级黑土达标</div>
+            </div>
+            <div class="rounded-xl bg-white/8 p-2.5 border border-white/10">
+              <div class="flex items-center gap-1 text-[9.5px] text-white/70"><Droplets :size="10.5" class="text-[#7DD3FC]" aria-hidden="true" /><span>耕层墒情</span></div>
+              <div class="font-mono text-[15.5px] font-bold text-white mt-1">68%</div>
+              <div class="text-[9px] text-white/70">适宜深松蓄墒</div>
+            </div>
+            <div class="rounded-xl bg-white/8 p-2.5 border border-white/10">
+              <div class="flex items-center gap-1 text-[9.5px] text-white/70"><Cpu :size="10.5" class="text-[#86EFAC]" aria-hidden="true" /><span>在线农机</span></div>
+              <div class="font-mono text-[15.5px] font-bold text-white mt-1">{{ onlineMachineryCount }}/{{ store.machinery.length }}台</div>
+              <div class="text-[9px] text-[#86EFAC]">RTK ±2.1cm</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 02 新农人四大刚需金刚区 -->
+        <div class="grid grid-cols-4 gap-2">
+          <button
+            type="button"
+            @click="openBookingSheet()"
+            class="p-2.5 rounded-2xl bg-white border border-[#C88A32]/30 shadow-2xs flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform"
+          >
+            <span class="w-9 h-9 rounded-xl bg-[#16261F] text-[#F0C275] flex items-center justify-center"><Tractor :size="16" aria-hidden="true" /></span>
+            <span class="text-[10.5px] font-bold text-[#16261F]">预约农机</span>
+          </button>
+          <button
+            type="button"
+            @click="openAi()"
+            class="p-2.5 rounded-2xl bg-white border border-[#1C1B18]/8 shadow-2xs flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform"
+          >
+            <span class="w-9 h-9 rounded-xl bg-[#EAF3EE] text-[#1F4E3D] flex items-center justify-center"><ScanLine :size="16" aria-hidden="true" /></span>
+            <span class="text-[10.5px] font-bold text-[#16261F]">AI看苗问诊</span>
+          </button>
+          <button
+            type="button"
+            @click="openCarbon()"
+            class="p-2.5 rounded-2xl bg-white border border-[#1C1B18]/8 shadow-2xs flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform"
+          >
+            <span class="w-9 h-9 rounded-xl bg-[#FDF4E6] text-[#8A5810] flex items-center justify-center"><Award :size="16" aria-hidden="true" /></span>
+            <span class="text-[10.5px] font-bold text-[#16261F]">分红补贴账</span>
+          </button>
+          <button
+            type="button"
+            @click="open3DHall('machinery')"
+            class="p-2.5 rounded-2xl bg-white border border-[#1C1B18]/8 shadow-2xs flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform"
+          >
+            <span class="w-9 h-9 rounded-xl bg-[#FBECE9] text-[#B83828] flex items-center justify-center"><Compass :size="16" aria-hidden="true" /></span>
+            <span class="text-[10.5px] font-bold text-[#16261F]">3D农机结构</span>
+          </button>
+        </div>
+
+        <!-- 03 北斗农机一键托管预约与实时派单状态卡 -->
+        <div class="bg-white rounded-[1.35rem] p-3.5 border border-[#1F4E3D]/20 shadow-xs space-y-2.5">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <h3 class="font-editorial text-[14.5px] font-bold text-[#16261F]">北斗 260HP 智能农机托管预约</h3>
+              <p class="text-[10px] text-[#5E5950]">工单直达合作社农机站 · 派车后实时回传机号</p>
+            </div>
+            <button
+              type="button"
+              @click="openBookingSheet()"
+              class="shrink-0 min-h-[36px] px-3 rounded-xl bg-[#1F4E3D] text-white text-[11px] font-bold cursor-pointer hover:bg-[#16382B] transition-colors"
+            >
+              + 发起预约
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 gap-1.5">
+            <div
+              v-for="m in store.machinery.slice(0, 2)"
+              :key="m.id"
+              class="p-2 rounded-xl bg-[#F8F6F1] border border-[#1C1B18]/7 flex items-center justify-between gap-1.5"
+            >
+              <div class="min-w-0">
+                <div class="font-mono text-[10px] font-bold text-[#16261F]">{{ m.code }}</div>
+                <div class="text-[9.5px] text-[#5E5950] truncate">{{ m.task }}</div>
+              </div>
+              <span
+                class="shrink-0 px-1.5 py-0.5 rounded-full text-[9px] font-bold"
+                :class="m.status === '作业中' ? 'bg-[#EAF3EE] text-[#1F4E3D]' : 'bg-[#FDF4E6] text-[#8A5810]'"
+              >{{ m.status }}</span>
+            </div>
+          </div>
+
+          <!-- 最新农机工单实时回执 -->
+          <div v-if="farmerBookings[0]" class="p-2.5 rounded-xl bg-[#FAF8F3] border border-[#C88A32]/25 space-y-1">
+            <div class="flex items-center justify-between text-[10.5px]">
+              <span class="font-bold text-[#16261F]">最新预约单 · {{ farmerBookings[0].village }}</span>
+              <span class="px-2 py-0.5 rounded-full text-[9.5px] font-bold border" :class="statusBadgeClass(farmerBookings[0].status)">
+                {{ farmerBookings[0].meta?.assignedMachineCode ? `已派 ${farmerBookings[0].meta.assignedMachineCode}` : farmerBookings[0].status }}
+              </span>
+            </div>
+            <p class="text-[10.5px] text-[#5A564E] line-clamp-2">{{ farmerBookings[0].content }}</p>
+            <div v-if="farmerBookings[0].reply" class="p-2 rounded-lg bg-[#EAF3EE] text-[#1F4E3D] text-[10px] font-medium">
+              {{ farmerBookings[0].reply }}
+            </div>
+          </div>
+        </div>
+
+        <!-- 04 社员收益总账与保护性耕作补贴确认卡 -->
+        <div class="bg-white rounded-[1.35rem] p-3.5 border border-[#C88A32]/30 shadow-xs space-y-2.5">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-editorial text-[14.5px] font-bold text-[#16261F]">我的合作社分红与护土补贴</h3>
+              <p class="text-[10px] text-[#5E5950]">直采订单每成交一笔，合作社分红池自动结算</p>
+            </div>
+            <button type="button" @click="openCarbon()" class="min-h-[36px] px-2 text-[11px] font-bold text-[#1F4E3D] cursor-pointer">
+              明细账 ›
+            </button>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 bg-[#F8F6F1] rounded-xl p-2.5 text-center">
+            <div>
+              <div class="text-[9.5px] text-[#6E6960]">托管保底</div>
+              <div class="font-mono text-[12.5px] font-bold text-[#16261F] mt-0.5">¥{{ store.farmerIncomeLedger.trustBase.toLocaleString() }}</div>
+            </div>
+            <div>
+              <div class="text-[9.5px] text-[#6E6960]">直采分红</div>
+              <div class="font-mono text-[12.5px] font-bold text-[#B83828] mt-0.5">¥{{ store.farmerIncomeLedger.orderDividend.toLocaleString() }}</div>
+            </div>
+            <div>
+              <div class="text-[9.5px] text-[#6E6960]">免耕补贴</div>
+              <div class="font-mono text-[12.5px] font-bold text-[#1F4E3D] mt-0.5">¥{{ store.farmerIncomeLedger.noTillSubsidy }}</div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            :disabled="store.farmerIncomeLedger.confirmed"
+            @click="handleFarmerConfirmSubsidy"
+            class="w-full min-h-[38px] rounded-xl text-[11.5px] font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-colors disabled:cursor-default"
+            :class="store.farmerIncomeLedger.confirmed ? 'bg-[#EAF3EE] text-[#1F4E3D]' : 'bg-[#C88A32] text-[#16261F] hover:brightness-105'"
+          >
+            <CheckCircle2 :size="14" aria-hidden="true" />
+            <span>{{ store.farmerIncomeLedger.confirmed ? '36 亩免耕补贴已确认核验（待发放）' : '一键核对并确认 36 亩免耕补贴 (¥2,592)' }}</span>
+          </button>
+        </div>
+
+        <!-- 05 重点振兴工程本村进度 -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h3 class="font-editorial text-[14px] font-bold text-[#16261F]">县域重点惠农工程进度</h3>
+            <span class="text-[10px] font-semibold text-[#1F4E3D]">带动 {{ store.totalHelpedHouseholds }} 户</span>
+          </div>
+          <div
+            v-for="prj in store.projects.slice(0, 2)"
+            :key="prj.id"
+            @click="selectedProject = prj"
+            class="bg-white rounded-2xl p-2.5 border border-[#1C1B18]/7 shadow-2xs flex gap-3 cursor-pointer"
+          >
+            <img :src="prj.cover" :alt="prj.name" class="w-16 h-16 rounded-xl object-cover shrink-0" />
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <span class="text-[9.5px] font-bold text-[#1F4E3D] bg-[#EAF3EE] px-1.5 py-0.5 rounded">{{ prj.category }}</span>
+                <span class="font-mono text-[10px] font-bold text-[#1F4E3D]">{{ prj.progress }}%</span>
+              </div>
+              <h4 class="text-[12px] font-bold text-[#1C1B18] mt-1 truncate">{{ prj.name }}</h4>
+              <p class="text-[10px] text-[#6E6960] truncate">{{ prj.village }} · 专项资金 {{ prj.fundWan }} 万</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== TAB 2: 严选/产销集市 ==================== -->
+      <div v-else-if="activeTab === 'market'" class="px-4 pt-2.5 pb-6 space-y-3.5">
         <div class="flex items-center justify-between">
           <div>
-            <h2 class="font-editorial text-[20px] font-bold text-[#16261F]">风物助农集市</h2>
+            <h2 class="font-editorial text-[20px] font-bold text-[#16261F]">
+              {{ store.appPersona === 'farmer' ? '合作社产销集市看板' : '风物助农严选集市' }}
+            </h2>
             <p class="text-[11px] text-[#6E6960]">产地直发 · 一袋一码 · 收益透明直达合作社</p>
           </div>
           <button
             type="button"
             @click="showCartSheet = true"
-            class="relative px-3 py-1.5 rounded-full bg-[#16261F] text-[#F7F4EE] text-[11.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+            class="relative min-h-[36px] px-3 rounded-full bg-[#16261F] text-[#F7F4EE] text-[11.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
           >
-            <ShoppingBag :size="13" class="text-[#F0C275]" />
+            <ShoppingBag :size="13" class="text-[#F0C275]" aria-hidden="true" />
             <span>购物袋</span>
             <span v-if="store.cartCount" class="px-1.5 py-0.2 rounded-full bg-[#C88A32] text-[#16261F] text-[10px] font-bold">{{ store.cartCount }}</span>
           </button>
         </div>
 
-        <!-- 助农补贴专享横幅 -->
-        <div class="rounded-2xl bg-gradient-to-r from-[#1F4E3D] to-[#2C644F] text-[#F7F4EE] px-3.5 py-2.5 flex items-center justify-between gap-2 shadow-xs">
+        <!-- 助农补贴专享横幅（点击可去积分兑更多券） -->
+        <button
+          type="button"
+          @click="openCarbon()"
+          class="w-full text-left rounded-2xl bg-gradient-to-r from-[#1F4E3D] to-[#2C644F] text-[#F7F4EE] px-3.5 py-2.5 flex items-center justify-between gap-2 shadow-xs cursor-pointer"
+        >
           <div class="flex items-center gap-2 min-w-0">
-            <Ticket :size="18" class="text-[#F0C275] shrink-0" />
+            <Ticket :size="18" class="text-[#F0C275] shrink-0" aria-hidden="true" />
             <div class="min-w-0">
-              <div class="text-[11.5px] font-bold truncate">黑土助农礼券已到账（满 60 减 10 / 满 199 减 25）</div>
-              <div class="text-[9.5px] text-white/75">结算时可直接勾选抵扣，补贴不扣减农户分成</div>
+              <div class="text-[11.5px] font-bold truncate">助农补贴券包（平台承担补贴，不扣农户分成）</div>
+              <div class="text-[9.5px] text-white/80">点击可用公益积分兑换更多满减补贴券</div>
             </div>
           </div>
-          <span class="shrink-0 px-2 py-0.5 rounded-full bg-[#F0C275] text-[#16261F] text-[9.5px] font-bold">可用 2 张</span>
-        </div>
+          <span class="shrink-0 px-2 py-0.5 rounded-full bg-[#F0C275] text-[#16261F] text-[9.5px] font-bold">可用 {{ store.coupons.length }} 张</span>
+        </button>
 
         <!-- 搜索输入框 -->
         <div class="relative">
-          <Search :size="14" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#7A746A]" />
+          <label for="market-search-input" class="sr-only">搜索农产品</label>
+          <Search :size="14" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#7A746A]" aria-hidden="true" />
           <input
+            id="market-search-input"
             v-model="marketSearch"
             type="search"
             placeholder="搜索农产品名称、合作社或产地…"
-            class="w-full h-9.5 pl-9 pr-3 rounded-xl bg-white border border-[#1C1B18]/10 text-[12px] text-[#1C1B18] placeholder:text-[#9A948A] focus:outline-none focus:border-[#1F4E3D]"
+            class="w-full h-10 pl-9 pr-3 rounded-xl bg-white border border-[#1C1B18]/10 text-base md:text-[12px] text-[#1C1B18] placeholder:text-[#9A948A] focus:outline-none focus:border-[#1F4E3D]"
           />
         </div>
 
@@ -825,7 +1120,7 @@ const statusBadgeClass = (status) => {
             :key="cat"
             type="button"
             @click="marketCategory = cat"
-            class="shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors cursor-pointer"
+            class="shrink-0 min-h-[36px] px-3 rounded-full text-[11px] font-bold transition-colors cursor-pointer"
             :class="marketCategory === cat ? 'bg-[#16261F] text-[#F0C275]' : 'bg-white text-[#5A564E] border border-[#1C1B18]/8'"
           >
             {{ cat }}
@@ -834,24 +1129,24 @@ const statusBadgeClass = (status) => {
 
         <!-- 排序筛选条 -->
         <div class="flex items-center justify-between gap-2 px-1 text-[10.5px]">
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2">
             <button
               v-for="s in [
-                { id: 'default', label: '综合推荐' },
-                { id: 'sales', label: '销量优先' },
-                { id: 'price', label: '价格升序' },
+                { id: 'default', label: '综合' },
+                { id: 'sales', label: '销量' },
+                { id: 'price', label: '低价' },
                 { id: 'share', label: '助农分成最高' }
               ]"
               :key="s.id"
               type="button"
               @click="marketSort = s.id"
-              class="cursor-pointer transition-colors"
+              class="min-h-[36px] px-1.5 cursor-pointer transition-colors"
               :class="marketSort === s.id ? 'font-bold text-[#1F4E3D] underline underline-offset-4' : 'text-[#6E6960]'"
             >
               {{ s.label }}
             </button>
           </div>
-          <span class="font-mono text-[9.5px] text-[#8E887E]">{{ filteredProducts.length }} 款</span>
+          <span class="font-mono text-[9.5px] text-[#6E6960]">{{ filteredProducts.length }} 款</span>
         </div>
 
         <!-- 2列商品网格 -->
@@ -869,12 +1164,12 @@ const statusBadgeClass = (status) => {
               <button
                 type="button"
                 @click.stop="store.toggleFavorite(item.id)"
-                class="absolute top-2 right-2 w-6.5 h-6.5 rounded-full bg-black/40 backdrop-blur-xs flex items-center justify-center cursor-pointer"
-                aria-label="收藏商品"
+                class="absolute top-1.5 right-1.5 w-8 h-8 rounded-full bg-black/42 backdrop-blur-xs flex items-center justify-center cursor-pointer"
+                :aria-label="isFav(item.id) ? `取消收藏${item.name}` : `收藏${item.name}`"
               >
-                <Heart :size="12" :class="isFav(item.id) ? 'fill-[#F87171] text-[#F87171]' : 'text-white'" />
+                <Heart :size="13" :class="isFav(item.id) ? 'fill-[#F87171] text-[#F87171]' : 'text-white'" aria-hidden="true" />
               </button>
-              <span class="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded bg-black/55 text-white text-[9px] font-mono">
+              <span class="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded bg-black/60 text-white text-[9px] font-mono">
                 助农 {{ item.farmerSharePct }}%
               </span>
             </div>
@@ -888,17 +1183,17 @@ const statusBadgeClass = (status) => {
                   <div class="flex items-baseline gap-1">
                     <span class="text-[10px] font-bold text-[#B83828]">¥</span>
                     <span class="font-mono text-[15px] font-bold text-[#B83828] leading-none">{{ item.price }}</span>
-                    <span class="font-mono text-[9.5px] text-[#9A948A] line-through">¥{{ item.originalPrice }}</span>
+                    <span class="font-mono text-[9.5px] text-[#8E887E] line-through">¥{{ item.originalPrice }}</span>
                   </div>
-                  <div class="text-[9.5px] text-[#8E887E] mt-0.5">余 {{ item.stock }} · 销 {{ item.sales }}</div>
+                  <div class="text-[9.5px] text-[#6E6960] mt-0.5">余 {{ item.stock }} · 销 {{ item.sales }}</div>
                 </div>
                 <button
                   type="button"
                   @click="quickAdd(item)"
-                  class="w-7 h-7 rounded-full bg-[#1F4E3D] text-white flex items-center justify-center cursor-pointer active:scale-90 transition-transform shadow-xs"
-                  aria-label="加入购物袋"
+                  class="w-8 h-8 rounded-full bg-[#1F4E3D] text-white flex items-center justify-center cursor-pointer active:scale-90 transition-transform shadow-xs"
+                  :aria-label="`将${item.name}加入购物袋`"
                 >
-                  <Plus :size="14" />
+                  <Plus :size="14" aria-hidden="true" />
                 </button>
               </div>
             </div>
@@ -907,27 +1202,29 @@ const statusBadgeClass = (status) => {
         <div v-else class="py-12 text-center text-[12px] text-[#6E6960]">暂无符合条件的在售农产品</div>
       </div>
 
-      <!-- ==================== TAB 3: 云认养 ==================== -->
-      <div v-else-if="activeTab === 'adopt'" class="px-4 pt-3 pb-6 space-y-4">
+      <!-- ==================== TAB 3: 云认养 / 托管地块 ==================== -->
+      <div v-else-if="activeTab === 'adopt'" class="px-4 pt-2.5 pb-6 space-y-4">
         <div
           class="rounded-[1.45rem] text-[#F7F4EE] p-4 relative overflow-hidden shadow-md border border-[#F0C275]/25"
-          style="background-image: linear-gradient(135deg, rgba(18,42,32,0.86), rgba(15,31,24,0.72)), url('/art-custom/app-header-banner.jpg'); background-size: cover; background-position: center;"
+          style="background-image: linear-gradient(135deg, rgba(18,42,32,0.88), rgba(15,31,24,0.74)), url('/art-custom/app-header-banner.jpg'); background-size: cover; background-position: center;"
         >
           <div class="relative z-10">
             <span class="text-[9.5px] font-mono tracking-[0.2em] text-[#F0C275]">CLOUD FARM ADOPTION</span>
-            <h2 class="font-editorial text-[21px] font-bold mt-1">认养一亩黑土田</h2>
-            <p class="text-[11px] text-[#F7F4EE]/82 mt-1 leading-relaxed">
-              春耕托管、北斗监测、秋收直邮。点击下方「我的云农田」可远程测墒、召唤无人机巡田并领取黑金电子收藏证书。
+            <h2 class="font-editorial text-[20px] font-bold mt-1">
+              {{ store.appPersona === 'farmer' ? '合作社托管与认养示范地块' : '认养一亩吉林黑土田' }}
+            </h2>
+            <p class="text-[11px] text-[#F7F4EE]/85 mt-1 leading-relaxed">
+              春耕托管、北斗监测、秋收直邮。点击已认养地块可远程测墒、调度无人机巡田并查看黑金电子收藏证书。
             </p>
           </div>
-          <Sprout :size="80" class="absolute -right-2 -bottom-3 text-white/8" />
+          <Sprout :size="80" class="absolute -right-2 -bottom-3 text-white/8" aria-hidden="true" />
         </div>
 
-        <!-- 我的云农田（可点击进入实时看板与电子证书！） -->
+        <!-- 我的云农田 -->
         <div class="space-y-2">
           <div class="flex items-center justify-between">
-            <h3 class="font-editorial text-[14.5px] font-bold text-[#16261F]">我的云农田与电子证书</h3>
-            <span class="text-[10.5px] text-[#1F4E3D] font-semibold">点击进入田间看板</span>
+            <h3 class="font-editorial text-[14.5px] font-bold text-[#16261F]">实时认养与管护看板</h3>
+            <span class="text-[10.5px] text-[#1F4E3D] font-semibold">点击进入田间实况</span>
           </div>
           <div
             v-for="adp in myAdoptions"
@@ -938,7 +1235,7 @@ const statusBadgeClass = (status) => {
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-1.5">
                 <span class="font-mono text-[11px] font-bold px-2 py-0.5 rounded bg-[#EAF3EE] text-[#1F4E3D]">{{ adp.plotCode }}</span>
-                <span class="text-[11px] text-[#6E6960]">{{ adp.shares }} 份 · ¥{{ adp.amount }}</span>
+                <span class="text-[11px] text-[#6E6960]">{{ adp.adopter }} · {{ adp.shares }} 份</span>
               </div>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border" :class="statusBadgeClass(adp.status)">
                 {{ adp.status }}
@@ -947,31 +1244,30 @@ const statusBadgeClass = (status) => {
             <div class="flex items-center justify-between gap-2">
               <div>
                 <div class="text-[13px] font-bold text-[#1C1B18]">{{ adp.plotName }}</div>
-                <div class="text-[10.5px] text-[#C88A32] font-semibold mt-0.5">物候：{{ adp.stage }}</div>
+                <div class="text-[10.5px] text-[#9A6518] font-semibold mt-0.5">物候：{{ adp.stage }}</div>
               </div>
               <span class="shrink-0 px-2.5 py-1 rounded-full bg-[#16261F] text-[#F0C275] text-[10px] font-bold flex items-center gap-1">
-                <Award :size="11" />
+                <Award :size="11" aria-hidden="true" />
                 <span>进田/证书</span>
               </span>
             </div>
           </div>
         </div>
 
-        <!-- 可认养示范地块列表（支持多元生态分类筛选） -->
+        <!-- 可认养示范地块列表 -->
         <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <h3 class="font-editorial text-[14.5px] font-bold text-[#16261F]">精选黑土与林下认养项目</h3>
+            <h3 class="font-editorial text-[14.5px] font-bold text-[#16261F]">精选黑土与林下地块目录</h3>
             <span class="font-mono text-[10px] text-[#1F4E3D] font-bold">共 {{ filteredPlots.length }} 项</span>
           </div>
 
-          <!-- 认养类型胶囊 -->
-          <div class="flex items-center gap-1 overflow-x-auto pb-0.5 no-scrollbar">
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar">
             <button
               v-for="cat in adoptCategories"
               :key="cat"
               type="button"
               @click="adoptCategory = cat"
-              class="shrink-0 px-2.5 py-1 rounded-full text-[10px] font-bold transition-colors cursor-pointer"
+              class="shrink-0 min-h-[36px] px-3 rounded-full text-[10.5px] font-bold transition-colors cursor-pointer"
               :class="adoptCategory === cat ? 'bg-[#16261F] text-[#F0C275]' : 'bg-white/90 text-[#5A564E] border border-[#1C1B18]/8'"
             >
               {{ cat }}
@@ -994,7 +1290,7 @@ const statusBadgeClass = (status) => {
               </span>
               <div class="absolute bottom-2.5 left-3 right-3 text-white">
                 <div class="text-[14.5px] font-bold">{{ plot.name }}</div>
-                <div class="text-[10.5px] text-white/82">{{ plot.location }} · {{ plot.area }}</div>
+                <div class="text-[10.5px] text-white/82">{{ plot.location }} · 管护人 {{ plot.farmerName }}</div>
               </div>
             </div>
             <div class="p-3 space-y-2.5">
@@ -1009,7 +1305,7 @@ const statusBadgeClass = (status) => {
                 </div>
                 <div>
                   <div class="text-[9.5px] text-[#6E6960]">当前物候</div>
-                  <div class="text-[10.5px] font-bold text-[#C88A32] truncate">{{ plot.stage.split(' · ')[0] }}</div>
+                  <div class="text-[10.5px] font-bold text-[#9A6518] truncate">{{ plot.stage.split(' · ')[0] }}</div>
                 </div>
               </div>
               <div class="flex items-center justify-between">
@@ -1023,7 +1319,7 @@ const statusBadgeClass = (status) => {
                 <button
                   type="button"
                   @click="openPlotSheet(plot)"
-                  class="px-3.5 py-2 rounded-xl bg-[#1F4E3D] text-white text-[11.5px] font-bold cursor-pointer active:scale-95 transition-transform"
+                  class="min-h-[36px] px-3.5 py-2 rounded-xl bg-[#1F4E3D] text-white text-[11.5px] font-bold cursor-pointer active:scale-95 transition-transform"
                 >
                   立即认养
                 </button>
@@ -1033,28 +1329,42 @@ const statusBadgeClass = (status) => {
         </div>
       </div>
 
-      <!-- ==================== TAB 4: 乡情村务 ==================== -->
-      <div v-else-if="activeTab === 'village'" class="px-4 pt-3 pb-6 space-y-4">
-        <div class="flex items-center justify-between">
+      <!-- ==================== TAB 4: 乡情公示 / 农机村务（双身份精准适配） ==================== -->
+      <div v-else-if="activeTab === 'village'" class="px-4 pt-2.5 pb-6 space-y-4">
+        <div class="flex items-center justify-between gap-2">
           <div>
-            <h2 class="font-editorial text-[20px] font-bold text-[#16261F]">数字乡村 · 村务直通</h2>
-            <p class="text-[11px] text-[#6E6960]">公告实时下发 · 农机一键预约 · 留言直达管理后台</p>
+            <h2 class="font-editorial text-[20px] font-bold text-[#16261F]">
+              {{ store.appPersona === 'farmer' ? '农机派单与村务直通' : '合作社公示与助农互动' }}
+            </h2>
+            <p class="text-[11px] text-[#6E6960]">
+              {{ store.appPersona === 'farmer' ? '寒潮预警直达 · 北斗农机预约 · 农技员实时答复' : '产区农情透明公示 · 认养研学报名 · 助农口碑直连' }}
+            </p>
           </div>
           <button
+            v-if="store.appPersona === 'farmer'"
+            type="button"
+            @click="openBookingSheet()"
+            class="shrink-0 min-h-[36px] px-3 rounded-full bg-[#16261F] text-[#F0C275] text-[10.5px] font-bold flex items-center gap-1 cursor-pointer"
+          >
+            <Tractor :size="12" aria-hidden="true" />
+            <span>标准派单</span>
+          </button>
+          <button
+            v-else
             type="button"
             @click="openSolar"
-            class="px-2.5 py-1.5 rounded-full bg-[#EAF3EE] text-[#1F4E3D] text-[10.5px] font-bold flex items-center gap-1 cursor-pointer"
+            class="shrink-0 min-h-[36px] px-2.5 rounded-full bg-[#EAF3EE] text-[#1F4E3D] text-[10.5px] font-bold flex items-center gap-1 cursor-pointer"
           >
-            <CalendarDays :size="12" />
+            <CalendarDays :size="12" aria-hidden="true" />
             <span>农时谱</span>
           </button>
         </div>
 
-        <!-- 村务公告栏 -->
+        <!-- 村务与产区动态公告栏 -->
         <div class="space-y-2">
           <h3 class="text-[12.5px] font-bold text-[#1C1B18] flex items-center gap-1.5">
-            <Megaphone :size="14" class="text-[#C88A32]" />
-            <span>最新村务与农情公告</span>
+            <Megaphone :size="14" class="text-[#C88A32]" aria-hidden="true" />
+            <span>合作社与乡村数智中心公告</span>
           </h3>
           <div
             v-for="n in store.notices"
@@ -1067,20 +1377,22 @@ const statusBadgeClass = (status) => {
                 <span class="px-1.5 py-0.5 rounded text-[9.5px] font-bold" :class="n.pinned ? 'bg-[#C88A32] text-[#16261F]' : 'bg-[#EAF3EE] text-[#1F4E3D]'">
                   {{ n.tag }}
                 </span>
-                <span v-if="n.pinned" class="text-[9.5px] font-bold text-[#B83828]">置顶公告</span>
+                <span v-if="n.pinned" class="text-[9.5px] font-bold text-[#B83828]">置顶重要</span>
               </div>
-              <span class="font-mono text-[10px] text-[#8E887E]">{{ n.date }}</span>
+              <span class="font-mono text-[10px] text-[#6E6960]">{{ n.date }}</span>
             </div>
             <h4 class="text-[13px] font-bold text-[#1C1B18] mt-1.5 leading-snug">{{ n.title }}</h4>
             <p class="text-[11px] text-[#5A564E] mt-1 leading-relaxed">{{ n.content }}</p>
           </div>
         </div>
 
-        <!-- 村情直报 / 农机预约表单 -->
+        <!-- 角色自适应直报表单 -->
         <div class="bg-white rounded-2xl p-3.5 border border-[#1C1B18]/8 shadow-xs space-y-2.5">
           <div class="flex items-center justify-between">
-            <h3 class="text-[13px] font-bold text-[#1C1B18]">村情直报 / 农机预约</h3>
-            <span class="text-[10px] text-[#1F4E3D] font-bold">实时同步后台</span>
+            <h3 class="text-[13px] font-bold text-[#1C1B18]">
+              {{ store.appPersona === 'farmer' ? '社员诉求直报 / 农技报修' : '消费者助农留言 / 研学预约' }}
+            </h3>
+            <span class="text-[10px] text-[#1F4E3D] font-bold">直通后台</span>
           </div>
           <div class="flex flex-wrap gap-1.5">
             <button
@@ -1088,37 +1400,47 @@ const statusBadgeClass = (status) => {
               :key="t"
               type="button"
               @click="fbType = t"
-              class="px-2.5 py-1 rounded-full text-[10.5px] font-bold cursor-pointer transition-colors"
+              class="min-h-[36px] px-3 rounded-full text-[10.5px] font-bold cursor-pointer transition-colors"
               :class="fbType === t ? 'bg-[#16261F] text-[#F0C275]' : 'bg-[#F3F0E9] text-[#5A564E]'"
             >
               {{ t }}
             </button>
           </div>
-          <input
-            v-model="fbVillage"
-            type="text"
-            placeholder="所在村屯 / 合作社"
-            class="w-full h-9 px-3 rounded-xl bg-[#F8F6F1] border border-[#1C1B18]/8 text-[11.5px] text-[#1C1B18] focus:outline-none focus:border-[#1F4E3D]"
-          />
-          <textarea
-            v-model="fbContent"
-            rows="3"
-            placeholder="填写农机作业预约、病虫害咨询或村务建议，提交后将立即出现在管理后台…"
-            class="w-full p-3 rounded-xl bg-[#F8F6F1] border border-[#1C1B18]/8 text-[11.5px] text-[#1C1B18] resize-none focus:outline-none focus:border-[#1F4E3D]"
-          ></textarea>
+          <div>
+            <label for="fb-village-input" class="sr-only">所在村屯或城市区域</label>
+            <input
+              id="fb-village-input"
+              v-model="fbVillage"
+              type="text"
+              :placeholder="store.appPersona === 'farmer' ? '所在村屯 / 合作社地块' : '所在城市 / 关联认养编号'"
+              class="w-full h-10 px-3 rounded-xl bg-[#F8F6F1] border border-[#1C1B18]/8 text-base md:text-[11.5px] text-[#1C1B18] focus:outline-none focus:border-[#1F4E3D]"
+            />
+          </div>
+          <div>
+            <label for="fb-content-input" class="sr-only">具体事项内容</label>
+            <textarea
+              id="fb-content-input"
+              v-model="fbContent"
+              rows="3"
+              :placeholder="store.appPersona === 'farmer'
+                ? '填写农机作业需求、大棚温湿咨询或补贴疑问，提交后农机站与村委实时响应…'
+                : '填写产区研学采摘报名、品质反馈或对合作社农户的寄语…'"
+              class="w-full p-3 rounded-xl bg-[#F8F6F1] border border-[#1C1B18]/8 text-base md:text-[11.5px] text-[#1C1B18] resize-y focus:outline-none focus:border-[#1F4E3D]"
+            ></textarea>
+          </div>
           <button
             type="button"
             @click="submitVillageFeedback"
-            class="w-full h-9.5 rounded-xl bg-[#1F4E3D] text-white text-[12px] font-bold flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.99] transition-transform"
+            class="w-full min-h-[40px] rounded-xl bg-[#1F4E3D] text-white text-[12px] font-bold flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.99] transition-transform"
           >
-            <Send :size="13" />
-            <span>提交至乡村治理中枢</span>
+            <Send :size="13" aria-hidden="true" />
+            <span>{{ store.appPersona === 'farmer' ? '提交至农机站与村委后台' : '提交至合作社客服与运营台' }}</span>
           </button>
         </div>
 
-        <!-- 历史反馈与后台官方回复 -->
+        <!-- 历史工单与官方回复 -->
         <div class="space-y-2">
-          <h3 class="text-[12.5px] font-bold text-[#1C1B18]">最新直报与官方回复</h3>
+          <h3 class="text-[12.5px] font-bold text-[#1C1B18]">双端公开回执与派单记录</h3>
           <div
             v-for="fb in store.feedbacks"
             :key="fb.id"
@@ -1127,22 +1449,23 @@ const statusBadgeClass = (status) => {
             <div class="flex items-center justify-between">
               <span class="text-[11px] font-bold text-[#1C1B18]">{{ fb.user }}</span>
               <span class="text-[10px] px-2 py-0.5 rounded-full border font-semibold" :class="statusBadgeClass(fb.status)">
-                {{ fb.status }}
+                {{ fb.meta?.assignedMachineCode ? `已派 ${fb.meta.assignedMachineCode}` : fb.status }}
               </span>
             </div>
             <p class="text-[11.5px] text-[#5A564E] leading-relaxed">{{ fb.content }}</p>
-            <div class="text-[10px] text-[#8E887E] font-mono">{{ fb.type }} · {{ fb.village }} · {{ fb.time }}</div>
+            <div class="text-[10px] text-[#6E6960] font-mono">{{ fb.type }} · {{ fb.village }} · {{ fb.time }}</div>
             <div v-if="fb.reply" class="mt-2 p-2.5 rounded-xl bg-[#EAF3EE] border border-[#2E5A44]/15 text-[11px] text-[#1F4E3D]">
-              <span class="font-bold">后台官方回复：</span>{{ fb.reply }}
+              <span class="font-bold">官方回执：</span>{{ fb.reply }}
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ==================== TAB 5: 我的 ==================== -->
-      <div v-else-if="activeTab === 'profile'" class="px-4 pt-3 pb-6 space-y-4">
-        <!-- 黑金翡翠质感会员卡（融入青绿鎏金山水底纹） -->
+      <!-- ==================== TAB 5: 我的 / 社员中心 ==================== -->
+      <div v-else-if="activeTab === 'profile'" class="px-4 pt-2.5 pb-6 space-y-4">
+        <!-- 角色专属身份数字名片 -->
         <div
+          v-if="store.appPersona === 'consumer'"
           class="rounded-[1.5rem] text-[#F7F4EE] p-4 relative overflow-hidden shadow-lg border border-[#F0C275]/35"
           style="background-image: linear-gradient(135deg, rgba(16,32,25,0.88), rgba(14,24,19,0.78)), url('/art-custom/app-header-banner.jpg'); background-size: cover; background-position: center;"
         >
@@ -1157,58 +1480,102 @@ const statusBadgeClass = (status) => {
                   {{ store.appConfig.userProfile.role }}
                 </span>
               </div>
-              <div class="font-mono text-[10px] text-[#F7F4EE]/60 mt-0.5">NO. {{ store.appConfig.userProfile.memberNo }} · 吉林黑土守护计划</div>
+              <div class="font-mono text-[10px] text-[#F7F4EE]/70 mt-0.5">NO. {{ store.appConfig.userProfile.memberNo }} · 城市助农消费端</div>
             </div>
             <button
               type="button"
               @click="openCert()"
-              class="px-2.5 py-1 rounded-full bg-[#F0C275] text-[#16261F] text-[10px] font-bold cursor-pointer shrink-0"
+              class="min-h-[36px] px-2.5 rounded-full bg-[#F0C275] text-[#16261F] text-[10px] font-bold cursor-pointer shrink-0"
             >
-              电子证书
+              认养证书
             </button>
           </div>
           <div class="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-white/10 text-center relative z-10">
-            <div>
-              <div class="font-mono text-[16px] font-bold text-[#F5D393]">{{ store.appConfig.userProfile.points }}</div>
-              <div class="text-[10px] text-[#F7F4EE]/65">助农公益分</div>
-            </div>
+            <button type="button" @click="openCarbon()" class="cursor-pointer group">
+              <div class="font-mono text-[16px] font-bold text-[#F5D393] group-hover:underline">{{ store.appConfig.userProfile.points }}</div>
+              <div class="text-[10px] text-[#F7F4EE]/75">公益积分兑券 ›</div>
+            </button>
             <div>
               <div class="font-mono text-[16px] font-bold text-white">{{ store.appConfig.userProfile.helpedHouseholds }} 户</div>
-              <div class="text-[10px] text-[#F7F4EE]/65">累计帮扶</div>
+              <div class="text-[10px] text-[#F7F4EE]/75">累计帮扶农户</div>
             </div>
             <button type="button" @click="openCarbon()" class="cursor-pointer group">
               <div class="font-mono text-[16px] font-bold text-[#86EFAC] group-hover:underline">{{ store.appConfig.userProfile.carbonSavedKg }}kg</div>
               <div class="text-[10px] text-[#F7F4EE]/75">黑土固碳 ›</div>
             </button>
           </div>
-          <Award :size="92" class="absolute -right-3 -top-3 text-[#F0C275]/6" />
         </div>
 
-        <!-- 快捷工具条（收藏 / 溯源 / 证书 / 礼券） -->
+        <!-- 新农人社员数字身份卡 -->
+        <div
+          v-else
+          class="rounded-[1.5rem] text-[#F7F4EE] p-4 relative overflow-hidden shadow-lg border border-[#F0C275]/35"
+          style="background-image: linear-gradient(135deg, rgba(16,34,26,0.92), rgba(20,42,32,0.82)), url('/art-custom/app-header-banner.jpg'); background-size: cover; background-position: center;"
+        >
+          <div class="flex items-center gap-3 relative z-10">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#86EFAC] to-[#2E5A44] text-[#0E261D] flex items-center justify-center font-editorial font-bold text-xl shrink-0 shadow-sm">
+              赵
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5">
+                <span class="text-[15.5px] font-bold">{{ store.appConfig.farmerProfile?.name || '赵建国' }}</span>
+                <span class="px-2 py-0.5 rounded-full bg-[#86EFAC]/20 text-[#86EFAC] text-[9.5px] font-bold border border-[#86EFAC]/30">
+                  示范社核心社员
+                </span>
+              </div>
+              <div class="font-mono text-[10px] text-[#F7F4EE]/75 mt-0.5">{{ store.appConfig.farmerProfile?.coop }} · 36 亩</div>
+            </div>
+            <button
+              type="button"
+              @click="openCarbon()"
+              class="min-h-[36px] px-2.5 rounded-full bg-[#F0C275] text-[#16261F] text-[10px] font-bold cursor-pointer shrink-0"
+            >
+              分红总账
+            </button>
+          </div>
+          <div class="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-white/10 text-center relative z-10">
+            <div>
+              <div class="font-mono text-[15px] font-bold text-[#F5D393]">¥{{ store.farmerIncomeLedger.total.toLocaleString() }}</div>
+              <div class="text-[10px] text-[#F7F4EE]/75">预计年综合收入</div>
+            </div>
+            <div>
+              <div class="font-mono text-[15px] font-bold text-[#86EFAC]">{{ store.farmerIncomeLedger.mu }} 亩</div>
+              <div class="text-[10px] text-[#F7F4EE]/75">北斗托管水旱田</div>
+            </div>
+            <div>
+              <div class="font-mono text-[15px] font-bold text-white">{{ farmerBookings.length }} 单</div>
+              <div class="text-[10px] text-[#F7F4EE]/75">农机与农技工单</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 快捷工具条（含真实可点开的收藏夹！） -->
         <div class="grid grid-cols-4 gap-2">
-          <button type="button" @click="openCert()" class="bg-white rounded-2xl py-2.5 border border-[#1C1B18]/7 flex flex-col items-center gap-1 cursor-pointer">
-            <Award :size="16" class="text-[#C88A32]" />
-            <span class="text-[10px] font-bold">认养证书</span>
-          </button>
-          <button type="button" @click="openTrace()" class="bg-white rounded-2xl py-2.5 border border-[#1C1B18]/7 flex flex-col items-center gap-1 cursor-pointer">
-            <QrCode :size="16" class="text-[#1F4E3D]" />
-            <span class="text-[10px] font-bold">溯源查验</span>
-          </button>
-          <button type="button" @click="setTab('market')" class="bg-white rounded-2xl py-2.5 border border-[#1C1B18]/7 flex flex-col items-center gap-1 cursor-pointer">
-            <Heart :size="16" class="text-[#B83828]" />
+          <button type="button" @click="showFavSheet = true" class="bg-white rounded-2xl py-2.5 border border-[#1C1B18]/7 flex flex-col items-center gap-1 cursor-pointer">
+            <Heart :size="16" class="text-[#B83828]" aria-hidden="true" />
             <span class="text-[10px] font-bold">收藏 ({{ favProducts.length }})</span>
           </button>
+          <button type="button" @click="openTrace()" class="bg-white rounded-2xl py-2.5 border border-[#1C1B18]/7 flex flex-col items-center gap-1 cursor-pointer">
+            <QrCode :size="16" class="text-[#1F4E3D]" aria-hidden="true" />
+            <span class="text-[10px] font-bold">扫码查真</span>
+          </button>
           <button type="button" @click="openCarbon()" class="bg-white rounded-2xl py-2.5 border border-[#1C1B18]/7 flex flex-col items-center gap-1 cursor-pointer">
-            <Leaf :size="16" class="text-[#1F4E3D]" />
-            <span class="text-[10px] font-bold">碳汇账本</span>
+            <Ticket :size="16" class="text-[#C88A32]" aria-hidden="true" />
+            <span class="text-[10px] font-bold">{{ store.appPersona === 'farmer' ? '分红账本' : '兑补贴券' }}</span>
+          </button>
+          <button type="button" @click="openAi()" class="bg-white rounded-2xl py-2.5 border border-[#1C1B18]/7 flex flex-col items-center gap-1 cursor-pointer">
+            <Sparkles :size="16" class="text-[#1F4E3D]" aria-hidden="true" />
+            <span class="text-[10px] font-bold">AI 农艺师</span>
           </button>
         </div>
 
-        <!-- 我的助农订单（点击可查看实时冷链物流进度！） -->
+        <!-- 我的助农订单 / 合作社发货流水 -->
         <div class="space-y-2">
           <div class="flex items-center justify-between">
-            <h3 class="font-editorial text-[14.5px] font-bold text-[#16261F]">我的助农订单</h3>
-            <span class="text-[10.5px] text-[#6E6960]">点击查看物流轨迹 · 共 {{ store.orders.length }} 单</span>
+            <h3 class="font-editorial text-[14.5px] font-bold text-[#16261F]">
+              {{ store.appPersona === 'farmer' ? '合作社近期直采发货流水' : '我的助农直采订单' }}
+            </h3>
+            <span class="text-[10.5px] text-[#6E6960]">点击查冷链轨迹 · 共 {{ store.orders.length }} 单</span>
           </div>
           <div
             v-for="ord in myOrders"
@@ -1219,8 +1586,8 @@ const statusBadgeClass = (status) => {
             <div class="flex items-center justify-between">
               <span class="font-mono text-[10.5px] font-semibold text-[#5A564E]">{{ ord.id }}</span>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border flex items-center gap-1" :class="statusBadgeClass(ord.status)">
-                <PackageCheck v-if="ord.status !== '待发货'" :size="10" />
-                <Clock v-else :size="10" />
+                <PackageCheck v-if="ord.status !== '待发货'" :size="10" aria-hidden="true" />
+                <Clock v-else :size="10" aria-hidden="true" />
                 <span>{{ ord.status }}</span>
               </span>
             </div>
@@ -1242,13 +1609,13 @@ const statusBadgeClass = (status) => {
             class="w-full px-3.5 py-3 flex items-center justify-between text-left cursor-pointer hover:bg-[#F8F6F1]"
           >
             <div class="flex items-center gap-2.5">
-              <ShieldCheck :size="16" class="text-[#1F4E3D]" />
+              <ShieldCheck :size="16" class="text-[#1F4E3D]" aria-hidden="true" />
               <div>
-                <div class="text-[12.5px] font-bold text-[#1C1B18]">进入乡村振兴后台管理系统</div>
-                <div class="text-[10px] text-[#6E6960]">管理商品、审核订单与认养、下发村务公告</div>
+                <div class="text-[12.5px] font-bold text-[#1C1B18]">进入分岗后台管理系统</div>
+                <div class="text-[10px] text-[#6E6960]">合作社运营 / 农机站派车 / 驻村村务督办</div>
               </div>
             </div>
-            <ArrowUpRight :size="15" class="text-[#6E6960]" />
+            <ArrowUpRight :size="15" class="text-[#6E6960]" aria-hidden="true" />
           </button>
           <button
             type="button"
@@ -1256,13 +1623,13 @@ const statusBadgeClass = (status) => {
             class="w-full px-3.5 py-3 flex items-center justify-between text-left cursor-pointer hover:bg-[#F8F6F1]"
           >
             <div class="flex items-center gap-2.5">
-              <Sparkles :size="16" class="text-[#C88A32]" />
+              <Sparkles :size="16" class="text-[#C88A32]" aria-hidden="true" />
               <div>
-                <div class="text-[12.5px] font-bold text-[#1C1B18]">双端同屏实时联动演示</div>
-                <div class="text-[10px] text-[#6E6960]">左屏 App + 右屏管理后台，答辩演示推荐</div>
+                <div class="text-[12.5px] font-bold text-[#1C1B18]">双端剧本同屏实时联动台</div>
+                <div class="text-[10px] text-[#6E6960]">3 条真实角色闭环剧本一键演示</div>
               </div>
             </div>
-            <ArrowUpRight :size="15" class="text-[#6E6960]" />
+            <ArrowUpRight :size="15" class="text-[#6E6960]" aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -1280,23 +1647,23 @@ const statusBadgeClass = (status) => {
           </div>
           <div>
             <div class="font-mono text-[14px] font-bold leading-none">¥{{ store.cartTotal }}</div>
-            <div class="text-[9.5px] text-white/65 mt-0.5">顺丰助农包邮 · 结算可用优惠券</div>
+            <div class="text-[9.5px] text-[#86EFAC] mt-0.5">直达合作社 ¥{{ store.cartFarmerShareSummary.farmerGain }}（{{ store.cartFarmerShareSummary.sharePct }}%）</div>
           </div>
         </div>
         <button
           type="button"
           @click="showCartSheet = true"
-          class="px-3.5 py-1.5 rounded-xl bg-[#C88A32] text-[#16261F] text-[11.5px] font-bold cursor-pointer"
+          class="min-h-[36px] px-3.5 py-1.5 rounded-xl bg-[#C88A32] text-[#16261F] text-[11.5px] font-bold cursor-pointer"
         >
           去结算
         </button>
       </div>
     </Transition>
 
-    <!-- 底部 5-Tab 导航栏（通透毛玻璃，透出底部青绿山水画卷） -->
+    <!-- 底部 5-Tab 导航栏 -->
     <nav
-      aria-label="App 底部导航"
-      class="shrink-0 absolute bottom-0 inset-x-0 bg-white/80 backdrop-blur-xl border-t border-[#C88A32]/20 px-2 pt-1.5 z-20 shadow-[0_-8px_24px_-12px_rgba(22,38,31,0.18)]"
+      aria-label="App 底部主导航"
+      class="shrink-0 absolute bottom-0 inset-x-0 bg-white/86 backdrop-blur-xl border-t border-[#C88A32]/20 px-2 pt-1.5 z-20 shadow-[0_-8px_24px_-12px_rgba(22,38,31,0.18)] select-none"
       :class="framed ? 'pb-4' : 'pb-[max(0.5rem,env(safe-area-inset-bottom))]'"
     >
       <div class="grid grid-cols-5">
@@ -1305,19 +1672,135 @@ const statusBadgeClass = (status) => {
           :key="tab.id"
           type="button"
           @click="setTab(tab.id)"
-          class="relative flex flex-col items-center justify-center py-1 gap-0.5 cursor-pointer transition-colors"
-          :class="activeTab === tab.id ? 'text-[#1F4E3D]' : 'text-[#8A8479]'"
+          class="relative min-h-[42px] flex flex-col items-center justify-center py-1 gap-0.5 cursor-pointer transition-colors"
+          :class="activeTab === tab.id ? 'text-[#1F4E3D]' : 'text-[#6E6960]'"
         >
-          <component :is="tab.icon" :size="19" :stroke-width="activeTab === tab.id ? 2.2 : 1.6" />
+          <component :is="tab.icon" :size="19" :stroke-width="activeTab === tab.id ? 2.2 : 1.6" aria-hidden="true" />
           <span class="text-[10px]" :class="activeTab === tab.id ? 'font-bold' : 'font-medium'">{{ tab.label }}</span>
           <span
             v-if="tab.id === 'market' && store.cartCount > 0"
-            class="absolute top-0 right-3.5 min-w-[14px] h-[14px] px-1 rounded-full bg-[#B83828] text-white text-[9px] font-bold flex items-center justify-center"
+            class="absolute top-0 right-3 min-w-[14px] h-[14px] px-1 rounded-full bg-[#B83828] text-white text-[9px] font-bold flex items-center justify-center"
           >{{ store.cartCount }}</span>
         </button>
       </div>
-      <div v-if="framed" class="w-28 h-1 rounded-full bg-[#1C1B18]/20 mx-auto mt-2"></div>
+      <div v-if="framed" class="w-28 h-1 rounded-full bg-[#1C1B18]/20 mx-auto mt-1.5"></div>
     </nav>
+
+    <!-- ==================== 弹层：北斗智能农机标准化预约单（新农人核心工具） ==================== -->
+    <div v-if="showBookingSheet" class="absolute inset-0 z-30 bg-black/50 flex items-end" @click.self="showBookingSheet = false">
+      <div class="w-full max-h-[86%] bg-[#F7F4EE] rounded-t-[1.75rem] overflow-y-auto p-4 space-y-3 shadow-2xl app-scroll">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-mono text-[#1F4E3D] font-bold">BEIDOU-3 RTK DISPATCH</span>
+            <h3 class="font-editorial text-[16.5px] font-bold text-[#16261F]">预约北斗智能农机托管作业</h3>
+          </div>
+          <button type="button" @click="showBookingSheet = false" class="w-8 h-8 rounded-full bg-white flex items-center justify-center cursor-pointer" aria-label="关闭预约窗口">
+            <X :size="15" aria-hidden="true" />
+          </button>
+        </div>
+
+        <div class="bg-white rounded-xl p-3 border border-[#1C1B18]/8 space-y-2.5">
+          <div class="text-[11px] font-bold text-[#1C1B18]">1. 选择作业类型</div>
+          <div class="grid grid-cols-2 gap-1.5">
+            <button
+              v-for="srv in bookingServiceOptions"
+              :key="srv"
+              type="button"
+              @click="bookingForm.serviceType = srv"
+              class="min-h-[36px] px-2.5 py-1.5 rounded-xl text-[11px] font-bold border text-left cursor-pointer transition-colors"
+              :class="bookingForm.serviceType === srv ? 'bg-[#16261F] text-[#F0C275] border-[#16261F]' : 'bg-[#F8F6F1] text-[#3E3B35] border-[#1C1B18]/8'"
+            >
+              {{ srv }}
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-3 border border-[#1C1B18]/8 space-y-2">
+          <div class="flex items-center justify-between text-[11px] font-bold">
+            <label for="booking-mu-range">2. 申报作业面积</label>
+            <span class="font-mono text-[13px] text-[#1F4E3D]">{{ bookingForm.plotMu }} 亩（预计节本 ¥{{ bookingForm.plotMu * 45 }}）</span>
+          </div>
+          <input id="booking-mu-range" v-model.number="bookingForm.plotMu" type="range" min="10" max="150" step="2" class="w-full accent-[#1F4E3D]" />
+        </div>
+
+        <div class="bg-white rounded-xl p-3 border border-[#1C1B18]/8 space-y-2">
+          <div class="text-[11px] font-bold text-[#1C1B18]">3. 期望进场农时窗口与地块</div>
+          <div class="flex flex-wrap gap-1.5">
+            <button
+              v-for="tw in bookingTimeOptions"
+              :key="tw"
+              type="button"
+              @click="bookingForm.dateWindow = tw"
+              class="min-h-[36px] px-2.5 rounded-lg text-[10.5px] font-semibold cursor-pointer"
+              :class="bookingForm.dateWindow === tw ? 'bg-[#EAF3EE] text-[#1F4E3D] border border-[#1F4E3D]/30 font-bold' : 'bg-[#F8F6F1] text-[#5A564E]'"
+            >
+              {{ tw }}
+            </button>
+          </div>
+          <label for="booking-village-input" class="sr-only">作业村屯位置</label>
+          <input
+            id="booking-village-input"
+            v-model="bookingForm.village"
+            type="text"
+            placeholder="村屯与地块方位"
+            class="w-full h-9.5 px-3 rounded-lg bg-[#F8F6F1] text-base md:text-[11.5px]"
+          />
+        </div>
+
+        <button
+          type="button"
+          @click="submitMachineOrder"
+          class="w-full min-h-[42px] rounded-xl bg-[#1F4E3D] text-white text-[12.5px] font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+        >
+          <Tractor :size="15" aria-hidden="true" />
+          <span>确认派发预约工单（实时同步农机站）</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================== 弹层：我的心愿收藏夹 ==================== -->
+    <div v-if="showFavSheet" class="absolute inset-0 z-30 bg-black/48 flex items-end" @click.self="showFavSheet = false">
+      <div class="w-full max-h-[80%] bg-[#F7F4EE] rounded-t-[1.75rem] overflow-y-auto p-4 space-y-3 shadow-2xl app-scroll">
+        <div class="flex items-center justify-between">
+          <h3 class="font-editorial text-[16px] font-bold text-[#16261F]">我的黑土好物收藏夹 ({{ favProducts.length }})</h3>
+          <button type="button" @click="showFavSheet = false" class="w-8 h-8 rounded-full bg-white flex items-center justify-center cursor-pointer" aria-label="关闭收藏夹">
+            <X :size="15" aria-hidden="true" />
+          </button>
+        </div>
+        <div v-if="favProducts.length" class="space-y-2">
+          <div
+            v-for="fp in favProducts"
+            :key="fp.id"
+            class="bg-white rounded-xl p-2.5 border border-[#1C1B18]/8 flex items-center gap-2.5"
+          >
+            <img :src="fp.image" :alt="fp.name" class="w-13 h-13 rounded-lg object-cover shrink-0 cursor-pointer" @click="showFavSheet = false; selectedProduct = fp" />
+            <div class="flex-1 min-w-0">
+              <div class="text-[12px] font-bold text-[#1C1B18] truncate">{{ fp.name }}</div>
+              <div class="text-[10px] text-[#6E6960]">{{ fp.origin }} · 助农 {{ fp.farmerSharePct }}%</div>
+              <div class="font-mono text-[13px] font-bold text-[#B83828] mt-0.5">¥{{ fp.price }}</div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button
+                type="button"
+                @click="quickAdd(fp)"
+                class="min-h-[36px] px-2.5 rounded-lg bg-[#1F4E3D] text-white text-[10.5px] font-bold cursor-pointer"
+              >
+                加购
+              </button>
+              <button
+                type="button"
+                @click="store.toggleFavorite(fp.id)"
+                class="w-8 h-8 rounded-lg bg-[#FBECE9] text-[#B83828] flex items-center justify-center cursor-pointer"
+                :aria-label="`移除收藏${fp.name}`"
+              >
+                <X :size="13" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div v-else class="py-8 text-center text-xs text-[#6E6960]">暂未收藏特产，可在严选集市点击心形图标收藏</div>
+      </div>
+    </div>
 
     <!-- ==================== 弹层：商品详情（含“一块地收益透明条”+ 直达溯源） ==================== -->
     <div v-if="selectedProduct" class="absolute inset-0 z-30 bg-black/48 flex items-end" @click.self="selectedProduct = null">
@@ -1328,13 +1811,13 @@ const statusBadgeClass = (status) => {
             <button
               type="button"
               @click="store.toggleFavorite(selectedProduct.id)"
-              class="w-7.5 h-7.5 rounded-full bg-white flex items-center justify-center cursor-pointer"
+              class="w-8 h-8 rounded-full bg-white flex items-center justify-center cursor-pointer"
               aria-label="收藏"
             >
-              <Heart :size="14" :class="isFav(selectedProduct.id) ? 'fill-[#B83828] text-[#B83828]' : 'text-[#5A564E]'" />
+              <Heart :size="14" :class="isFav(selectedProduct.id) ? 'fill-[#B83828] text-[#B83828]' : 'text-[#5A564E]'" aria-hidden="true" />
             </button>
-            <button type="button" @click="selectedProduct = null" class="w-7.5 h-7.5 rounded-full bg-white flex items-center justify-center cursor-pointer" aria-label="关闭">
-              <X :size="15" />
+            <button type="button" @click="selectedProduct = null" class="w-8 h-8 rounded-full bg-white flex items-center justify-center cursor-pointer" aria-label="关闭">
+              <X :size="15" aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -1359,9 +1842,9 @@ const statusBadgeClass = (status) => {
             <button
               type="button"
               @click="const code = selectedProduct.traceCode; selectedProduct = null; openTrace(code)"
-              class="text-[10.5px] text-[#C88A32] font-bold flex items-center gap-0.5 cursor-pointer"
+              class="min-h-[32px] px-1.5 text-[10.5px] text-[#9A6518] font-bold flex items-center gap-0.5 cursor-pointer"
             >
-              <QrCode :size="11" />
+              <QrCode :size="11" aria-hidden="true" />
               <span>核验溯源码</span>
             </button>
           </div>
@@ -1383,14 +1866,14 @@ const statusBadgeClass = (status) => {
           <button
             type="button"
             @click="quickAdd(selectedProduct); selectedProduct = null"
-            class="h-10.5 rounded-xl bg-white border border-[#1F4E3D] text-[#1F4E3D] text-[12px] font-bold cursor-pointer"
+            class="min-h-[42px] rounded-xl bg-white border border-[#1F4E3D] text-[#1F4E3D] text-[12px] font-bold cursor-pointer"
           >
             加入购物袋
           </button>
           <button
             type="button"
             @click="store.addToCart(selectedProduct, 1); selectedProduct = null; showCartSheet = true"
-            class="h-10.5 rounded-xl bg-[#1F4E3D] text-white text-[12px] font-bold cursor-pointer"
+            class="min-h-[42px] rounded-xl bg-[#1F4E3D] text-white text-[12px] font-bold cursor-pointer"
           >
             立即助农购买
           </button>
@@ -1403,8 +1886,8 @@ const statusBadgeClass = (status) => {
       <div class="w-full max-h-[86%] bg-[#F7F4EE] rounded-t-[1.75rem] overflow-y-auto p-4 space-y-3 shadow-2xl app-scroll">
         <div class="flex items-center justify-between">
           <h3 class="font-editorial text-[16px] font-bold text-[#16261F]">助农购物袋 ({{ store.cartCount }})</h3>
-          <button type="button" @click="showCartSheet = false" class="w-7 h-7 rounded-full bg-white flex items-center justify-center cursor-pointer" aria-label="关闭">
-            <X :size="15" />
+          <button type="button" @click="showCartSheet = false" class="w-8 h-8 rounded-full bg-white flex items-center justify-center cursor-pointer" aria-label="关闭">
+            <X :size="15" aria-hidden="true" />
           </button>
         </div>
         <div v-if="store.cart.length" class="space-y-2.5">
@@ -1415,17 +1898,20 @@ const statusBadgeClass = (status) => {
               <div class="font-mono text-[12px] text-[#B83828] font-bold">¥{{ c.price }}</div>
             </div>
             <div class="flex items-center gap-1.5">
-              <button type="button" @click="store.updateCartQty(c.productId, -1)" class="w-6 h-6 rounded-full bg-[#F3F0E9] flex items-center justify-center cursor-pointer"><Minus :size="12" /></button>
-              <span class="font-mono text-[12px] font-bold w-4 text-center">{{ c.qty }}</span>
-              <button type="button" @click="store.updateCartQty(c.productId, 1)" class="w-6 h-6 rounded-full bg-[#1F4E3D] text-white flex items-center justify-center cursor-pointer"><Plus :size="12" /></button>
+              <button type="button" @click="store.updateCartQty(c.productId, -1)" class="w-7 h-7 rounded-full bg-[#F3F0E9] flex items-center justify-center cursor-pointer" aria-label="减少数量"><Minus :size="12" aria-hidden="true" /></button>
+              <span class="font-mono text-[12px] font-bold w-5 text-center">{{ c.qty }}</span>
+              <button type="button" @click="store.updateCartQty(c.productId, 1)" class="w-7 h-7 rounded-full bg-[#1F4E3D] text-white flex items-center justify-center cursor-pointer" aria-label="增加数量"><Plus :size="12" aria-hidden="true" /></button>
             </div>
           </div>
 
           <!-- 助农优惠券选择 -->
           <div class="bg-white rounded-xl p-3 border border-[#1C1B18]/6 space-y-2">
-            <div class="text-[11px] font-bold text-[#1C1B18] flex items-center gap-1">
-              <Ticket :size="13" class="text-[#C88A32]" />
-              <span>助农补贴券（不扣减农户分成）</span>
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="font-bold text-[#1C1B18] flex items-center gap-1">
+                <Ticket :size="13" class="text-[#C88A32]" aria-hidden="true" />
+                <span>助农补贴券（不扣减农户分成）</span>
+              </span>
+              <span class="font-mono text-[10px] text-[#1F4E3D] font-bold">农户稳拿 ¥{{ store.cartFarmerShareSummary.farmerGain }}</span>
             </div>
             <div class="grid grid-cols-2 gap-1.5">
               <button
@@ -1437,24 +1923,29 @@ const statusBadgeClass = (status) => {
                 class="p-2 rounded-xl border text-left transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 :class="selectedCouponId === cpn.id ? 'border-[#C88A32] bg-[#FDF4E6]' : 'border-[#1C1B18]/10 bg-[#F8F6F1]'"
               >
-                <div class="font-mono text-[13px] font-bold text-[#B83828]">-¥{{ cpn.amount }}</div>
-                <div class="text-[9.5px] text-[#5A564E]">满 {{ cpn.minSpend }} 可用</div>
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-[13px] font-bold text-[#B83828]">-¥{{ cpn.amount }}</span>
+                  <span class="text-[8.5px] px-1 py-0.2 rounded bg-white text-[#8A5810] font-bold">{{ cpn.tag }}</span>
+                </div>
+                <div class="text-[9.5px] text-[#5A564E] truncate">满 {{ cpn.minSpend }} 可用 · {{ cpn.title }}</div>
               </button>
             </div>
           </div>
 
           <div class="bg-white rounded-xl p-3 border border-[#1C1B18]/6 space-y-2">
             <div class="text-[11px] font-bold text-[#1C1B18]">收货信息（演示）</div>
-            <input v-model="checkoutForm.customer" type="text" placeholder="收件人" class="w-full h-8 px-2.5 rounded-lg bg-[#F8F6F1] text-[11.5px]" />
-            <input v-model="checkoutForm.address" type="text" placeholder="收货地址" class="w-full h-8 px-2.5 rounded-lg bg-[#F8F6F1] text-[11.5px]" />
+            <label for="chk-name" class="sr-only">收件人姓名</label>
+            <input id="chk-name" v-model="checkoutForm.customer" type="text" placeholder="收件人" class="w-full h-9 px-2.5 rounded-lg bg-[#F8F6F1] text-base md:text-[11.5px]" />
+            <label for="chk-addr" class="sr-only">收货地址</label>
+            <input id="chk-addr" v-model="checkoutForm.address" type="text" placeholder="收货地址" class="w-full h-9 px-2.5 rounded-lg bg-[#F8F6F1] text-base md:text-[11.5px]" />
           </div>
 
           <button
             type="button"
             @click="submitCartOrder"
-            class="w-full h-11 rounded-xl bg-[#1F4E3D] text-white text-[12.5px] font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+            class="w-full min-h-[44px] rounded-xl bg-[#1F4E3D] text-white text-[12.5px] font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm"
           >
-            <CheckCircle2 :size="15" />
+            <CheckCircle2 :size="15" aria-hidden="true" />
             <span>提交订单 · 实付 ¥{{ finalPayAmount }}</span>
           </button>
         </div>
@@ -1467,34 +1958,36 @@ const statusBadgeClass = (status) => {
       <div class="w-full rounded-[1.6rem] bg-[#16261F] p-1.5 shadow-2xl border border-[#F0C275]/40">
         <div class="rounded-[1.35rem] bg-gradient-to-b from-[#1B3329] via-[#152720] to-[#101E18] text-[#F7F4EE] p-5 text-center space-y-3.5 relative overflow-hidden">
           <div class="w-12 h-12 rounded-2xl bg-[#4ADE80]/15 border border-[#4ADE80]/35 text-[#4ADE80] mx-auto flex items-center justify-center">
-            <CheckCircle2 :size="26" />
+            <CheckCircle2 :size="26" aria-hidden="true" />
           </div>
           <div>
             <div class="font-mono text-[9.5px] tracking-[0.22em] text-[#F0C275]">RURAL REVITALIZATION RECEIPT</div>
             <h3 class="font-editorial text-[19px] font-bold text-[#F5D393] mt-0.5">助农直采下单成功</h3>
-            <p class="font-mono text-[10.5px] text-white/65 mt-0.5">订单号 {{ orderSuccessReceipt.orderId }} · 已实时同步后台</p>
+            <p class="font-mono text-[10.5px] text-white/70 mt-0.5">订单号 {{ orderSuccessReceipt.orderId }} · 已同步合作社后台</p>
           </div>
           <div class="rounded-2xl bg-white/8 border border-[#F0C275]/25 p-3.5 space-y-1.5 text-left">
             <div class="text-[11px] text-[#86EFAC] font-bold flex items-center gap-1">
-              <Sparkles :size="12" />
-              <span>您的每一次消费，都在为黑土乡村增收</span>
+              <Sparkles :size="12" aria-hidden="true" />
+              <span>透明助农结算账单（平台补贴不扣农户）</span>
             </div>
             <p class="text-[11.5px] text-white/90 leading-relaxed">
-              本单实付 <strong class="font-mono text-[#F5D393]">¥{{ orderSuccessReceipt.total }}</strong>，其中约 <strong class="font-mono text-[#86EFAC]">¥{{ orderSuccessReceipt.farmerGain }}（{{ orderSuccessReceipt.sharePct }}%）</strong> 将直接结算至 <strong>{{ orderSuccessReceipt.coopName }}</strong> 农户账户，同时为您累计 <strong class="font-mono text-[#F5D393]">+{{ orderSuccessReceipt.points }}</strong> 公益积分。
+              商品原值 <strong class="font-mono">¥{{ orderSuccessReceipt.rawTotal }}</strong>
+              <span v-if="orderSuccessReceipt.discount > 0">（助农券已为您补贴 <strong class="font-mono text-[#F5D393]">-¥{{ orderSuccessReceipt.discount }}</strong>，实付 <strong class="font-mono text-[#F5D393]">¥{{ orderSuccessReceipt.total }}</strong>）</span>，
+              按原值加权核算的 <strong class="font-mono text-[#86EFAC]">¥{{ orderSuccessReceipt.farmerGain }}（{{ orderSuccessReceipt.sharePct }}%）</strong> 全额结算至 <strong>{{ orderSuccessReceipt.coopName }}</strong>，并为您累计 <strong class="font-mono text-[#F5D393]">+{{ orderSuccessReceipt.points }}</strong> 公益积分。
             </p>
           </div>
           <div class="grid grid-cols-2 gap-2 pt-1">
             <button
               type="button"
               @click="const code = orderSuccessReceipt.traceCode; orderSuccessReceipt = null; openTrace(code)"
-              class="h-9.5 rounded-xl bg-white/12 border border-white/18 text-white text-[11px] font-bold cursor-pointer"
+              class="min-h-[38px] rounded-xl bg-white/12 border border-white/18 text-white text-[11px] font-bold cursor-pointer"
             >
               查验一袋一码
             </button>
             <button
               type="button"
               @click="orderSuccessReceipt = null; setTab('profile')"
-              class="h-9.5 rounded-xl bg-[#C88A32] text-[#16261F] text-[11px] font-bold cursor-pointer"
+              class="min-h-[38px] rounded-xl bg-[#C88A32] text-[#16261F] text-[11px] font-bold cursor-pointer"
             >
               查看我的订单
             </button>
@@ -1511,15 +2004,15 @@ const statusBadgeClass = (status) => {
             <h3 class="font-editorial text-[16px] font-bold text-[#16261F]">助农冷链物流追踪</h3>
             <div class="font-mono text-[10px] text-[#6E6960]">{{ selectedOrder.id }} · 溯源码 {{ selectedOrder.traceCode }}</div>
           </div>
-          <button type="button" @click="selectedOrder = null" class="w-7 h-7 rounded-full bg-white flex items-center justify-center cursor-pointer" aria-label="关闭">
-            <X :size="15" />
+          <button type="button" @click="selectedOrder = null" class="w-8 h-8 rounded-full bg-white flex items-center justify-center cursor-pointer" aria-label="关闭">
+            <X :size="15" aria-hidden="true" />
           </button>
         </div>
 
         <div class="bg-white rounded-2xl p-3.5 border border-[#1C1B18]/8 space-y-3">
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-full bg-[#EAF3EE] text-[#1F4E3D] flex items-center justify-center shrink-0">
-              <CheckCircle2 :size="15" />
+              <CheckCircle2 :size="15" aria-hidden="true" />
             </div>
             <div>
               <div class="text-[12px] font-bold text-[#1C1B18]">合作社已接单 · 产地分拣贴溯源码</div>
@@ -1528,16 +2021,16 @@ const statusBadgeClass = (status) => {
           </div>
           <div class="flex items-center gap-2.5" :class="selectedOrder.status === '待发货' ? 'opacity-40' : ''">
             <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" :class="selectedOrder.status !== '待发货' ? 'bg-[#FDF4E6] text-[#C88A32]' : 'bg-[#ECE8DF] text-[#8E887E]'">
-              <Truck :size="15" />
+              <Truck :size="15" aria-hidden="true" />
             </div>
             <div>
               <div class="text-[12px] font-bold text-[#1C1B18]">顺丰助农冷链专车已揽收发运</div>
-              <div class="text-[10px] text-[#6E6960]">{{ selectedOrder.status !== '待发货' ? '后台已操作确认发货，正发往收货地址' : '等待后台管理中枢操作发货' }}</div>
+              <div class="text-[10px] text-[#6E6960]">{{ selectedOrder.status !== '待发货' ? '后台已操作确认发货，正发往收货地址' : '等待合作社运营后台操作发货' }}</div>
             </div>
           </div>
           <div class="flex items-center gap-2.5" :class="selectedOrder.status !== '已完成' ? 'opacity-40' : ''">
             <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" :class="selectedOrder.status === '已完成' ? 'bg-[#1F4E3D] text-white' : 'bg-[#ECE8DF] text-[#8E887E]'">
-              <PackageCheck :size="15" />
+              <PackageCheck :size="15" aria-hidden="true" />
             </div>
             <div>
               <div class="text-[12px] font-bold text-[#1C1B18]">买家已签收 · 收益已结算至合作社</div>
@@ -1549,9 +2042,9 @@ const statusBadgeClass = (status) => {
         <button
           type="button"
           @click="const code = selectedOrder.traceCode; selectedOrder = null; openTrace(code)"
-          class="w-full h-10 rounded-xl bg-[#16261F] text-[#F0C275] text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer"
+          class="w-full min-h-[40px] rounded-xl bg-[#16261F] text-[#F0C275] text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer"
         >
-          <QrCode :size="14" />
+          <QrCode :size="14" aria-hidden="true" />
           <span>查看该订单商品一袋一码溯源档案</span>
         </button>
       </div>
@@ -1562,8 +2055,8 @@ const statusBadgeClass = (status) => {
       <div class="w-full bg-[#F7F4EE] rounded-t-[1.75rem] p-4 space-y-3 shadow-2xl">
         <div class="flex items-center justify-between">
           <h3 class="font-editorial text-[16px] font-bold text-[#16261F]">确认云认养 · {{ selectedPlot.code }}</h3>
-          <button type="button" @click="selectedPlot = null" class="w-7 h-7 rounded-full bg-white flex items-center justify-center cursor-pointer" aria-label="关闭">
-            <X :size="15" />
+          <button type="button" @click="selectedPlot = null" class="w-8 h-8 rounded-full bg-white flex items-center justify-center cursor-pointer" aria-label="关闭">
+            <X :size="15" aria-hidden="true" />
           </button>
         </div>
         <div class="bg-white rounded-xl p-3 border border-[#1C1B18]/8 space-y-1">
@@ -1574,15 +2067,15 @@ const statusBadgeClass = (status) => {
         <div class="flex items-center justify-between bg-white rounded-xl p-3 border border-[#1C1B18]/8">
           <span class="text-[12px] font-semibold">认养份数</span>
           <div class="flex items-center gap-2.5">
-            <button type="button" @click="adoptShares = Math.max(1, adoptShares - 1)" class="w-7 h-7 rounded-full bg-[#F3F0E9] flex items-center justify-center cursor-pointer"><Minus :size="13" /></button>
+            <button type="button" @click="adoptShares = Math.max(1, adoptShares - 1)" class="w-8 h-8 rounded-full bg-[#F3F0E9] flex items-center justify-center cursor-pointer" aria-label="减少份数"><Minus :size="13" aria-hidden="true" /></button>
             <span class="font-mono text-[14px] font-bold">{{ adoptShares }}</span>
-            <button type="button" @click="adoptShares = Math.min(selectedPlot.slotsLeft, adoptShares + 1)" class="w-7 h-7 rounded-full bg-[#1F4E3D] text-white flex items-center justify-center cursor-pointer"><Plus :size="13" /></button>
+            <button type="button" @click="adoptShares = Math.min(selectedPlot.slotsLeft, adoptShares + 1)" class="w-8 h-8 rounded-full bg-[#1F4E3D] text-white flex items-center justify-center cursor-pointer" aria-label="增加份数"><Plus :size="13" aria-hidden="true" /></button>
           </div>
         </div>
         <button
           type="button"
           @click="confirmAdopt"
-          class="w-full h-10.5 rounded-xl bg-[#C88A32] text-[#16261F] text-[12.5px] font-bold cursor-pointer"
+          class="w-full min-h-[42px] rounded-xl bg-[#C88A32] text-[#16261F] text-[12.5px] font-bold cursor-pointer"
         >
           确认认养 · ¥{{ selectedPlot.priceYear * adoptShares }} / 年
         </button>
@@ -1594,8 +2087,8 @@ const statusBadgeClass = (status) => {
       <div class="w-full bg-[#F7F4EE] rounded-t-[1.75rem] p-4 space-y-3 shadow-2xl">
         <div class="flex items-center justify-between">
           <span class="text-[11px] font-bold text-[#1F4E3D] bg-[#EAF3EE] px-2 py-0.5 rounded-full">{{ selectedProject.category }}</span>
-          <button type="button" @click="selectedProject = null" class="w-7 h-7 rounded-full bg-white flex items-center justify-center cursor-pointer" aria-label="关闭">
-            <X :size="15" />
+          <button type="button" @click="selectedProject = null" class="w-8 h-8 rounded-full bg-white flex items-center justify-center cursor-pointer" aria-label="关闭">
+            <X :size="15" aria-hidden="true" />
           </button>
         </div>
         <img :src="selectedProject.cover" :alt="selectedProject.name" class="w-full h-36 rounded-2xl object-cover" />
@@ -1611,14 +2104,14 @@ const statusBadgeClass = (status) => {
           </div>
           <div>
             <div class="text-[10px] text-[#6E6960]">专项资金</div>
-            <div class="font-mono text-[14px] font-bold text-[#C88A32]">{{ selectedProject.fundWan }} 万</div>
+            <div class="font-mono text-[14px] font-bold text-[#9A6518]">{{ selectedProject.fundWan }} 万</div>
           </div>
         </div>
         <p class="text-[11.5px] text-[#5A564E] leading-relaxed">{{ selectedProject.summary }}</p>
       </div>
     </div>
 
-    <!-- ==================== App 全屏沉浸子页面（带丝滑过渡） ==================== -->
+    <!-- ==================== App 全屏沉浸子页面 ==================== -->
     <Transition name="slide-up">
       <AppLiveCamOverlay
         v-if="activeLiveCamId"
@@ -1686,9 +2179,9 @@ const statusBadgeClass = (status) => {
         <button
           type="button"
           @click="active3D = null"
-          class="h-8 px-2.5 rounded-full bg-white border border-[#1C1B18]/10 text-[11.5px] font-bold text-[#1C1B18] flex items-center gap-0.5 cursor-pointer shrink-0"
+          class="min-h-[36px] px-2.5 rounded-full bg-white border border-[#1C1B18]/10 text-[11.5px] font-bold text-[#1C1B18] flex items-center gap-0.5 cursor-pointer shrink-0"
         >
-          <ChevronLeft :size="14" />
+          <ChevronLeft :size="14" aria-hidden="true" />
           <span>返回</span>
         </button>
 
@@ -1698,7 +2191,7 @@ const statusBadgeClass = (status) => {
             :key="key"
             type="button"
             @click="active3D = key"
-            class="px-2.5 py-1 rounded-full text-[10.5px] font-bold transition-colors cursor-pointer"
+            class="min-h-[32px] px-2.5 py-1 rounded-full text-[10.5px] font-bold transition-colors cursor-pointer"
             :class="active3D === key ? 'bg-[#16261F] text-[#F0C275]' : 'text-[#5A564E]'"
           >
             {{ meta.label }}
@@ -1708,11 +2201,10 @@ const statusBadgeClass = (status) => {
         <button
           type="button"
           @click="router.push(hall3DMeta[active3D].route)"
-          class="w-8 h-8 rounded-full bg-white border border-[#1C1B18]/10 text-[#1F4E3D] flex items-center justify-center cursor-pointer shrink-0"
-          title="切换桌面大屏展厅"
+          class="w-9 h-9 rounded-full bg-white border border-[#1C1B18]/10 text-[#1F4E3D] flex items-center justify-center cursor-pointer shrink-0"
           aria-label="切换桌面大屏展厅"
         >
-          <Maximize2 :size="13" />
+          <Maximize2 :size="13" aria-hidden="true" />
         </button>
       </div>
 
@@ -1725,9 +2217,11 @@ const statusBadgeClass = (status) => {
     <Transition name="toast">
       <div
         v-if="toastMsg"
+        role="status"
+        aria-live="polite"
         class="absolute top-14 left-4 right-4 z-50 px-3.5 py-2.5 rounded-2xl bg-[#16261F]/95 text-[#F7F4EE] text-[11.5px] font-medium shadow-xl flex items-center gap-2 backdrop-blur-md border border-[#F0C275]/25"
       >
-        <CheckCircle2 :size="14" class="text-[#4ADE80] shrink-0" />
+        <CheckCircle2 :size="14" class="text-[#4ADE80] shrink-0" aria-hidden="true" />
         <span class="leading-snug">{{ toastMsg }}</span>
       </div>
     </Transition>
@@ -1738,6 +2232,13 @@ const statusBadgeClass = (status) => {
 .app-scroll::-webkit-scrollbar { width: 0; height: 0; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
+
+/* 手机真机独立视口 (<768px) 保证所有可点击控件满足 >=36px 触控最小目标尺寸 */
+.rural-app--standalone :deep(button),
+.rural-app--standalone :deep(a),
+.rural-app--standalone :deep(select) {
+  min-block-size: 36px;
+}
 
 .toast-enter-active, .toast-leave-active { transition: all 0.25s ease; }
 .toast-enter-from, .toast-leave-to { opacity: 0; transform: translateY(-10px); }

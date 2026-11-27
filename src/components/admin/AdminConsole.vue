@@ -1,12 +1,12 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 import {
   LayoutDashboard, ShoppingBag, ClipboardList, Sprout,
   Tractor, Megaphone, Settings, LogOut, Plus, Pencil,
   Trash2, X, RotateCcw, Smartphone, Columns2,
   Send, Search, Sparkles, CheckCircle2, Truck,
-  Compass, Radio, TrendingUp, Users, BellRing, Activity, Zap, Radar, Download, Command
+  Compass, Radio, TrendingUp, Users, BellRing, Activity, Zap, Radar, Download, ShieldCheck
 } from 'lucide-vue-next'
 import { useRuralPlatformStore } from '../../stores/ruralPlatformStore'
 import RuralAdminCharts from './RuralAdminCharts.vue'
@@ -17,8 +17,53 @@ const props = defineProps({
   embedded: { type: Boolean, default: false }
 })
 
+const route = useRoute()
 const store = useRuralPlatformStore()
 const isAuthed = computed(() => props.embedded || store.authed)
+
+/* ---------------- 四类基层运营角色精准视角配置 ---------------- */
+const roleConfigs = [
+  {
+    id: 'all',
+    short: '平台总控',
+    person: '综合管理员',
+    title: '吉林黑土乡村振兴全域统筹中枢',
+    desc: '统揽地标农产集市、助农冷链订单、云认养地块、北斗农机雷达与乡村治理全模块',
+    tabs: ['overview', 'telemetry', 'products', 'orders', 'adoptions', 'projects', 'village', 'settings'],
+    defaultTab: 'overview'
+  },
+  {
+    id: 'coop',
+    short: '合作社运营',
+    person: '周理事长 · 产销社',
+    title: '合作社地标产销与云认养履约工作台',
+    desc: '聚焦 14 款地标特产定价库存、助农订单批量冷链发货、云认养证书审签与物候播报',
+    tabs: ['overview', 'orders', 'products', 'adoptions'],
+    defaultTab: 'orders'
+  },
+  {
+    id: 'agri',
+    short: '农机农技站',
+    person: '韩站长 · 农机总站',
+    title: '北斗 RTK 智能农机调度与农技响应站',
+    desc: '聚焦 260HP 无人拖拉机雷达监控、新农人托管预约一键派车、慢直播机位与农技答疑',
+    tabs: ['telemetry', 'village', 'projects'],
+    defaultTab: 'telemetry'
+  },
+  {
+    id: 'village',
+    short: '驻村村委',
+    person: '孟书记 · 驻村工作队',
+    title: '数字乡村村务督办与惠农工程工作台',
+    desc: '聚焦节气寒潮预警与补贴通知下发、重点振兴项目资金进度管控与社员诉求闭环',
+    tabs: ['overview', 'village', 'projects', 'settings'],
+    defaultTab: 'village'
+  }
+]
+
+const currentRoleConfig = computed(() =>
+  roleConfigs.find((r) => r.id === store.adminRole) || roleConfigs[0]
+)
 
 /* ---------------- 登录门禁 ---------------- */
 const password = ref('')
@@ -28,28 +73,55 @@ const doLogin = () => {
     loginError.value = ''
     password.value = ''
   } else {
-    loginError.value = '密码不正确，可点击下方「一键免密体验」'
+    loginError.value = '密码不正确，可点击下方岗位卡片一键免密进入'
   }
 }
-const fillAndLogin = () => {
+const fillAndLogin = (role = 'all') => {
+  store.setAdminRole(role)
   store.quickDemoLogin()
   loginError.value = ''
+  const cfg = roleConfigs.find((r) => r.id === role)
+  if (cfg) activeTab.value = cfg.defaultTab
 }
 
-/* ---------------- 侧边栏导航 ---------------- */
+/* ---------------- 侧边栏导航（按当前岗位视角精准过滤） ---------------- */
 const activeTab = ref('overview')
-const navTabs = computed(() => [
+const allNavTabs = computed(() => [
   { id: 'overview', label: '数智总览', icon: LayoutDashboard, badge: 0 },
   { id: 'telemetry', label: '北斗孪生调度', icon: Radar, badge: 0 },
   { id: 'products', label: '农产集市', icon: ShoppingBag, badge: 0 },
   { id: 'orders', label: '助农订单', icon: ClipboardList, badge: store.pendingOrdersCount },
   { id: 'adoptions', label: '云认养地块', icon: Sprout, badge: store.pendingAdoptionsCount },
   { id: 'projects', label: '项目·农机·直播', icon: Tractor, badge: 0 },
-  { id: 'village', label: '村务与反馈', icon: Megaphone, badge: store.pendingFeedbacksCount },
+  { id: 'village', label: '村务与派单', icon: Megaphone, badge: store.pendingFeedbacksCount },
   { id: 'settings', label: 'App 与系统设置', icon: Settings, badge: 0 }
 ])
 
-const currentTabObj = computed(() => navTabs.value.find((t) => t.id === activeTab.value) || navTabs.value[0])
+const navTabs = computed(() => {
+  const allowed = currentRoleConfig.value.tabs
+  return allNavTabs.value.filter((t) => allowed.includes(t.id))
+})
+
+const currentTabObj = computed(() => allNavTabs.value.find((t) => t.id === activeTab.value) || allNavTabs.value[0])
+
+function applyRole(roleId, targetTab = '') {
+  store.setAdminRole(roleId)
+  const cfg = roleConfigs.find((r) => r.id === roleId) || roleConfigs[0]
+  if (targetTab && cfg.tabs.includes(targetTab)) {
+    activeTab.value = targetTab
+  } else if (!cfg.tabs.includes(activeTab.value)) {
+    activeTab.value = cfg.defaultTab
+  }
+}
+
+function setTab(tabId) {
+  if (!currentRoleConfig.value.tabs.includes(tabId)) {
+    store.setAdminRole('all')
+  }
+  activeTab.value = tabId
+}
+
+defineExpose({ setTab, applyRole })
 
 /* ---------------- 后台 Toast ---------------- */
 const toast = ref('')
@@ -177,7 +249,15 @@ function onGlobalKeydown(e) {
   }
 }
 
-onMounted(() => window.addEventListener('keydown', onGlobalKeydown))
+onMounted(() => {
+  window.addEventListener('keydown', onGlobalKeydown)
+  const qTab = typeof route?.query?.tab === 'string' ? route.query.tab : ''
+  if (qTab && allNavTabs.value.some((t) => t.id === qTab)) {
+    activeTab.value = qTab
+  } else if (!currentRoleConfig.value.tabs.includes(activeTab.value)) {
+    activeTab.value = currentRoleConfig.value.defaultTab
+  }
+})
 onUnmounted(() => window.removeEventListener('keydown', onGlobalKeydown))
 
 /* ---------------- 区域示范带进度数据 ---------------- */
@@ -348,6 +428,13 @@ function sendReply(fb) {
   showToast(`已回复「${fb.user}」，App 端即时可见`)
 }
 
+function handleQuickDispatchMachine(fb) {
+  const m = store.dispatchMachineryForFeedback(fb.id)
+  if (m) {
+    showToast(`已指派 ${m.code} 前往 ${fb.village} 作业，农户端与雷达已同步`)
+  }
+}
+
 /* ---------------- 项目进度微调 ---------------- */
 function bumpProjectProgress(prj, delta) {
   const next = Math.max(0, Math.min(100, prj.progress + delta))
@@ -393,48 +480,60 @@ watch(() => props.embedded, () => {
         </div>
       </div>
 
-      <p class="text-[12.5px] text-[#5A564E] leading-relaxed mb-6">
-        面向乡村振兴运营中枢的综合管理后台，与移动端 App 实时双向联动，统筹地理标志农产品、助农订单、云认养地块、慢直播机位与村务公告。
+      <p class="text-[12.5px] text-[#5A564E] leading-relaxed mb-5">
+        按基层真实职责划分为<strong>合作社运营、农机农技站、驻村村委与平台总控</strong>四类岗位工作台，与移动端双身份 App 毫秒级双向联动。
       </p>
 
-      <form @submit.prevent="doLogin" class="space-y-4">
+      <!-- 按岗位角色一键免密直入 -->
+      <div class="mb-4 space-y-2">
+        <div class="text-[11px] font-bold text-[#16261F]">选择管理岗位一键免密体验</div>
+        <div class="grid grid-cols-2 gap-2">
+          <button
+            v-for="r in roleConfigs"
+            :key="r.id"
+            type="button"
+            @click="fillAndLogin(r.id)"
+            class="min-h-[42px] px-3 py-2 rounded-xl border text-left transition-all cursor-pointer"
+            :class="r.id === 'all'
+              ? 'bg-[#16261F] text-[#F5D393] border-[#16261F]'
+              : 'bg-[#FAF8F3] hover:bg-[#FDF4E6] text-[#1C1B18] border-[#C88A32]/28'"
+          >
+            <div class="text-[11.5px] font-bold">{{ r.short }}</div>
+            <div class="text-[9.5px] opacity-80 truncate">{{ r.person }}</div>
+          </button>
+        </div>
+      </div>
+
+      <form @submit.prevent="doLogin" class="space-y-3 pt-3 border-t border-[#1C1B18]/8">
         <div>
-          <label for="admin-pwd" class="block text-[11.5px] font-semibold text-[#1C1B18] mb-1.5">管理员通行密码</label>
+          <label for="admin-pwd" class="block text-[11.5px] font-semibold text-[#1C1B18] mb-1.5">或使用管理员通行密码登录</label>
           <input
             id="admin-pwd"
             v-model="password"
             type="password"
+            autocomplete="current-password"
             placeholder="请输入演示密码 admin123456"
-            class="w-full h-11 px-4 rounded-xl bg-[#F8F6F1] border border-[#1C1B18]/12 text-sm text-[#1C1B18] focus:outline-none focus:border-[#1F4E3D]"
+            class="w-full h-11 px-4 rounded-xl bg-[#F8F6F1] border border-[#1C1B18]/12 text-base sm:text-sm text-[#1C1B18] focus:outline-none focus:border-[#1F4E3D]"
           />
-          <p v-if="loginError" class="text-[11.5px] text-[#B83828] mt-1.5">{{ loginError }}</p>
+          <p v-if="loginError" role="alert" class="text-[11.5px] text-[#B83828] mt-1.5">{{ loginError }}</p>
         </div>
 
         <button
           type="submit"
-          class="w-full h-11 rounded-xl bg-[#16261F] text-[#F7F4EE] text-sm font-bold hover:bg-[#1F4E3D] transition-colors cursor-pointer"
+          class="w-full min-h-[44px] rounded-xl bg-[#1F4E3D] text-[#F7F4EE] text-sm font-bold hover:bg-[#16382B] transition-colors cursor-pointer"
         >
-          进入管理中枢
-        </button>
-
-        <button
-          type="button"
-          @click="fillAndLogin"
-          class="w-full h-10.5 rounded-xl bg-[#FDF4E6] border border-[#C88A32]/35 text-[#8A5810] text-xs font-bold hover:bg-[#C88A32]/20 transition-colors cursor-pointer flex items-center justify-center gap-1.5"
-        >
-          <Sparkles :size="14" />
-          <span>一键免密体验（演示密码：admin123456）</span>
+          验证密码进入中枢
         </button>
       </form>
 
-      <div class="mt-6 pt-5 border-t border-[#1C1B18]/8 flex items-center justify-between text-xs text-[#6E6960]">
-        <RouterLink to="/" class="hover:text-[#1F4E3D] font-medium flex items-center gap-1">
-          <Smartphone :size="13" />
+      <div class="mt-5 pt-4 border-t border-[#1C1B18]/8 flex items-center justify-between text-xs text-[#5E5950]">
+        <RouterLink to="/" class="min-h-[36px] inline-flex items-center gap-1 hover:text-[#1F4E3D] font-semibold">
+          <Smartphone :size="13" aria-hidden="true" />
           <span>返回移动端 App</span>
         </RouterLink>
-        <RouterLink to="/split" class="hover:text-[#1F4E3D] font-medium flex items-center gap-1">
-          <Columns2 :size="13" />
-          <span>双端同屏演示</span>
+        <RouterLink to="/split" class="min-h-[36px] inline-flex items-center gap-1 hover:text-[#1F4E3D] font-semibold">
+          <Columns2 :size="13" aria-hidden="true" />
+          <span>双端同屏实训</span>
         </RouterLink>
       </div>
     </div>
@@ -535,45 +634,54 @@ watch(() => props.embedded, () => {
       class="flex-1 min-w-0 flex flex-col h-full overflow-hidden"
       style="background-image: linear-gradient(180deg, rgba(250,247,240,0.62) 0%, rgba(246,242,233,0.42) 55%, rgba(244,239,228,0.28) 100%), url('/art-custom/showcase-bg-pattern.jpg'); background-size: cover; background-position: bottom center;"
     >
-      <!-- 顶部栏（通透宣纸毛玻璃） -->
-      <header class="shrink-0 z-20 h-15 px-6 bg-white/76 backdrop-blur-xl border-b border-[#C88A32]/16 flex items-center justify-between gap-4">
-        <div class="flex items-center gap-3 min-w-0">
-          <h1 class="font-editorial text-[17.5px] font-bold text-[#16261F] truncate">{{ currentTabObj.label }}</h1>
-          <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EAF3EE] text-[#1F4E3D] text-[11px] font-semibold border border-[#2E5A44]/15">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse"></span>
-            <span class="truncate max-w-[280px]">{{ store.lastSyncEvent }}</span>
-          </span>
+      <!-- 顶部栏：当前模块 + 四类岗位视角快速切换 + 全局搜索 -->
+      <header class="shrink-0 z-20 min-h-[60px] py-2 px-5 bg-white/82 backdrop-blur-xl border-b border-[#C88A32]/18 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <h1 class="font-editorial text-[17px] font-bold text-[#16261F] truncate">{{ currentTabObj.label }}</h1>
+          <div role="group" aria-label="切换后台管理岗位视角" class="hidden sm:inline-flex items-center gap-0.5 p-0.5 rounded-full bg-[#F2EFE7] border border-[#1C1B18]/8">
+            <button
+              v-for="r in roleConfigs"
+              :key="r.id"
+              type="button"
+              @click="applyRole(r.id)"
+              :aria-pressed="store.adminRole === r.id ? 'true' : 'false'"
+              class="px-2.5 py-1 rounded-full text-[10.5px] font-bold transition-all cursor-pointer whitespace-nowrap"
+              :class="store.adminRole === r.id ? 'bg-[#16261F] text-[#F5D393] shadow-2xs' : 'text-[#5A564E] hover:text-[#16261F]'"
+            >
+              {{ r.short }}
+            </button>
+          </div>
         </div>
 
-        <div class="flex items-center gap-2.5 shrink-0">
+        <div class="flex items-center gap-2 shrink-0">
           <button
             type="button"
             @click="openCmdPalette"
-            class="hidden md:inline-flex items-center gap-2 h-8.5 px-3 rounded-full bg-white/85 border border-[#C88A32]/22 text-[11.5px] text-[#5A564E] hover:border-[#1F4E3D] transition-colors cursor-pointer shadow-2xs"
+            class="hidden lg:inline-flex items-center gap-2 h-8.5 px-3 rounded-full bg-white/90 border border-[#C88A32]/25 text-[11.5px] text-[#5A564E] hover:border-[#1F4E3D] transition-colors cursor-pointer shadow-2xs"
           >
-            <Search :size="12.5" class="text-[#1F4E3D]" />
-            <span>全局检索商品 / 订单 / 地块</span>
+            <Search :size="12.5" class="text-[#1F4E3D]" aria-hidden="true" />
+            <span>检索商品 / 订单 / 地块</span>
             <kbd class="font-mono text-[9.5px] px-1.5 py-0.5 rounded bg-[#F5F2EB] text-[#6E6960] border border-[#1C1B18]/10">Ctrl K</kbd>
           </button>
           <RouterLink
             v-if="!embedded"
             to="/split"
-            class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16261F] text-[#F7F4EE] text-[11.5px] font-bold hover:bg-[#1F4E3D] transition-colors"
+            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#16261F] text-[#F5D393] text-[11px] font-bold hover:bg-[#1F4E3D] transition-colors"
           >
-            <Columns2 :size="13" class="text-[#F0C275]" />
-            <span>同屏联动预览</span>
+            <Columns2 :size="12.5" aria-hidden="true" />
+            <span>同屏实训</span>
           </RouterLink>
           <div class="flex items-center gap-2 pl-2 border-l border-[#1C1B18]/10">
             <div class="w-7.5 h-7.5 rounded-full bg-gradient-to-br from-[#1F4E3D] to-[#12261E] text-[#F0C275] text-xs font-bold flex items-center justify-center">
-              管
+              {{ currentRoleConfig.person.slice(0, 1) }}
             </div>
-            <span class="hidden lg:inline text-[12px] font-semibold text-[#1C1B18]">振兴管理员</span>
+            <span class="hidden xl:inline text-[11.5px] font-semibold text-[#1C1B18]">{{ currentRoleConfig.person }}</span>
           </div>
         </div>
       </header>
 
-      <!-- 主内容滚动区 -->
-      <div class="flex-1 p-5 lg:p-6 space-y-5 overflow-y-auto">
+      <!-- 主内容滚动区（启用 @container 容器查询，完美兼容全屏后台与分屏窄栏） -->
+      <div class="@container flex-1 p-4 lg:p-6 space-y-5 overflow-y-auto">
         <!-- Toast（位于后台顶栏正下方，兼容单屏与分屏模式，绝不遮挡搜索栏与内容） -->
         <Transition name="fade">
           <div
@@ -597,13 +705,13 @@ watch(() => props.embedded, () => {
             <div class="relative z-10 flex flex-wrap items-center justify-between gap-4">
               <div>
                 <div class="flex items-center gap-2 font-mono text-[10px] tracking-[0.18em] text-[#F0C275]">
-                  <span>RURAL REVITALIZATION COMMAND CENTER</span>
+                  <span>{{ currentRoleConfig.short }} · {{ currentRoleConfig.person }}</span>
                   <span>·</span>
                   <span>{{ store.appConfig.solarTerm }}</span>
                 </div>
-                <h2 class="font-editorial text-xl font-bold mt-1">吉林黑土乡村振兴数智运营中枢</h2>
-                <p class="text-[12px] text-[#F7F4EE]/75 mt-1">
-                  当前 {{ store.liveCamOnlineCount }} 路产地慢直播在线 · 监测合作社 14 家 · 所有操作毫秒级同步至移动端 App
+                <h2 class="font-editorial text-xl font-bold mt-1">{{ currentRoleConfig.title }}</h2>
+                <p class="text-[12px] text-[#F7F4EE]/80 mt-1">
+                  {{ currentRoleConfig.desc }}
                 </p>
               </div>
               <div class="flex flex-wrap items-center gap-2">
@@ -635,59 +743,59 @@ watch(() => props.embedded, () => {
             </div>
           </div>
 
-          <!-- 4 个升级版核心 KPI 卡（毛玻璃鎏金微描边） -->
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- 4 个升级版核心 KPI 卡（基于 @container 响应容器宽度，窄栏分屏自动双列不裁字） -->
+          <div class="grid grid-cols-2 @3xl:grid-cols-4 gap-3.5">
             <button
               type="button"
               @click="activeTab = 'orders'"
-              class="text-left bg-white/86 backdrop-blur-md rounded-2xl border border-[#C88A32]/16 p-4 shadow-[0_8px_24px_-14px_rgba(22,38,31,0.16)] hover:bg-white hover:border-[#C88A32]/50 transition-all cursor-pointer group"
+              class="text-left bg-white/88 backdrop-blur-md rounded-2xl border border-[#C88A32]/16 p-3.5 @3xl:p-4 shadow-[0_8px_24px_-14px_rgba(22,38,31,0.16)] hover:bg-white hover:border-[#C88A32]/50 transition-all cursor-pointer group min-w-0"
             >
-              <div class="flex items-center justify-between">
-                <span class="text-[11px] font-semibold text-[#6E6960]">助农累计成交额</span>
-                <span class="w-8 h-8 rounded-xl bg-[#FDF4E6] text-[#C88A32] flex items-center justify-center"><TrendingUp :size="15" /></span>
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-[11px] font-semibold text-[#6E6960] truncate">助农累计成交额</span>
+                <span class="w-7.5 h-7.5 rounded-xl bg-[#FDF4E6] text-[#C88A32] flex items-center justify-center shrink-0"><TrendingUp :size="14" aria-hidden="true" /></span>
               </div>
-              <div class="font-mono text-2xl font-bold text-[#16261F] mt-2">¥{{ store.totalGMV.toLocaleString() }}</div>
-              <div class="text-[11px] text-[#1F4E3D] font-semibold mt-1">较上周 +18.4% · 实时累加</div>
+              <div class="font-mono text-xl @3xl:text-2xl font-bold text-[#16261F] mt-2 truncate">¥{{ store.totalGMV.toLocaleString() }}</div>
+              <div class="text-[10.5px] text-[#1F4E3D] font-semibold mt-1 truncate">较上周 +18.4% · 实时累加</div>
             </button>
 
             <button
               type="button"
               @click="activeTab = 'products'"
-              class="text-left bg-white/86 backdrop-blur-md rounded-2xl border border-[#C88A32]/16 p-4 shadow-[0_8px_24px_-14px_rgba(22,38,31,0.16)] hover:bg-white hover:border-[#1F4E3D]/40 transition-all cursor-pointer"
+              class="text-left bg-white/88 backdrop-blur-md rounded-2xl border border-[#C88A32]/16 p-3.5 @3xl:p-4 shadow-[0_8px_24px_-14px_rgba(22,38,31,0.16)] hover:bg-white hover:border-[#1F4E3D]/40 transition-all cursor-pointer min-w-0"
             >
-              <div class="flex items-center justify-between">
-                <span class="text-[11px] font-semibold text-[#6E6960]">在售地标农产品</span>
-                <span class="w-8 h-8 rounded-xl bg-[#EAF3EE] text-[#1F4E3D] flex items-center justify-center"><ShoppingBag :size="15" /></span>
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-[11px] font-semibold text-[#6E6960] truncate">在售地标农产品</span>
+                <span class="w-7.5 h-7.5 rounded-xl bg-[#EAF3EE] text-[#1F4E3D] flex items-center justify-center shrink-0"><ShoppingBag :size="14" aria-hidden="true" /></span>
               </div>
-              <div class="font-mono text-2xl font-bold text-[#1F4E3D] mt-2">{{ store.activeProducts.length }} <span class="text-xs font-normal text-[#6E6960]">/ {{ store.products.length }} 款</span></div>
-              <div class="text-[11px] text-[#6E6960] mt-1">平均农户分成 78.5%</div>
+              <div class="font-mono text-xl @3xl:text-2xl font-bold text-[#1F4E3D] mt-2 truncate">{{ store.activeProducts.length }} <span class="text-xs font-normal text-[#6E6960]">/ {{ store.products.length }} 款</span></div>
+              <div class="text-[10.5px] text-[#6E6960] mt-1 truncate">平均农户分成 78.5%</div>
             </button>
 
             <button
               type="button"
               @click="activeTab = 'projects'"
-              class="text-left bg-white/86 backdrop-blur-md rounded-2xl border border-[#C88A32]/16 p-4 shadow-[0_8px_24px_-14px_rgba(22,38,31,0.16)] hover:bg-white hover:border-[#1F4E3D]/40 transition-all cursor-pointer"
+              class="text-left bg-white/88 backdrop-blur-md rounded-2xl border border-[#C88A32]/16 p-3.5 @3xl:p-4 shadow-[0_8px_24px_-14px_rgba(22,38,31,0.16)] hover:bg-white hover:border-[#1F4E3D]/40 transition-all cursor-pointer min-w-0"
             >
-              <div class="flex items-center justify-between">
-                <span class="text-[11px] font-semibold text-[#6E6960]">累计带动增收农户</span>
-                <span class="w-8 h-8 rounded-xl bg-[#EEF2FA] text-[#2F5380] flex items-center justify-center"><Users :size="15" /></span>
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-[11px] font-semibold text-[#6E6960] truncate">累计带动增收农户</span>
+                <span class="w-7.5 h-7.5 rounded-xl bg-[#EEF2FA] text-[#2F5380] flex items-center justify-center shrink-0"><Users :size="14" aria-hidden="true" /></span>
               </div>
-              <div class="font-mono text-2xl font-bold text-[#C88A32] mt-2">{{ store.totalHelpedHouseholds }} <span class="text-xs font-normal text-[#6E6960]">户</span></div>
-              <div class="text-[11px] text-[#6E6960] mt-1">覆盖 {{ store.projects.length }} 个重点振兴项目</div>
+              <div class="font-mono text-xl @3xl:text-2xl font-bold text-[#9A6518] mt-2 truncate">{{ store.totalHelpedHouseholds }} <span class="text-xs font-normal text-[#6E6960]">户</span></div>
+              <div class="text-[10.5px] text-[#6E6960] mt-1 truncate">覆盖 {{ store.projects.length }} 个重点振兴项目</div>
             </button>
 
             <button
               type="button"
               @click="activeTab = 'orders'"
-              class="text-left bg-white/86 backdrop-blur-md rounded-2xl border border-[#C88A32]/16 p-4 shadow-[0_8px_24px_-14px_rgba(22,38,31,0.16)] hover:bg-white hover:border-[#B83828]/40 transition-all cursor-pointer"
+              class="text-left bg-white/88 backdrop-blur-md rounded-2xl border border-[#C88A32]/16 p-3.5 @3xl:p-4 shadow-[0_8px_24px_-14px_rgba(22,38,31,0.16)] hover:bg-white hover:border-[#B83828]/40 transition-all cursor-pointer min-w-0"
             >
-              <div class="flex items-center justify-between">
-                <span class="text-[11px] font-semibold text-[#6E6960]">待处理业务队列</span>
-                <span class="w-8 h-8 rounded-xl bg-[#FBECE9] text-[#B83828] flex items-center justify-center"><BellRing :size="15" /></span>
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-[11px] font-semibold text-[#6E6960] truncate">待处理业务队列</span>
+                <span class="w-7.5 h-7.5 rounded-xl bg-[#FBECE9] text-[#B83828] flex items-center justify-center shrink-0"><BellRing :size="14" aria-hidden="true" /></span>
               </div>
-              <div class="font-mono text-2xl font-bold text-[#B83828] mt-2">{{ store.totalPendingCount }} <span class="text-xs font-normal text-[#6E6960]">项</span></div>
-              <div class="text-[11px] text-[#6E6960] mt-1">
-                订单 {{ store.pendingOrdersCount }} · 认养 {{ store.pendingAdoptionsCount }} · 反馈 {{ store.pendingFeedbacksCount }}
+              <div class="font-mono text-xl @3xl:text-2xl font-bold text-[#B83828] mt-2 truncate">{{ store.totalPendingCount }} <span class="text-xs font-normal text-[#6E6960]">项</span></div>
+              <div class="text-[10.5px] text-[#6E6960] mt-1 truncate">
+                订单 {{ store.pendingOrdersCount }} · 认养 {{ store.pendingAdoptionsCount }} · 诉求 {{ store.pendingFeedbacksCount }}
               </div>
             </button>
           </div>
@@ -800,14 +908,15 @@ watch(() => props.embedded, () => {
           <div class="bg-white/88 backdrop-blur-md rounded-2xl border border-[#C88A32]/16 overflow-hidden shadow-[0_8px_24px_-14px_rgba(22,38,31,0.14)]">
             <div tabindex="0" role="region" aria-label="农产品列表" class="table-wrapper overflow-x-auto">
               <table class="w-full text-left border-collapse">
+                <caption class="sr-only">在售地理标志农产品管理表</caption>
                 <thead class="bg-[#F8F6F1] text-[11px] font-semibold text-[#5A564E] border-b border-[#1C1B18]/8">
                   <tr>
-                    <th class="py-3 px-4">商品信息</th>
-                    <th class="py-3 px-3">品类 / 产地</th>
-                    <th class="py-3 px-3">售价</th>
-                    <th class="py-3 px-3">库存 / 销量</th>
-                    <th class="py-3 px-3">状态</th>
-                    <th class="py-3 px-4 text-right">操作</th>
+                    <th scope="col" class="py-3 px-4">商品信息</th>
+                    <th scope="col" class="py-3 px-3">品类 / 产地</th>
+                    <th scope="col" class="py-3 px-3">售价</th>
+                    <th scope="col" class="py-3 px-3">库存 / 销量</th>
+                    <th scope="col" class="py-3 px-3">状态</th>
+                    <th scope="col" class="py-3 px-4 text-right">操作</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-[#1C1B18]/6 text-[12.5px]">
@@ -915,15 +1024,16 @@ watch(() => props.embedded, () => {
 
           <div class="bg-white/88 backdrop-blur-md rounded-2xl border border-[#C88A32]/16 overflow-hidden shadow-[0_8px_24px_-14px_rgba(22,38,31,0.14)]">
             <div tabindex="0" role="region" aria-label="助农订单表" class="table-wrapper overflow-x-auto">
-              <table class="w-full text-left border-collapse">
-                <thead class="bg-[#F8F6F1] text-[11px] font-semibold text-[#5A564E] border-b border-[#1C1B18]/8">
+              <table class="w-full min-w-[680px] text-left border-collapse">
+                <caption class="sr-only">助农直采订单履约表</caption>
+                <thead class="bg-[#F8F6F1] text-[11px] font-semibold text-[#5A564E] border-b border-[#1C1B18]/8 whitespace-nowrap">
                   <tr>
-                    <th class="py-3 px-4">订单编号 / 时间</th>
-                    <th class="py-3 px-3">买家与收货地</th>
-                    <th class="py-3 px-3">商品明细</th>
-                    <th class="py-3 px-3">实付金额</th>
-                    <th class="py-3 px-3">状态</th>
-                    <th class="py-3 px-4 text-right">履约操作</th>
+                    <th scope="col" class="py-3 px-4">订单编号 / 时间</th>
+                    <th scope="col" class="py-3 px-3">买家与收货地</th>
+                    <th scope="col" class="py-3 px-3 min-w-[168px]">商品明细</th>
+                    <th scope="col" class="py-3 px-3">实付金额</th>
+                    <th scope="col" class="py-3 px-3">状态</th>
+                    <th scope="col" class="py-3 px-4 text-right">履约操作</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-[#1C1B18]/6 text-[12.5px]">
@@ -1028,14 +1138,15 @@ watch(() => props.embedded, () => {
             </div>
             <div tabindex="0" role="region" aria-label="认养申请表" class="table-wrapper overflow-x-auto">
               <table class="w-full text-left border-collapse">
+                <caption class="sr-only">云认养申请与电子证书审核表</caption>
                 <thead class="bg-[#F8F6F1] text-[11px] font-semibold text-[#5A564E] border-b border-[#1C1B18]/8">
                   <tr>
-                    <th class="py-3 px-4">认养单号</th>
-                    <th class="py-3 px-3">地块与份数</th>
-                    <th class="py-3 px-3">认养人</th>
-                    <th class="py-3 px-3">金额</th>
-                    <th class="py-3 px-3">状态</th>
-                    <th class="py-3 px-4 text-right">操作</th>
+                    <th scope="col" class="py-3 px-4">认养单号</th>
+                    <th scope="col" class="py-3 px-3">地块与份数</th>
+                    <th scope="col" class="py-3 px-3">认养人</th>
+                    <th scope="col" class="py-3 px-3">金额</th>
+                    <th scope="col" class="py-3 px-3">状态</th>
+                    <th scope="col" class="py-3 px-4 text-right">操作</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-[#1C1B18]/6 text-[12.5px]">
@@ -1193,7 +1304,7 @@ watch(() => props.embedded, () => {
                 v-model="noticeForm.content"
                 rows="3"
                 placeholder="输入详细公告正文…"
-                class="w-full p-3 rounded-xl bg-[#F8F6F1] border border-[#1C1B18]/10 text-xs resize-none"
+                class="w-full p-3 rounded-xl bg-[#F8F6F1] border border-[#1C1B18]/10 text-xs resize-y"
               ></textarea>
               <button
                 type="button"
@@ -1221,19 +1332,32 @@ watch(() => props.embedded, () => {
 
             <div class="xl:col-span-7 bg-white/88 backdrop-blur-md rounded-2xl border border-[#C88A32]/16 shadow-[0_8px_24px_-14px_rgba(22,38,31,0.14)] p-5 space-y-3">
               <div class="flex items-center justify-between">
-                <h3 class="text-[14px] font-bold text-[#16261F]">村民直报与反馈处理队列</h3>
+                <h3 class="text-[14px] font-bold text-[#16261F]">农机预约派单与村民诉求队列</h3>
                 <span class="text-[11px] text-[#6E6960]">待处理 {{ store.pendingFeedbacksCount }} 条</span>
               </div>
               <div class="space-y-3">
                 <div v-for="fb in store.feedbacks" :key="fb.id" class="p-4 rounded-2xl bg-[#FAF8F4] border border-[#1C1B18]/8 space-y-2">
-                  <div class="flex items-center justify-between">
+                  <div class="flex items-center justify-between gap-2">
                     <div class="text-[12.5px] font-bold text-[#1C1B18]">{{ fb.user }} <span class="font-normal text-[#6E6960]">· {{ fb.village }}</span></div>
-                    <span class="text-[10.5px] font-semibold px-2 py-0.5 rounded-full border" :class="statusPill(fb.status)">{{ fb.status }}</span>
+                    <div class="flex items-center gap-1.5">
+                      <button
+                        v-if="fb.type === '农机预约' && fb.status === '待处理'"
+                        type="button"
+                        @click="handleQuickDispatchMachine(fb)"
+                        class="px-2.5 py-1 rounded-lg bg-[#16261F] hover:bg-[#1F4E3D] text-[#F5D393] text-[10.5px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                      >
+                        <Tractor :size="12" aria-hidden="true" />
+                        <span>一键指派北斗农机</span>
+                      </button>
+                      <span class="text-[10.5px] font-semibold px-2 py-0.5 rounded-full border" :class="statusPill(fb.status)">
+                        {{ fb.meta?.assignedMachineCode ? `已派 ${fb.meta.assignedMachineCode}` : fb.status }}
+                      </span>
+                    </div>
                   </div>
                   <p class="text-[12px] text-[#3E3B35] leading-relaxed">{{ fb.content }}</p>
-                  <div class="text-[10.5px] font-mono text-[#8E887E]">{{ fb.type }} · {{ fb.time }}</div>
+                  <div class="text-[10.5px] font-mono text-[#6E6960]">{{ fb.type }} · {{ fb.time }}</div>
                   <div v-if="fb.reply" class="p-2.5 rounded-xl bg-[#EAF3EE] text-[#1F4E3D] text-[11.5px]">
-                    <strong>已回复：</strong>{{ fb.reply }}
+                    <strong>已回执：</strong>{{ fb.reply }}
                   </div>
                   <div class="flex items-center gap-2 pt-1">
                     <input

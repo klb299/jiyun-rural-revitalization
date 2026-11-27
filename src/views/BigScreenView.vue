@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { RouterLink } from 'vue-router'
 import {
   LayoutDashboard, Columns2, Smartphone, Zap, Radio,
@@ -33,11 +33,16 @@ function triggerPulseArc() {
   }
 }
 
+const selectedCamId = ref('cam-1')
+const activeOriginCam = computed(() =>
+  store.liveCams.find((c) => c.id === selectedCamId.value) || store.liveCams[0]
+)
+
 const originNodes = [
-  { name: '查干湖冬捕', x: 0.22, y: 0.28, color: '#38BDF8' },
-  { name: '九台核心稻区', x: 0.50, y: 0.48, color: '#4ADE80' },
-  { name: '梨树黑土带', x: 0.28, y: 0.76, color: '#F0C275' },
-  { name: '长白山林海', x: 0.80, y: 0.44, color: '#FB7185' }
+  { camId: 'cam-2', name: '查干湖冬捕', x: 0.22, y: 0.28, color: '#38BDF8' },
+  { camId: 'cam-1', name: '九台核心稻区', x: 0.50, y: 0.48, color: '#4ADE80' },
+  { camId: 'cam-3', name: '梨树黑土带', x: 0.28, y: 0.76, color: '#F0C275' },
+  { camId: 'cam-4', name: '农安/长白产区', x: 0.80, y: 0.44, color: '#FB7185' }
 ]
 
 const hubTargets = [
@@ -115,30 +120,39 @@ function drawTwinMap(now) {
     ctx.fill()
   })
 
-  // 3. 产区脉冲节点
+  // 3. 产区脉冲节点（高亮当前选中的监控产区）
   originNodes.forEach((n, idx) => {
     const nx = n.x * w, ny = n.y * h
+    const isFocused = n.camId === selectedCamId.value
     const pr = (12 + ((t * 18 + idx * 6) % 16)) * dpr
-    const pa = Math.max(0, 1 - (pr / (28 * dpr))) * 0.65
+    const pa = Math.max(0, 1 - (pr / (28 * dpr))) * (isFocused ? 0.92 : 0.55)
     ctx.beginPath()
     ctx.arc(nx, ny, pr, 0, Math.PI * 2)
-    ctx.strokeStyle = n.color + Math.round(pa * 255).toString(16).padStart(2, '0')
-    ctx.lineWidth = 1.5 * dpr
+    ctx.strokeStyle = (isFocused ? '#F0C275' : n.color) + Math.round(pa * 255).toString(16).padStart(2, '0')
+    ctx.lineWidth = (isFocused ? 2.2 : 1.5) * dpr
     ctx.stroke()
 
+    if (isFocused) {
+      ctx.beginPath()
+      ctx.arc(nx, ny, 10 * dpr, 0, Math.PI * 2)
+      ctx.strokeStyle = 'rgba(240, 194, 117, 0.9)'
+      ctx.lineWidth = 1.6 * dpr
+      ctx.stroke()
+    }
+
     ctx.beginPath()
-    ctx.arc(nx, ny, 5 * dpr, 0, Math.PI * 2)
+    ctx.arc(nx, ny, (isFocused ? 6 : 5) * dpr, 0, Math.PI * 2)
     ctx.fillStyle = n.color
     ctx.fill()
     ctx.strokeStyle = '#0B1511'
     ctx.lineWidth = 1.5 * dpr
     ctx.stroke()
 
-    ctx.fillStyle = 'rgba(11, 21, 17, 0.82)'
-    ctx.fillRect(nx + 8 * dpr, ny - 10 * dpr, 78 * dpr, 19 * dpr)
-    ctx.strokeStyle = n.color + '88'
-    ctx.strokeRect(nx + 8 * dpr, ny - 10 * dpr, 78 * dpr, 19 * dpr)
-    ctx.fillStyle = '#F7F4EE'
+    ctx.fillStyle = isFocused ? 'rgba(20, 42, 32, 0.94)' : 'rgba(11, 21, 17, 0.82)'
+    ctx.fillRect(nx + 8 * dpr, ny - 10 * dpr, 84 * dpr, 19 * dpr)
+    ctx.strokeStyle = isFocused ? '#F0C275' : n.color + '88'
+    ctx.strokeRect(nx + 8 * dpr, ny - 10 * dpr, 84 * dpr, 19 * dpr)
+    ctx.fillStyle = isFocused ? '#F5D393' : '#F7F4EE'
     ctx.font = `700 ${10 * dpr}px sans-serif`
     ctx.fillText(n.name, nx + 13 * dpr, ny + 3 * dpr)
   })
@@ -374,29 +388,45 @@ onUnmounted(() => {
             <span class="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-[#F0C275]/35 text-[#F5D393] font-mono text-[10.5px] font-bold">
               松辽黑土产销冷链飞线 · 实时数字孪生态势
             </span>
-            <span class="font-mono text-[10px] text-[#86EFAC] bg-black/55 px-2.5 py-1 rounded-full">43.88°N · 125.32°E</span>
+            <span class="font-mono text-[10px] text-[#86EFAC] bg-black/55 px-2.5 py-1 rounded-full">SONGLIAO CORRIDOR · 产区示意态势</span>
           </div>
+
+          <!-- 当前锁定机位实时遥测浮层 -->
+          <div v-if="activeOriginCam" class="absolute bottom-3 left-4 right-4 z-10 flex items-center justify-between gap-3 px-3.5 py-2 rounded-xl bg-[#0B1712]/82 backdrop-blur-md border border-[#F0C275]/28 text-xs pointer-events-none">
+            <div class="min-w-0">
+              <span class="font-mono text-[10px] text-[#F0C275] mr-2">当前锁定机位</span>
+              <strong class="text-[#F7F4EE]">{{ activeOriginCam.title }}</strong>
+              <span class="text-white/65 ml-2 hidden sm:inline">（{{ activeOriginCam.location }}）</span>
+            </div>
+            <div class="font-mono text-[11px] text-[#86EFAC] shrink-0">
+              {{ activeOriginCam.temp }} · {{ activeOriginCam.soilMoisture }} · {{ activeOriginCam.wind }}
+            </div>
+          </div>
+
           <canvas ref="mapCanvasRef" class="w-full h-full block"></canvas>
         </div>
 
-        <!-- 底部 4 路慢直播实景监控墙 -->
+        <!-- 底部 4 路慢直播实景监控墙（可点击切换锁定产区节点） -->
         <div class="shrink-0 grid grid-cols-4 gap-2.5 h-[138px]">
-          <div
+          <button
             v-for="cam in store.liveCams"
             :key="cam.id"
-            class="relative rounded-2xl overflow-hidden border border-white/14 group"
+            type="button"
+            @click="selectedCamId = cam.id"
+            class="relative rounded-2xl overflow-hidden border text-left group cursor-pointer transition-all"
+            :class="selectedCamId === cam.id ? 'border-[#F0C275] ring-2 ring-[#F0C275]/40' : 'border-white/14 hover:border-white/35'"
           >
-            <img :src="cam.image" :alt="cam.shortTitle" class="w-full h-full object-cover opacity-85" />
+            <img :src="cam.image" :alt="cam.shortTitle" class="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent"></div>
             <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-[#B83828]/90 text-white font-mono text-[8.5px] font-bold flex items-center gap-1">
-              <Radio :size="8.5" />
+              <Radio :size="8.5" aria-hidden="true" />
               <span>{{ cam.status }}</span>
             </span>
             <div class="absolute bottom-2 left-2.5 right-2.5">
-              <div class="text-[11px] font-bold truncate">{{ cam.shortTitle }}</div>
+              <div class="text-[11px] font-bold text-white truncate">{{ cam.shortTitle }}</div>
               <div class="font-mono text-[9.5px] text-[#F0C275]">{{ cam.temp }} · {{ cam.viewers }} 在看</div>
             </div>
-          </div>
+          </button>
         </div>
       </div>
 

@@ -33,3 +33,7 @@ dist-ssr
 .workbuddy/backup/
 .workbuddy/shots/
 .workbuddy/audit/
+
+# 大体积本地录屏/成片视频与 PPT 中间工程备份（防止超过 GitHub 100MB 限制）
+video-assets/
+defense-ppt/

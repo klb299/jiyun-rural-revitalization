@@ -136,8 +136,8 @@ svg[class*="lucide"] { stroke-width: 1.5; }
     font-weight: 600;
   }
 
-  .lede { font-size: clamp(1rem, 1.2vw, 1.16rem); line-height: 1.88; color: var(--ink-secondary); }
-  .body-copy { font-size: 0.9rem; line-height: 1.9; color: var(--ink-secondary); }
+  .lede { font-size: clamp(1rem, 1.2vw, 1.16rem); line-height: 1.88; color: var(--ink-secondary); text-wrap: pretty; }
+  .body-copy { font-size: 0.9rem; line-height: 1.9; color: var(--ink-secondary); text-wrap: pretty; }
   .caption {
     font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
     font-size: 0.72rem; letter-spacing: 0.1em; color: var(--ink-muted); line-height: 1.7;
@@ -1358,6 +1358,16 @@ html.vt-active .reveal {
     position: fixed;
     margin: 0;
   }
+}
+
+@supports not selector(:popover-open) {
+  .portal-popover[popover]:not(.\:popover-open) {
+    display: none;
+  }
+}
+
+.portal-popover[popover] {
+  transform-origin: top left;
 }
 
 .portal-popover[popover]:where(:popover-open, .\:popover-open) {

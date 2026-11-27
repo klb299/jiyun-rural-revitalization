@@ -1,15 +1,17 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { ChevronRight } from 'lucide-vue-next'
+import { useRouter } from 'vue-router'
+import { ChevronRight, Compass } from 'lucide-vue-next'
 import BrandLogo from './BrandLogo.vue'
 
 const emit = defineEmits(['done'])
+const router = useRouter()
 
-const TOTAL_DUR = 10.8
+const TOTAL_DUR = 6.8
 const CHAPTERS = [
   { id: 0, start: 0.0, num: '卷一', name: '展卷黑土' },
-  { id: 1, start: 3.4, num: '卷二', name: '吉林风物' },
-  { id: 2, start: 7.0, num: '卷三', name: '智绘丰年' }
+  { id: 1, start: 2.2, num: '卷二', name: '吉林风物' },
+  { id: 2, start: 4.4, num: '卷三', name: '智绘丰年' }
 ]
 
 // 全部由专项生成的高精国风原画驱动（零低多边形 / 严格遵循松辽平坦黑土平原 + 远缘低山丘陵真实地貌）
@@ -67,17 +69,22 @@ const activeChapter = computed(() => {
   return 2
 })
 
-// 双画轴左右展卷进度（0.15s -> 1.65s 从 0 展开到 1）
+// 双画轴左右展卷进度（0.10s -> 1.15s 从 0 展开到 1）
 const scrollOpen = computed(() => {
-  const raw = Math.max(0, Math.min(1, (elapsed.value - 0.15) / 1.5))
+  const raw = Math.max(0, Math.min(1, (elapsed.value - 0.1) / 1.05))
   // cubic-bezier 缓出感
   return 1 - Math.pow(1 - raw, 3)
 })
 
 const insetPct = computed(() => Number(((1 - scrollOpen.value) * 50).toFixed(2)))
-const showSealStamp = computed(() => elapsed.value >= CHAPTERS[2].start + 1.05)
-const showFinalCta = computed(() => elapsed.value >= CHAPTERS[2].start + 1.6)
+const showSealStamp = computed(() => elapsed.value >= CHAPTERS[2].start + 0.55)
+const showFinalCta = computed(() => elapsed.value >= CHAPTERS[2].start + 0.85)
 const progressPct = computed(() => Math.min(100, (elapsed.value / TOTAL_DUR) * 100))
+
+function enterMuseumDirect() {
+  finishIntro()
+  router.push('/museum')
+}
 
 let rafId = 0
 let startPerf = 0
@@ -234,20 +241,29 @@ onUnmounted(() => {
                 </span>
               </div>
 
-              <p class="finale-tagline">一端连乡野 · 一端驭数智</p>
+              <p class="finale-tagline">一端连乡野农事 · 一端通城市餐桌</p>
               <p class="finale-desc">
-                吉林黑土乡村振兴双端协同平台 — 移动端助农 App、数智管理后台、3D 数字展馆与四季交互体验同源共构。
+                精准面向<strong>城市助农消费者、本地新农人社员、合作社村委与科普研学访客</strong>四类人群，构建双端实时联动与三维黑土数字展陈。
               </p>
 
-              <button
-                type="button"
-                class="finale-enter-btn"
-                :class="{ 'is-on': showFinalCta }"
-                @click="finishIntro"
-              >
-                <span>步入平台体验</span>
-                <ChevronRight :size="15" aria-hidden="true" />
-              </button>
+              <div class="finale-cta-group" :class="{ 'is-on': showFinalCta }">
+                <button
+                  type="button"
+                  class="finale-enter-btn is-on"
+                  @click="finishIntro"
+                >
+                  <span>步入四端协同平台</span>
+                  <ChevronRight :size="15" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  class="finale-museum-btn"
+                  @click="enterMuseumDirect"
+                >
+                  <Compass :size="14" aria-hidden="true" />
+                  <span>直达 3D 数字展馆</span>
+                </button>
+              </div>
             </div>
 
             <!-- 右侧透明底工笔重彩「丹顶鹤衔金穗 + 长白梅花鹿踏云」舒展升起 -->
@@ -390,10 +406,11 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.38rem 0.95rem;
+  min-height: 2.35rem;
+  padding: 0.42rem 1rem;
   border-radius: 999px;
-  background: rgba(16, 36, 28, 0.86);
-  border: 1px solid rgba(229, 193, 117, 0.45);
+  background: rgba(16, 36, 28, 0.88);
+  border: 1px solid rgba(229, 193, 117, 0.48);
   color: #F6E2B3;
   font-size: 0.75rem;
   font-weight: 600;
@@ -877,29 +894,61 @@ onUnmounted(() => {
   max-width: 460px;
 }
 
+.finale-cta-group {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.finale-cta-group.is-on {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .finale-enter-btn {
-  margin-top: 1.65rem;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.72rem 1.55rem;
+  min-height: 2.65rem;
+  padding: 0.68rem 1.45rem;
   border-radius: 999px;
   background: linear-gradient(90deg, #E8C472 0%, #F4DA98 100%);
   color: #0E261D;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   border: none;
   cursor: pointer;
   box-shadow: 0 14px 32px -10px rgba(232, 196, 114, 0.65);
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.2s ease;
+  transition: filter 0.2s ease, transform 0.2s ease;
 }
 
-.finale-enter-btn.is-on {
-  opacity: 1;
-  transform: translateY(0);
+.finale-museum-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.65rem;
+  padding: 0.68rem 1.25rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(242, 210, 131, 0.45);
+  color: #F6E6BC;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.finale-museum-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
 
 .finale-enter-btn:hover {
@@ -998,11 +1047,12 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.3rem 0.8rem;
+  min-height: 2.35rem;
+  padding: 0.38rem 0.85rem;
   border-radius: 999px;
   border: 1px solid rgba(16, 36, 28, 0.14);
-  background: rgba(255, 255, 255, 0.65);
-  color: #4D655B;
+  background: rgba(255, 255, 255, 0.72);
+  color: #3E554B;
   font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.25s ease;
